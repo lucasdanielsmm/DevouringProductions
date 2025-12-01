@@ -1,118 +1,152 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="es">
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucas Daniel Soriano</title>
-
     <style>
-
         body {
-
             font-family: Arial, sans-serif;
-
-            margin: 20px;
-
+            margin: 10px;
             background-color: #000000;
-
             color: #ffffff;
+            line-height: 1.6;
+        }
 
+        h1, p:first-of-type {
+            text-align: center;
         }
 
         h1 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
 
-            color: #333;
-
+        p:first-of-type {
+            font-size: 1.2em;
+            color: #cccccc;
+            margin-top: 0;
         }
 
         p {
-
-            font-size: 16px;
-
+            font-size: 1em;
             color: #dddddd;
         }
 
         a {
-
             color: #1e90ff;
         }
 
         a:active {
-                color: #00ff00;
-       }
+            color: #00ff00;
+        }
 
+        iframe {
+            width: 100%;
+            max-width: 560px;
+            height: auto;
+            aspect-ratio: 16/9;
+            display: block;
+            margin: 10px auto;
+            border: none;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        /* Botones táctiles generales */
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            margin: 10px auto;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            background-color: #1e90ff;
+            color: #fff;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #00bfff;
+        }
+
+        .btn:active {
+            background-color: #00ff00;
+            color: #000;
+        }
+
+        /* Botón especial para redes */
+        .btn-redes {
+            background-color: #28a745; /* verde base */
+            color: #fff;
+        }
+
+        .btn-redes:hover {
+            background-color: #3bd85f; /* verde más claro al pasar */
+        }
+
+        .btn-redes:active {
+            background-color: #fff;   /* fondo blanco al click */
+            color: #28a745;           /* texto verde */
+        }
+
+        .logo {
+            max-width: 120px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8em; }
+            p { font-size: 1.1em; }
+            h2 { font-size: 1.3em; }
+            .btn { width: 100%; }
+        }
     </style>
-
 </head>
-
 <body>
 
+    <!-- Logo centrado -->
+    <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano" class="logo">
+
     <h1>Lucas Daniel Soriano</h1>
+    <p><strong>Portafolio de Proyectos</strong></p>
 
-    <p><strong></strong> Portafolio de Proyectos</p>
-
-<br><br>
-
-<p><strong>    
-Descripción:</strong> Soy Lucas, Game Designer, creador de experiencias inmersivas conbinando precision tecnica y vision creativa. Desde la integracion de sistemas de juego complejos en Unity hasta la construccion de bucles jugables atractivos, buscondo siempre soluciones claras, mantenibles y reutilisables. Ademas, comparto mi proceso y avanses de desarrollo indie en mis Redes.</p>
-
-<br>
-
-
+    <p><strong>Descripción:</strong> Soy Lucas, Game Designer, creador de experiencias inmersivas combinando precisión técnica y visión creativa. Desde la integración de sistemas de juego complejos en Unity hasta la construcción de bucles jugables atractivos, buscando siempre soluciones claras, mantenibles y reutilizables. Además, comparto mi proceso y avances de desarrollo indie en mis Redes.</p>
 
     <h2>MOVE-LANZER: Scratch</h2>
-
-    <p><strong>Descripción:</strong> Este es mi proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de Fundamentos de la Programación I. Podés probarlo y editarlo acá: </p>
-
-    <a href="https://scratch.mit.edu/projects/1208664342">Jugar en Scratch</a>
-
+    <p><strong>Descripción:</strong> Este es mi proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de Fundamentos de la Programación I. Podés probarlo y editarlo acá:</p>
+    <a href="https://scratch.mit.edu/projects/1208664342" class="btn">Jugar en Scratch</a>
     <p><strong>Trailer:</strong></p>
-
-    
-
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
-   
-
+    <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
     <p><strong>Informe:</strong> Acá describo cómo hice el proyecto de Scratch. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1H_EasA6_fBTmswYct79Bxj22b70S6vSK/edit?usp=sharing&ouid=106616549855987864796&rtpof=true&sd=true">Informe Completo</a></p>
 
-    <br>
-
     <h2>Vireo CODE: RPG Maker</h2>
-
-    <p><strong>Descripción:</strong> Este es mi proyecto en RPG Maker MV. Es un juego de rol de estetica Sci-fi que creé en la materia de Fundamentos de la Programación I en el segundo cuatrimestre del 2025. Podés descargarlo y jugarlo acá.</p>
-
-    <a href="https://drive.google.com/drive/folders/1fmQCkMnAtXoqv5pZXHVjmH-JfM3LilDH?usp=drive_link">Descargar</a>
-
+    <p><strong>Descripción:</strong> Este es mi proyecto en RPG Maker MV. Es un juego de rol de estética Sci-fi que creé en la materia de Fundamentos de la Programación I en el segundo cuatrimestre del 2025. Podés descargarlo y jugarlo acá:</p>
+    <a href="https://drive.google.com/drive/folders/1fmQCkMnAtXoqv5pZXHVjmH-JfM3LilDH?usp=drive_link" class="btn">Descargar</a>
     <p><strong>Gameplay Trailer:</strong></p>
-
-    
-
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/t_Ud17NMSQQ?si=5u_qgy6hGDH1eisW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
-    
-
+    <iframe src="https://www.youtube.com/embed/t_Ud17NMSQQ?si=5u_qgy6hGDH1eisW" allowfullscreen></iframe>
     <p><strong>Informe:</strong> Acá describo cómo hice el proyecto de RPG MAKER MV. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1AyxeBXJah2CiWuHDM5pdYhdMJttzdoRP/edit?usp=sharing&ouid=106616549855987864796&rtpof=true&sd=true">Informe Completo</a></p>
 
-    <br>
-
     <h2>CREATURA DINOMA: Unity</h2>
-
-    <p><strong>Descripción:</strong> Este es mi proyecto de Unity, el cuál consiste en un videojuego del genero Extraccion en 3D, de Capturar, Transportar y Vender Criaturas. Podés descargarlo y jugarlo acá: </p>
-
-    <a href="https://drive.google.com/drive/folders/1N632Wn_cmsnFj1Ge4oFEEcSdj-sIYoGV?usp=drive_link">Descargar</a>
-
+    <p><strong>Descripción:</strong> Este es mi proyecto de Unity, el cuál consiste en un videojuego del género Extracción en 3D, de Capturar, Transportar y Vender Criaturas. Podés descargarlo y jugarlo acá:</p>
+    <a href="https://drive.google.com/drive/folders/1N632Wn_cmsnFj1Ge4oFEEcSdj-sIYoGV?usp=drive_link" class="btn">Descargar</a>
     <p><strong>Video Gameplay:</strong></p>
-
-    
-
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/YGBjGzZh438" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
-    
-
+    <iframe src="https://www.youtube.com/embed/YGBjGzZh438" allowfullscreen></iframe>
     <p><strong>Informe:</strong> Acá describo cómo hice el proyecto de Unity, muestro algunas capturas de pantalla relevantes. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1hRlHdFdcQsb9y8-r7JjA5UjjRilk5XoE/edit?usp=drive_link&ouid=106616549855987864796&rtpof=true&sd=true">Informe Completo</a></p>
 
-</body>
+    <!-- Enlace a redes con color verde -->
+    <div style="text-align:center; margin-top:30px;">
+        <a href="https://linktr.ee/LucasDanielSMM" class="btn btn-redes">Mis Redes</a>
+    </div>
 
+</body>
 </html>
