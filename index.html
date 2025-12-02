@@ -52,16 +52,60 @@
             border: none;
         }
 
-        h2 {
-            font-size: 1.5em;
-            margin-top: 40px;
-            text-align: center;
-        }
+        /* Efecto RGB multicolor con pulso de brillo */
+/* Efecto RGB multicolor con brillo suave y rápido */
+h2 {
+    font-size: 1.5em;
+    margin-top: 40px;
+    text-align: center;
+    background: linear-gradient(
+        90deg,
+        red,
+        orange,
+        yellow,
+        lime,
+        green,
+        cyan,
+        turquoise,
+        blue,
+        indigo,
+        violet,
+        magenta,
+        pink
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 300% 300%;
+    animation: rgbShift 8s infinite linear, neonPulse 2s infinite ease-in-out;
+}
 
-        /* Separador sutil */
+/* Animación del degradado en movimiento */
+@keyframes rgbShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Pulso de brillo más suave */
+@keyframes neonPulse {
+    0%, 100% {
+        text-shadow: 0 0 2px rgba(255, 105, 180, 0.4), /* rosa tenue */
+                     0 0 4px rgba(0, 255, 255, 0.3),   /* cyan suave */
+                     0 0 6px rgba(255, 0, 255, 0.3);   /* violeta tenue */
+    }
+    50% {
+        text-shadow: 0 0 4px rgba(255, 105, 180, 0.5),
+                     0 0 8px rgba(0, 255, 255, 0.4),
+                     0 0 10px rgba(255, 0, 255, 0.4);
+    }
+}
+
+
+
+        /* Separador sutil con degradado */
         .divider {
             border: 0;
-            height: 1px;
+            height: 3px;
             background: linear-gradient(to right, transparent, #111, transparent);
             margin: 30px 0;
         }
@@ -112,6 +156,35 @@
             margin: 0 auto 10px;
         }
 
+        /* Footer elegante */
+        footer {
+            background-color: #0a0a0a; /* casi negro */
+            color: #888; /* gris suave */
+            text-align: center;
+            padding: 20px 10px;
+            margin-top: 40px;
+            font-size: 0.9em;
+            border-top: 1px solid #111; /* línea sutil */
+        }
+
+        footer img {
+            max-width: 60px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        footer a {
+            color: #28a745; /* verde consistente con tu botón de redes */
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #3bd85f; /* verde más claro al pasar */
+        }
+
         @media (max-width: 600px) {
             h1 { font-size: 1.8em; }
             p { font-size: 1.1em; }
@@ -156,6 +229,17 @@
     <div style="text-align:center; margin-top:30px;">
         <a href="https://linktr.ee/LucasDanielSMM" class="btn btn-redes">Mis Redes</a>
     </div>
+
+    <!-- Footer elegante -->
+    <footer>
+        <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano">
+        <p>© 2025 Lucas Daniel Soriano</p>
+        <p><a href="https://linktr.ee/LucasDanielSMM">Mis Redes</a></p>
+    </footer>
+
+</body>
+</html>
+
 
 </body>
 </html>
