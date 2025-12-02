@@ -52,6 +52,110 @@
             border: none;
         }
 
+.cajas-juegos {
+  display: flex;
+  flex-direction: row;        /* horizontal por defecto */
+  flex-wrap: wrap;            /* permite que bajen si no hay espacio */
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 10px;
+}
+
+.caja {
+  width: 200px;
+  height: 280px;
+  background-color: #111;
+  border: 2px solid #333;
+  border-radius: 6px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.caja:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 24px rgba(255,105,180,0.4);
+}
+
+.caja img {
+  width: 100%;
+  height: 70%;
+  object-fit: cover;
+  border-bottom: 2px solid #333;
+}
+
+.caja h3 {
+  font-size: 1.1em;
+  margin: 8px 0 4px;
+  background: linear-gradient(90deg, red, pink, cyan);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.caja p {
+  font-size: 0.85em;
+  color: #ccc;
+  margin: 0 10px 10px;
+}
+
+/* Responsivo: en pantallas pequeñas se apilan verticalmente */
+@media (max-width: 600px) {
+  .cajas-juegos {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+
+.carrusel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 600px;
+  margin: 40px auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.carrusel-contenedor {
+  display: flex;
+  width: 100%;
+  transition: transform 0.5s ease;
+}
+
+.tarjeta {
+  flex: 0 0 100%;   /* cada tarjeta ocupa todo el ancho */
+  text-align: center;
+  background-color: #111;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.tarjeta img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.carrusel-btn {
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: #1e90ff;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  z-index: 10;
+}
+
+.carrusel-btn:hover {
+  color: #00bfff;
+}
+
+
+
         /* Efecto RGB multicolor con pulso de brillo */
 /* Efecto RGB multicolor con brillo suave y rápido */
 h2 {
@@ -203,6 +307,59 @@ h2 {
 
     <p><strong>Descripción:</strong> Soy Lucas, Game Designer, creador de experiencias inmersivas combinando precisión técnica y visión creativa. Desde la integración de sistemas de juego complejos en Unity hasta la construcción de bucles jugables atractivos, buscando siempre soluciones claras, mantenibles y reutilizables. Además, comparto mi proceso y avances de desarrollo indie en mis Redes.</p>
 
+
+<section class="carrusel">
+  <button class="carrusel-btn izquierda">⟨</button>
+
+  <div class="carrusel-contenedor">
+    <div class="tarjeta">
+      <img src="caratula-move-lanzer.jpg" alt="MOVE-LANZER">
+      <h3>MOVE-LANZER</h3>
+      <p>Juego de oleadas infinitas hecho en Scratch.</p>
+    </div>
+    <div class="tarjeta">
+      <img src="caratula-vireo-code.jpg" alt="Vireo CODE">
+      <h3>Vireo CODE</h3>
+      <p>RPG Sci-fi hecho en RPG Maker MV.</p>
+    </div>
+    <div class="tarjeta">
+      <img src="caratula-creatura-dinoma.jpg" alt="CREATURA DINOMA">
+      <h3>CREATURA DINOMA</h3>
+      <p>Juego 3D de extracción hecho en Unity.</p>
+    </div>
+  </div>
+
+  <button class="carrusel-btn derecha">⟩</button>
+</section>
+
+
+
+
+<section class="cajas-juegos">
+  <div class="caja">
+    <img src="caratula-move-lanzer.jpg" alt="MOVE-LANZER">
+    <h3>MOVE-LANZER</h3>
+    <p>Juego de oleadas infinitas hecho en Scratch.</p>
+  </div>
+
+  <div class="caja">
+    <img src="caratula-vireo-code.jpg" alt="Vireo CODE">
+    <h3>Vireo CODE</h3>
+    <p>RPG Sci-fi hecho en RPG Maker MV.</p>
+  </div>
+
+  <div class="caja">
+    <img src="caratula-creatura-dinoma.jpg" alt="CREATURA DINOMA">
+    <h3>CREATURA DINOMA</h3>
+    <p>Juego 3D de extracción hecho en Unity.</p>
+  </div>
+</section>
+
+
+
+
+
+
     <h2>MOVE-LANZER: Scratch</h2>
     <p><strong>Descripción:</strong> Este es mi proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de la carrera Diseño y Produccion de videojuegos. Podés probarlo y editarlo acá:</p>
     <a href="https://scratch.mit.edu/projects/1208664342" class="btn">Jugar en Scratch</a>
@@ -240,6 +397,32 @@ h2 {
 </body>
 </html>
 
+<script>
+  const contenedor = document.querySelector('.carrusel-contenedor');
+  const tarjetas = document.querySelectorAll('.tarjeta');
+  let indice = 0;
 
-</body>
-</html>
+  function mostrarTarjeta() {
+    contenedor.style.transform = `translateX(-${indice * 100}%)`;
+  }
+
+  // Botones manuales
+  document.querySelector('.izquierda').addEventListener('click', () => {
+    indice = (indice > 0) ? indice - 1 : tarjetas.length - 1;
+    mostrarTarjeta();
+  });
+
+  document.querySelector('.derecha').addEventListener('click', () => {
+    indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
+    mostrarTarjeta();
+  });
+
+  // Scroll automático cada 5 segundos
+  setInterval(() => {
+    indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
+    mostrarTarjeta();
+  }, 5000);
+</script>
+
+
+
