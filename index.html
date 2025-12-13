@@ -52,160 +52,177 @@
             border: none;
         }
 
+/* ESTILOS DE CAJAS DE JUEGOS (al final) */
 .cajas-juegos {
-  display: flex;
-  flex-direction: row;        /* horizontal por defecto */
-  flex-wrap: wrap;            /* permite que bajen si no hay espacio */
-  justify-content: center;
-  gap: 20px;
-  padding: 40px 10px;
+    display: flex;
+    flex-direction: row;        /* horizontal por defecto */
+    flex-wrap: wrap;            /* permite que bajen si no hay espacio */
+    justify-content: center;
+    gap: 20px;
+    padding: 40px 10px;
 }
 
 .caja {
-  width: 200px;
-  height: 280px;
-  background-color: #111;
-  border: 2px solid #333;
-  border-radius: 6px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.6);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 200px;
+    height: 280px;
+    background-color: #111;
+    border: 2px solid #333;
+    border-radius: 6px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .caja:hover {
-  transform: scale(1.05);
-  box-shadow: 0 12px 24px rgba(255,105,180,0.4);
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px rgba(255,105,180,0.4);
 }
 
 .caja img {
-  width: 100%;
-  height: 70%;
-  object-fit: cover;
-  border-bottom: 2px solid #333;
+    width: 100%;
+    height: 70%;
+    object-fit: cover;
+    border-bottom: 2px solid #333;
 }
 
 .caja h3 {
-  font-size: 1.1em;
-  margin: 8px 0 4px;
-  background: linear-gradient(90deg, red, pink, cyan);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+    font-size: 1.1em;
+    margin: 8px 0 4px;
+    background: linear-gradient(90deg, red, pink, cyan);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .caja p {
-  font-size: 0.85em;
-  color: #ccc;
-  margin: 0 10px 10px;
+    font-size: 0.85em;
+    color: #ccc;
+    margin: 0 10px 10px;
 }
 
 /* Responsivo: en pantallas pequeñas se apilan verticalmente */
 @media (max-width: 600px) {
-  .cajas-juegos {
-    flex-direction: column;
-    align-items: center;
-  }
+    .cajas-juegos {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
 
+/* ESTILOS DEL CARRUSEL (Ajustados para posicionamiento de botones) */
 .carrusel {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;          /* ocupa todo el ancho */
-  max-width: 100%;      /* elimina el límite de 600px */
-  margin: 40px auto;
-  position: relative;
-  overflow: hidden;
+    /* display: flex; <--- ELIMINADO: lo haces relative para posicionar botones*/
+    align-items: center;
+    justify-content: center;
+    width: 100%;            /* ocupa todo el ancho */
+    max-width: 100%;        /* elimina el límite de 600px */
+    margin: 40px auto;
+    position: relative;
+    overflow: hidden;
 }
 
 .carrusel-contenedor {
-  display: flex;
-  width: 100%;
-  overflow: hidden;
-  transition: transform 0.5s ease;
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    transition: transform 0.5s ease;
 }
 
 .tarjeta {
-  flex: 0 0 100%;   /* cada tarjeta ocupa todo el ancho */
-  text-align: center;
-  background-color: #111;
-  border-radius: 10px;
-  padding: 20px;
+    flex: 0 0 100%;   /* cada tarjeta ocupa todo el ancho */
+    text-align: center;
+    background-color: #111;
+    border-radius: 10px;
+    padding: 20px;
 }
 
 .tarjeta img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
 }
 
 .carrusel-btn {
-  background: none;
-  border: none;
-  font-size: 2em;
-  color: #1e90ff;
-  cursor: pointer;
-  transition: color 0.3s ease;
-  z-index: 10;
+    /* Modificados para posicionamiento absoluto */
+    position: absolute; /* Nueva */
+    top: 50%; /* Nueva */
+    transform: translateY(-50%); /* Nueva */
+    background: rgba(0,0,0,0.6); /* Ajustado, antes era none */
+    border: none;
+    font-size: 2em;
+    color: #fff; /* Ajustado, antes era #1e90ff */
+    padding: 10px; /* Nueva */
+    line-height: 1; /* Nueva */
+    border-radius: 50%; /* Nueva para hacerlo redondo */
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    z-index: 10;
+}
+
+.carrusel-btn.izquierda {
+    left: 10px; /* Nueva */
+}
+
+.carrusel-btn.derecha {
+    right: 10px; /* Nueva */
 }
 
 .carrusel-btn:hover {
-  color: #00bfff;
+    color: #00bfff;
+    background: rgba(0,0,0,0.8);
 }
+/* FIN ESTILOS DEL CARRUSEL */
 
 
+/* ESTILOS RGB, FOOTER, ETC. */
+        /* Efecto RGB multicolor con brillo suave y rápido */
+        h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            text-align: center;
+            background: linear-gradient(
+                90deg,
+                red,
+                orange,
+                yellow,
+                lime,
+                green,
+                cyan,
+                turquoise,
+                blue,
+                indigo,
+                violet,
+                magenta,
+                pink
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 300% 300%;
+            animation: rgbShift 8s infinite linear, neonPulse 2s infinite ease-in-out;
+        }
 
-        /* Efecto RGB multicolor con pulso de brillo */
-/* Efecto RGB multicolor con brillo suave y rápido */
-h2 {
-    font-size: 1.5em;
-    margin-top: 40px;
-    text-align: center;
-    background: linear-gradient(
-        90deg,
-        red,
-        orange,
-        yellow,
-        lime,
-        green,
-        cyan,
-        turquoise,
-        blue,
-        indigo,
-        violet,
-        magenta,
-        pink
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 300% 300%;
-    animation: rgbShift 8s infinite linear, neonPulse 2s infinite ease-in-out;
-}
+        /* Animación del degradado en movimiento */
+        @keyframes rgbShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-/* Animación del degradado en movimiento */
-@keyframes rgbShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* Pulso de brillo más suave */
-@keyframes neonPulse {
-    0%, 100% {
-        text-shadow: 0 0 2px rgba(255, 105, 180, 0.4), /* rosa tenue */
-                     0 0 4px rgba(0, 255, 255, 0.3),   /* cyan suave */
-                     0 0 6px rgba(255, 0, 255, 0.3);   /* violeta tenue */
-    }
-    50% {
-        text-shadow: 0 0 4px rgba(255, 105, 180, 0.5),
-                     0 0 8px rgba(0, 255, 255, 0.4),
-                     0 0 10px rgba(255, 0, 255, 0.4);
-    }
-}
-
+        /* Pulso de brillo más suave */
+        @keyframes neonPulse {
+            0%, 100% {
+                text-shadow: 0 0 2px rgba(255, 105, 180, 0.4), /* rosa tenue */
+                             0 0 4px rgba(0, 255, 255, 0.3),   /* cyan suave */
+                             0 0 6px rgba(255, 0, 255, 0.3);   /* violeta tenue */
+            }
+            50% {
+                text-shadow: 0 0 4px rgba(255, 105, 180, 0.5),
+                             0 0 8px rgba(0, 255, 255, 0.4),
+                             0 0 10px rgba(255, 0, 255, 0.4);
+            }
+        }
 
 
         /* Separador sutil con degradado */
@@ -251,8 +268,8 @@ h2 {
         }
 
         .btn-redes:active {
-            background-color: #fff;   /* fondo blanco al click */
-            color: #28a745;           /* texto verde */
+            background-color: #fff;    /* fondo blanco al click */
+            color: #28a745;            /* texto verde */
         }
 
         .logo {
@@ -301,7 +318,6 @@ h2 {
 </head>
 <body>
 
-    <!-- Logo centrado -->
     <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano" class="logo">
 
     <h1>Lucas Daniel Soriano</h1>
@@ -311,32 +327,32 @@ h2 {
 
 
 <section class="carrusel">
-  <button class="carrusel-btn izquierda">⟨</button>
+    <button class="carrusel-btn izquierda">⟨</button>
 
-  <div class="carrusel-contenedor">
-    <div class="tarjeta">
-      <img src="portada-CAE-CCC.jpg" alt="MOVE-LANZER">
-      <h3>CAE:  CCC</h3>
-      <p>Juego Arcade Emoji! hecho en HTML.</p>
+    <div class="carrusel-contenedor">
+        <div class="tarjeta">
+            <img src="portada-CAE-CCC.jpg" alt="CAE: CCC">
+            <h3>CAE: CCC</h3>
+            <p>Juego Arcade Emoji! hecho en HTML.</p>
+        </div>
+        <div class="tarjeta">
+            <img src="portada-move-lanzer.jpg" alt="MOVE-LANZER">
+            <h3>MOVE-LANZER</h3>
+            <p>Juego de oleadas infinitas hecho en Scratch.</p>
+        </div>
+        <div class="tarjeta">
+            <img src="portada-vireo-CODE.jpg" alt="Vireo CODE">
+            <h3>Vireo CODE</h3>
+            <p>RPG Sci-fi hecho en RPG Maker MV.</p>
+        </div>
+        <div class="tarjeta">
+            <img src="portada-creatura-dinoma.jpg" alt="CREATURA DINOMA">
+            <h3>CREATURA DINOMA</h3>
+            <p>Juego 3D de extracción hecho en Unity.</p>
+        </div>
     </div>
-    <div class="tarjeta">
-      <img src="portada-move-lanzer.jpg" alt="MOVE-LANZER">
-      <h3>MOVE-LANZER</h3>
-      <p>Juego de oleadas infinitas hecho en Scratch.</p>
-    </div>
-    <div class="tarjeta">
-      <img src="portada-vireo-CODE.jpg" alt="Vireo CODE">
-      <h3>Vireo CODE</h3>
-      <p>RPG Sci-fi hecho en RPG Maker MV.</p>
-    </div>
-    <div class="tarjeta">
-      <img src="portada-creatura-dinoma.jpg" alt="CREATURA DINOMA">
-      <h3>CREATURA DINOMA</h3>
-      <p>Juego 3D de extracción hecho en Unity.</p>
-    </div>
-  </div>
 
-  <button class="carrusel-btn derecha">⟩</button>
+    <button class="carrusel-btn derecha">⟩</button>
 </section>
 
 
@@ -368,148 +384,96 @@ h2 {
 
 
 <section class="cajas-juegos">
-  <div class="caja">
-    <img src="caratula-CAE-CCC.jpg" alt="CAE">
-    <h3>CAE</h3>
-    <p>Juego Arcade hecho Completamente en HTML.</p>
-  </div>
-    
-  <div class="caja">
-    <img src="caratula-move-lanzer.jpg" alt="MOVE-LANZER">
-    <h3>MOVE-LANZER</h3>
-    <p>Juego de oleadas infinitas hecho en Scratch.</p>
-  </div>
+    <div class="caja">
+        <img src="caratula-CAE-CCC.jpg" alt="CAE">
+        <h3>CAE</h3>
+        <p>Juego Arcade hecho Completamente en HTML.</p>
+    </div>
+        
+    <div class="caja">
+        <img src="caratula-move-lanzer.jpg" alt="MOVE-LANZER">
+        <h3>MOVE-LANZER</h3>
+        <p>Juego de oleadas infinitas hecho en Scratch.</p>
+    </div>
 
-  <div class="caja">
-    <img src="caratula-vireo-CODE.jpg" alt="Vireo CODE">
-    <h3>Vireo CODE</h3>
-    <p>RPG Sci-fi hecho en RPG Maker MV.</p>
-  </div>
+    <div class="caja">
+        <img src="caratula-vireo-CODE.jpg" alt="Vireo CODE">
+        <h3>Vireo CODE</h3>
+        <p>RPG Sci-fi hecho en RPG Maker MV.</p>
+    </div>
 
-  <div class="caja">
-    <img src="caratula-creatura-dinoma.jpg" alt="CREATURA DINOMA">
-    <h3>CREATURA DINOMA</h3>
-    <p>Juego 3D de extracción hecho en Unity.</p>
-  </div>
+    <div class="caja">
+        <img src="caratula-creatura-dinoma.jpg" alt="CREATURA DINOMA">
+        <h3>CREATURA DINOMA</h3>
+        <p>Juego 3D de extracción hecho en Unity.</p>
+    </div>
 </section>
 
-    
-    <!-- Enlace a redes con color verde -->
+        
     <div style="text-align:center; margin-top:30px;">
         <a href="https://linktr.ee/LucasDanielSMM" class="btn btn-redes">Mis Redes</a>
     </div>
 
-    <!-- Footer elegante -->
     <footer>
         <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano">
         <p>© 2025 Lucas Daniel Soriano</p>
         <p><a href="https://linktr.ee/LucasDanielSMM">Contacto</a></p>
     </footer>
 
-</body>
+    <script>
+        const contenedor = document.querySelector('.carrusel-contenedor');
+        const tarjetas = document.querySelectorAll('.carrusel-contenedor .tarjeta');
+        const botonIzquierda = document.querySelector('.carrusel-btn.izquierda');
+        const botonDerecha = document.querySelector('.carrusel-btn.derecha');
+
+        let indice = 0;
+
+        function mostrarTarjeta() {
+            // Aplica el desplazamiento al contenedor completo
+            contenedor.style.transform = `translateX(-${indice * 100}%)`;
+        }
+
+        // Se ajusta el ancho del contenedor total (ya que antes se calculaba dentro de un loop)
+        // Aunque no es estrictamente necesario, es buena práctica si no se usa flex-grow en el contenedor
+        // contenedor.style.width = `${tarjetas.length * 100}%`; 
+
+        // Botones manuales
+        botonIzquierda.addEventListener('click', () => {
+            indice = (indice > 0) ? indice - 1 : tarjetas.length - 1;
+            mostrarTarjeta();
+        });
+
+        botonDerecha.addEventListener('click', () => {
+            indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
+            mostrarTarjeta();
+        });
+
+        // Scroll automático cada 5 segundos
+        setInterval(() => {
+            indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
+            mostrarTarjeta();
+        }, 5000);
+
+        // Swipe en celular
+        let startX = 0;
+        contenedor.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+
+        contenedor.addEventListener('touchend', (e) => {
+            let endX = e.changedTouches[0].clientX;
+            let diff = startX - endX;
+
+            if (diff > 50) {
+                // izquierda → siguiente
+                indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
+                mostrarTarjeta();
+            } else if (diff < -50) {
+                // derecha → anterior
+                indice = (indice > 0) ? indice - 1 : tarjetas.length - 1;
+                mostrarTarjeta();
+            }
+        });
+    </script>
+    </body>
 </html>
-
-<!-- Carrusel -->
-<div class="carrusel">
-  <div class="carrusel-contenedor">
-    <div class="tarjeta"> <img src="imagen1.jpg" alt="Imagen 1"> </div>
-    <div class="tarjeta"> <img src="imagen2.jpg" alt="Imagen 2"> </div>
-    <div class="tarjeta"> <img src="imagen3.jpg" alt="Imagen 3"> </div>
-  </div>
-  <button class="izquierda">⬅</button>
-  <button class="derecha">➡</button>
-</div>
-
-<style>
-  .carrusel {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-  }
-
-  .carrusel-contenedor {
-    display: flex;
-    width: 100%;
-    transition: transform 0.5s ease;
-  }
-
-  .tarjeta {
-    flex: 0 0 100%; /* cada tarjeta ocupa todo el ancho */
-  }
-
-  .tarjeta img {
-    width: 100%;
-    display: block;
-  }
-
-  .izquierda, .derecha {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-  }
-
-  .izquierda { left: 10px; }
-  .derecha { right: 10px; }
-</style>
-
-<script>
-  const contenedor = document.querySelector('.carrusel-contenedor');
-  const tarjetas = document.querySelectorAll('.tarjeta');
-
-  contenedor.style.width = `${tarjetas.length * 100}%`; // ancho total
-
-  tarjetas.forEach(t => {
-  t.style.width = `${100 / tarjetas.length}%`; // opcional si quieres proporción distinta
-
-  let indice = 0;
-
-  function mostrarTarjeta() {
-    contenedor.style.transform = `translateX(-${indice * 100}%)`;
-  }
-
-  // Botones manuales
-  document.querySelector('.izquierda').addEventListener('click', () => {
-    indice = (indice > 0) ? indice - 1 : tarjetas.length - 1;
-    mostrarTarjeta();
-  });
-
-  document.querySelector('.derecha').addEventListener('click', () => {
-    indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
-    mostrarTarjeta();
-  });
-
-  // Scroll automático cada 5 segundos
-  setInterval(() => {
-    indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
-    mostrarTarjeta();
-  }, 5000);
-
-  // Swipe en celular
-  let startX = 0;
-  contenedor.addEventListener('touchstart', (e) => {
-    startX = e.touches[0].clientX;
-  });
-
-  contenedor.addEventListener('touchend', (e) => {
-    let endX = e.changedTouches[0].clientX;
-    let diff = startX - endX;
-
-    if (diff > 50) {
-      // izquierda → siguiente
-      indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
-      mostrarTarjeta();
-    } else if (diff < -50) {
-      // derecha → anterior
-      indice = (indice > 0) ? indice - 1 : tarjetas.length - 1;
-      mostrarTarjeta();
-    }
-  });
-</script>
-
-
-
