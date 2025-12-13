@@ -460,6 +460,12 @@ h2 {
 <script>
   const contenedor = document.querySelector('.carrusel-contenedor');
   const tarjetas = document.querySelectorAll('.tarjeta');
+
+  contenedor.style.width = `${tarjetas.length * 100}%`; // ancho total
+
+  tarjetas.forEach(t => {
+  t.style.width = `${100 / tarjetas.length}%`; // opcional si quieres proporción distinta
+
   let indice = 0;
 
   function mostrarTarjeta() {
