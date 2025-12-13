@@ -408,6 +408,54 @@ h2 {
 </body>
 </html>
 
+<!-- Carrusel -->
+<div class="carrusel">
+  <div class="carrusel-contenedor">
+    <div class="tarjeta"> <img src="imagen1.jpg" alt="Imagen 1"> </div>
+    <div class="tarjeta"> <img src="imagen2.jpg" alt="Imagen 2"> </div>
+    <div class="tarjeta"> <img src="imagen3.jpg" alt="Imagen 3"> </div>
+  </div>
+  <button class="izquierda">⬅</button>
+  <button class="derecha">➡</button>
+</div>
+
+<style>
+  .carrusel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .carrusel-contenedor {
+    display: flex;
+    width: 100%;
+    transition: transform 0.5s ease;
+  }
+
+  .tarjeta {
+    flex: 0 0 100%; /* cada tarjeta ocupa todo el ancho */
+  }
+
+  .tarjeta img {
+    width: 100%;
+    display: block;
+  }
+
+  .izquierda, .derecha {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .izquierda { left: 10px; }
+  .derecha { right: 10px; }
+</style>
+
 <script>
   const contenedor = document.querySelector('.carrusel-contenedor');
   const tarjetas = document.querySelectorAll('.tarjeta');
@@ -427,32 +475,33 @@ h2 {
     indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
     mostrarTarjeta();
   });
-  let startX = 0;
-
-contenedor.addEventListener('touchstart', (e) => {
-  startX = e.touches[0].clientX;
-  });
-
-  contenedor.addEventListener('touchend', (e) => {
-    let endX = e.changedTouches[0].clientX;
-    let diff = startX - endX;
-  
-    if (diff > 50) {
-    // deslizó a la izquierda → siguiente
-      indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
-      mostrarTarjeta();
-    } else if (diff < -50) {
-    // deslizó a la derecha → anterior
-      indice = (indice > 0) ? indice - 1 : tarjetas.length - 1;
-      mostrarTarjeta();
-    }
-  });
 
   // Scroll automático cada 5 segundos
   setInterval(() => {
     indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
     mostrarTarjeta();
   }, 5000);
+
+  // Swipe en celular
+  let startX = 0;
+  contenedor.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+  });
+
+  contenedor.addEventListener('touchend', (e) => {
+    let endX = e.changedTouches[0].clientX;
+    let diff = startX - endX;
+
+    if (diff > 50) {
+      // izquierda → siguiente
+      indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
+      mostrarTarjeta();
+    } else if (diff < -50) {
+      // derecha → anterior
+      indice = (indice > 0) ? indice - 1 : tarjetas.length - 1;
+      mostrarTarjeta();
+    }
+  });
 </script>
 
 
