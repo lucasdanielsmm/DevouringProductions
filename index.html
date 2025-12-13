@@ -111,70 +111,58 @@
 }
 
 
-/* ESTILOS DEL CARRUSEL (Ajustados para posicionamiento de botones) */
+/* ESTILOS DEL CARRUSEL (Ajustados para posicionamiento de botones y layout) */
 .carrusel {
-    position: relative;
-    width: 100%;
-    max-width: 1000px; /* Ejemplo, ajusta a tu gusto */
-    margin: 0 auto;
-    overflow: hidden;
+    max-width: 100%;        
+    margin: 40px auto;
+    position: relative; /* CLAVE para posicionar botones */
+    overflow: hidden; /* CLAVE para ocultar tarjetas no visibles */
 }
 
 .carrusel-contenedor {
-    .carrusel-contenedor {
-    display: flex;
-    width: 100%;
-    /* Movimiento más suave y lento: tardará 1.2 segundos en pasar la imagen */
+    display: flex; /* CLAVE para alineación horizontal */
+    width: 400%; /* CLAVE: 4 tarjetas * 100% */
+    /* TIEMPO DE TRANSICIÓN: Ajustado a 1.2s para un movimiento suave */
     transition: transform 1.2s ease-in-out; 
-    overflow: hidden;
 }
 
 .tarjeta {
-    flex: 0 0 100%;   /* cada tarjeta ocupa todo el ancho */
+    flex-shrink: 0;   /* CLAVE: Evita que las tarjetas se encojan */
+    width: 25%;       /* 100% / 4 tarjetas = 25% de 400%, que es 100% de la vista */
     text-align: center;
     background-color: #111;
     border-radius: 10px;
     padding: 20px;
 }
 
-.tarjeta {
-    /* CLAVE: Cada tarjeta ocupa el 100% del ancho del carrusel (1/N del carrusel-contenedor) */
+.tarjeta img {
     width: 100%;
-    
-    /* CLAVE: Asegura que la tarjeta no se "encoga" */
-    flex-shrink: 0;
-    
-    height: auto; /* O un valor fijo como 400px, si lo necesitas */
+    height: auto;
+    object-fit: cover;
 }
 
 .carrusel-btn {
-    /* Modificados para posicionamiento absoluto */
-    position: absolute; /* Nueva */
-    top: 50%; /* Nueva */
-    transform: translateY(-50%); /* Nueva */
-    background: rgba(0,0,0,0.6); /* Ajustado, antes era none */
+    position: absolute; /* CLAVE para posicionamiento */
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.6);
     border: none;
     font-size: 2em;
-    color: #fff; /* Ajustado, antes era #1e90ff */
-    padding: 10px; /* Nueva */
-    line-height: 1; /* Nueva */
-    border-radius: 50%; /* Nueva para hacerlo redondo */
+    color: #fff;
+    padding: 10px;
+    line-height: 1;
+    border-radius: 50%;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
-    z-index: 10;
+    z-index: 10; /* CLAVE: Asegura que estén encima */
 }
 
 .carrusel-btn.izquierda {
-    left: 10px; /* Nueva */
+    left: 10px;
 }
 
 .carrusel-btn.derecha {
-    right: 10px; /* Nueva */
-}
-
-.carrusel-btn:hover {
-    color: #00bfff;
-    background: rgba(0,0,0,0.8);
+    right: 10px;
 }
 /* FIN ESTILOS DEL CARRUSEL */
 
@@ -216,9 +204,9 @@
         /* Pulso de brillo más suave */
         @keyframes neonPulse {
             0%, 100% {
-                text-shadow: 0 0 2px rgba(255, 105, 180, 0.4), /* rosa tenue */
-                             0 0 4px rgba(0, 255, 255, 0.3),   /* cyan suave */
-                             0 0 6px rgba(255, 0, 255, 0.3);   /* violeta tenue */
+                text-shadow: 0 0 2px rgba(255, 105, 180, 0.4), 
+                             0 0 4px rgba(0, 255, 255, 0.3),   
+                             0 0 6px rgba(255, 0, 255, 0.3);   
             }
             50% {
                 text-shadow: 0 0 4px rgba(255, 105, 180, 0.5),
@@ -359,10 +347,6 @@
 </section>
 
 
-
-
-
-
     <h2>MOVE-LANZER: Scratch</h2>
     <p><strong>Descripción:</strong> Este es mi proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de la carrera Diseño y Produccion de videojuegos. Podés probarlo y editarlo acá:</p>
     <a href="https://scratch.mit.edu/projects/1208664342" class="btn">Jugar en Scratch</a>
@@ -424,58 +408,61 @@
     </footer>
 
     <script>
-        const contenedor = document.querySelector('.carrusel-contenedor');
-        const tarjetas = document.querySelectorAll('.carrusel-contenedor .tarjeta');
-        const botonIzquierda = document.querySelector('.carrusel-btn.izquierda');
-        const botonDerecha = document.querySelector('.carrusel-btn.derecha');
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const contenedor = document.querySelector('.carrusel-contenedor');
+            const tarjetas = document.querySelectorAll('.carrusel-contenedor .tarjeta');
+            const botonIzquierda = document.querySelector('.carrusel-btn.izquierda');
+            const botonDerecha = document.querySelector('.carrusel-btn.derecha');
 
-        let indice = 0;
+            if (!contenedor || tarjetas.length === 0 || !botonIzquierda || !botonDerecha) {
+                console.error("No se pudieron encontrar todos los elementos del carrusel.");
+                return;
+            }
 
-        function mostrarTarjeta() {
-            // Aplica el desplazamiento al contenedor completo
-            contenedor.style.transform = `translateX(-${indice * 100}%)`;
-        }
+            let indice = 0;
 
-        // Se ajusta el ancho del contenedor total (ya que antes se calculaba dentro de un loop)
-        // Aunque no es estrictamente necesario, es buena práctica si no se usa flex-grow en el contenedor
-        // contenedor.style.width = `${tarjetas.length * 100}%`; 
+            function mostrarTarjeta() {
+                // Aplica el desplazamiento: (índice * 100) es el porcentaje de tarjetas a mover
+                contenedor.style.transform = `translateX(-${indice * 100}%)`;
+            }
 
-        // Botones manuales
-        botonIzquierda.addEventListener('click', () => {
-            indice = (indice > 0) ? indice - 1 : tarjetas.length - 1;
-            mostrarTarjeta();
-        });
+            // Botones manuales
+            botonIzquierda.addEventListener('click', () => {
+                indice = (indice > 0) ? indice - 1 : tarjetas.length - 1; 
+                mostrarTarjeta();
+            });
 
-        botonDerecha.addEventListener('click', () => {
-            indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
-            mostrarTarjeta();
-        });
+            botonDerecha.addEventListener('click', () => {
+                indice = (indice < tarjetas.length - 1) ? indice + 1 : 0; 
+                mostrarTarjeta();
+            });
 
-        // Scroll automático cada 5 segundos
-        setInterval(() => {
-            indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
-            mostrarTarjeta();
-        }, 5000);
-
-        // Swipe en celular
-        let startX = 0;
-        contenedor.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-        });
-
-        contenedor.addEventListener('touchend', (e) => {
-            let endX = e.changedTouches[0].clientX;
-            let diff = startX - endX;
-
-            if (diff > 50) {
-                // izquierda → siguiente
+            // Scroll automático cada 8 segundos (AJUSTADO)
+            setInterval(() => {
                 indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
                 mostrarTarjeta();
-            } else if (diff < -50) {
-                // derecha → anterior
-                indice = (indice > 0) ? indice - 1 : tarjetas.length - 1;
-                mostrarTarjeta();
-            }
+            }, 8000); // 8000 milisegundos = 8 segundos
+
+            // Swipe en celular
+            let startX = 0;
+            contenedor.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            });
+
+            contenedor.addEventListener('touchend', (e) => {
+                let endX = e.changedTouches[0].clientX;
+                let diff = startX - endX;
+
+                if (diff > 50) {
+                    // Mover a la izquierda (siguiente imagen)
+                    indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
+                    mostrarTarjeta();
+                } else if (diff < -50) {
+                    // Mover a la derecha (anterior imagen)
+                    indice = (indice > 0) ? indice - 1 : tarjetas.length - 1;
+                    mostrarTarjeta();
+                }
+            });
         });
     </script>
     </body>
