@@ -123,6 +123,7 @@
 .carrusel-contenedor {
   display: flex;
   width: 100%;
+  overflow: hidden;
   transition: transform 0.5s ease;
 }
 
@@ -425,6 +426,26 @@ h2 {
   document.querySelector('.derecha').addEventListener('click', () => {
     indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
     mostrarTarjeta();
+  });
+  let startX = 0;
+
+contenedor.addEventListener('touchstart', (e) => {
+  startX = e.touches[0].clientX;
+  });
+
+  contenedor.addEventListener('touchend', (e) => {
+    let endX = e.changedTouches[0].clientX;
+    let diff = startX - endX;
+  
+    if (diff > 50) {
+    // deslizó a la izquierda → siguiente
+      indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
+      mostrarTarjeta();
+    } else if (diff < -50) {
+    // deslizó a la derecha → anterior
+      indice = (indice > 0) ? indice - 1 : tarjetas.length - 1;
+      mostrarTarjeta();
+    }
   });
 
   // Scroll automático cada 5 segundos
