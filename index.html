@@ -113,21 +113,22 @@
 
 /* ESTILOS DEL CARRUSEL (Ajustados para posicionamiento de botones) */
 .carrusel {
-    /* display: flex; <--- ELIMINADO: lo haces relative para posicionar botones*/
-    align-items: center;
-    justify-content: center;
-    width: 100%;            /* ocupa todo el ancho */
-    max-width: 100%;        /* elimina el límite de 600px */
-    margin: 40px auto;
     position: relative;
+    width: 100%;
+    max-width: 1000px; /* Ejemplo, ajusta a tu gusto */
+    margin: 0 auto;
     overflow: hidden;
 }
 
 .carrusel-contenedor {
+    /* CLAVE: Usar Flexbox para alinear las tarjetas horizontalmente */
     display: flex;
-    width: 100%;
-    overflow: hidden;
-    transition: transform 0.5s ease;
+    
+    /* CLAVE: Transición para el efecto de movimiento suave */
+    transition: transform 0.5s ease-in-out;
+    
+    /* El ancho se calcula automáticamente al usar flexbox y las tarjetas al 100% */
+    width: 400%; /* Si tienes 4 tarjetas, debe ser 400%. Si tienes N tarjetas, debe
 }
 
 .tarjeta {
@@ -138,10 +139,14 @@
     padding: 20px;
 }
 
-.tarjeta img {
+.tarjeta {
+    /* CLAVE: Cada tarjeta ocupa el 100% del ancho del carrusel (1/N del carrusel-contenedor) */
     width: 100%;
-    height: auto;
-    object-fit: cover;
+    
+    /* CLAVE: Asegura que la tarjeta no se "encoga" */
+    flex-shrink: 0;
+    
+    height: auto; /* O un valor fijo como 400px, si lo necesitas */
 }
 
 .carrusel-btn {
