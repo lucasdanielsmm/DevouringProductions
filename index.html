@@ -11,6 +11,8 @@
             background-color: #000000;
             color: #ffffff;
             line-height: 1.6;
+            /* AJUSTE DE SEGURIDAD */
+            overflow-x: hidden; /* Evita scroll horizontal no deseado */
         }
 
         h1, p:first-of-type {
@@ -55,11 +57,13 @@
 /* ESTILOS DE CAJAS DE JUEGOS (al final) */
 .cajas-juegos {
     display: flex;
-    flex-direction: row;        /* horizontal por defecto */
-    flex-wrap: wrap;            /* permite que bajen si no hay espacio */
+    flex-direction: row;        
+    flex-wrap: wrap;            
     justify-content: center;
     gap: 20px;
     padding: 40px 10px;
+    /* AJUSTE DE SEGURIDAD */
+    min-height: 350px; 
 }
 
 .caja {
@@ -111,24 +115,23 @@
 }
 
 
-/* ESTILOS DEL CARRUSEL (Ajustados para posicionamiento de botones y layout) */
+/* ESTILOS DEL CARRUSEL */
 .carrusel {
     max-width: 100%;        
     margin: 40px auto;
-    position: relative; /* CLAVE para posicionar botones */
-    overflow: hidden; /* CLAVE para ocultar tarjetas no visibles */
+    position: relative; 
+    overflow: hidden; 
 }
 
 .carrusel-contenedor {
-    display: flex; /* CLAVE para alineación horizontal */
-    width: 400%; /* CLAVE: 4 tarjetas * 100% */
-    /* TIEMPO DE TRANSICIÓN: Ajustado a 1.2s para un movimiento suave */
+    display: flex; 
+    width: 400%; /* Si tienes 4 tarjetas, debe ser 400% */
     transition: transform 1.2s ease-in-out; 
 }
 
 .tarjeta {
-    flex-shrink: 0;   /* CLAVE: Evita que las tarjetas se encojan */
-    width: 25%;       /* 100% / 4 tarjetas = 25% de 400%, que es 100% de la vista */
+    flex-shrink: 0;   
+    width: 25%; 
     text-align: center;
     background-color: #111;
     border-radius: 10px;
@@ -139,10 +142,12 @@
     width: 100%;
     height: auto;
     object-fit: cover;
+    /* AJUSTE DE SEGURIDAD */
+    max-width: 100%; 
 }
 
 .carrusel-btn {
-    position: absolute; /* CLAVE para posicionamiento */
+    position: absolute; 
     top: 50%;
     transform: translateY(-50%);
     background: rgba(0,0,0,0.6);
@@ -154,7 +159,7 @@
     border-radius: 50%;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
-    z-index: 10; /* CLAVE: Asegura que estén encima */
+    z-index: 10; 
 }
 
 .carrusel-btn.izquierda {
@@ -250,17 +255,17 @@
 
         /* Botón especial para redes */
         .btn-redes {
-            background-color: #28a745; /* verde base */
+            background-color: #28a745; 
             color: #fff;
         }
 
         .btn-redes:hover {
-            background-color: #3bd85f; /* verde más claro al pasar */
+            background-color: #3bd85f; 
         }
 
         .btn-redes:active {
-            background-color: #fff;    /* fondo blanco al click */
-            color: #28a745;            /* texto verde */
+            background-color: #fff;    
+            color: #28a745;            
         }
 
         .logo {
@@ -272,13 +277,13 @@
 
         /* Footer elegante */
         footer {
-            background-color: #0a0a0a; /* casi negro */
-            color: #888; /* gris suave */
+            background-color: #0a0a0a; 
+            color: #888; 
             text-align: center;
             padding: 20px 10px;
             margin-top: 40px;
             font-size: 0.9em;
-            border-top: 1px solid #111; /* línea sutil */
+            border-top: 1px solid #111; 
         }
 
         footer img {
@@ -289,14 +294,14 @@
         }
 
         footer a {
-            color: #28a745; /* verde consistente con tu botón de redes */
+            color: #28a745; 
             font-weight: bold;
             text-decoration: none;
             transition: color 0.3s ease;
         }
 
         footer a:hover {
-            color: #3bd85f; /* verde más claro al pasar */
+            color: #3bd85f; 
         }
 
         @media (max-width: 600px) {
@@ -415,14 +420,13 @@
             const botonDerecha = document.querySelector('.carrusel-btn.derecha');
 
             if (!contenedor || tarjetas.length === 0 || !botonIzquierda || !botonDerecha) {
-                console.error("No se pudieron encontrar todos los elementos del carrusel.");
+                // Si no encuentra elementos, no hace nada (para evitar errores)
                 return;
             }
 
             let indice = 0;
 
             function mostrarTarjeta() {
-                // Aplica el desplazamiento: (índice * 100) es el porcentaje de tarjetas a mover
                 contenedor.style.transform = `translateX(-${indice * 100}%)`;
             }
 
@@ -437,11 +441,11 @@
                 mostrarTarjeta();
             });
 
-            // Scroll automático cada 8 segundos (AJUSTADO)
+            // Scroll automático cada 8 segundos
             setInterval(() => {
                 indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
                 mostrarTarjeta();
-            }, 8000); // 8000 milisegundos = 8 segundos
+            }, 8000); 
 
             // Swipe en celular
             let startX = 0;
@@ -454,16 +458,14 @@
                 let diff = startX - endX;
 
                 if (diff > 50) {
-                    // Mover a la izquierda (siguiente imagen)
                     indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
                     mostrarTarjeta();
                 } else if (diff < -50) {
-                    // Mover a la derecha (anterior imagen)
                     indice = (indice > 0) ? indice - 1 : tarjetas.length - 1;
                     mostrarTarjeta();
                 }
             });
         });
     </script>
-    </body>
+</body>
 </html>
