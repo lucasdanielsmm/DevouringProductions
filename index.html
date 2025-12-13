@@ -115,7 +115,7 @@
 }
 
 
-/* ESTILOS DEL CARRUSEL */
+/* ESTILOS DEL CARRUSEL (Ajustados para una navegación suave) */
 .carrusel {
     max-width: 100%;        
     margin: 40px auto;
@@ -125,18 +125,20 @@
 
 .carrusel-contenedor {
     display: flex; 
-    width: 400%; /* Si tienes 4 tarjetas, debe ser 400% */
+    /* Quitamos el width: 400% y dejamos que flex lo maneje */
     transition: transform 1.2s ease-in-out; 
 }
 
 .tarjeta {
-    flex-shrink: 0;   
-    width: 25%; 
+    /* CLAVE: width 100% dividido por el número de tarjetas (4) */
+    flex: 0 0 25%; /* flex-grow: 0, flex-shrink: 0, width: 25% */
+    
     text-align: center;
     background-color: #111;
     border-radius: 10px;
     padding: 20px;
 }
+/* FIN ESTILOS DEL CARRUSEL */
 
 .tarjeta img {
     width: 100%;
