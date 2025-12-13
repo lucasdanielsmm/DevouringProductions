@@ -121,14 +121,12 @@
 }
 
 .carrusel-contenedor {
-    /* CLAVE: Usar Flexbox para alinear las tarjetas horizontalmente */
+    .carrusel-contenedor {
     display: flex;
-    
-    /* CLAVE: Transición para el efecto de movimiento suave */
-    transition: transform 0.5s ease-in-out;
-    
-    /* El ancho se calcula automáticamente al usar flexbox y las tarjetas al 100% */
-    width: 400%; /* Si tienes 4 tarjetas, debe ser 400%. Si tienes N tarjetas, debe
+    width: 100%;
+    /* Movimiento más suave y lento: tardará 1.2 segundos en pasar la imagen */
+    transition: transform 1.2s ease-in-out; 
+    overflow: hidden;
 }
 
 .tarjeta {
