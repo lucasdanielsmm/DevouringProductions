@@ -116,38 +116,58 @@
 
 
 /* ESTILOS DEL CARRUSEL (Ajustados para una navegación suave) */
+@media (max-width: 600px) {
+    body {
+        /* Eliminamos márgenes/padding que puedan desbordar 100vw */
+        margin: 0; 
+        padding: 0;
+    }
+    .carrusel {
+        /* Forzamos el ancho al 100% de la ventana (vista vertical) */
+        width: 100vw; 
+        margin: 20px 0; /* Ajustamos el margen para que no esté pegado */
+    }
+}
+/* ---------------------------------------------------- */
+
+
+/* 2. Contenedor Visible (Ajustado) */
 .carrusel {
+    /* Mantenemos max-width 100% y centrado para escritorio */
     max-width: 100%;        
     margin: 40px auto;
-    position: relative; 
-    overflow: hidden; 
+    position: relative;  
+    overflow: hidden; /* CLAVE para que no se vean las otras tarjetas */
 }
 
+/* 3. Contenedor de Movimiento (Correcto con Flexbox) */
 .carrusel-contenedor {
-    display: flex; 
-    /* Quitamos el width: 400% y dejamos que flex lo maneje */
+    display: flex; /* CLAVE para alineación horizontal */
     transition: transform 1.2s ease-in-out; 
 }
 
+/* 4. Estilo de Cada Tarjeta (Correcto con 25%) */
 .tarjeta {
-    /* CLAVE: width 100% dividido por el número de tarjetas (4) */
-    flex: 0 0 25%; /* flex-grow: 0, flex-shrink: 0, width: 25% */
+    /* flex: 0 0 25% asegura que cada tarjeta ocupe exactamente 1/4 del contenedor */
+    flex: 0 0 25%; 
     
     text-align: center;
     background-color: #111;
     border-radius: 10px;
     padding: 20px;
 }
-/* FIN ESTILOS DEL CARRUSEL */
 
-.tarjeta img {
+/* 5. Estilo de la Imagen (Movido dentro de .tarjeta para mejor orden) */
+.tarjeta img { 
+    /* Esta regla es vital para que la imagen no sea más ancha que el 25% asignado */
+    max-width: 100%; 
     width: 100%;
     height: auto;
     object-fit: cover;
-    /* AJUSTE DE SEGURIDAD */
-    max-width: 100%; 
+    display: block; /* Ayuda a eliminar cualquier espacio extra debajo de la imagen */
 }
 
+/* 6. Estilos de los Botones (Correctos) */
 .carrusel-btn {
     position: absolute; 
     top: 50%;
@@ -170,7 +190,6 @@
 
 .carrusel-btn.derecha {
     right: 10px;
-}
 /* FIN ESTILOS DEL CARRUSEL */
 
 
@@ -425,55 +444,56 @@
                 return;
             }
 
+            const totalTarjetas = tarjetas.length;
             let indice = 0;
-            let autoScrollInterval; // Variable para almacenar el ID del temporizador
+            let autoScrollInterval;
 
             function mostrarTarjeta() {
                 contenedor.style.transform = `translateX(-${indice * 100}%)`;
             }
 
-            // --- Lógica del Auto-Scroll que se detiene ---
+            // --- Lógica de Auto-Scroll que se detiene ---
             function iniciarAutoScroll() {
-                // Si el temporizador ya existe, lo detenemos para reiniciarlo
                 if (autoScrollInterval) {
                     clearInterval(autoScrollInterval);
                 }
                 
-                // Creamos el nuevo temporizador
                 autoScrollInterval = setInterval(() => {
-                    if (indice < tarjetas.length - 1) {
-                        // Si no es la última tarjeta, avanza
+                    if (indice < totalTarjetas - 1) {
+                        // Si no es la última, avanza
                         indice++;
                         mostrarTarjeta();
                     } else {
-                        // Si es la última tarjeta, detenemos el temporizador
+                        // Si es la última, se detiene
                         clearInterval(autoScrollInterval);
-                        console.log("Auto-scroll detenido: Se alcanzó la última imagen.");
                     }
-                }, 8000); // 8 segundos
+                }, 8000); 
             }
 
             // Iniciamos el auto-scroll al cargar la página
             iniciarAutoScroll();
 
-            // --- Lógica de Botones Manuales (Mantienen el loop infinito para la interacción del usuario) ---
+            // --- Lógica de Botones Manuales (AVANCE SIN BUCLE) ---
             botonIzquierda.addEventListener('click', () => {
-                // Permite volver atrás, haciendo loop al final si es la primera
-                indice = (indice > 0) ? indice - 1 : tarjetas.length - 1; 
+                // Retrocede, pero se detiene en la primera imagen (indice 0)
+                if (indice > 0) {
+                    indice--;
+                }
                 mostrarTarjeta();
-                // Reiniciamos el auto-scroll si el usuario interactúa
+                // Reinicia el auto-scroll si se usa el botón (si el usuario quiere verlo completo de nuevo)
                 iniciarAutoScroll(); 
             });
 
             botonDerecha.addEventListener('click', () => {
-                // Permite avanzar, haciendo loop al inicio si es la última
-                indice = (indice < tarjetas.length - 1) ? indice + 1 : 0; 
+                // Avanza, pero se detiene en la última imagen (totalTarjetas - 1)
+                if (indice < totalTarjetas - 1) {
+                    indice++;
+                }
                 mostrarTarjeta();
-                // Reiniciamos el auto-scroll si el usuario interactúa
-                iniciarAutoScroll(); 
+                iniciarAutoScroll();
             });
 
-            // --- Swipe en celular (También mantiene el loop infinito y reinicia el auto-scroll) ---
+            // --- Swipe en celular (AVANCE SIN BUCLE) ---
             let startX = 0;
             contenedor.addEventListener('touchstart', (e) => {
                 startX = e.touches[0].clientX;
@@ -484,15 +504,19 @@
                 let diff = startX - endX;
 
                 if (diff > 50) {
-                    // Mover a la izquierda (siguiente imagen)
-                    indice = (indice < tarjetas.length - 1) ? indice + 1 : 0;
-                    mostrarTarjeta();
-                    iniciarAutoScroll();
+                    // Swipe a la izquierda (Avanza a la siguiente imagen)
+                    if (indice < totalTarjetas - 1) {
+                        indice++;
+                        mostrarTarjeta();
+                        iniciarAutoScroll();
+                    }
                 } else if (diff < -50) {
-                    // Mover a la derecha (anterior imagen)
-                    indice = (indice > 0) ? indice - 1 : tarjetas.length - 1;
-                    mostrarTarjeta();
-                    iniciarAutoScroll();
+                    // Swipe a la derecha (Retrocede a la anterior imagen)
+                    if (indice > 0) {
+                        indice--;
+                        mostrarTarjeta();
+                        iniciarAutoScroll();
+                    }
                 }
             });
         });
