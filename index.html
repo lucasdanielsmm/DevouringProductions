@@ -343,16 +343,22 @@
 
 /* Lupa/Icono de zoom al pasar el cursor */
 .lupa-overlay {
+    /* CLAVE: La altura debe coincidir con la de la imagen para que la lupa se muestre bien */
+    height: 100%; /* La altura del overlay es el 100% de la tarjeta */
+    
+    /* Nota: Si el texto de la tarjeta (h3 y p) está fuera del overlay, 
+       esta regla está bien. Si la lupa cubre el texto, revisamos el HTML.
+       Dado que el HTML se mantiene, usaremos 100% del contenedor.
+    */
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% - 40px); /* Ajusta la altura para no cubrir el texto/botón */
     background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 0; /* Oculto por defecto */
+    opacity: 0; 
     transition: opacity 0.3s ease;
     border-radius: 10px;
     z-index: 5;
