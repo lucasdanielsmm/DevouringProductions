@@ -132,42 +132,40 @@
 
 
 /* 2. Contenedor Visible (Ajustado) */
+/* ESTILOS DE CAJAS DE JUEGOS (al final) */
+/* ... (Deja tus estilos .cajas-juegos como están ahora) ... */
+
+
+/* ESTILOS DEL CARRUSEL (FINAL Y SEGURO) */
 .carrusel {
-    /* Mantenemos max-width 100% y centrado para escritorio */
+    /* Usamos max-width y centrado estándar */
     max-width: 100%;        
     margin: 40px auto;
     position: relative;  
-    overflow: hidden; /* CLAVE para que no se vean las otras tarjetas */
+    overflow: hidden; 
 }
 
-/* 3. Contenedor de Movimiento (Correcto con Flexbox) */
 .carrusel-contenedor {
-    display: flex; /* CLAVE para alineación horizontal */
+    display: flex; 
     transition: transform 1.2s ease-in-out; 
 }
 
-/* 4. Estilo de Cada Tarjeta (Correcto con 25%) */
 .tarjeta {
-    /* flex: 0 0 25% asegura que cada tarjeta ocupe exactamente 1/4 del contenedor */
-    flex: 0 0 25%; 
-    
+    flex: 0 0 25%; /* flex-grow: 0, flex-shrink: 0, width: 25% */
     text-align: center;
     background-color: #111;
     border-radius: 10px;
     padding: 20px;
 }
 
-/* 5. Estilo de la Imagen (Movido dentro de .tarjeta para mejor orden) */
-.tarjeta img { 
-    /* Esta regla es vital para que la imagen no sea más ancha que el 25% asignado */
-    max-width: 100%; 
+.tarjeta img {
+    max-width: 100%;
     width: 100%;
     height: auto;
     object-fit: cover;
-    display: block; /* Ayuda a eliminar cualquier espacio extra debajo de la imagen */
+    display: block; 
 }
 
-/* 6. Estilos de los Botones (Correctos) */
 .carrusel-btn {
     position: absolute; 
     top: 50%;
@@ -190,6 +188,22 @@
 
 .carrusel-btn.derecha {
     right: 10px;
+}
+
+/* **Ajuste Crítico para Móvil:** Quitamos la regla del BODY, solo ajustamos el carrusel */
+@media (max-width: 600px) {
+    .carrusel {
+        /* Permite que el carrusel se estire sin crear scroll horizontal */
+        margin-left: 0; 
+        margin-right: 0;
+    }
+
+    /* Reglas para asegurar que el logo y los botones sigan centrados */
+    .logo, .btn {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
 /* FIN ESTILOS DEL CARRUSEL */
 
 
