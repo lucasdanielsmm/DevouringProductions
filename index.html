@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucas Daniel Soriano</title>
     <style>
-        /* REGRESION: BOX-SIZING RESET para evitar desbordes por padding */
+        /* REGRESION: BOX-SIZING RESET */
         *, *::before, *::after {
             box-sizing: border-box; 
         }
@@ -16,7 +16,7 @@
             background-color: #000000;
             color: #ffffff;
             line-height: 1.6;
-            overflow-x: hidden; /* Seguridad anti-scroll horizontal */
+            overflow-x: hidden; 
         }
 
         h1, p:first-of-type {
@@ -58,260 +58,222 @@
             border: none;
         }
 
-/* ESTILOS DE CAJAS DE JUEGOS (al final) */
-.cajas-juegos {
-    display: flex;
-    flex-direction: row;       
-    flex-wrap: wrap;           
-    justify-content: center;
-    gap: 20px;
-    padding: 40px 10px;
-}
+        /* ESTILOS DE CAJAS DE JUEGOS */
+        .cajas-juegos {
+            display: flex;
+            flex-direction: row;        
+            flex-wrap: wrap;            
+            justify-content: center;
+            gap: 20px;
+            padding: 40px 10px;
+        }
 
-.caja {
-    width: 200px;
-    height: 280px;
-    background-color: #111;
-    border: 2px solid #333;
-    border-radius: 6px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.6);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+        .caja {
+            width: 200px;
+            height: 280px;
+            background-color: #111;
+            border: 2px solid #333;
+            border-radius: 6px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-.caja:hover {
-    transform: scale(1.05);
-    box-shadow: 0 12px 24px rgba(255,105,180,0.4);
-}
+        .caja:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 24px rgba(255,105,180,0.4);
+        }
 
-.caja img {
-    width: 100%;
-    height: 70%;
-    object-fit: cover;
-    border-bottom: 2px solid #333;
-}
+        .caja img {
+            width: 100%;
+            height: 70%;
+            object-fit: cover;
+            border-bottom: 2px solid #333;
+        }
 
-.caja h3 {
-    font-size: 1.1em;
-    margin: 8px 0 4px;
-    background: linear-gradient(90deg, red, pink, cyan);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+        .caja h3 {
+            font-size: 1.1em;
+            margin: 8px 0 4px;
+            background: linear-gradient(90deg, red, pink, cyan);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-.caja p {
-    font-size: 0.85em;
-    color: #ccc;
-    margin: 0 10px 10px;
-}
+        .caja p {
+            font-size: 0.85em;
+            color: #ccc;
+            margin: 0 10px 10px;
+        }
 
-/* Responsivo: en pantallas pequeñas se apilan verticalmente */
-@media (max-width: 600px) {
-    .cajas-juegos {
-        flex-direction: column;
-        align-items: center;
-    }
-}
+        @media (max-width: 600px) {
+            .cajas-juegos {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
 
+        /* --- ESTILOS DEL CARRUSEL --- */
+        .carrusel {
+            max-width: 100%;      
+            margin: 40px auto;
+            position: relative; 
+            overflow: hidden; 
+        }
 
-/* --- ESTILOS DEL CARRUSEL: SOLUCIÓN FINAL (ASPECT-RATIO) --- */
+        .carrusel-contenedor {
+            display: flex; 
+            transition: transform 1.2s ease-in-out; 
+        }
 
-/* --- ESTILOS DEL CARRUSEL: UNIFICADO (IMAGEN, FLECHAS, LUPA, BRILLO) --- */
+        .tarjeta {
+            flex: 0 0 100%; 
+            text-align: center;
+            background-color: #111;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative; 
+            cursor: pointer;
+            overflow: hidden; 
+        }
 
-.carrusel {
-    max-width: 100%;      
-    margin: 40px auto;
-    position: relative; 
-    overflow: hidden; 
-}
+        /* Regla para PC: Muestra 4 tarjetas */
+        @media (min-width: 900px) {
+            .tarjeta {
+                flex: 0 0 25%; 
+            }
+        }
 
-.carrusel-contenedor {
-    display: flex; 
-    transition: transform 1.2s ease-in-out; 
-}
+        .tarjeta img {
+            width: 100%;
+            aspect-ratio: 16 / 9; 
+            object-fit: cover;
+            max-width: 100%;
+            display: block; 
+            border-radius: 8px; 
+        }
 
-/* Base de la tarjeta */
-.tarjeta {
-    flex: 0 0 100%; 
-    text-align: center;
-    background-color: #111;
-    border-radius: 10px;
-    padding: 20px;
-    position: relative; 
-    cursor: pointer;
-    overflow: hidden; /* Necesario para contener el efecto de brillo */
-}
+        /* --- ESTILOS DE LUPA --- */
+        .lupa-overlay {
+            position: absolute;
+            top: 20px; 
+            left: 20px; 
+            width: calc(100% - 40px); 
+            height: auto; 
+            aspect-ratio: 16 / 9; 
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0; 
+            transition: opacity 0.3s ease;
+            border-radius: 8px; 
+            z-index: 5; 
+        }
 
-/* Regla para PC: Muestra 4 tarjetas */
-@media (min-width: 900px) {
-    .tarjeta {
-        flex: 0 0 25%; 
-    }
-}
+        .tarjeta:hover .lupa-overlay {
+            opacity: 1; 
+        }
 
-/* La Imagen: Usa Aspect-Ratio */
-.tarjeta img {
-    width: 100%;
-    aspect-ratio: 16 / 9; 
-    object-fit: cover;
-    max-width: 100%;
-    display: block; 
-    border-radius: 8px; 
-}
+        .lupa-overlay::after {
+            content: "🔍"; 
+            font-size: 3em;
+            color: white;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
 
-/* --- ESTILOS DE LUPA (Overlay) --- */
+        /* --- ESTILOS DE BOTONES --- */
+        .carrusel-btn {
+            position: absolute; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            background: rgba(0, 0, 0, 0.4); 
+            border: 2px solid #1e90ff; 
+            font-size: 2em;
+            color: #1e90ff; 
+            padding: 10px;
+            line-height: 1;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s;
+            z-index: 10; 
+        }
 
-.lupa-overlay {
-    /* Posiciona la lupa exactamente sobre la imagen, sin cubrir el padding */
-    position: absolute;
-    top: 20px; 
-    left: 20px; 
-    width: calc(100% - 40px); /* 100% menos 20px de padding por lado */
-    
-    /* La altura debe coincidir con la de la imagen */
-    height: auto; 
-    aspect-ratio: 16 / 9; 
-    
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0; 
-    transition: opacity 0.3s ease;
-    border-radius: 8px; 
-    z-index: 5; /* Alto para estar sobre la imagen */
-}
+        .carrusel-btn:hover {
+            background-color: #1e90ff; 
+            color: #000; 
+        }
 
-.tarjeta:hover .lupa-overlay {
-    opacity: 1; /* Mostrar al pasar el ratón */
-}
+        .carrusel-btn.izquierda {
+            left: 10px;
+        }
 
-.lupa-overlay::after {
-    content: "🔍"; 
-    font-size: 3em;
-    color: white;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
-}
+        .carrusel-btn.derecha {
+            right: 10px;
+        }
 
+        /* Clase para ocultar botones si no son necesarios */
+        .carrusel-btn.oculto {
+            opacity: 0;
+            pointer-events: none;
+        }
 
-/* --- ESTILOS DE BOTONES (Flechas) --- */
+        /* --- EFECTO DE BRILLO --- */
+        .tarjeta h3, .tarjeta p {
+            position: relative;
+            z-index: 2; 
+        }
 
-.carrusel-btn {
-    position: absolute; 
-    top: 50%; 
-    transform: translateY(-50%); 
-    background: rgba(0, 0, 0, 0.4); 
-    border: 2px solid #1e90ff; 
-    font-size: 2em;
-    color: #1e90ff; 
-    padding: 10px;
-    line-height: 1;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    z-index: 10; 
-}
+        .tarjeta::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%; 
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent
+            );
+            transition: transform 0.5s ease; 
+            z-index: 1; 
+        }
 
-.carrusel-btn:hover {
-    background-color: #1e90ff; 
-    color: #000; 
-}
+        .tarjeta:hover::after {
+            transform: translateX(200%); 
+        }
 
-.carrusel-btn.izquierda {
-    left: 10px;
-}
-
-.carrusel-btn.derecha {
-    right: 10px;
-}
-
-/* --- EFECTO DE BRILLO EN EL TEXTO --- */
-
-/* Contenedores de texto */
-.tarjeta h3, .tarjeta p {
-    position: relative;
-    z-index: 2; /* Asegura que el texto esté por encima del brillo */
-}
-
-/* El elemento que crea el efecto de brillo (usa ::after) */
-.tarjeta::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%; 
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg, 
-        transparent, 
-        rgba(255, 255, 255, 0.1) 50%, 
-        transparent
-    );
-    transition: transform 0.5s ease; 
-    z-index: 1; /* Bajo el texto (z-index: 2) y bajo la lupa (z-index: 5) */
-}
-
-/* Mover el brillo al pasar el ratón */
-.tarjeta:hover::after {
-    transform: translateX(200%); /* Mover el brillo de -100% a 100% */
-}
-/* --- FIN ESTILOS DEL CARRUSEL: UNIFICADO --- */
-/* --- FIN ESTILOS DEL CARRUSEL: SOLUCIÓN FINAL (ASPECT-RATIO) --- */
-
-
-/* ESTILOS RGB, FOOTER, ETC. */
-        /* Efecto RGB multicolor con brillo suave y rápido */
+        /* ESTILOS RGB, FOOTER, ETC. */
         h2 {
             font-size: 1.5em;
             margin-top: 40px;
             text-align: center;
-            background: linear-gradient(
-                90deg,
-                red,
-                orange,
-                yellow,
-                lime,
-                green,
-                cyan,
-                turquoise,
-                blue,
-                indigo,
-                violet,
-                magenta,
-                pink
-            );
+            background: linear-gradient(90deg, red, orange, yellow, lime, green, cyan, turquoise, blue, indigo, violet, magenta, pink);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-size: 300% 300%;
             animation: rgbShift 8s infinite linear, neonPulse 2s infinite ease-in-out;
         }
 
-        /* Animación del degradado en movimiento */
         @keyframes rgbShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* Pulso de brillo más suave */
         @keyframes neonPulse {
             0%, 100% {
-                text-shadow: 0 0 2px rgba(255, 105, 180, 0.4), 
-                             0 0 4px rgba(0, 255, 255, 0.3),   
-                             0 0 6px rgba(255, 0, 255, 0.3);   
+                text-shadow: 0 0 2px rgba(255, 105, 180, 0.4), 0 0 4px rgba(0, 255, 255, 0.3), 0 0 6px rgba(255, 0, 255, 0.3);    
             }
             50% {
-                text-shadow: 0 0 4px rgba(255, 105, 180, 0.5),
-                             0 0 8px rgba(0, 255, 255, 0.4),
-                             0 0 10px rgba(255, 0, 255, 0.4);
+                text-shadow: 0 0 4px rgba(255, 105, 180, 0.5), 0 0 8px rgba(0, 255, 255, 0.4), 0 0 10px rgba(255, 0, 255, 0.4);
             }
         }
 
-
-        /* Separador sutil con degradado */
         .divider {
             border: 0;
             height: 3px;
@@ -319,7 +281,6 @@
             margin: 30px 0;
         }
 
-        /* Botones táctiles generales */
         .btn {
             display: inline-block;
             padding: 12px 20px;
@@ -343,7 +304,6 @@
             color: #000;
         }
 
-        /* Botón especial para redes */
         .btn-redes {
             background-color: #28a745; 
             color: #fff;
@@ -354,8 +314,8 @@
         }
 
         .btn-redes:active {
-            background-color: #fff;    
-            color: #28a745;            
+            background-color: #fff;     
+            color: #28a745;             
         }
 
         .logo {
@@ -365,7 +325,6 @@
             margin: 0 auto 10px;
         }
 
-        /* Footer elegante */
         footer {
             background-color: #0a0a0a; 
             color: #888; 
@@ -401,212 +360,145 @@
             .btn { width: 100%; }
         }
 
-        /* --- ESTILOS PARA MODAL Y LUPA --- */
+        /* --- ESTILOS PARA MODAL --- */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 9999; 
+            padding-top: 50px; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9); 
+        }
 
-/* Contenedor de la Tarjeta para posicionar la lupa */
-.tarjeta {
-    /* Asegura que la lupa se posicione correctamente dentro de la tarjeta */
-    position: relative; 
-    cursor: pointer;
-}
+        .modal-contenido {
+            margin: auto;
+            display: block;
+            width: 90%;
+            max-width: 900px; 
+            animation: zoom 0.6s; 
+        }
 
-/* Lupa/Icono de zoom al pasar el cursor */
-.lupa-overlay {
-    /* CLAVE: La altura debe coincidir con la de la imagen para que la lupa se muestre bien */
-    height: 100%; /* La altura del overlay es el 100% de la tarjeta */
-    
-    /* Nota: Si el texto de la tarjeta (h3 y p) está fuera del overlay, 
-       esta regla está bien. Si la lupa cubre el texto, revisamos el HTML.
-       Dado que el HTML se mantiene, usaremos 100% del contenedor.
-    */
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0; 
-    transition: opacity 0.3s ease;
-    border-radius: 10px;
-    z-index: 5;
-}
+        @keyframes zoom {
+            from {transform: scale(0)} 
+            to {transform: scale(1)}
+        }
 
-.tarjeta:hover .lupa-overlay {
-    opacity: 1; /* Mostrar al pasar el ratón */
-}
+        .cerrar-modal {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
 
-.lupa-overlay::after {
-    content: "🔍"; /* Icono de la lupa */
-    font-size: 3em;
-    color: white;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
-}
+        .cerrar-modal:hover,
+        .cerrar-modal:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
-/* Modal (La ventana que aparece en grande) */
-.modal {
-    display: none; /* Oculto por defecto */
-    position: fixed;
-    z-index: 9999; /* Asegura que esté por encima de todo */
-    padding-top: 50px; 
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.9); /* Fondo negro semi-transparente */
-}
+        @media only screen and (max-width: 700px) {
+            .modal-contenido {
+                width: 100%;
+            }
+        }
 
-/* Contenido del Modal (La imagen en sí) */
-.modal-contenido {
-    margin: auto;
-    display: block;
-    width: 90%;
-    max-width: 900px; /* Tamaño máximo para la imagen ampliada */
-    animation: zoom 0.6s; /* Animación de entrada */
-}
+        /* --- ESTILOS PARA SECCIONES DE PROYECTO (Zig-Zag) --- */
+        .proyecto-seccion {
+            padding: 20px 0;
+            margin-bottom: 40px;
+        }
 
-@keyframes zoom {
-    from {transform: scale(0)} 
-    to {transform: scale(1)}
-}
+        .proyecto-cuerpo {
+            width: 100%; 
+        }
 
-/* Botón de Cerrar (X) */
-.cerrar-modal {
-    position: absolute;
-    top: 15px;
-    right: 35px;
-    color: #f1f1f1;
-    font-size: 40px;
-    font-weight: bold;
-    transition: 0.3s;
-    cursor: pointer;
-}
+        .proyecto-seccion h2 {
+            margin-bottom: 20px;
+        }
 
-.cerrar-modal:hover,
-.cerrar-modal:focus {
-    color: #bbb;
-    text-decoration: none;
-    cursor: pointer;
-}
+        .contenido-proyecto {
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px;
+            align-items: center; 
+        }
 
-/* Media Query para móvil (ajustar el padding del modal) */
-@media only screen and (max-width: 700px) {
-    .modal-contenido {
-        width: 100%;
-    }
-}
-/* --- ESTILOS PARA SECCIONES DE PROYECTO (Zig-Zag) --- */
+        .texto-columna {
+            width: 100%;
+            text-align: center; 
+        }
 
-/* --- ESTILOS PARA SECCIONES DE PROYECTO (Zig-Zag) --- */
+        .texto-columna .btn {
+            margin: 10px auto; 
+            display: block; 
+            width: fit-content; 
+        }
 
-.proyecto-seccion {
-    padding: 20px 0;
-    margin-bottom: 40px;
-}
+        /* --- Ajustes para PC (min-width: 900px) --- */
+        @media (min-width: 900px) {
+            .proyecto-cuerpo {
+                text-align: center; 
+                max-width: 1200px; 
+                margin: 0 auto; 
+            }
+            
+            .contenido-proyecto {
+                flex-direction: row; 
+                align-items: center; /* Alineado verticalmente */
+                gap: 50px;
+            }
+            
+            .texto-columna {
+                flex: 1; 
+                max-width: 50%;
+                text-align: left; 
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                /* Corrección solicitada previamente: Subir ligeramente el bloque */
+                margin-top: -10px; 
+            }
+            
+            .texto-columna .btn {
+                margin: 10px auto; 
+                display: block; 
+            }
 
-.proyecto-cuerpo {
-    width: 100%; 
-}
+            .video-columna {
+                flex: 1; 
+                max-width: 50%;
+                display: flex;
+                flex-direction: column;
+                align-items: center; 
+            }
 
-/* Estilo base del título */
-.proyecto-seccion h2 {
-    margin-bottom: 20px;
-    line-height: 1.2;
-    /* En móvil se centra por defecto gracias al text-align del padre */
-}
+            .video-columna .informe {
+                margin-top: 10px;
+                text-align: center; 
+            }
 
-/* Contenedor Flex para las columnas */
-.contenido-proyecto {
-    display: flex; 
-    flex-direction: column; /* Móvil: Vertical */
-    gap: 20px;
-    align-items: center; 
-}
-
-/* Columna de texto (Móvil) */
-.texto-columna {
-    width: 100%;
-    text-align: center; /* Centra Título, Texto y Botón en móvil */
-}
-
-.texto-columna .btn {
-    margin: 10px auto; 
-    display: block; 
-    width: fit-content; 
-}
-
-
-/* --- Ajustes para PC (min-width: 900px) --- */
-@media (min-width: 900px) {
-    
-    .proyecto-cuerpo {
-        max-width: 1200px; 
-        margin: 0 auto; 
-    }
-    
-    .contenido-proyecto {
-        flex-direction: row; 
-        /* CLAVE 1: 'align-items: center' centra verticalmente el bloque de texto respecto al video */
-        align-items: center; 
-        gap: 50px;
-    }
-    
-    /* Configuración de la Columna de Texto en PC */
-    .texto-columna {
-        flex: 1; 
-        max-width: 50%;
-        
-        /* CLAVE 2: Centramos el contenido INTERNO de la columna */
-        text-align: center; /* Centra el Título y la Descripción horizontalmente */
-
-        margin-top: -100px;
-        /* Aseguramos que sea un bloque flexible para mejor control vertical */
-        display: flex;
-        flex-direction: column;
-        justify-content: center; 
-    }
-    
-    /* Ajuste fino para la descripción: si quieres que el párrafo se lea mejor, 
-       puedes usar 'text-align: left' o 'center'. Aquí lo dejo en center 
-       para que coincida con el título como pediste "sobre la descripción". */
-    .texto-columna p {
-        text-align: center; 
-    }
-
-    /* El botón se mantiene centrado */
-    .texto-columna .btn {
-        margin: 15px auto 0 auto; 
-    }
-
-    /* Configuración de la Columna de Video */
-    .video-columna {
-        flex: 1; 
-        max-width: 50%;
-        display: flex;
-        flex-direction: column;
-        align-items: center; 
-    }
-
-    .video-columna .informe {
-        margin-top: 10px;
-        text-align: center; 
-    }
-
-    /* Zig-Zag (Orden) */
-    .proyecto-impar .texto-columna { order: 0; }
-    .proyecto-impar .video-columna { order: 1; }
-    
-    .proyecto-par .texto-columna { order: 1; }
-    .proyecto-par .video-columna { order: 0; }
-}
+            .proyecto-impar .texto-columna { order: 0; }
+            .proyecto-impar .video-columna { order: 1; }
+            .proyecto-par .texto-columna { order: 1; }
+            .proyecto-par .video-columna { order: 0; }
+        }
     </style>
 </head>
+
 <div id="modal-imagen" class="modal">
     <span class="cerrar-modal">&times;</span>
     <img class="modal-contenido" id="imagen-modal" alt="Vista ampliada del proyecto">
 </div>
+
 <body>
 
     <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano" class="logo">
@@ -616,131 +508,110 @@
 
     <p><strong>Descripción:</strong> Soy Lucas, Game Designer, creador de experiencias inmersivas combinando precisión técnica y visión creativa. Desde la integración de sistemas de juego complejos en Unity hasta la construcción de bucles jugables atractivos, buscando siempre soluciones claras, mantenibles y reutilizables. Además, comparto mi proceso y avances de desarrollo indie en mis Redes.</p>
 
+    <section class="carrusel">
+        <button class="carrusel-btn izquierda">⟨</button>
 
-<section class="carrusel">
-    <button class="carrusel-btn izquierda">⟨</button>
-
-    <div class="carrusel-contenedor">
-        <div class="tarjeta">
-            <img src="portada-CAE-CCC.jpg" alt="CAE: CCC">
-            <h3>CAE: CCC</h3>
-            <p>Juego Arcade Emoji! hecho en HTML.</p>
+        <div class="carrusel-contenedor">
+            <div class="tarjeta">
+                <img src="portada-CAE-CCC.jpg" alt="CAE: CCC">
+                <h3>CAE: CCC</h3>
+                <p>Juego Arcade Emoji! hecho en HTML.</p>
+            </div>
+            <div class="tarjeta">
+                <img src="portada-move-lanzer.jpg" alt="MOVE-LANZER">
+                <h3>MOVE-LANZER</h3>
+                <p>Juego de oleadas infinitas hecho en Scratch.</p>
+            </div>
+            <div class="tarjeta">
+                <img src="portada-vireo-CODE.jpg" alt="Vireo CODE">
+                <h3>Vireo CODE</h3>
+                <p>RPG Sci-fi hecho en RPG Maker MV.</p>
+            </div>
+            <div class="tarjeta">
+                <img src="portada-creatura-dinoma.jpg" alt="CREATURA DINOMA">
+                <h3>CREATURA DINOMA</h3>
+                <p>Juego 3D de extracción hecho en Unity.</p>
+            </div>
         </div>
-        <div class="tarjeta">
-            <img src="portada-move-lanzer.jpg" alt="MOVE-LANZER">
+
+        <button class="carrusel-btn derecha">⟩</button>
+    </section>
+
+    <section class="proyecto-seccion proyecto-impar">
+        <div class="proyecto-cuerpo"> 
+            <h2>MOVE-LANZER: Scratch</h2>
+            <div class="contenido-proyecto">
+                <div class="texto-columna">
+                    <p><strong>Descripción:</strong> Este es mi proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de la carrera Diseño y Produccion de videojuegos. Podés probarlo y editarlo acá:</p>
+                    <a href="https://scratch.mit.edu/projects/1208664342" class="btn">Jugar en Scratch</a> 
+                </div>
+                <div class="video-columna">
+                    <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
+                    <p class="informe"><strong>Informe:</strong> Acá describo cómo hice el proyecto de Scratch. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1H_EasA6_fBTmswYct79Bxj22b70S6vSK/edit?usp=sharing">Informe Completo</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="proyecto-seccion proyecto-par">
+        <div class="proyecto-cuerpo">
+            <h2>Vireo CODE: RPG Maker</h2>
+            <div class="contenido-proyecto">
+                <div class="texto-columna">
+                    <p><strong>Descripción:</strong> Este es mi proyecto en RPG Maker MV. Es un juego de rol de estética Sci-fi que creé en la materia de Fundamentos de la Programación I en el segundo cuatrimestre del 2025. Podés descargarlo y jugarlo acá:</p>
+                    <a href="https://drive.google.com/drive/folders/1fmQCkMnAtXoqv5pZXHVjmH-JfM3LilDH?usp=drive_link" class="btn">Descargar</a>
+                </div>
+                <div class="video-columna">
+                    <iframe src="https://www.youtube.com/embed/t_Ud17NMSQQ?si=5u_qgy6hGDH1eisW" allowfullscreen></iframe>
+                    <p><strong>Informe:</strong> Acá describo cómo hice el proyecto de RPG MAKER MV. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1AyxeBXJah2CiWuHDM5pdYhdMJttzdoRP/edit?usp=sharing">Informe Completo</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="proyecto-seccion proyecto-impar">
+        <div class="proyecto-cuerpo">
+            <h2>CREATURA DINOMA: Unity</h2>
+            <div class="contenido-proyecto">
+                <div class="texto-columna">
+                    <p><strong>Descripción:</strong> Este es mi proyecto de Unity, el cuál consiste en un videojuego del género Extracción en 3D, de Capturar, Transportar y Vender Criaturas. Podés descargarlo y jugarlo acá:</p>
+                    <a href="https://drive.google.com/drive/folders/1N632Wn_cmsnFj1Ge4oFEEcSdj-sIYoGV?usp=drive_link" class="btn">Descargar</a>
+                </div>
+                <div class="video-columna">
+                    <iframe src="https://www.youtube.com/embed/YGBjGzZh438" allowfullscreen></iframe>
+                    <p><strong>Informe:</strong> Acá describo cómo hice el proyecto de Unity, muestro algunas capturas de pantalla relevantes. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1hRlHdFdcQsb9y8-r7JjA5UjjRilk5XoE/edit?usp=drive_link">Informe Completo</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cajas-juegos">
+        <div class="caja">
+            <img src="caratula-CAE-CCC.jpg" alt="CAE">
+            <h3>CAE</h3>
+            <p>Juego Arcade hecho Completamente en HTML.</p>
+        </div>
+        <div class="caja">
+            <img src="caratula-move-lanzer.jpg" alt="MOVE-LANZER">
             <h3>MOVE-LANZER</h3>
             <p>Juego de oleadas infinitas hecho en Scratch.</p>
         </div>
-        <div class="tarjeta">
-            <img src="portada-vireo-CODE.jpg" alt="Vireo CODE">
+        <div class="caja">
+            <img src="caratula-vireo-CODE.jpg" alt="Vireo CODE">
             <h3>Vireo CODE</h3>
             <p>RPG Sci-fi hecho en RPG Maker MV.</p>
         </div>
-        <div class="tarjeta">
-            <img src="portada-creatura-dinoma.jpg" alt="CREATURA DINOMA">
+        <div class="caja">
+            <img src="caratula-creatura-dinoma.jpg" alt="CREATURA DINOMA">
             <h3>CREATURA DINOMA</h3>
             <p>Juego 3D de extracción hecho en Unity.</p>
         </div>
-        <div class="tarjeta">
-            <img src="portada-CAE-CCC.jpg" alt="CAE: CCC">
-            <h3>CAE: CCC</h3>
-            <p>Juego Arcade Emoji! hecho en HTML.</p>
-        </div>
-        <div class="tarjeta">
-            <img src="portada-move-lanzer.jpg" alt="MOVE-LANZER">
-            <h3>MOVE-LANZER</h3>
-            <p>Juego de oleadas infinitas hecho en Scratch.</p>
-        </div>
-        <div class="tarjeta">
-            <img src="portada-vireo-CODE.jpg" alt="Vireo CODE">
-            <h3>Vireo CODE</h3>
-            <p>RPG Sci-fi hecho en RPG Maker MV.</p>
-        </div>
-    </div>
+    </section>
 
-    <button class="carrusel-btn derecha">⟩</button>
-</section>
-
-    <section class="proyecto-seccion proyecto-impar">
-    <div class="proyecto-cuerpo"> 
-        <div class="contenido-proyecto">
-            <div class="texto-columna">
-                <h2>MOVE-LANZER: Scratch</h2> 
-                <p><strong>Descripción:</strong> Este es mi proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de la carrera Diseño y Produccion de videojuegos. Podés probarlo y editarlo acá:</p>
-                <a href="https://scratch.mit.edu/projects/1208664342" class="btn">Jugar en Scratch</a> 
-            </div>
-            <div class="video-columna">
-                <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
-                <p class="informe"><strong>Informe:</strong> Acá describo cómo hice el proyecto de Scratch. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1H_EasA6_fBTmswYct79Bxj22b70S6vSK/edit?usp=sharing">Informe Completo</a></p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<hr class="divider">
-
-<section class="proyecto-seccion proyecto-par">
-    <div class="proyecto-cuerpo">
-        <div class="contenido-proyecto">
-            <div class="texto-columna">
-                <h2>Vireo CODE: RPG Maker</h2>
-                <p><strong>Descripción:</strong> Este es mi proyecto en RPG Maker MV. Es un juego de rol de estética Sci-fi que creé en la materia de Fundamentos de la Programación I en el segundo cuatrimestre del 2025. Podés descargarlo y jugarlo acá:</p>
-                <a href="https://drive.google.com/drive/folders/1fmQCkMnAtXoqv5pZXHVjmH-JfM3LilDH?usp=drive_link" class="btn">Descargar</a>
-            </div>
-            <div class="video-columna">
-                <iframe src="https://www.youtube.com/embed/t_Ud17NMSQQ?si=5u_qgy6hGDH1eisW" allowfullscreen></iframe>
-                <p class="informe">Acá describo cómo hice el proyecto de RPG MAKER MV. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1AyxeBXJah2CiWuHDM5pdYhdMJttzdoRP/edit?usp=sharing">Informe Completo</a></p>
-            </div>
-        </div>
-    </div>
-</section> 
-    
-<hr class="divider">
-
-<section class="proyecto-seccion proyecto-impar">
-    <div class="proyecto-cuerpo"> 
-        <div class="contenido-proyecto">
-            <div class="texto-columna">
-                <h2>CREATURA DINOMA: Unity</h2> 
-                <p><strong>Descripción:</strong> Este es mi proyecto de Unity, el cuál consiste en un videojuego del género Extracción en 3D, de Capturar, Transportar y Vender Criaturas. Podés descargarlo y jugarlo acá:</p>
-                <a href="https://drive.google.com/drive/folders/1N632Wn_cmsnFj1Ge4oFEEcSdj-sIYoGV?usp=drive_link" class="btn">Descargar</a> 
-            </div>
-            <div class="video-columna">
-                <iframe src="https://www.youtube.com/embed/YGBjGzZh438" allowfullscreen></iframe>
-                <p class="informe"><strong>Informe:</strong> Acá describo cómo hice el proyecto de Unity, muestro algunas capturas de pantalla relevantes. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1hRlHdFdcQsb9y8-r7JjA5UjjRilk5XoE/edit?usp=drive_link">Informe Completo</a></p>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<section class="cajas-juegos">
-    <div class="caja">
-        <img src="caratula-CAE-CCC.jpg" alt="CAE">
-        <h3>CAE</h3>
-        <p>Juego Arcade hecho Completamente en HTML.</p>
-    </div>
-        
-    <div class="caja">
-        <img src="caratula-move-lanzer.jpg" alt="MOVE-LANZER">
-        <h3>MOVE-LANZER</h3>
-        <p>Juego de oleadas infinitas hecho en Scratch.</p>
-    </div>
-
-    <div class="caja">
-        <img src="caratula-vireo-CODE.jpg" alt="Vireo CODE">
-        <h3>Vireo CODE</h3>
-        <p>RPG Sci-fi hecho en RPG Maker MV.</p>
-    </div>
-
-    <div class="caja">
-        <img src="caratula-creatura-dinoma.jpg" alt="CREATURA DINOMA">
-        <h3>CREATURA DINOMA</h3>
-        <p>Juego 3D de extracción hecho en Unity.</p>
-    </div>
-</section>
-
-        
     <div style="text-align:center; margin-top:30px;">
         <a href="https://linktr.ee/LucasDanielSMM" class="btn btn-redes">Mis Redes</a>
     </div>
@@ -773,8 +644,41 @@
 
             // --- Lógica del Carrusel ---
 
+            // Función para calcular el índice máximo permitido
+            function getMaxIndice() {
+                // Ancho del contenedor visible
+                const anchoContenedor = document.querySelector('.carrusel').offsetWidth;
+                // Ancho de una sola tarjeta
+                const anchoTarjeta = tarjetas[0].offsetWidth;
+                
+                // Cuántas tarjetas caben en pantalla (aprox)
+                // En móvil será 1, en PC será 4
+                const tarjetasVisibles = Math.round(anchoContenedor / anchoTarjeta);
+                
+                // El índice máximo es Total - Visibles.
+                // Si tengo 4 tarjetas y veo 4, el max es 0 (no se mueve).
+                // Si tengo 4 tarjetas y veo 1, el max es 3.
+                let max = totalTarjetas - tarjetasVisibles;
+                
+                // Seguridad: no permitir negativos
+                return Math.max(0, max);
+            }
+
+            // Función para ocultar flechas si no son necesarias
+            function actualizarFlechas() {
+                const maxIndice = getMaxIndice();
+                if (maxIndice === 0) {
+                    botonIzquierda.classList.add('oculto');
+                    botonDerecha.classList.add('oculto');
+                    contenedor.style.transform = `translateX(0px)`;
+                    indice = 0;
+                } else {
+                    botonIzquierda.classList.remove('oculto');
+                    botonDerecha.classList.remove('oculto');
+                }
+            }
+
             function mostrarTarjeta() {
-                // Obtenemos el ancho de la tarjeta visible (100% en móvil, 25% en PC)
                 const anchoTarjeta = tarjetas[0].offsetWidth; 
                 contenedor.style.transform = `translateX(-${indice * anchoTarjeta}px)`;
             }
@@ -784,28 +688,37 @@
                     clearInterval(autoScrollInterval);
                 }
                 
-                autoScrollInterval = setInterval(() => {
-                    // Bucle Infinito
-                    indice = (indice < totalTarjetas - 1) ? indice + 1 : 0;
-                    mostrarTarjeta();
-                }, 5000); 
+                // Solo iniciar autoscroll si hay desplazamiento posible
+                if (getMaxIndice() > 0) {
+                    autoScrollInterval = setInterval(() => {
+                        const maxIndice = getMaxIndice();
+                        indice = (indice < maxIndice) ? indice + 1 : 0;
+                        mostrarTarjeta();
+                    }, 5000); 
+                }
             }
 
+            // Iniciar lógica
+            actualizarFlechas();
             iniciarAutoScroll();
 
             botonIzquierda.addEventListener('click', () => {
-                indice = (indice > 0) ? indice - 1 : totalTarjetas - 1; 
+                const maxIndice = getMaxIndice();
+                // Si estamos en 0, ir al final (maxIndice), si no, restar 1
+                indice = (indice > 0) ? indice - 1 : maxIndice; 
                 mostrarTarjeta();
                 iniciarAutoScroll(); 
             });
 
             botonDerecha.addEventListener('click', () => {
-                indice = (indice < totalTarjetas - 1) ? indice + 1 : 0; 
+                const maxIndice = getMaxIndice();
+                // Si estamos en el max, volver a 0, si no, sumar 1
+                indice = (indice < maxIndice) ? indice + 1 : 0; 
                 mostrarTarjeta();
                 iniciarAutoScroll();
             });
 
-            // Swipe
+            // Swipe Táctil
             let startX = 0;
             contenedor.addEventListener('touchstart', (e) => {
                 startX = e.touches[0].clientX;
@@ -814,23 +727,31 @@
             contenedor.addEventListener('touchend', (e) => {
                 let endX = e.changedTouches[0].clientX;
                 let diff = startX - endX;
+                const maxIndice = getMaxIndice();
 
-                if (diff > 50) {
-                    indice = (indice < totalTarjetas - 1) ? indice + 1 : 0;
+                if (diff > 50) { // Deslizar izquierda (Siguiente)
+                    indice = (indice < maxIndice) ? indice + 1 : 0;
                     mostrarTarjeta();
                     iniciarAutoScroll();
-                } else if (diff < -50) {
-                    indice = (indice > 0) ? indice - 1 : totalTarjetas - 1;
+                } else if (diff < -50) { // Deslizar derecha (Anterior)
+                    indice = (indice > 0) ? indice - 1 : maxIndice;
                     mostrarTarjeta();
                     iniciarAutoScroll();
                 }
             });
             
-            window.addEventListener('resize', mostrarTarjeta);
+            // Recalcular al cambiar tamaño de ventana
+            window.addEventListener('resize', () => {
+                // Asegurar que el índice no quede fuera de rango al cambiar de móvil a PC
+                const maxIndice = getMaxIndice();
+                if (indice > maxIndice) {
+                    indice = maxIndice;
+                }
+                mostrarTarjeta();
+                actualizarFlechas();
+            });
 
             // --- Lógica del Modal (Lupa) ---
-
-            // Agregar el overlay de la lupa a cada tarjeta
             tarjetas.forEach(tarjeta => {
                 const lupaOverlay = document.createElement('div');
                 lupaOverlay.classList.add('lupa-overlay');
@@ -838,26 +759,21 @@
 
                 tarjeta.addEventListener('click', () => {
                     const imagenSrc = tarjeta.querySelector('img').src;
-                    
-                    // Abrir Modal
                     modal.style.display = "block";
                     imagenModal.src = imagenSrc;
                 });
             });
 
-            // Cerrar Modal al hacer click en la X
             cerrarModal.onclick = function() {
                 modal.style.display = "none";
             }
 
-            // Cerrar Modal al hacer click fuera de la imagen
             modal.onclick = function(e) {
                 if (e.target === modal) {
                     modal.style.display = "none";
                 }
             }
             
-            // Cerrar Modal con la tecla ESC
             document.addEventListener('keydown', function(event) {
                 if (event.key === "Escape") {
                     modal.style.display = "none";
