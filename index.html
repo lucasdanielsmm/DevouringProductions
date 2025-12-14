@@ -516,28 +516,32 @@
     display: flex; 
     flex-direction: column; /* Apilamiento vertical en móvil (por defecto) */
     gap: 20px;
-    
-    /* Centrar contenido en móvil (título y botón) */
     align-items: center; 
 }
 
-/* CLAVE: Ajustar la columna de texto y el botón en móvil */
+/* Columna de texto en vista móvil (Centra el contenido) */
 .texto-columna {
     width: 100%;
-    /* Centrar el texto y los elementos inline-block como el botón */
     text-align: center; 
 }
 
 /* Centrar el botón en móvil */
 .texto-columna .btn {
-    margin: 10px auto; /* Centrado horizontal automático */
+    margin: 10px auto; 
     display: block; 
     width: fit-content; 
 }
 
+/* Columna de video en vista móvil (Centra el iframe) */
+.video-columna {
+    /* El iframe ya se centra con 'iframe { margin: 10px auto; display: block; }' */
+    text-align: center; 
+}
+
+
 /* --- Ajustes de columnas para PC/Pantalla panorámica (min-width: 900px) --- */
 @media (min-width: 900px) {
-    /* Desactivar el centrado del CONTENIDO en PC */
+    /* Desactivar el centrado del CONTENIDO principal en PC */
     .contenido-proyecto {
         flex-direction: row; 
         align-items: flex-start;
@@ -546,52 +550,49 @@
         margin: 0 auto;
     }
     
-    /* Alineación del TÍTULO en PC (ya no es centrado) */
+    /* Alinear el TÍTULO del proyecto (h2) a la izquierda, justo antes de la división */
     .proyecto-seccion h2 {
         text-align: left; 
     }
 
-    /* La columna de texto debe alinearse a la izquierda en PC */
+    /* Columna de texto */
     .texto-columna {
         flex: 1; 
         max-width: 50%;
-        text-align: left; 
+        text-align: left; /* Descripción alineada a la izquierda */
     }
     
-    /* El botón debe alinearse a la izquierda en PC */
+    /* CLAVE DE CORRECCIÓN 1: Centrar el botón de descarga bajo la descripción en PC */
     .texto-columna .btn {
-        margin: 10px 0; /* Margen a la izquierda, quitamos el auto centrado */
+        margin: 10px auto; /* Centrado horizontal automático */
+        display: block; /* Ocupa su propio bloque */
     }
 
     /* Columna de video */
     .video-columna {
         flex: 1; 
         max-width: 50%;
+        
+        /* CLAVE DE CORRECCIÓN 2: Centrar el iframe y el informe en la columna de video en PC */
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centra el iframe y el informe horizontalmente */
     }
-    
+
     /* Asegurar que el informe quede bien posicionado debajo del video */
     .video-columna .informe {
         margin-top: 10px;
-        text-align: left;
+        text-align: center; /* Centrar el texto del informe bajo el video */
     }
 
-    /* Reordenamiento para el patrón Zig-Zag */
-    /* Proyecto IMPAR: Texto a la Izquierda, Video a la Derecha */
-    .proyecto-impar .texto-columna {
-        order: 0; 
-    }
-    .proyecto-impar .video-columna {
-        order: 1; 
-    }
+    /* Reordenamiento para el patrón Zig-Zag (mantenido) */
+    /* Proyecto IMPAR: Texto (Izquierda) - Video (Derecha) */
+    .proyecto-impar .texto-columna { order: 0; }
+    .proyecto-impar .video-columna { order: 1; }
 
-    /* Proyecto PAR: Video a la Izquierda, Texto a la Derecha */
-    .proyecto-par .texto-columna {
-        order: 1; /* Mueve el texto a la derecha */
-    }
-    
-    .proyecto-par .video-columna {
-        order: 0; /* Mueve el video a la izquierda */
-    }
+    /* Proyecto PAR: Video (Izquierda) - Texto (Derecha) */
+    .proyecto-par .texto-columna { order: 1; }
+    .proyecto-par .video-columna { order: 0; }
 }
     </style>
 </head>
