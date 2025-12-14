@@ -162,15 +162,19 @@
     padding: 20px;
 }
 
-.tarjeta {
-    /* Nueva regla de seguridad: flex-basis es el ancho base */
-    flex: 0 0 25%; 
-    width: 25%; /* Redundancia de seguridad */
-    
-    text-align: center;
-    background-color: #111;
-    border-radius: 10px;
-    padding: 20px;
+.tarjeta img {
+    /* CLAVE: Definimos una altura uniforme para todas las imágenes del carrusel */
+    height: 400px; /* Puedes ajustar este valor si 400px es muy alto o bajo */
+    width: 100%;
+    max-width: 100%;
+    display: block;
+
+    /* CLAVE: 'contain' o 'cover'. 
+       Si usas 'cover', la imagen llenará el espacio (400px) recortando los bordes.
+       Si usas 'contain', la imagen se verá completa, pero dejará barras negras.
+       Generalmente, 'cover' se usa en carruseles para evitar barras.
+    */
+    object-fit: cover; 
 }
 
 .carrusel-btn {
