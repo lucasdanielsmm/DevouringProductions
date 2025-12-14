@@ -501,39 +501,36 @@
 
 /* --- ESTILOS PARA SECCIONES DE PROYECTO (Zig-Zag) --- */
 
-/* Contenedor general de cada proyecto (video + texto) */
 .proyecto-seccion {
     padding: 20px 0;
     margin-bottom: 40px;
 }
 
-/* Base del cuerpo del proyecto (Contiene H2 y columnas) */
 .proyecto-cuerpo {
-    /* Por defecto, ocupa el 100% y alinea el texto al centro para móviles */
     width: 100%; 
-    text-align: center;
 }
 
-/* TÍTULOS de proyecto */
+/* Estilo base del título */
 .proyecto-seccion h2 {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    line-height: 1.2;
+    /* En móvil se centra por defecto gracias al text-align del padre */
 }
 
-/* Contenedor Flex para las columnas de texto y video */
+/* Contenedor Flex para las columnas */
 .contenido-proyecto {
     display: flex; 
-    flex-direction: column; /* Apilamiento vertical en móvil (por defecto) */
+    flex-direction: column; /* Móvil: Vertical */
     gap: 20px;
     align-items: center; 
 }
 
-/* Columna de texto en vista móvil (Centra el contenido) */
+/* Columna de texto (Móvil) */
 .texto-columna {
     width: 100%;
-    text-align: center; 
+    text-align: center; /* Centra Título, Texto y Botón en móvil */
 }
 
-/* Centrar el botón en móvil */
 .texto-columna .btn {
     margin: 10px auto; 
     display: block; 
@@ -541,41 +538,48 @@
 }
 
 
-/* --- Ajustes de columnas para PC/Pantalla panorámica (min-width: 900px) --- */
+/* --- Ajustes para PC (min-width: 900px) --- */
 @media (min-width: 900px) {
-    /* CLAVE DE CENTRADO DEL TÍTULO EN PC */
+    
     .proyecto-cuerpo {
-        text-align: center; /* Centra H2 */
-        max-width: 1200px; /* Limita el ancho del H2 y las columnas */
-        margin: 0 auto; /* Centra el bloque de H2 y columnas en la pantalla */
+        max-width: 1200px; 
+        margin: 0 auto; 
     }
     
-    /* Desactivar el centrado del CONTENIDO en PC */
     .contenido-proyecto {
         flex-direction: row; 
-        align-items: center; /* Centrado vertical entre columnas */
+        /* CLAVE 1: 'align-items: center' centra verticalmente el bloque de texto respecto al video */
+        align-items: center; 
         gap: 50px;
-        /* Ya no necesita max-width y margin: auto porque lo tiene .proyecto-cuerpo */
     }
     
-    /* Columna de texto */
+    /* Configuración de la Columna de Texto en PC */
     .texto-columna {
         flex: 1; 
         max-width: 50%;
-        text-align: left; /* Descripción alineada a la izquierda */
         
+        /* CLAVE 2: Centramos el contenido INTERNO de la columna */
+        text-align: center; /* Centra el Título y la Descripción horizontalmente */
+        
+        /* Aseguramos que sea un bloque flexible para mejor control vertical */
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: center; 
     }
     
-    /* Centrar el botón de descarga bajo la descripción en PC */
-    .texto-columna .btn {
-        margin: 10px auto; 
-        display: block; 
+    /* Ajuste fino para la descripción: si quieres que el párrafo se lea mejor, 
+       puedes usar 'text-align: left' o 'center'. Aquí lo dejo en center 
+       para que coincida con el título como pediste "sobre la descripción". */
+    .texto-columna p {
+        text-align: center; 
     }
 
-    /* Columna de video */
+    /* El botón se mantiene centrado */
+    .texto-columna .btn {
+        margin: 15px auto 0 auto; 
+    }
+
+    /* Configuración de la Columna de Video */
     .video-columna {
         flex: 1; 
         max-width: 50%;
@@ -584,15 +588,15 @@
         align-items: center; 
     }
 
-    /* Asegurar que el informe quede bien posicionado debajo del video */
     .video-columna .informe {
         margin-top: 10px;
         text-align: center; 
     }
 
-    /* Reordenamiento para el patrón Zig-Zag (mantenido) */
+    /* Zig-Zag (Orden) */
     .proyecto-impar .texto-columna { order: 0; }
     .proyecto-impar .video-columna { order: 1; }
+    
     .proyecto-par .texto-columna { order: 1; }
     .proyecto-par .video-columna { order: 0; }
 }
@@ -641,22 +645,21 @@
     <button class="carrusel-btn derecha">⟩</button>
 </section>
 
-    
     <section class="proyecto-seccion proyecto-impar">
     <div class="proyecto-cuerpo"> 
-        <h2>MOVE-LANZER: Scratch</h2>
         <div class="contenido-proyecto">
             <div class="texto-columna">
+                <h2>MOVE-LANZER: Scratch</h2> 
                 <p><strong>Descripción:</strong> Este es mi proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de la carrera Diseño y Produccion de videojuegos. Podés probarlo y editarlo acá:</p>
                 <a href="https://scratch.mit.edu/projects/1208664342" class="btn">Jugar en Scratch</a> 
             </div>
             <div class="video-columna">
-                <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3"></iframe>
                 <p class="informe"><strong>Informe:</strong> Acá describo cómo hice el proyecto de Scratch. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1H_EasA6_fBTmswYct79Bxj22b70S6vSK/edit?usp=sharing">Informe Completo</a></p>
             </div>
         </div>
     </div>
-    </section>
+</section>
 
 <hr class="divider">
 
@@ -674,6 +677,22 @@
     </div>
 </section>
 
+<section class="proyecto-seccion proyecto-par">
+    <div class="proyecto-cuerpo">
+        <div class="contenido-proyecto">
+            <div class="texto-columna">
+                <h2>Vireo CODE: RPG Maker</h2>
+                <p><strong>Descripción:</strong> Este es mi proyecto en RPG Maker MV. Es un juego de rol de estética Sci-fi que creé en la materia de Fundamentos de la Programación I en el segundo cuatrimestre del 2025. Podés descargarlo y jugarlo acá:</p>
+                <a href="https://drive.google.com/drive/folders/1fmQCkMnAtXoqv5pZXHVjmH-JfM3LilDH?usp=drive_link" class="btn">Descargar</a>
+            </div>
+            <div class="video-columna">
+                <iframe src="https://www.youtube.com/embed/t_Ud17NMSQQ?si=5u_qgy6hGDH1eisW"></iframe>
+                <p class="informe">Acá describo cómo hice el proyecto de RPG MAKER MV. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1AyxeBXJah2CiWuHDM5pdYhdMJttzdoRP/edit?usp=sharing">Informe Completo</a></p>
+            </div>
+        </div>
+    </div>
+</section> 
+    
 <hr class="divider">
 
 <section class="proyecto-seccion proyecto-impar">
