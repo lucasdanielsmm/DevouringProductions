@@ -556,17 +556,22 @@
     }
 
     /* --- Ajustes de columnas para PC/Pantalla panorámica (min-width: 900px) --- */
+/* --- Ajustes de columnas para PC/Pantalla panorámica (min-width: 900px) --- */
 @media (min-width: 900px) {
+    /* CLAVE: Forzar el centrado del TÍTULO (h2) en PC */
+    .proyecto-seccion h2 {
+        text-align: center;
+    }
+    
     /* Desactivar el centrado del CONTENIDO principal en PC */
     .contenido-proyecto {
         flex-direction: row; 
         align-items: flex-start;
         gap: 50px;
-        max-width: 1200px;
-        margin: 0 auto;
+        /* MANTENEMOS: Limitar el ancho de las columnas a 1200px y centrar el bloque */
+        max-width: 1200px; 
+        margin: 0 auto; 
     }
-    
-    /* El TÍTULO (h2) MANTIENE text-align: center, heredado de la regla general. */
     
     /* Columna de texto */
     .texto-columna {
@@ -575,7 +580,7 @@
         text-align: left; 
     }
     
-    /* CLAVE DE CORRECCIÓN 1: Centrar el botón de descarga bajo la descripción en PC */
+    /* Centrar el botón de descarga bajo la descripción en PC */
     .texto-columna .btn {
         margin: 10px auto; 
         display: block; 
