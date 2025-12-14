@@ -555,42 +555,50 @@
         text-align: left; 
     }
 
+    /* --- Ajustes de columnas para PC/Pantalla panorámica (min-width: 900px) --- */
+@media (min-width: 900px) {
+    /* Desactivar el centrado del CONTENIDO principal en PC */
+    .contenido-proyecto {
+        flex-direction: row; 
+        align-items: flex-start;
+        gap: 50px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    /* El TÍTULO (h2) MANTIENE text-align: center, heredado de la regla general. */
+    
     /* Columna de texto */
     .texto-columna {
         flex: 1; 
         max-width: 50%;
-        text-align: left; /* Descripción alineada a la izquierda */
+        text-align: left; 
     }
     
     /* CLAVE DE CORRECCIÓN 1: Centrar el botón de descarga bajo la descripción en PC */
     .texto-columna .btn {
-        margin: 10px auto; /* Centrado horizontal automático */
-        display: block; /* Ocupa su propio bloque */
+        margin: 10px auto; 
+        display: block; 
     }
 
     /* Columna de video */
     .video-columna {
         flex: 1; 
         max-width: 50%;
-        
-        /* CLAVE DE CORRECCIÓN 2: Centrar el iframe y el informe en la columna de video en PC */
         display: flex;
         flex-direction: column;
-        align-items: center; /* Centra el iframe y el informe horizontalmente */
+        align-items: center; 
     }
 
     /* Asegurar que el informe quede bien posicionado debajo del video */
     .video-columna .informe {
         margin-top: 10px;
-        text-align: center; /* Centrar el texto del informe bajo el video */
+        text-align: center; 
     }
 
     /* Reordenamiento para el patrón Zig-Zag (mantenido) */
-    /* Proyecto IMPAR: Texto (Izquierda) - Video (Derecha) */
     .proyecto-impar .texto-columna { order: 0; }
     .proyecto-impar .video-columna { order: 1; }
-
-    /* Proyecto PAR: Video (Izquierda) - Texto (Derecha) */
     .proyecto-par .texto-columna { order: 1; }
     .proyecto-par .video-columna { order: 0; }
 }
