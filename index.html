@@ -505,62 +505,92 @@
     margin-bottom: 40px;
 }
 
+/* Centrar TÍTULOS de proyecto en todas las vistas */
 .proyecto-seccion h2 {
-    /* Desactivar el centrado de los títulos de proyecto en pantallas grandes */
-    text-align: left; 
+    text-align: center; /* Título centrado por defecto */
     margin-bottom: 20px;
 }
 
 /* Contenedor Flex para las columnas de texto y video */
 .contenido-proyecto {
-    display: flex; /* Por defecto, apilado en móvil */
-    flex-direction: column; /* Apilamiento en móvil (Video arriba, Texto abajo) */
+    display: flex; 
+    flex-direction: column; /* Apilamiento vertical en móvil (por defecto) */
     gap: 20px;
+    
+    /* Centrar contenido en móvil (título y botón) */
+    align-items: center; 
 }
 
-/* Ajustes de columnas para PC/Pantalla panorámica */
+/* CLAVE: Ajustar la columna de texto y el botón en móvil */
+.texto-columna {
+    width: 100%;
+    /* Centrar el texto y los elementos inline-block como el botón */
+    text-align: center; 
+}
+
+/* Centrar el botón en móvil */
+.texto-columna .btn {
+    margin: 10px auto; /* Centrado horizontal automático */
+    display: block; 
+    width: fit-content; 
+}
+
+/* --- Ajustes de columnas para PC/Pantalla panorámica (min-width: 900px) --- */
 @media (min-width: 900px) {
+    /* Desactivar el centrado del CONTENIDO en PC */
     .contenido-proyecto {
-        flex-direction: row; /* Columnas lado a lado */
-        align-items: flex-start; /* Alinea arriba */
+        flex-direction: row; 
+        align-items: flex-start;
         gap: 50px;
         max-width: 1200px;
         margin: 0 auto;
     }
+    
+    /* Alineación del TÍTULO en PC (ya no es centrado) */
+    .proyecto-seccion h2 {
+        text-align: left; 
+    }
 
-    /* Columnas de texto y video comparten el espacio */
-    .texto-columna, .video-columna {
+    /* La columna de texto debe alinearse a la izquierda en PC */
+    .texto-columna {
+        flex: 1; 
+        max-width: 50%;
+        text-align: left; 
+    }
+    
+    /* El botón debe alinearse a la izquierda en PC */
+    .texto-columna .btn {
+        margin: 10px 0; /* Margen a la izquierda, quitamos el auto centrado */
+    }
+
+    /* Columna de video */
+    .video-columna {
         flex: 1; 
         max-width: 50%;
     }
-
-    /* Reordenamiento para el patrón Zig-Zag */
-    /* Proyecto IMPAR (1ro, 3ro, 5to): Texto (0) a la Izquierda, Video (1) a la Derecha (Predeterminado) */
-    .proyecto-impar .texto-columna {
-        order: 0; 
+    
+    /* Asegurar que el informe quede bien posicionado debajo del video */
+    .video-columna .informe {
+        margin-top: 10px;
         text-align: left;
     }
 
-    /* Proyecto PAR (2do, 4to, 6to): Video (0) a la Izquierda, Texto (1) a la Derecha */
+    /* Reordenamiento para el patrón Zig-Zag */
+    /* Proyecto IMPAR: Texto a la Izquierda, Video a la Derecha */
+    .proyecto-impar .texto-columna {
+        order: 0; 
+    }
+    .proyecto-impar .video-columna {
+        order: 1; 
+    }
+
+    /* Proyecto PAR: Video a la Izquierda, Texto a la Derecha */
     .proyecto-par .texto-columna {
         order: 1; /* Mueve el texto a la derecha */
-        text-align: left;
     }
     
     .proyecto-par .video-columna {
         order: 0; /* Mueve el video a la izquierda */
-    }
-
-    /* Ajuste para el botón de descarga */
-    .texto-columna .btn {
-        margin: 10px 0; /* Descentra el botón en vista de PC */
-        display: block; /* Ocupa todo el ancho disponible */
-        width: fit-content; /* Ocupa solo el espacio necesario */
-    }
-    
-    /* Asegurar que el informe quede abajo del video/texto */
-    .texto-columna p:last-child {
-        margin-top: 20px; /* Separación entre el botón y el informe */
     }
 }
     </style>
@@ -608,17 +638,17 @@
     <button class="carrusel-btn derecha">⟩</button>
 </section>
 
-
+    
     <section class="proyecto-seccion proyecto-impar">
     <h2>MOVE-LANZER: Scratch</h2>
     <div class="contenido-proyecto">
         <div class="texto-columna">
             <p><strong>Descripción:</strong> Este es mi proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de la carrera Diseño y Produccion de videojuegos. Podés probarlo y editarlo acá:</p>
-            <a href="https://scratch.mit.edu/projects/1208664342" class="btn">Jugar en Scratch</a>
-            <p><strong>Informe:</strong> Acá describo cómo hice el proyecto de Scratch. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1H_EasA6_fBTmswYct79Bxj22b70S6vSK/edit?usp=sharing">Informe Completo</a></p>
+            <a href="https://scratch.mit.edu/projects/1208664342" class="btn">Jugar en Scratch</a> 
         </div>
         <div class="video-columna">
             <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
+            <p class="informe"><strong>Informe:</strong> Acá describo cómo hice el proyecto de Scratch. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1H_EasA6_fBTmswYct79Bxj22b70S6vSK/edit?usp=sharing">Informe Completo</a></p>
         </div>
     </div>
 </section>
@@ -631,10 +661,10 @@
         <div class="texto-columna">
             <p><strong>Descripción:</strong> Este es mi proyecto en RPG Maker MV. Es un juego de rol de estética Sci-fi que creé en la materia de Fundamentos de la Programación I en el segundo cuatrimestre del 2025. Podés descargarlo y jugarlo acá:</p>
             <a href="https://drive.google.com/drive/folders/1fmQCkMnAtXoqv5pZXHVjmH-JfM3LilDH?usp=drive_link" class="btn">Descargar</a>
-            <p><strong>Informe:</strong> Acá describo cómo hice el proyecto de RPG MAKER MV. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1AyxeBXJah2CiWuHDM5pdYhdMJttzdoRP/edit?usp=sharing">Informe Completo</a></p>
         </div>
         <div class="video-columna">
             <iframe src="https://www.youtube.com/embed/t_Ud17NMSQQ?si=5u_qgy6hGDH1eisW" allowfullscreen></iframe>
+            <p><strong>Informe:</strong> Acá describo cómo hice el proyecto de RPG MAKER MV. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1AyxeBXJah2CiWuHDM5pdYhdMJttzdoRP/edit?usp=sharing">Informe Completo</a></p>
         </div>
     </div>
 </section>
@@ -647,10 +677,10 @@
         <div class="texto-columna">
             <p><strong>Descripción:</strong> Este es mi proyecto de Unity, el cuál consiste en un videojuego del género Extracción en 3D, de Capturar, Transportar y Vender Criaturas. Podés descargarlo y jugarlo acá:</p>
             <a href="https://drive.google.com/drive/folders/1N632Wn_cmsnFj1Ge4oFEEcSdj-sIYoGV?usp=drive_link" class="btn">Descargar</a>
-            <p><strong>Informe:</strong> Acá describo cómo hice el proyecto de Unity, muestro algunas capturas de pantalla relevantes. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1hRlHdFdcQsb9y8-r7JjA5UjjRilk5XoE/edit?usp=drive_link">Informe Completo</a></p>
         </div>
         <div class="video-columna">
             <iframe src="https://www.youtube.com/embed/YGBjGzZh438" allowfullscreen></iframe>
+            <p><strong>Informe:</strong> Acá describo cómo hice el proyecto de Unity, muestro algunas capturas de pantalla relevantes. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1hRlHdFdcQsb9y8-r7JjA5UjjRilk5XoE/edit?usp=drive_link">Informe Completo</a></p>
         </div>
     </div>
 </section>
