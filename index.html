@@ -421,8 +421,10 @@
             width: 100%; 
         }
 
+        /* Ajuste: margen reducido para pegar título a descripción */
         .proyecto-seccion h2 {
-            margin-bottom: 20px;
+            margin-bottom: 5px; 
+            line-height: 1.2;
         }
 
         .contenido-proyecto {
@@ -436,6 +438,11 @@
             width: 100%;
             text-align: center; 
         }
+        
+        /* Ajuste para subir descripción */
+        .texto-columna p {
+            margin-top: 5px; 
+        }
 
         .texto-columna .btn {
             margin: 10px auto; 
@@ -446,30 +453,38 @@
         /* --- Ajustes para PC (min-width: 900px) --- */
         @media (min-width: 900px) {
             .proyecto-cuerpo {
-                text-align: center; 
                 max-width: 1200px; 
                 margin: 0 auto; 
             }
             
             .contenido-proyecto {
                 flex-direction: row; 
-                align-items: center; /* Alineado verticalmente */
+                align-items: center; /* Alineado verticalmente al video */
                 gap: 50px;
             }
             
             .texto-columna {
                 flex: 1; 
                 max-width: 50%;
-                text-align: left; 
+                
+                /* CLAVE: Alineación centrada para Título y Descripción */
+                text-align: center; 
+                
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                /* Corrección solicitada previamente: Subir ligeramente el bloque */
-                margin-top: -10px; 
+                
+                /* Ajuste para subir el bloque entero ligeramente */
+                margin-top: -30px; 
+            }
+            
+            /* Asegurar que el párrafo también se centre */
+            .texto-columna p {
+                text-align: center;
             }
             
             .texto-columna .btn {
-                margin: 10px auto; 
+                margin: 15px auto 0 auto; 
                 display: block; 
             }
 
@@ -539,9 +554,9 @@
 
     <section class="proyecto-seccion proyecto-impar">
         <div class="proyecto-cuerpo"> 
-            <h2>MOVE-LANZER: Scratch</h2>
             <div class="contenido-proyecto">
                 <div class="texto-columna">
+                    <h2>MOVE-LANZER: Scratch</h2>
                     <p><strong>Descripción:</strong> Este es mi proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de la carrera Diseño y Produccion de videojuegos. Podés probarlo y editarlo acá:</p>
                     <a href="https://scratch.mit.edu/projects/1208664342" class="btn">Jugar en Scratch</a> 
                 </div>
@@ -557,9 +572,9 @@
 
     <section class="proyecto-seccion proyecto-par">
         <div class="proyecto-cuerpo">
-            <h2>Vireo CODE: RPG Maker</h2>
             <div class="contenido-proyecto">
                 <div class="texto-columna">
+                    <h2>Vireo CODE: RPG Maker</h2>
                     <p><strong>Descripción:</strong> Este es mi proyecto en RPG Maker MV. Es un juego de rol de estética Sci-fi que creé en la materia de Fundamentos de la Programación I en el segundo cuatrimestre del 2025. Podés descargarlo y jugarlo acá:</p>
                     <a href="https://drive.google.com/drive/folders/1fmQCkMnAtXoqv5pZXHVjmH-JfM3LilDH?usp=drive_link" class="btn">Descargar</a>
                 </div>
@@ -575,9 +590,9 @@
 
     <section class="proyecto-seccion proyecto-impar">
         <div class="proyecto-cuerpo">
-            <h2>CREATURA DINOMA: Unity</h2>
             <div class="contenido-proyecto">
                 <div class="texto-columna">
+                    <h2>CREATURA DINOMA: Unity</h2>
                     <p><strong>Descripción:</strong> Este es mi proyecto de Unity, el cuál consiste en un videojuego del género Extracción en 3D, de Capturar, Transportar y Vender Criaturas. Podés descargarlo y jugarlo acá:</p>
                     <a href="https://drive.google.com/drive/folders/1N632Wn_cmsnFj1Ge4oFEEcSdj-sIYoGV?usp=drive_link" class="btn">Descargar</a>
                 </div>
