@@ -141,20 +141,28 @@
     padding: 20px;
 }
 
+/* Altura de Imagen: Base (Móvil vertical) */
 .tarjeta img {
     width: 100%;
-    /* Altura por defecto para escritorio o vertical de móvil */
-    height: 350px; 
+    height: 350px; /* Altura ideal para móvil vertical (una imagen por fila) */
     object-fit: cover;
     max-width: 100%;
     display: block; 
 }
 
-/* Ajuste CLAVE para Móvil Horizontal (o pantallas pequeñas/anchas) */
-/* Reducimos la altura para que la imagen no ocupe todo el espacio vertical */
+/* Ajuste 1: Móvil Horizontal (para evitar recorte) */
 @media (max-width: 900px) and (max-height: 500px) {
     .tarjeta img {
-        height: 200px; /* Reducido a 200px o menos, ajusta este valor si es necesario */
+        height: 200px; /* Reducido para celular horizontal */
+    }
+}
+
+/* Ajuste 2: CLAVE PARA PC (Muestra 4 imágenes) */
+/* Cuando la pantalla es ancha, el 25% de la tarjeta es más ancho, 
+   así que reducimos la altura para mantener la proporción visual. */
+@media (min-width: 900px) {
+    .tarjeta img {
+        height: 200px; /* Reducido a 200px para evitar que se aplaste */
     }
 }
 .carrusel-btn {
