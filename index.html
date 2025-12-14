@@ -321,8 +321,103 @@
             h2 { font-size: 1.3em; }
             .btn { width: 100%; }
         }
+
+        /* --- ESTILOS PARA MODAL Y LUPA --- */
+
+/* Contenedor de la Tarjeta para posicionar la lupa */
+.tarjeta {
+    /* Asegura que la lupa se posicione correctamente dentro de la tarjeta */
+    position: relative; 
+    cursor: pointer;
+}
+
+/* Lupa/Icono de zoom al pasar el cursor */
+.lupa-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 40px); /* Ajusta la altura para no cubrir el texto/botón */
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Oculto por defecto */
+    transition: opacity 0.3s ease;
+    border-radius: 10px;
+    z-index: 5;
+}
+
+.tarjeta:hover .lupa-overlay {
+    opacity: 1; /* Mostrar al pasar el ratón */
+}
+
+.lupa-overlay::after {
+    content: "🔍"; /* Icono de la lupa */
+    font-size: 3em;
+    color: white;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Modal (La ventana que aparece en grande) */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 9999; /* Asegura que esté por encima de todo */
+    padding-top: 50px; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.9); /* Fondo negro semi-transparente */
+}
+
+/* Contenido del Modal (La imagen en sí) */
+.modal-contenido {
+    margin: auto;
+    display: block;
+    width: 90%;
+    max-width: 900px; /* Tamaño máximo para la imagen ampliada */
+    animation: zoom 0.6s; /* Animación de entrada */
+}
+
+@keyframes zoom {
+    from {transform: scale(0)} 
+    to {transform: scale(1)}
+}
+
+/* Botón de Cerrar (X) */
+.cerrar-modal {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.cerrar-modal:hover,
+.cerrar-modal:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Media Query para móvil (ajustar el padding del modal) */
+@media only screen and (max-width: 700px) {
+    .modal-contenido {
+        width: 100%;
+    }
+}
     </style>
 </head>
+<div id="modal-imagen" class="modal">
+    <span class="cerrar-modal">&times;</span>
+    <img class="modal-contenido" id="imagen-modal" alt="Vista ampliada del proyecto">
+</div>
 <body>
 
     <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano" class="logo">
@@ -429,6 +524,11 @@
             const tarjetas = document.querySelectorAll('.carrusel-contenedor .tarjeta');
             const botonIzquierda = document.querySelector('.carrusel-btn.izquierda');
             const botonDerecha = document.querySelector('.carrusel-btn.derecha');
+            
+            // Elementos del Modal
+            const modal = document.getElementById('modal-imagen');
+            const imagenModal = document.getElementById('imagen-modal');
+            const cerrarModal = document.querySelector('.cerrar-modal');
 
             if (!contenedor || tarjetas.length === 0 || !botonIzquierda || !botonDerecha) {
                 return;
@@ -438,30 +538,28 @@
             let indice = 0;
             let autoScrollInterval;
 
+            // --- Lógica del Carrusel ---
+
             function mostrarTarjeta() {
                 // Obtenemos el ancho de la tarjeta visible (100% en móvil, 25% en PC)
-                // y lo multiplicamos por el índice.
                 const anchoTarjeta = tarjetas[0].offsetWidth; 
                 contenedor.style.transform = `translateX(-${indice * anchoTarjeta}px)`;
             }
 
-            // --- Lógica de Auto-Scroll con Bucle Infinito ---
             function iniciarAutoScroll() {
                 if (autoScrollInterval) {
                     clearInterval(autoScrollInterval);
                 }
                 
                 autoScrollInterval = setInterval(() => {
-                    // Si no es la última, avanza. Si es la última, vuelve a 0.
+                    // Bucle Infinito
                     indice = (indice < totalTarjetas - 1) ? indice + 1 : 0;
                     mostrarTarjeta();
-                }, 5000); // 5 segundos, como en el original
+                }, 5000); 
             }
 
-            // Iniciamos el auto-scroll al cargar la página
             iniciarAutoScroll();
 
-            // --- Lógica de Botones Manuales con Bucle Infinito ---
             botonIzquierda.addEventListener('click', () => {
                 indice = (indice > 0) ? indice - 1 : totalTarjetas - 1; 
                 mostrarTarjeta();
@@ -474,7 +572,7 @@
                 iniciarAutoScroll();
             });
 
-            // --- Swipe en celular con Bucle Infinito ---
+            // Swipe
             let startX = 0;
             contenedor.addEventListener('touchstart', (e) => {
                 startX = e.touches[0].clientX;
@@ -495,8 +593,43 @@
                 }
             });
             
-            // Recalcula la posición al cambiar el tamaño de la ventana (necesario por el flex responsivo)
             window.addEventListener('resize', mostrarTarjeta);
+
+            // --- Lógica del Modal (Lupa) ---
+
+            // Agregar el overlay de la lupa a cada tarjeta
+            tarjetas.forEach(tarjeta => {
+                const lupaOverlay = document.createElement('div');
+                lupaOverlay.classList.add('lupa-overlay');
+                tarjeta.appendChild(lupaOverlay);
+
+                tarjeta.addEventListener('click', () => {
+                    const imagenSrc = tarjeta.querySelector('img').src;
+                    
+                    // Abrir Modal
+                    modal.style.display = "block";
+                    imagenModal.src = imagenSrc;
+                });
+            });
+
+            // Cerrar Modal al hacer click en la X
+            cerrarModal.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            // Cerrar Modal al hacer click fuera de la imagen
+            modal.onclick = function(e) {
+                if (e.target === modal) {
+                    modal.style.display = "none";
+                }
+            }
+            
+            // Cerrar Modal con la tecla ESC
+            document.addEventListener('keydown', function(event) {
+                if (event.key === "Escape") {
+                    modal.style.display = "none";
+                }
+            });
         });
     </script>
 </body>
