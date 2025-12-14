@@ -117,10 +117,10 @@
 }
 
 
-/* --- ESTILOS DEL CARRUSEL: CORRECCIÓN FINAL --- */
+/* --- ESTILOS DEL CARRUSEL: SOLUCIÓN FINAL (ASPECT-RATIO) --- */
 
 .carrusel {
-    max-width: 100%;        
+    max-width: 100%;      
     margin: 40px auto;
     position: relative; 
     overflow: hidden; /* Oculta lo que no se ve */
@@ -128,8 +128,7 @@
 
 .carrusel-contenedor {
     display: flex; /* Mantiene las tarjetas en línea */
-    /* El ancho total será 400% si en tarjeta usamos 25%, pero no lo definimos aquí */
-    transition: transform 1.2s ease-in-out; /* Velocidad de desplazamiento */
+    transition: transform 1.2s ease-in-out; 
 }
 
 /* Base de la tarjeta: Para móviles, muestra 1 (100%) */
@@ -139,58 +138,61 @@
     background-color: #111;
     border-radius: 10px;
     padding: 20px;
+    position: relative; /* Necesario para la lupa */
+    cursor: pointer;
 }
 
-/* Altura de Imagen: Base (Móvil vertical) */
+/* La Imagen: Utiliza aspect-ratio en TODAS las resoluciones */
 .tarjeta img {
     width: 100%;
-    /* ELIMINAMOS height: 350px/200px y usamos aspect-ratio */
-    aspect-ratio: 16 / 9; /* CLAVE: Mantiene la proporción de cine/pantalla */
-    
+    /* CLAVE FINAL: Define la proporción 16:9 sin altura fija */
+    aspect-ratio: 16 / 9; 
     object-fit: cover;
     max-width: 100%;
     display: block; 
+    border-radius: 8px; /* Un pequeño radio para que se vea bien */
 }
 
-/* Ajuste 1: Móvil Horizontal (para evitar recorte) */
-@media (max-width: 900px) and (max-height: 500px) {
-    .tarjeta img {
-        height: 200px; /* Reducido para celular horizontal */
-    }
-}
-
-/* Ajuste 2: CLAVE PARA PC (Muestra 4 imágenes) */
-/* Cuando la pantalla es ancha, el 25% de la tarjeta es más ancho, 
-   así que reducimos la altura para mantener la proporción visual. */
+/* Regla para PC: Muestra 4 tarjetas */
 @media (min-width: 900px) {
-    .tarjeta img {
-        height: 200px; /* Reducido a 200px para evitar que se aplaste */
+    .tarjeta {
+        flex: 0 0 25%; /* Muestra 4 tarjetas en la pantalla (100% / 4) */
     }
 }
-.carrusel-btn {
-    position: absolute; 
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.6);
-    border: none;
-    font-size: 2em;
-    color: #fff;
-    padding: 10px;
-    line-height: 1;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    z-index: 10; 
+
+/* Lupa/Overlay (Ajustado para cubrir SOLO la imagen) */
+.lupa-overlay {
+    /* CLAVE: Cubre la imagen y está por encima de ella */
+    position: absolute;
+    top: 20px; /* Sube para coincidir con el padding-top de .tarjeta */
+    left: 20px; /* Coincide con el padding-left de .tarjeta */
+    width: calc(100% - 40px); /* 100% menos 20px de padding por lado */
+    
+    /* La altura se calcula del mismo modo que la imagen: basándose en la proporción del ancho */
+    height: auto; 
+    aspect-ratio: 16 / 9; 
+    
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; 
+    transition: opacity 0.3s ease;
+    border-radius: 8px; /* Debe coincidir con el borde de la imagen */
+    z-index: 5;
 }
 
-.carrusel-btn.izquierda {
-    left: 10px;
+.tarjeta:hover .lupa-overlay {
+    opacity: 1; /* Mostrar al pasar el ratón */
 }
 
-.carrusel-btn.derecha {
-    right: 10px;
+.lupa-overlay::after {
+    content: "🔍"; /* Icono de la lupa */
+    font-size: 3em;
+    color: white;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
 }
-/* --- FIN ESTILOS DEL CARRUSEL --- */
+/* --- FIN ESTILOS DEL CARRUSEL: SOLUCIÓN FINAL (ASPECT-RATIO) --- */
 
 
 /* ESTILOS RGB, FOOTER, ETC. */
