@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Daniel Soriano - CAE CCC</title>
+    <style>
+        /* CSS general (Mantén el CSS principal de tu archivo anterior aquí) */
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden; 
+            text-align: center; /* Centrar todo por defecto */
+        }
+        
+        .logo {
+            max-width: 120px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+            cursor: pointer; /* Indica que es clickeable */
+        }
+        
+        /* Estilos del Título Principal */
+        .titulo-pagina {
+            font-size: 3em; /* Título grande como en la imagen de EarthShape */
+            color: #ffffff;
+            margin: 30px auto 10px auto;
+            text-align: center;
+        }
+
+        /* Contenedor del Video/Portada */
+        .video-container {
+            width: 90%;
+            max-width: 800px; /* Ancho máximo para el video */
+            margin: 20px auto;
+            aspect-ratio: 16/9;
+            position: relative;
+        }
+        
+        .video-container iframe, .video-container img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: none;
+            border-radius: 8px;
+        }
+
+        /* Estilos del Subtítulo (Sow the stars!) */
+        .subtitulo {
+            font-size: 2em;
+            color: #1e90ff; /* Color de acento */
+            margin: 40px auto 20px auto;
+            text-align: center;
+        }
+
+        /* Contenedor de Detalles (Vamp - Status, Role, etc.) */
+        .detalles-container {
+            display: inline-block; /* Opcional: para que la caja no sea 100% ancho */
+            text-align: left;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #111;
+            border-radius: 8px;
+        }
+        
+        .detalle-fila {
+            display: flex;
+            justify-content: space-between;
+            width: 300px;
+            margin-bottom: 5px;
+        }
+
+        .detalle-fila strong {
+            color: #fff;
+        }
+
+        .detalle-fila span {
+            color: #ccc;
+        }
+
+        /* Contenedor de la Galería de Capturas */
+        .galeria {
+            margin-top: 50px;
+            padding: 20px 10px;
+            border-top: 1px solid #333;
+            text-align: center;
+        }
+
+        .galeria h3 {
+            font-size: 1.8em;
+            color: #1e90ff;
+            margin-bottom: 30px;
+        }
+
+        .capturas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .capturas-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .capturas-grid img:hover {
+            transform: scale(1.02);
+        }
+        
+        /* Incluye el resto de tus estilos (Modal, Footer, Botones, etc.) aquí */
+        
+    </style>
+</head>
+<body>
+
+    <a href="index.html">
+        <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano" class="logo">
+    </a>
+
+    <h1 class="titulo-pagina">CAE</h1>
+
+    <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
+    </div>
+
+    <h2 class="subtitulo">¡Juego de Oleadas Infinitas!</h2>
+
+    <p style="max-width: 800px; margin: 0 auto 30px auto; padding: 0 20px;">
+        MOVE-LANZER es un proyecto de Scratch diseñado como parte de mi formación en Diseño y Producción de Videojuegos. Se centra en un bucle de juego simple pero adictivo: esquivar enemigos, recolectar potenciadores y sobrevivir a oleadas infinitas.
+    </p>
+
+    <div class="detalles-container">
+        <div class="detalle-fila">
+            <strong>Project Status</strong>
+            <span>Completed</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Project Type</strong>
+            <span>Academic Project</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Project Duration</strong>
+            <span>4 weeks</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Software Used</strong>
+            <span>Scratch</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Languages Used</strong>
+            <span>Visual Blocks</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Primary Role(s)</strong>
+            <span>Game Design / Programming</span>
+        </div>
+    </div>
+    
+    <a href="https://scratch.mit.edu/projects/1208664342" class="btn" style="margin-top: 30px;">Jugar en Scratch</a> 
+    
+    <section class="galeria">
+        <h3>Capturas y Proceso de Desarrollo</h3>
+        <div class="capturas-grid">
+            <img src="captura-move-lanzer-1.jpg" alt="Captura de pantalla 1 de Move-Lanzer">
+            <img src="captura-move-lanzer-2.jpg" alt="Captura de pantalla 2 de Move-Lanzer">
+            <img src="captura-move-lanzer-3.jpg" alt="Captura de pantalla 3 de Move-Lanzer">
+            </div>
+    </section>
+
+    <footer>
+        <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano">
+        <p>© 2025 Lucas Daniel Soriano</p>
+        <p><a href="https://linktr.ee/LucasDanielSMM">Contacto</a></p>
+    </footer>
+    
+    </body>
+</html>
