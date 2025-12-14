@@ -497,16 +497,5 @@
             });
         });
     </script>
-    ```
-
-### Resumen de los Cambios:
-
-1.  Se creó una función `iniciarAutoScroll()`.
-2.  Dentro de esta función, la lógica de `setInterval` ahora verifica: `if (indice < tarjetas.length - 1)`.
-3.  Si la condición es falsa (estamos en la última imagen), se llama a `clearInterval(autoScrollInterval)`, deteniendo el movimiento.
-4.  La lógica de los botones manuales (izquierdo y derecho) se mantiene con *loop* infinito, ya que es el comportamiento esperado para la interacción del usuario. Además, se llama a `iniciarAutoScroll()` al interactuar, por si el carrusel se había detenido antes.
-
-Con esto, el carrusel se moverá automáticamente hasta la última imagen y se detendrá ahí.
-                                                                                       
 </body>
 </html>
