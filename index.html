@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucas Daniel Soriano</title>
     <style>
-    *, *::before, *::after {
-        box-sizing: border-box; /* CLAVE para que padding y border no rompan el 25% */
+        /* REGRESION: BOX-SIZING RESET para evitar desbordes por padding */
+        *, *::before, *::after {
+            box-sizing: border-box; 
         }
+
         body {
             font-family: Arial, sans-serif;
             margin: 10px;
             background-color: #000000;
             color: #ffffff;
             line-height: 1.6;
-            /* AJUSTE DE SEGURIDAD */
-            overflow-x: hidden; /* Evita scroll horizontal no deseado */
+            overflow-x: hidden; /* Seguridad anti-scroll horizontal */
         }
 
         h1, p:first-of-type {
@@ -60,13 +61,11 @@
 /* ESTILOS DE CAJAS DE JUEGOS (al final) */
 .cajas-juegos {
     display: flex;
-    flex-direction: row;        
-    flex-wrap: wrap;            
+    flex-direction: row;       
+    flex-wrap: wrap;           
     justify-content: center;
     gap: 20px;
     padding: 40px 10px;
-    /* AJUSTE DE SEGURIDAD */
-    min-height: 350px; 
 }
 
 .caja {
@@ -118,44 +117,24 @@
 }
 
 
-/* ESTILOS DEL CARRUSEL (Ajustados para una navegación suave) */
-@media (max-width: 600px) {
-    body {
-        /* Eliminamos márgenes/padding que puedan desbordar 100vw */
-        margin: 0; 
-        padding: 0;
-    }
-    .carrusel {
-        /* Forzamos el ancho al 100% de la ventana (vista vertical) */
-        width: 100vw; 
-        margin: 20px 0; /* Ajustamos el margen para que no esté pegado */
-    }
-}
-/* ---------------------------------------------------- */
+/* --- ESTILOS DEL CARRUSEL: CORRECCIÓN FINAL --- */
 
-
-/* 2. Contenedor Visible (Ajustado) */
-/* ESTILOS DE CAJAS DE JUEGOS (al final) */
-/* ... (Deja tus estilos .cajas-juegos como están ahora) ... */
-
-
-/* ESTILOS DEL CARRUSEL (FINAL Y SEGURO) */
 .carrusel {
-    /* Usamos max-width y centrado estándar */
     max-width: 100%;        
     margin: 40px auto;
-    position: relative;  
-    overflow: hidden; 
+    position: relative; 
+    overflow: hidden; /* Oculta lo que no se ve */
 }
 
 .carrusel-contenedor {
-    display: flex; 
-    transition: transform 1.2s ease-in-out; 
+    display: flex; /* Mantiene las tarjetas en línea */
+    /* El ancho total será 400% si en tarjeta usamos 25%, pero no lo definimos aquí */
+    transition: transform 1.2s ease-in-out; /* Velocidad de desplazamiento */
 }
 
+/* Base de la tarjeta: Para móviles, muestra 1 (100%) */
 .tarjeta {
-    flex: 0 0 25%; /* flex-grow: 0, flex-shrink: 0, width: 25% */
-    
+    flex: 0 0 100%; /* CLAVE: Por defecto, ocupa el 100% (vista móvil) */
     text-align: center;
     background-color: #111;
     border-radius: 10px;
@@ -163,18 +142,20 @@
 }
 
 .tarjeta img {
-    /* CLAVE: Definimos una altura uniforme para todas las imágenes del carrusel */
-    height: 400px; /* Puedes ajustar este valor si 400px es muy alto o bajo */
     width: 100%;
+    /* Altura fija para evitar que se estire/aplaste, usando 'cover' para recortar si es necesario */
+    height: 350px; 
+    object-fit: cover;
     max-width: 100%;
-    display: block;
+    display: block; 
+}
 
-    /* CLAVE: 'contain' o 'cover'. 
-       Si usas 'cover', la imagen llenará el espacio (400px) recortando los bordes.
-       Si usas 'contain', la imagen se verá completa, pero dejará barras negras.
-       Generalmente, 'cover' se usa en carruseles para evitar barras.
-    */
-    object-fit: cover; 
+/* Media Query: Para PC/Pantallas Horizontales (Muestra 4) */
+@media (min-width: 900px) {
+    .tarjeta {
+        /* CLAVE: Si la pantalla es grande, muestra 4. Cada una toma el 25% */
+        flex: 0 0 25%;
+    }
 }
 
 .carrusel-btn {
@@ -200,22 +181,7 @@
 .carrusel-btn.derecha {
     right: 10px;
 }
-
-/* **Ajuste Crítico para Móvil:** Quitamos la regla del BODY, solo ajustamos el carrusel */
-@media (max-width: 600px) {
-    .carrusel {
-        /* Permite que el carrusel se estire sin crear scroll horizontal */
-        margin-left: 0; 
-        margin-right: 0;
-    }
-
-    /* Reglas para asegurar que el logo y los botones sigan centrados */
-    .logo, .btn {
-        margin-left: auto;
-        margin-right: auto;
-    }
-}
-/* FIN ESTILOS DEL CARRUSEL */
+/* --- FIN ESTILOS DEL CARRUSEL --- */
 
 
 /* ESTILOS RGB, FOOTER, ETC. */
@@ -474,51 +440,42 @@
             let autoScrollInterval;
 
             function mostrarTarjeta() {
-                contenedor.style.transform = `translateX(-${indice * 100}%)`;
+                // Obtenemos el ancho de la tarjeta visible (100% en móvil, 25% en PC)
+                // y lo multiplicamos por el índice.
+                const anchoTarjeta = tarjetas[0].offsetWidth; 
+                contenedor.style.transform = `translateX(-${indice * anchoTarjeta}px)`;
             }
 
-            // --- Lógica de Auto-Scroll que se detiene ---
+            // --- Lógica de Auto-Scroll con Bucle Infinito ---
             function iniciarAutoScroll() {
                 if (autoScrollInterval) {
                     clearInterval(autoScrollInterval);
                 }
                 
                 autoScrollInterval = setInterval(() => {
-                    if (indice < totalTarjetas - 1) {
-                        // Si no es la última, avanza
-                        indice++;
-                        mostrarTarjeta();
-                    } else {
-                        // Si es la última, se detiene
-                        clearInterval(autoScrollInterval);
-                    }
-                }, 8000); 
+                    // Si no es la última, avanza. Si es la última, vuelve a 0.
+                    indice = (indice < totalTarjetas - 1) ? indice + 1 : 0;
+                    mostrarTarjeta();
+                }, 5000); // 5 segundos, como en el original
             }
 
             // Iniciamos el auto-scroll al cargar la página
             iniciarAutoScroll();
 
-            // --- Lógica de Botones Manuales (AVANCE SIN BUCLE) ---
+            // --- Lógica de Botones Manuales con Bucle Infinito ---
             botonIzquierda.addEventListener('click', () => {
-                // Retrocede, pero se detiene en la primera imagen (indice 0)
-                if (indice > 0) {
-                    indice--;
-                }
+                indice = (indice > 0) ? indice - 1 : totalTarjetas - 1; 
                 mostrarTarjeta();
-                // Reinicia el auto-scroll si se usa el botón (si el usuario quiere verlo completo de nuevo)
                 iniciarAutoScroll(); 
             });
 
             botonDerecha.addEventListener('click', () => {
-                // Avanza, pero se detiene en la última imagen (totalTarjetas - 1)
-                if (indice < totalTarjetas - 1) {
-                    indice++;
-                }
+                indice = (indice < totalTarjetas - 1) ? indice + 1 : 0; 
                 mostrarTarjeta();
                 iniciarAutoScroll();
             });
 
-            // --- Swipe en celular (AVANCE SIN BUCLE) ---
+            // --- Swipe en celular con Bucle Infinito ---
             let startX = 0;
             contenedor.addEventListener('touchstart', (e) => {
                 startX = e.touches[0].clientX;
@@ -529,21 +486,18 @@
                 let diff = startX - endX;
 
                 if (diff > 50) {
-                    // Swipe a la izquierda (Avanza a la siguiente imagen)
-                    if (indice < totalTarjetas - 1) {
-                        indice++;
-                        mostrarTarjeta();
-                        iniciarAutoScroll();
-                    }
+                    indice = (indice < totalTarjetas - 1) ? indice + 1 : 0;
+                    mostrarTarjeta();
+                    iniciarAutoScroll();
                 } else if (diff < -50) {
-                    // Swipe a la derecha (Retrocede a la anterior imagen)
-                    if (indice > 0) {
-                        indice--;
-                        mostrarTarjeta();
-                        iniciarAutoScroll();
-                    }
+                    indice = (indice > 0) ? indice - 1 : totalTarjetas - 1;
+                    mostrarTarjeta();
+                    iniciarAutoScroll();
                 }
             });
+            
+            // Recalcula la posición al cambiar el tamaño de la ventana (necesario por el flex responsivo)
+            window.addEventListener('resize', mostrarTarjeta);
         });
     </script>
 </body>
