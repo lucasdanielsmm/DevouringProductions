@@ -499,15 +499,23 @@
 }
 /* --- ESTILOS PARA SECCIONES DE PROYECTO (Zig-Zag) --- */
 
+/* --- ESTILOS PARA SECCIONES DE PROYECTO (Zig-Zag) --- */
+
 /* Contenedor general de cada proyecto (video + texto) */
 .proyecto-seccion {
     padding: 20px 0;
     margin-bottom: 40px;
 }
 
-/* Centrar TÍTULOS de proyecto en todas las vistas */
+/* Base del cuerpo del proyecto (Contiene H2 y columnas) */
+.proyecto-cuerpo {
+    /* Por defecto, ocupa el 100% y alinea el texto al centro para móviles */
+    width: 100%; 
+    text-align: center;
+}
+
+/* TÍTULOS de proyecto */
 .proyecto-seccion h2 {
-    text-align: center; /* Título centrado por defecto */
     margin-bottom: 20px;
 }
 
@@ -532,60 +540,33 @@
     width: fit-content; 
 }
 
-/* Columna de video en vista móvil (Centra el iframe) */
-.video-columna {
-    /* El iframe ya se centra con 'iframe { margin: 10px auto; display: block; }' */
-    text-align: center; 
-}
-
 
 /* --- Ajustes de columnas para PC/Pantalla panorámica (min-width: 900px) --- */
 @media (min-width: 900px) {
-    /* Desactivar el centrado del CONTENIDO principal en PC */
-    .contenido-proyecto {
-        flex-direction: row; 
-        align-items: flex-start;
-        gap: 50px;
-        max-width: 1200px;
-        margin: 0 auto;
+    /* CLAVE DE CENTRADO DEL TÍTULO EN PC */
+    .proyecto-cuerpo {
+        text-align: center; /* Centra H2 */
+        max-width: 1200px; /* Limita el ancho del H2 y las columnas */
+        margin: 0 auto; /* Centra el bloque de H2 y columnas en la pantalla */
     }
     
-    /* Alinear el TÍTULO del proyecto (h2) a la izquierda, justo antes de la división */
-    .proyecto-seccion h2 {
-        text-align: left; 
-    }
-
-    /* --- Ajustes de columnas para PC/Pantalla panorámica (min-width: 900px) --- */
-/* --- Ajustes de columnas para PC/Pantalla panorámica (min-width: 900px) --- */
-/* --- Ajustes de columnas para PC/Pantalla panorámica (min-width: 900px) --- */
-@media (min-width: 900px) {
-    /* Centrar TÍTULO (h2) sobre las columnas */
-    .proyecto-seccion h2 {
-        text-align: center;
-    }
-    
-    /* Desactivar el centrado del CONTENIDO principal en PC */
+    /* Desactivar el centrado del CONTENIDO en PC */
     .contenido-proyecto {
         flex-direction: row; 
-        
-        /* CLAVE DE CENTRADO 1: Alinea el bloque de texto con el video */
-        align-items: center; 
-        
+        align-items: center; /* Centrado vertical entre columnas */
         gap: 50px;
-        max-width: 1200px; 
-        margin: 0 auto; 
+        /* Ya no necesita max-width y margin: auto porque lo tiene .proyecto-cuerpo */
     }
-
+    
     /* Columna de texto */
     .texto-columna {
         flex: 1; 
         max-width: 50%;
         text-align: left; /* Descripción alineada a la izquierda */
         
-        /* CLAVE DE CENTRADO 2: Centrar el bloque de texto (descripción) sobre el botón */
         display: flex;
         flex-direction: column;
-        justify-content: center; /* Alinea contenido verticalmente si hay espacio extra */
+        justify-content: center;
     }
     
     /* Centrar el botón de descarga bajo la descripción en PC */
