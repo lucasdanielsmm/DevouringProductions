@@ -143,21 +143,20 @@
 
 .tarjeta img {
     width: 100%;
-    /* Altura fija para evitar que se estire/aplaste, usando 'cover' para recortar si es necesario */
+    /* Altura por defecto para escritorio o vertical de móvil */
     height: 350px; 
     object-fit: cover;
     max-width: 100%;
     display: block; 
 }
 
-/* Media Query: Para PC/Pantallas Horizontales (Muestra 4) */
-@media (min-width: 900px) {
-    .tarjeta {
-        /* CLAVE: Si la pantalla es grande, muestra 4. Cada una toma el 25% */
-        flex: 0 0 25%;
+/* Ajuste CLAVE para Móvil Horizontal (o pantallas pequeñas/anchas) */
+/* Reducimos la altura para que la imagen no ocupe todo el espacio vertical */
+@media (max-width: 900px) and (max-height: 500px) {
+    .tarjeta img {
+        height: 200px; /* Reducido a 200px o menos, ajusta este valor si es necesario */
     }
 }
-
 .carrusel-btn {
     position: absolute; 
     top: 50%;
