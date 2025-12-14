@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucas Daniel Soriano</title>
     <style>
+    *, *::before, *::after {
+        box-sizing: border-box; /* CLAVE para que padding y border no rompan el 25% */
+        }
         body {
             font-family: Arial, sans-serif;
             margin: 10px;
@@ -152,18 +155,22 @@
 
 .tarjeta {
     flex: 0 0 25%; /* flex-grow: 0, flex-shrink: 0, width: 25% */
+    
     text-align: center;
     background-color: #111;
     border-radius: 10px;
     padding: 20px;
 }
 
-.tarjeta img {
-    max-width: 100%;
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    display: block; 
+.tarjeta {
+    /* Nueva regla de seguridad: flex-basis es el ancho base */
+    flex: 0 0 25%; 
+    width: 25%; /* Redundancia de seguridad */
+    
+    text-align: center;
+    background-color: #111;
+    border-radius: 10px;
+    padding: 20px;
 }
 
 .carrusel-btn {
