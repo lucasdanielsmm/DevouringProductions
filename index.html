@@ -557,8 +557,9 @@
 
     /* --- Ajustes de columnas para PC/Pantalla panorámica (min-width: 900px) --- */
 /* --- Ajustes de columnas para PC/Pantalla panorámica (min-width: 900px) --- */
+/* --- Ajustes de columnas para PC/Pantalla panorámica (min-width: 900px) --- */
 @media (min-width: 900px) {
-    /* CLAVE: Forzar el centrado del TÍTULO (h2) en PC */
+    /* Centrar TÍTULO (h2) sobre las columnas */
     .proyecto-seccion h2 {
         text-align: center;
     }
@@ -566,18 +567,25 @@
     /* Desactivar el centrado del CONTENIDO principal en PC */
     .contenido-proyecto {
         flex-direction: row; 
-        align-items: flex-start;
+        
+        /* CLAVE DE CENTRADO 1: Alinea el bloque de texto con el video */
+        align-items: center; 
+        
         gap: 50px;
-        /* MANTENEMOS: Limitar el ancho de las columnas a 1200px y centrar el bloque */
         max-width: 1200px; 
         margin: 0 auto; 
     }
-    
+
     /* Columna de texto */
     .texto-columna {
         flex: 1; 
         max-width: 50%;
-        text-align: left; 
+        text-align: left; /* Descripción alineada a la izquierda */
+        
+        /* CLAVE DE CENTRADO 2: Centrar el bloque de texto (descripción) sobre el botón */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Alinea contenido verticalmente si hay espacio extra */
     }
     
     /* Centrar el botón de descarga bajo la descripción en PC */
