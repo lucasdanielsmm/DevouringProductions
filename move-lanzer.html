@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucas Daniel Soriano - MOVE-LANZER</title>
     <style>
-        /* CSS general */
+        /* ========================================================= */
+        /* == ESTILOS GLOBALES Y COMPARTIDOS (Base de Index.html) == */
+        /* ========================================================= */
         *, *::before, *::after { box-sizing: border-box; }
         
         body {
@@ -19,7 +21,7 @@
         }
         
         a {
-            text-decoration: none; /* Asegura que los enlaces no tengan subrayado */
+            text-decoration: none; 
             color: inherit;
         }
 
@@ -38,34 +40,86 @@
             text-align: center;
         }
 
-        .video-container {
-            width: 90%;
-            max-width: 800px; 
-            margin: 20px auto;
-            aspect-ratio: 16/9;
-            position: relative;
-        }
-        
-        .video-container iframe, .video-container img {
-            width: 100%;
-            height: 100%;
-            display: block;
-            border: none;
-            border-radius: 8px;
-        }
-
+        /* Estilos del Subtítulo (Sow the stars!) */
         .subtitulo {
             font-size: 2em;
             color: #1e90ff; 
             margin: 40px auto 20px auto;
             text-align: center;
         }
+        
+        /* ESTILO DEL DIVIDER (Separador con Fade) */
+        .divider {
+            border: 0;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #111, transparent);
+            margin: 30px 0;
+        }
 
-        /* Contenedor de Detalles (Vamp - Status, Role, etc.) */
+
+        /* ========================================================= */
+        /* == ESTILOS DE LA ESTRUCTURA DE COLUMNAS (DETALLE) == */
+        /* ========================================================= */
+
+        .proyecto-cuerpo {
+            width: 100%;
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 40px 0;
+        }
+        
+        .contenido-proyecto {
+            display: flex; 
+            flex-direction: column; 
+            gap: 50px;
+            align-items: center; 
+        }
+
+        .texto-columna {
+            width: 100%;
+            text-align: center; 
+        }
+        
+        .video-columna {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+        }
+        
+        .video-columna iframe, .video-columna img {
+            width: 100%;
+            max-width: 560px;
+            height: auto;
+            aspect-ratio: 16/9;
+            display: block;
+            border: none;
+            border-radius: 8px;
+        }
+        
+        @media (min-width: 900px) {
+            .contenido-proyecto {
+                flex-direction: row; 
+                align-items: center; 
+            }
+            
+            .texto-columna, .video-columna {
+                flex: 1; 
+                max-width: 50%;
+            }
+            
+            .video-columna { order: 1; }
+            .texto-columna { order: 0; }
+        }
+
+        /* ========================================================= */
+        /* == ESTILOS ESPECÍFICOS DEL CONTENIDO (Datos/Logo) == */
+        /* ========================================================= */
+
         .detalles-container {
-            display: inline-block; /* Permite que el margen auto lo centre */
+            display: inline-block; 
             text-align: left;
-            margin: 20px auto 40px auto; 
+            margin: 20px auto 0 auto; 
             padding: 20px;
             background-color: #111;
             border-radius: 8px;
@@ -86,29 +140,22 @@
             color: #ccc;
         }
         
-        /* --- ESTILO DE LOGO DE PLAY MINIMALISTA (SOLICITADO) --- */
+        /* Estilo de Logo de Play Minimalista */
         .btn-logo-play {
-       /* CLAVE: Lo forzamos a ser un bloque para que 'margin: auto' lo centre */
-       display: block; 
-       width: fit-content; /* Se ajusta al ancho del logo (80px) */
-    
-       /* Margen: 20px debajo de la descripción, 20px arriba de la tabla de datos */
-       margin: 20px auto 20px auto; 
-    
-       transition: transform 0.3s ease, opacity 0.3s;
-       line-height: 0; 
-   }
+            display: block; 
+            width: fit-content; 
+            margin: 20px auto 20px auto; 
+            transition: transform 0.3s ease, opacity 0.3s;
+            line-height: 0; 
+        }
 
-   .btn-logo-play img {
-       width: 100%;
-       max-width: 80px; /* Tamaño del logo */
-       height: auto;
-    
-       /* Eliminación de adornos */
-       border: none; 
-       border-radius: 0;
-       box-shadow: none; 
-   }
+        .btn-logo-play img {
+            width: 100%;
+            max-width: 80px; 
+            height: auto;
+            border: none; 
+            box-shadow: none; 
+        }
         
         .btn-logo-play:hover {
             transform: scale(1.1); 
@@ -120,7 +167,7 @@
         .galeria {
             margin-top: 50px;
             padding: 20px 10px;
-            border-top: 1px solid #333;
+            /* Eliminamos el border-top aquí, ya que el divider lo reemplaza */
             text-align: center;
         }
 
@@ -151,6 +198,35 @@
             transform: scale(1.02);
         }
         
+        /* === ESTILOS DEL FOOTER (IGUAL QUE EL INDEX) === */
+        footer {
+            background-color: #0a0a0a; 
+            color: #888; 
+            text-align: center;
+            padding: 20px 10px;
+            margin-top: 40px;
+            font-size: 0.9em;
+            border-top: 1px solid #111; 
+        }
+
+        footer img {
+            max-width: 60px; /* Tamaño del logo pequeño en el footer */
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        footer a {
+            color: #28a745; 
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #3bd85f; 
+        }
+        
     </style>
 </head>
 <body>
@@ -161,47 +237,56 @@
 
     <h1 class="titulo-pagina">MOVE-LANZER</h1>
 
-    <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
-    </div>
-
     <h2 class="subtitulo">¡Juego de Oleadas Infinitas!</h2>
 
-    <p style="max-width: 800px; margin: 0 auto 10px auto; padding: 0 20px;">
-        MOVE-LANZER es un proyecto de Scratch diseñado como parte de mi formación en Diseño y Producción de Videojuegos. Se centra en un bucle de juego simple pero adictivo: esquivar enemigos, recolectar potenciadores y sobrevivir a oleadas infinitas.
-    </p>
+    <section class="proyecto-cuerpo">
+        <div class="contenido-proyecto">
+            
+            <div class="texto-columna">
+                <p style="max-width: 600px; margin: 0 auto 10px auto; padding: 0 20px; text-align: center;">
+                    MOVE-LANZER es un proyecto de Scratch diseñado como parte de mi formación en Diseño y Producción de Videojuegos. Se centra en un bucle de juego simple pero adictivo: esquivar enemigos, recolectar potenciadores y sobrevivir a oleadas infinitas.
+                </p>
 
-    <a href="https://scratch.mit.edu/projects/1208664342" class="btn-logo-play" aria-label="Jugar en Scratch">
-        <img src="scratch-logo.png" alt="Logo de Scratch - Enlace a Jugar">
-    </a>
+                <a href="https://scratch.mit.edu/projects/1208664342" class="btn-logo-play" aria-label="Jugar en Scratch">
+                    <img src="scratch-logo.png" alt="Logo de Scratch - Enlace a Jugar">
+                </a>
 
-    <div class="detalles-container">
-        <div class="detalle-fila">
-            <strong>Project Status</strong>
-            <span>Completed</span>
+                <div class="detalles-container">
+                    <div class="detalle-fila">
+                        <strong>Project Status</strong>
+                        <span>Completed</span>
+                    </div>
+                    <div class="detalle-fila">
+                        <strong>Project Type</strong>
+                        <span>Academic Project</span>
+                    </div>
+                    <div class="detalle-fila">
+                        <strong>Project Duration</strong>
+                        <span>4 weeks</span>
+                    </div>
+                    <div class="detalle-fila">
+                        <strong>Software Used</strong>
+                        <span>Scratch</span>
+                    </div>
+                    <div class="detalle-fila">
+                        <strong>Languages Used</strong>
+                        <span>Visual Blocks</span>
+                    </div>
+                    <div class="detalle-fila">
+                        <strong>Primary Role(s)</strong>
+                        <span>Game Design / Programming</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="video-columna">
+                <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
+            </div>
+
         </div>
-        <div class="detalle-fila">
-            <strong>Project Type</strong>
-            <span>Academic Project</span>
-        </div>
-        <div class="detalle-fila">
-            <strong>Project Duration</strong>
-            <span>4 weeks</span>
-        </div>
-        <div class="detalle-fila">
-            <strong>Software Used</strong>
-            <span>Scratch</span>
-        </div>
-        <div class="detalle-fila">
-            <strong>Languages Used</strong>
-            <span>Visual Blocks</span>
-        </div>
-        <div class="detalle-fila">
-            <strong>Primary Role(s)</strong>
-            <span>Game Design / Programming</span>
-        </div>
-    </div>
-    
+    </section>
+    <hr class="divider">
+
     <section class="galeria">
         <h3>Capturas y Proceso de Desarrollo</h3>
         <div class="capturas-grid">
@@ -219,4 +304,3 @@
     
 </body>
 </html>
-
