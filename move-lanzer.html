@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucas Daniel Soriano - MOVE-LANZER</title>
     <style>
+        /* [Estilos CSS Omitidos por brevedad, son los mismos que funcionaron] */
         /* ========================================================= */
         /* == ESTILOS GLOBALES Y COMPARTIDOS (Base) == */
         /* ========================================================= */
@@ -41,7 +42,7 @@
         }
 
         /* ========================================================= */
-        /* == ANIMACIONES (VIDEO LENTO / GALERÍA RÁPIDA) == */
+        /* == ANIMACIONES == */
         /* ========================================================= */
 
         /* 1. Video: Estado Inicial (Oculto y Abajo) */
@@ -86,15 +87,14 @@
             transform: translateY(0);
         }
 
-        /* Tiempos de cascada para las imágenes (Rápido) */
+        /* Tiempos de cascada para las imágenes */
         .capturas-grid img:nth-child(1) { transition-delay: 0s; } 
         .capturas-grid img:nth-child(2) { transition-delay: 0.15s; } 
         .capturas-grid img:nth-child(3) { transition-delay: 0.3s; } 
 
         /* ========================================================= */
-        /* == RESTO DE ESTILOS == */
+        /* == RESTO DE ESTILOS (Omitidos por brevedad) == */
         /* ========================================================= */
-
         .subtitulo {
             font-size: 2em;
             color: #1e90ff; 
@@ -117,14 +117,8 @@
             width: 300px;
             margin-bottom: 5px;
         }
-
-        .detalle-fila strong {
-            color: #fff;
-        }
-
-        .detalle-fila span {
-            color: #ccc;
-        }
+        .detalle-fila strong { color: #fff; }
+        .detalle-fila span { color: #ccc; }
         
         .btn-logo-play {
             display: block; 
@@ -230,7 +224,7 @@
 
     <div class="video-container">
         <iframe 
-            src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3&amp;autoplay=1&amp;controls=0&amp;modestbranding=1&amp;rel=0&amp;showinfo=0" 
+            src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3&amp;autoplay=1&amp;mute=1&amp;controls=0&amp;modestbranding=1&amp;rel=0&amp;showinfo=0" 
             allow="autoplay; encrypted-media" 
             allowfullscreen>
         </iframe>
@@ -293,7 +287,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // 1. ANIMACIÓN DEL VIDEO: Usamos offsetHeight para forzar la animación
+            // 1. ANIMACIÓN DEL VIDEO: Forzamos la animación con una lectura de layout
             const video = document.querySelector('.video-container');
             if (video) {
                 // Forzar re-pintura antes de la clase para asegurar el estado inicial
