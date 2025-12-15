@@ -44,30 +44,23 @@
         /* == ANIMACIONES (CORREGIDAS) == */
         /* ========================================================= */
 
-        /* 1. Definición de la Animación (Movimiento hacia arriba) */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* 2. Video: Animación automática al cargar (Sin JavaScript) */
+        /* 1. Video: Estado Inicial (Oculto y Abajo) */
         .video-container {
             width: 90%;
             max-width: 800px; 
             margin: 20px auto;
             aspect-ratio: 16/9;
             position: relative;
-            
-            /* Aquí aplicamos la animación directamente */
-            opacity: 0; /* Empieza invisible */
-            animation: fadeInUp 1s ease-out forwards; /* Ejecuta la animación y se queda en el estado final */
-            animation-delay: 0.2s; /* Pequeña pausa antes de empezar */
+
+            opacity: 0; 
+            transform: translateY(40px); /* Posición inicial oculta */
+            transition: opacity 1s ease-out, transform 1s ease-out; /* Prepara la transición */
+        }
+
+        /* Clase final añadida por JavaScript (se anima) */
+        .video-container.animar-video {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .video-container iframe, .video-container img {
@@ -78,7 +71,7 @@
             border-radius: 8px;
         }
 
-        /* 3. Galería: Estado inicial para Scroll */
+        /* 2. Galería: Estado inicial para Scroll */
         .slide-up-on-scroll {
             opacity: 0;
             transform: translateY(50px); 
@@ -86,7 +79,7 @@
             will-change: opacity, transform;
         }
 
-        /* Estado final activado por JS */
+        /* Estado final activado por JS (scroll) */
         .slide-up-on-scroll.active {
             opacity: 1;
             transform: translateY(0);
@@ -98,7 +91,7 @@
         .capturas-grid img:nth-child(3) { transition-delay: 0.3s; } 
 
         /* ========================================================= */
-        /* == RESTO DE ESTILOS == */
+        /* == RESTO DE ESTILOS (Sin cambios) == */
         /* ========================================================= */
 
         .subtitulo {
@@ -295,12 +288,21 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // Configuración del Observer para la Galería
+            // 1. ANIMACIÓN DEL VIDEO: Usamos setTimeout(0) para asegurar la transición.
+            const video = document.querySelector('.video-container');
+            if (video) {
+                // setTimeout(0) fuerza al navegador a renderizar primero el estado inicial (oculto)
+                // y luego aplicar la clase para la animación en el siguiente ciclo.
+                setTimeout(() => {
+                    video.classList.add('animar-video');
+                }, 0);
+            }
+
+            // 2. Animación de la Galería (al hacer scroll)
             const observerOptions = {
                 root: null, 
                 rootMargin: '0px',
-                // CAMBIO CLAVE: Threshold 0.01 (1%)
-                // Se activa en el instante en que 1 pixel de la imagen entra en pantalla
+                // Umbral 0.01 (1%) para respuesta instantánea en el scroll
                 threshold: 0.01
             };
 
@@ -308,7 +310,6 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('active');
-                        // Dejamos de observar para que no se repita
                         observer.unobserve(entry.target);
                     }
                 });
@@ -318,8 +319,6 @@
             slideElements.forEach(el => {
                 observer.observe(el);
             });
-            
-            // Nota: Ya no necesitamos JS para el video porque usa CSS puro
         });
     </script>
     
