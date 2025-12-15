@@ -40,49 +40,34 @@
             text-align: center;
         }
 
-        /* --- ESTILOS DE ANIMACIÓN AJUSTADOS (MÁS RÁPIDOS) --- */
-        
-        /* Video (Se anima al cargar) */
-        .video-container {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        .video-container.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        /* ========================================================= */
+        /* == ANIMACIONES (CORREGIDAS) == */
+        /* ========================================================= */
 
-        /* Imágenes de la Galería (Se animan al hacer scroll) */
-        .slide-up-on-scroll {
-            opacity: 0;
-            /* Mayor desplazamiento inicial para que el efecto sea más notorio */
-            transform: translateY(50px); 
-            /* Transición más rápida (0.5s) */
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-            will-change: opacity, transform; /* Optimización de rendimiento */
+        /* 1. Definición de la Animación (Movimiento hacia arriba) */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* Clase añadida por JS al entrar en el viewport */
-        .slide-up-on-scroll.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Retrasos MUY reducidos para respuesta casi instantánea */
-        .capturas-grid img:nth-child(1) { transition-delay: 0s; } 
-        .capturas-grid img:nth-child(2) { transition-delay: 0.1s; } 
-        .capturas-grid img:nth-child(3) { transition-delay: 0.2s; } 
-        /* --- FIN ESTILOS DE ANIMACIÓN --- */
-
-
-        /* Video Container (Vertical Layout) */
+        /* 2. Video: Animación automática al cargar (Sin JavaScript) */
         .video-container {
             width: 90%;
             max-width: 800px; 
             margin: 20px auto;
             aspect-ratio: 16/9;
             position: relative;
+            
+            /* Aquí aplicamos la animación directamente */
+            opacity: 0; /* Empieza invisible */
+            animation: fadeInUp 1s ease-out forwards; /* Ejecuta la animación y se queda en el estado final */
+            animation-delay: 0.2s; /* Pequeña pausa antes de empezar */
         }
         
         .video-container iframe, .video-container img {
@@ -93,6 +78,29 @@
             border-radius: 8px;
         }
 
+        /* 3. Galería: Estado inicial para Scroll */
+        .slide-up-on-scroll {
+            opacity: 0;
+            transform: translateY(50px); 
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            will-change: opacity, transform;
+        }
+
+        /* Estado final activado por JS */
+        .slide-up-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Tiempos de cascada para las imágenes */
+        .capturas-grid img:nth-child(1) { transition-delay: 0s; } 
+        .capturas-grid img:nth-child(2) { transition-delay: 0.15s; } 
+        .capturas-grid img:nth-child(3) { transition-delay: 0.3s; } 
+
+        /* ========================================================= */
+        /* == RESTO DE ESTILOS == */
+        /* ========================================================= */
+
         .subtitulo {
             font-size: 2em;
             color: #1e90ff; 
@@ -100,7 +108,6 @@
             text-align: center;
         }
 
-        /* Contenedor de Detalles (Caja de Datos) */
         .detalles-container {
             display: inline-block; 
             text-align: left;
@@ -125,7 +132,6 @@
             color: #ccc;
         }
         
-        /* Estilo de Logo de Play Minimalista */
         .btn-logo-play {
             display: block; 
             width: fit-content; 
@@ -147,8 +153,6 @@
             opacity: 0.8;
         }
 
-
-        /* Contenedor de la Galería de Capturas */
         .galeria {
             margin-top: 50px;
             padding: 20px 10px;
@@ -182,9 +186,6 @@
             transform: scale(1.02);
         }
 
-        /* --- ESTILOS DE INDEX.HTML (FOOTER Y DIVIDER) --- */
-        
-        /* ESTILO DEL DIVIDER (Separador con Fade) */
         .divider {
             border: 0;
             height: 3px;
@@ -195,7 +196,6 @@
             margin-right: auto;
         }
 
-        /* ESTILOS DEL FOOTER */
         footer {
             background-color: #0a0a0a; 
             color: #888; 
@@ -295,28 +295,20 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // 1. Animación del Video (al cargar)
-            const video = document.querySelector('.video-container');
-            if (video) {
-                // Pequeño timeout de seguridad para asegurar que el CSS se procesó
-                setTimeout(() => {
-                    video.classList.add('visible');
-                }, 50);
-            }
-
-            // 2. Animación de la Galería (al hacer scroll)
+            // Configuración del Observer para la Galería
             const observerOptions = {
                 root: null, 
                 rootMargin: '0px',
-                // CAMBIO CRÍTICO: Umbral muy bajo (0.15)
-                // Esto significa: "¡Actívate apenas aparezca el 15% de la imagen!"
-                threshold: 0.15
+                // CAMBIO CLAVE: Threshold 0.01 (1%)
+                // Se activa en el instante en que 1 pixel de la imagen entra en pantalla
+                threshold: 0.01
             };
 
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('active');
+                        // Dejamos de observar para que no se repita
                         observer.unobserve(entry.target);
                     }
                 });
@@ -326,6 +318,8 @@
             slideElements.forEach(el => {
                 observer.observe(el);
             });
+            
+            // Nota: Ya no necesitamos JS para el video porque usa CSS puro
         });
     </script>
     
