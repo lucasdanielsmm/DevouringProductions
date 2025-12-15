@@ -54,8 +54,10 @@
 
             opacity: 0; 
             transform: translateY(40px); /* Posición inicial oculta */
-            /* REVERSIÓN: Transición de vuelta a 1.0s para más suavidad */
+            /* Transición de 1.0s para suavidad */
             transition: opacity 1.0s ease-out, transform 1.0s ease-out; 
+            /* Para evitar el flickering en algunos navegadores */
+            will-change: opacity, transform; 
         }
 
         /* Clase final añadida por JavaScript (se anima) */
@@ -92,7 +94,7 @@
         .capturas-grid img:nth-child(3) { transition-delay: 0.3s; } 
 
         /* ========================================================= */
-        /* == RESTO DE ESTILOS (Sin cambios) == */
+        /* == RESTO DE ESTILOS == */
         /* ========================================================= */
 
         .subtitulo {
@@ -289,9 +291,14 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // 1. ANIMACIÓN DEL VIDEO: Añadimos la clase directamente al cargar (ahora la transición CSS es de 1s)
+            // 1. ANIMACIÓN DEL VIDEO: Usamos offsetHeight para forzar la animación
             const video = document.querySelector('.video-container');
             if (video) {
+                // Paso 1: Forzar re-pintura (layout reading)
+                // Esto asegura que el navegador 'vea' el estado inicial (opacity 0) antes de la transición.
+                video.offsetHeight; 
+                
+                // Paso 2: Aplicar la clase final que dispara la animación de 1s
                 video.classList.add('animar-video');
             }
 
