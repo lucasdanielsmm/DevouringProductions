@@ -48,7 +48,6 @@
             transform: translateY(20px);
             transition: opacity 1s ease-out, transform 1s ease-out;
         }
-        /* Clase añadida por JS para el video */
         .video-container.visible {
             opacity: 1;
             transform: translateY(0);
@@ -58,7 +57,8 @@
         .slide-up-on-scroll {
             opacity: 0;
             transform: translateY(30px); 
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            /* OPTIMIZACIÓN: Reducción de 0.8s a 0.6s */
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
 
         /* Clase añadida por JS al entrar en el viewport */
@@ -293,9 +293,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // 1. Animación del Video (al cargar): CORRECCIÓN AQUÍ
+            // 1. Animación del Video (al cargar)
             const video = document.querySelector('.video-container');
-            // Añadimos la clase 'visible' inmediatamente para animar el video
             if (video) {
                 video.classList.add('visible');
             }
@@ -304,7 +303,8 @@
             const observerOptions = {
                 root: null, 
                 rootMargin: '0px',
-                threshold: 0.2 
+                // OPTIMIZACIÓN: Aumentamos el umbral a 75% para que la animación se active antes
+                threshold: 0.75 
             };
 
             const observer = new IntersectionObserver((entries, observer) => {
