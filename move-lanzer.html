@@ -40,26 +40,38 @@
             text-align: center;
         }
 
-        /* --- ESTILOS DE ANIMACIÓN DE DESLIZAMIENTO Y FADE --- */
-        /* 1. Estado Inicial (Oculto y Abajo) para elementos a animar */
-        .video-container,
-        .capturas-grid img {
+        /* --- ESTILOS DE ANIMACIÓN --- */
+        
+        /* Video (Se anima al cargar) */
+        .video-container {
             opacity: 0;
             transform: translateY(20px);
-            /* Transición aplicada para el estado 'visible' */
             transition: opacity 1s ease-out, transform 1s ease-out;
         }
-
-        /* 2. Estado Final (Visible y en Posición) - Se añade por JS */
-        .visible {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
+        /* Clase añadida por JS para el video */
+        .video-container.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
-        
-        /* 3. Retrasos secuenciales para las imágenes de la galería */
-        .capturas-grid img:nth-child(1) { transition-delay: 0.1s; }
-        .capturas-grid img:nth-child(2) { transition-delay: 0.3s; }
-        .capturas-grid img:nth-child(3) { transition-delay: 0.5s; }
+
+        /* Imágenes de la Galería (Se animan al hacer scroll) */
+        .slide-up-on-scroll {
+            opacity: 0;
+            transform: translateY(30px); 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        /* Clase añadida por JS al entrar en el viewport */
+        .slide-up-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Retrasos secuenciales para las imágenes */
+        .capturas-grid img:nth-child(1) { transition-delay: 0s; } 
+        .capturas-grid img:nth-child(2) { transition-delay: 0.2s; } 
+        .capturas-grid img:nth-child(3) { transition-delay: 0.4s; } 
+        /* --- FIN ESTILOS DE ANIMACIÓN --- */
 
 
         /* Video Container (Vertical Layout) */
@@ -266,9 +278,9 @@
     <section class="galeria">
         <h3>Capturas y Proceso de Desarrollo</h3>
         <div class="capturas-grid">
-            <img src="captura-move-lanzer-1.jpg" alt="Captura de pantalla 1 de Move-Lanzer">
-            <img src="captura-move-lanzer-2.jpg" alt="Captura de pantalla 2 de Move-Lanzer">
-            <img src="captura-move-lanzer-3.jpg" alt="Captura de pantalla 3 de Move-Lanzer">
+            <img src="captura-move-lanzer-1.jpg" alt="Captura de pantalla 1 de Move-Lanzer" class="slide-up-on-scroll">
+            <img src="captura-move-lanzer-2.jpg" alt="Captura de pantalla 2 de Move-Lanzer" class="slide-up-on-scroll">
+            <img src="captura-move-lanzer-3.jpg" alt="Captura de pantalla 3 de Move-Lanzer" class="slide-up-on-scroll">
             </div>
     </section>
 
@@ -279,35 +291,38 @@
     </footer>
 
     <script>
-        function animateElements() {
-            // Animamos el video inmediatamente al cargar
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Animación del Video (al cargar)
             const video = document.querySelector('.video-container');
             if (video) {
                 video.classList.add('visible');
             }
 
-            // Animamos las capturas de la galería con un ligero retraso secuencial
-            const capturas = document.querySelectorAll('.capturas-grid img');
-            capturas.forEach((img, index) => {
-                // El setTimeout crea un efecto de "cascada"
-                setTimeout(() => {
-                    img.classList.add('visible');
-                }, 1000 + (index * 300)); // Espera 1 segundo total para el video, luego inicia las capturas
-            });
-            
-            // Si deseas animar también el contenedor de detalles, descomenta lo siguiente:
-            /*
-            const detalles = document.querySelector('.detalles-container');
-            if (detalles) {
-                setTimeout(() => {
-                    detalles.classList.add('visible');
-                }, 500); // Aparece después de 0.5 segundos
-            }
-            */
-        }
+            // 2. Animación de la Galería (al hacer scroll, usando Intersection Observer)
+            const observerOptions = {
+                root: null, // El viewport es la raíz
+                rootMargin: '0px',
+                threshold: 0.2 // Activa cuando el 20% del elemento es visible
+            };
 
-        // Ejecuta la animación cuando la página esté completamente cargada
-        window.onload = animateElements;
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Si el elemento es visible, añade la clase 'active'
+                        entry.target.classList.add('active');
+                        // Deja de observar este elemento para no animarlo de nuevo
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            // Observa todas las imágenes de la galería
+            const slideElements = document.querySelectorAll('.slide-up-on-scroll');
+            slideElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
     </script>
     
 </body>
