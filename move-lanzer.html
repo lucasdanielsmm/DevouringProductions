@@ -40,13 +40,13 @@
             text-align: center;
         }
 
-        /* --- ESTILOS DE ANIMACIÓN --- */
+        /* --- ESTILOS DE ANIMACIÓN AJUSTADOS (MÁS RÁPIDOS) --- */
         
         /* Video (Se anima al cargar) */
         .video-container {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1s ease-out, transform 1s ease-out;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
         .video-container.visible {
             opacity: 1;
@@ -56,9 +56,11 @@
         /* Imágenes de la Galería (Se animan al hacer scroll) */
         .slide-up-on-scroll {
             opacity: 0;
-            transform: translateY(30px); 
-            /* OPTIMIZACIÓN: Reducción de 0.8s a 0.6s */
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            /* Mayor desplazamiento inicial para que el efecto sea más notorio */
+            transform: translateY(50px); 
+            /* Transición más rápida (0.5s) */
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            will-change: opacity, transform; /* Optimización de rendimiento */
         }
 
         /* Clase añadida por JS al entrar en el viewport */
@@ -67,10 +69,10 @@
             transform: translateY(0);
         }
 
-        /* Retrasos secuenciales para las imágenes */
+        /* Retrasos MUY reducidos para respuesta casi instantánea */
         .capturas-grid img:nth-child(1) { transition-delay: 0s; } 
-        .capturas-grid img:nth-child(2) { transition-delay: 0.2s; } 
-        .capturas-grid img:nth-child(3) { transition-delay: 0.4s; } 
+        .capturas-grid img:nth-child(2) { transition-delay: 0.1s; } 
+        .capturas-grid img:nth-child(3) { transition-delay: 0.2s; } 
         /* --- FIN ESTILOS DE ANIMACIÓN --- */
 
 
@@ -296,29 +298,30 @@
             // 1. Animación del Video (al cargar)
             const video = document.querySelector('.video-container');
             if (video) {
-                video.classList.add('visible');
+                // Pequeño timeout de seguridad para asegurar que el CSS se procesó
+                setTimeout(() => {
+                    video.classList.add('visible');
+                }, 50);
             }
 
-            // 2. Animación de la Galería (al hacer scroll, usando Intersection Observer)
+            // 2. Animación de la Galería (al hacer scroll)
             const observerOptions = {
                 root: null, 
                 rootMargin: '0px',
-                // OPTIMIZACIÓN: Aumentamos el umbral a 75% para que la animación se active antes
-                threshold: 0.75 
+                // CAMBIO CRÍTICO: Umbral muy bajo (0.15)
+                // Esto significa: "¡Actívate apenas aparezca el 15% de la imagen!"
+                threshold: 0.15
             };
 
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // Si el elemento es visible, añade la clase 'active'
                         entry.target.classList.add('active');
-                        // Deja de observar
                         observer.unobserve(entry.target);
                     }
                 });
             }, observerOptions);
 
-            // Observa todas las imágenes de la galería
             const slideElements = document.querySelectorAll('.slide-up-on-scroll');
             slideElements.forEach(el => {
                 observer.observe(el);
