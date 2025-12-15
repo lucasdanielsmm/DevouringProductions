@@ -14,7 +14,7 @@
             color: #ffffff;
             line-height: 1.6;
             overflow-x: hidden; 
-            text-align: center; /* Centrar todo por defecto */
+            text-align: center; 
         }
         
         .logo {
@@ -22,10 +22,9 @@
             height: auto;
             display: block;
             margin: 0 auto 10px;
-            cursor: pointer; /* Indica que es clickeable */
+            cursor: pointer;
         }
         
-        /* Estilos del Título Principal */
         .titulo-pagina {
             font-size: 3em; 
             color: #ffffff;
@@ -33,7 +32,6 @@
             text-align: center;
         }
 
-        /* Contenedor del Video/Portada */
         .video-container {
             width: 90%;
             max-width: 800px; 
@@ -50,7 +48,6 @@
             border-radius: 8px;
         }
 
-        /* Estilos del Subtítulo (Sow the stars!) */
         .subtitulo {
             font-size: 2em;
             color: #1e90ff; 
@@ -60,9 +57,9 @@
 
         /* Contenedor de Detalles (Vamp - Status, Role, etc.) */
         .detalles-container {
-            display: inline-block; /* CLAVE para que ocupe solo el ancho del contenido */
+            display: inline-block;
             text-align: left;
-            margin: 20px auto; /* CLAVE para centrar el bloque inline-block */
+            margin: 20px auto 40px auto; /* Aumento del margen inferior para separación */
             padding: 20px;
             background-color: #111;
             border-radius: 8px;
@@ -83,32 +80,26 @@
             color: #ccc;
         }
         
-        /* --- NUEVO ESTILO: Icono de Jugar --- */
-        .btn-play-icon {
+        /* --- NUEVO ESTILO: Enlace/Logo de Play Minimalista --- */
+        .btn-logo-play {
             display: inline-block;
-            margin: 20px auto 40px auto; /* Separación después de la descripción y antes de la tabla de datos */
-            font-size: 1.1em;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 8px;
-            
-            /* Estilo Visual del Botón */
-            padding: 10px 20px;
-            background-color: #1e90ff; /* Fondo azul */
-            color: #fff;
-            box-shadow: 0 4px 10px rgba(30, 144, 255, 0.5);
-            transition: background-color 0.3s ease, transform 0.2s;
+            margin: 20px auto 20px auto; /* Espacio debajo de la descripción */
+            transition: transform 0.3s ease, opacity 0.3s;
+            line-height: 0; /* Elimina espacio debajo de la imagen */
         }
 
-        .btn-play-icon:hover {
-            background-color: #00bfff;
-            transform: scale(1.05);
+        .btn-logo-play img {
+            width: 100%;
+            max-width: 80px; /* Tamaño del logo */
+            height: auto;
+            border: 2px solid #1e90ff; /* Borde de color */
+            border-radius: 50%; /* Opcional: forma circular si la imagen lo permite */
+            box-shadow: 0 0 15px rgba(30, 144, 255, 0.5); /* Efecto de brillo */
         }
-
-        .btn-play-icon span {
-            margin-right: 5px; /* Espacio entre el icono y el texto */
-            font-size: 1.5em; /* Icono un poco más grande */
-            vertical-align: middle;
+        
+        .btn-logo-play:hover {
+            transform: scale(1.1); /* Efecto al pasar el ratón */
+            opacity: 0.9;
         }
 
 
@@ -147,8 +138,6 @@
             transform: scale(1.02);
         }
         
-        /* Puedes añadir aquí el estilo del Footer si lo necesitas */
-        
     </style>
 </head>
 <body>
@@ -169,8 +158,8 @@
         MOVE-LANZER es un proyecto de Scratch diseñado como parte de mi formación en Diseño y Producción de Videojuegos. Se centra en un bucle de juego simple pero adictivo: esquivar enemigos, recolectar potenciadores y sobrevivir a oleadas infinitas.
     </p>
 
-    <a href="https://scratch.mit.edu/projects/1208664342" class="btn-play-icon">
-        <span role="img" aria-label="Play">▶️</span> Play
+    <a href="https://scratch.mit.edu/projects/1208664342" class="btn-logo-play" aria-label="Jugar en Scratch">
+        <img src="scratch-logo.png" alt="Logo de Scratch - Enlace a Jugar">
     </a>
 
     <div class="detalles-container">
