@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lucas Daniel Soriano - CAE CCC</title>
+    <title>Lucas Daniel Soriano - MOVE-LANZER</title>
     <style>
         /* CSS general (Mantén el CSS principal de tu archivo anterior aquí) */
         *, *::before, *::after { box-sizing: border-box; }
@@ -27,7 +27,7 @@
         
         /* Estilos del Título Principal */
         .titulo-pagina {
-            font-size: 3em; /* Título grande como en la imagen de EarthShape */
+            font-size: 3em; 
             color: #ffffff;
             margin: 30px auto 10px auto;
             text-align: center;
@@ -36,7 +36,7 @@
         /* Contenedor del Video/Portada */
         .video-container {
             width: 90%;
-            max-width: 800px; /* Ancho máximo para el video */
+            max-width: 800px; 
             margin: 20px auto;
             aspect-ratio: 16/9;
             position: relative;
@@ -53,16 +53,16 @@
         /* Estilos del Subtítulo (Sow the stars!) */
         .subtitulo {
             font-size: 2em;
-            color: #1e90ff; /* Color de acento */
+            color: #1e90ff; 
             margin: 40px auto 20px auto;
             text-align: center;
         }
 
         /* Contenedor de Detalles (Vamp - Status, Role, etc.) */
         .detalles-container {
-            display: inline-block; /* Opcional: para que la caja no sea 100% ancho */
+            display: inline-block; /* CLAVE para que ocupe solo el ancho del contenido */
             text-align: left;
-            margin: 20px auto;
+            margin: 20px auto; /* CLAVE para centrar el bloque inline-block */
             padding: 20px;
             background-color: #111;
             border-radius: 8px;
@@ -82,6 +82,35 @@
         .detalle-fila span {
             color: #ccc;
         }
+        
+        /* --- NUEVO ESTILO: Icono de Jugar --- */
+        .btn-play-icon {
+            display: inline-block;
+            margin: 20px auto 40px auto; /* Separación después de la descripción y antes de la tabla de datos */
+            font-size: 1.1em;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            
+            /* Estilo Visual del Botón */
+            padding: 10px 20px;
+            background-color: #1e90ff; /* Fondo azul */
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(30, 144, 255, 0.5);
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+
+        .btn-play-icon:hover {
+            background-color: #00bfff;
+            transform: scale(1.05);
+        }
+
+        .btn-play-icon span {
+            margin-right: 5px; /* Espacio entre el icono y el texto */
+            font-size: 1.5em; /* Icono un poco más grande */
+            vertical-align: middle;
+        }
+
 
         /* Contenedor de la Galería de Capturas */
         .galeria {
@@ -118,7 +147,7 @@
             transform: scale(1.02);
         }
         
-        /* Incluye el resto de tus estilos (Modal, Footer, Botones, etc.) aquí */
+        /* Puedes añadir aquí el estilo del Footer si lo necesitas */
         
     </style>
 </head>
@@ -128,7 +157,7 @@
         <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano" class="logo">
     </a>
 
-    <h1 class="titulo-pagina">CAE</h1>
+    <h1 class="titulo-pagina">MOVE-LANZER</h1>
 
     <div class="video-container">
         <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
@@ -136,9 +165,13 @@
 
     <h2 class="subtitulo">¡Juego de Oleadas Infinitas!</h2>
 
-    <p style="max-width: 800px; margin: 0 auto 30px auto; padding: 0 20px;">
+    <p style="max-width: 800px; margin: 0 auto 10px auto; padding: 0 20px;">
         MOVE-LANZER es un proyecto de Scratch diseñado como parte de mi formación en Diseño y Producción de Videojuegos. Se centra en un bucle de juego simple pero adictivo: esquivar enemigos, recolectar potenciadores y sobrevivir a oleadas infinitas.
     </p>
+
+    <a href="https://scratch.mit.edu/projects/1208664342" class="btn-play-icon">
+        <span role="img" aria-label="Play">▶️</span> Play
+    </a>
 
     <div class="detalles-container">
         <div class="detalle-fila">
@@ -167,14 +200,12 @@
         </div>
     </div>
     
-    <a href="https://scratch.mit.edu/projects/1208664342" class="btn" style="margin-top: 30px;">Jugar en Scratch</a> 
-    
     <section class="galeria">
         <h3>Capturas y Proceso de Desarrollo</h3>
         <div class="capturas-grid">
-            <img src="captura-cae-1.jpg" alt="Captura de pantalla 1 de CAE">
-            <img src="captura-cae-2.jpg" alt="Captura de pantalla 2 de CAE">
-            <img src="captura-cae-3.jpg" alt="Captura de pantalla 3 de CAE">
+            <img src="captura-move-lanzer-1.jpg" alt="Captura de pantalla 1 de Move-Lanzer">
+            <img src="captura-move-lanzer-2.jpg" alt="Captura de pantalla 2 de Move-Lanzer">
+            <img src="captura-move-lanzer-3.jpg" alt="Captura de pantalla 3 de Move-Lanzer">
             </div>
     </section>
 
@@ -184,6 +215,5 @@
         <p><a href="https://linktr.ee/LucasDanielSMM">Contacto</a></p>
     </footer>
     
-    </body>
-
+</body>
 </html>
