@@ -41,7 +41,7 @@
         }
 
         /* ========================================================= */
-        /* == ANIMACIONES (CORREGIDAS) == */
+        /* == ANIMACIONES (VIDEO LENTO / GALERÍA RÁPIDA) == */
         /* ========================================================= */
 
         /* 1. Video: Estado Inicial (Oculto y Abajo) */
@@ -54,7 +54,8 @@
 
             opacity: 0; 
             transform: translateY(40px); /* Posición inicial oculta */
-            transition: opacity 1s ease-out, transform 1s ease-out; /* Prepara la transición */
+            /* REVERSIÓN: Transición de vuelta a 1.0s para más suavidad */
+            transition: opacity 1.0s ease-out, transform 1.0s ease-out; 
         }
 
         /* Clase final añadida por JavaScript (se anima) */
@@ -71,7 +72,7 @@
             border-radius: 8px;
         }
 
-        /* 2. Galería: Estado inicial para Scroll */
+        /* 2. Galería: Estado inicial para Scroll (Mantiene la optimización) */
         .slide-up-on-scroll {
             opacity: 0;
             transform: translateY(50px); 
@@ -85,7 +86,7 @@
             transform: translateY(0);
         }
 
-        /* Tiempos de cascada para las imágenes */
+        /* Tiempos de cascada para las imágenes (Rápido) */
         .capturas-grid img:nth-child(1) { transition-delay: 0s; } 
         .capturas-grid img:nth-child(2) { transition-delay: 0.15s; } 
         .capturas-grid img:nth-child(3) { transition-delay: 0.3s; } 
@@ -288,22 +289,17 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // 1. ANIMACIÓN DEL VIDEO: Usamos setTimeout(0) para asegurar la transición.
+            // 1. ANIMACIÓN DEL VIDEO: Añadimos la clase directamente al cargar (ahora la transición CSS es de 1s)
             const video = document.querySelector('.video-container');
             if (video) {
-                // setTimeout(0) fuerza al navegador a renderizar primero el estado inicial (oculto)
-                // y luego aplicar la clase para la animación en el siguiente ciclo.
-                setTimeout(() => {
-                    video.classList.add('animar-video');
-                }, 0);
+                video.classList.add('animar-video');
             }
 
             // 2. Animación de la Galería (al hacer scroll)
             const observerOptions = {
                 root: null, 
                 rootMargin: '0px',
-                // Umbral 0.01 (1%) para respuesta instantánea en el scroll
-                threshold: 0.01
+                threshold: 0.01 // Se activa al 1% de entrada (respuesta inmediata en el scroll).
             };
 
             const observer = new IntersectionObserver((entries, observer) => {
