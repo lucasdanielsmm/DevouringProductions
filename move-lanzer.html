@@ -293,17 +293,18 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // 1. Animación del Video (al cargar)
+            // 1. Animación del Video (al cargar): CORRECCIÓN AQUÍ
             const video = document.querySelector('.video-container');
+            // Añadimos la clase 'visible' inmediatamente para animar el video
             if (video) {
                 video.classList.add('visible');
             }
 
             // 2. Animación de la Galería (al hacer scroll, usando Intersection Observer)
             const observerOptions = {
-                root: null, // El viewport es la raíz
+                root: null, 
                 rootMargin: '0px',
-                threshold: 0.2 // Activa cuando el 20% del elemento es visible
+                threshold: 0.2 
             };
 
             const observer = new IntersectionObserver((entries, observer) => {
@@ -311,7 +312,7 @@
                     if (entry.isIntersecting) {
                         // Si el elemento es visible, añade la clase 'active'
                         entry.target.classList.add('active');
-                        // Deja de observar este elemento para no animarlo de nuevo
+                        // Deja de observar
                         observer.unobserve(entry.target);
                     }
                 });
