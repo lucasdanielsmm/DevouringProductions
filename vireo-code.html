@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Daniel Soriano - ViReo CODE: Prologo Anomalia</title>
+    <style>
+        /* ========================================================= */
+        /* == ESTILOS GLOBALES Y COMPARTIDOS (Base) == */
+        /* ========================================================= */
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden; 
+            text-align: center; 
+        }
+        
+        a {
+            text-decoration: none; 
+            color: inherit;
+        }
+
+        .logo {
+            max-width: 120px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+            cursor: pointer;
+        }
+        
+        .titulo-pagina {
+            font-size: 3em; 
+            color: #ffffff;
+            margin: 30px auto 10px auto;
+            text-align: center;
+            text-transform: uppercase; /* Opcional: Para darle más fuerza al título */
+            letter-spacing: 2px;
+        }
+
+        /* ========================================================= */
+        /* == ANIMACIONES == */
+        /* ========================================================= */
+
+        /* 1. Video: Estado Inicial (Oculto y Abajo) */
+        .video-container {
+            width: 90%;
+            max-width: 800px; 
+            margin: 20px auto;
+            aspect-ratio: 16/9;
+            position: relative;
+
+            opacity: 0; 
+            transform: translateY(40px); /* Posición inicial oculta */
+            transition: opacity 1.0s ease-out, transform 1.0s ease-out; 
+            will-change: opacity, transform; 
+        }
+
+        /* Clase final añadida por JavaScript (se anima) */
+        .video-container.animar-video {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .video-container iframe, .video-container img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.2); /* Sutil brillo verde estilo código */
+        }
+
+        /* 2. Galería: Estado inicial para Scroll */
+        .slide-up-on-scroll {
+            opacity: 0;
+            transform: translateY(50px); 
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            will-change: opacity, transform;
+        }
+
+        /* Estado final activado por JS (scroll) */
+        .slide-up-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Tiempos de cascada para las imágenes */
+        .capturas-grid img:nth-child(1) { transition-delay: 0s; } 
+        .capturas-grid img:nth-child(2) { transition-delay: 0.15s; } 
+        .capturas-grid img:nth-child(3) { transition-delay: 0.3s; } 
+
+        /* ========================================================= */
+        /* == RESTO DE ESTILOS == */
+        /* ========================================================= */
+        .subtitulo {
+            font-size: 2em;
+            color: #4ade80; /* Un verde un poco más "hacker/code" */
+            margin: 40px auto 20px auto;
+            text-align: center;
+        }
+
+        .detalles-container {
+            display: inline-block; 
+            text-align: left;
+            margin: 20px auto 40px auto; 
+            padding: 20px;
+            background-color: #111;
+            border-radius: 8px;
+            border: 1px solid #222;
+        }
+        
+        .detalle-fila {
+            display: flex;
+            justify-content: space-between;
+            width: 300px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 2px;
+        }
+        .detalle-fila:last-child { border-bottom: none; }
+        
+        .detalle-fila strong { color: #fff; }
+        .detalle-fila span { color: #aaa; font-family: monospace; } /* Fuente monospace para estilo código */
+        
+        .btn-logo-play {
+            display: block; 
+            width: fit-content; 
+            margin: 20px auto 20px auto; 
+            transition: transform 0.3s ease, opacity 0.3s;
+            line-height: 0; 
+        }
+
+        .btn-logo-play img {
+            width: 100%;
+            max-width: 150px; /* Un poco más grande para botones tipo "Download" */
+            height: auto;
+            border: none; 
+            box-shadow: none; 
+        }
+        
+        .btn-logo-play:hover {
+            transform: scale(1.05); 
+            opacity: 0.9;
+        }
+
+        .galeria {
+            margin-top: 50px;
+            padding: 20px 10px;
+            text-align: center;
+        }
+
+        .galeria h3 {
+            font-size: 1.8em;
+            color: #ffffff;
+            margin-bottom: 30px;
+        }
+
+        .capturas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .capturas-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .capturas-grid img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
+        }
+
+        .divider {
+            border: 0;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #222, transparent);
+            margin: 30px 0;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        footer {
+            background-color: #0a0a0a; 
+            color: #888; 
+            text-align: center;
+            padding: 20px 10px;
+            margin-top: 40px;
+            font-size: 0.9em;
+            border-top: 1px solid #111; 
+        }
+
+        footer img {
+            max-width: 60px; 
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        footer a {
+            color: #28a745; 
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #3bd85f; 
+        }
+        
+    </style>
+</head>
+<body>
+
+    <a href="index.html">
+        <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano" class="logo">
+    </a>
+
+    <h1 class="titulo-pagina">ViReo CODE: Prologo Anomalia</h1>
+
+    <div class="video-container">
+        <iframe 
+            src="https://www.youtube.com/embed/HZYgiIH48Y8?si=hxrnzoxL9KlNZJoVsi=placeholder&amp;autoplay=1&amp;mute=1&amp;controls=0&amp;modestbranding=1&amp;rel=0&amp;showinfo=0" 
+            allow="autoplay; encrypted-media" 
+            allowfullscreen>
+        </iframe>
+    </div>
+
+    <h2 class="subtitulo">Desencripta la verdad...</h2>
+
+    <p style="max-width: 800px; margin: 0 auto 10px auto; padding: 0 20px;">
+        ViReo CODE: Prologo Anomalia es una experiencia inmersiva que mezcla una narrativa con potencial infinito y resolución de puzzles en entornos organicos (Vivos). Adéntrate en un Planeta Desconocido, manipula el entorno haciendo uso de tecnogia avansada y descubre el origen de la anomalía antes de que todo colapse.
+    </p>
+
+    <a href="#" class="btn-logo-play" aria-label="Jugar o Descargar">
+        <img src="play-button-generic.png" alt="Jugar ViReo CODE">
+    </a>
+
+    <div class="detalles-container">
+        <div class="detalle-fila">
+            <strong>Project Status</strong>
+            <span>Prologue Released</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Project Type</strong>
+            <span>Personal / Indie</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Project Duration</strong>
+            <span>1 Month</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Software Used</strong>
+            <span>RPGMAKER MV</span> </div>
+        <div class="detalle-fila">
+            <strong>Language</strong>
+            <span>English / Spanish</span> </div>
+        <div class="detalle-fila">
+            <strong>Primary Role(s)</strong>
+            <span>Full Developement</span>
+        </div>
+    </div>
+    
+    <hr class="divider">
+
+    <section class="galeria">
+        <h3>Entorno y Visuales</h3>
+        <div class="capturas-grid">
+            <img src="captura-vireo-1.jpg" alt="Gameplay ViReo 1" class="slide-up-on-scroll">
+            <img src="captura-vireo-2.jpg" alt="Gameplay ViReo 2" class="slide-up-on-scroll">
+            <img src="captura-vireo-3.jpg" alt="Gameplay ViReo 3" class="slide-up-on-scroll">
+        </div>
+    </section>
+
+    <footer>
+        <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano">
+        <p>© 2025 Lucas Daniel Soriano</p>
+        <p><a href="https://linktr.ee/LucasDanielSMM">Contacto</a></p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. ANIMACIÓN DEL VIDEO
+            const video = document.querySelector('.video-container');
+            if (video) {
+                // Forzar re-pintura
+                video.offsetHeight; 
+                
+                // Aplicar la clase final que dispara la animación de 1s
+                video.classList.add('animar-video');
+            }
+
+            // 2. Animación de la Galería (al hacer scroll)
+            const observerOptions = {
+                root: null, 
+                rootMargin: '0px',
+                threshold: 0.01 // Se activa al 1% de entrada
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const slideElements = document.querySelectorAll('.slide-up-on-scroll');
+            slideElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+    
+</body>
+</html>
