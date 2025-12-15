@@ -54,9 +54,7 @@
 
             opacity: 0; 
             transform: translateY(40px); /* Posición inicial oculta */
-            /* Transición de 1.0s para suavidad */
             transition: opacity 1.0s ease-out, transform 1.0s ease-out; 
-            /* Para evitar el flickering en algunos navegadores */
             will-change: opacity, transform; 
         }
 
@@ -74,7 +72,7 @@
             border-radius: 8px;
         }
 
-        /* 2. Galería: Estado inicial para Scroll (Mantiene la optimización) */
+        /* 2. Galería: Estado inicial para Scroll */
         .slide-up-on-scroll {
             opacity: 0;
             transform: translateY(50px); 
@@ -231,7 +229,11 @@
     <h1 class="titulo-pagina">MOVE-LANZER</h1>
 
     <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
+        <iframe 
+            src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3&amp;autoplay=1&amp;controls=0&amp;modestbranding=1&amp;rel=0&amp;showinfo=0" 
+            allow="autoplay; encrypted-media" 
+            allowfullscreen>
+        </iframe>
     </div>
 
     <h2 class="subtitulo">¡Juego de Oleadas Infinitas!</h2>
@@ -294,11 +296,10 @@
             // 1. ANIMACIÓN DEL VIDEO: Usamos offsetHeight para forzar la animación
             const video = document.querySelector('.video-container');
             if (video) {
-                // Paso 1: Forzar re-pintura (layout reading)
-                // Esto asegura que el navegador 'vea' el estado inicial (opacity 0) antes de la transición.
+                // Forzar re-pintura antes de la clase para asegurar el estado inicial
                 video.offsetHeight; 
                 
-                // Paso 2: Aplicar la clase final que dispara la animación de 1s
+                // Aplicar la clase final que dispara la animación de 1s
                 video.classList.add('animar-video');
             }
 
@@ -306,7 +307,7 @@
             const observerOptions = {
                 root: null, 
                 rootMargin: '0px',
-                threshold: 0.01 // Se activa al 1% de entrada (respuesta inmediata en el scroll).
+                threshold: 0.01 // Se activa al 1% de entrada (respuesta inmediata).
             };
 
             const observer = new IntersectionObserver((entries, observer) => {
