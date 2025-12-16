@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAE CCC — Comida, Cuchillos & Caos</title>
+    <style>
+        /* ========================================================= */
+        /* == ESTILOS GLOBALES Y COMPARTIDOS (Base) == */
+        /* ========================================================= */
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden; 
+            text-align: center; 
+        }
+        
+        a {
+            text-decoration: none; 
+            color: inherit;
+        }
+
+        .logo {
+            max-width: 120px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+            cursor: pointer;
+        }
+        
+        .titulo-pagina {
+            font-size: 3em; 
+            color: #ffffff;
+            margin: 30px auto 10px auto;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* ========================================================= */
+        /* == ANIMACIONES (Mantenidas de la plantilla) == */
+        /* ========================================================= */
+
+        /* 1. Video/Imagen Principal: Estado Inicial (Oculto y Abajo) */
+        .video-container {
+            width: 90%;
+            max-width: 800px; 
+            margin: 20px auto;
+            aspect-ratio: 16/9;
+            position: relative;
+
+            opacity: 0; 
+            transform: translateY(40px);
+            transition: opacity 1.0s ease-out, transform 1.0s ease-out; 
+            will-change: opacity, transform; 
+        }
+
+        /* Clase final añadida por JavaScript (se anima) */
+        .video-container.animar-video {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .video-container iframe, .video-container img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: none;
+            border-radius: 8px;
+            /* Brillo amarillo sutil */
+            box-shadow: 0 0 20px rgba(255, 221, 0, 0.2);
+        }
+
+        /* 2. Galería: Estado inicial para Scroll */
+        .slide-up-on-scroll {
+            opacity: 0;
+            transform: translateY(50px); 
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            will-change: opacity, transform;
+        }
+
+        /* Estado final activado por JS (scroll) */
+        .slide-up-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Tiempos de cascada para las imágenes */
+        .capturas-grid img:nth-child(1) { transition-delay: 0s; } 
+        .capturas-grid img:nth-child(2) { transition-delay: 0.15s; } 
+        .capturas-grid img:nth-child(3) { transition-delay: 0.3s; } 
+        .capturas-grid img:nth-child(4) { transition-delay: 0.45s; } 
+
+        /* ========================================================= */
+        /* == RESTO DE ESTILOS (Adaptados a Amarillo) == */
+        /* ========================================================= */
+        .subtitulo {
+            font-size: 2em;
+            color: #ffdd00; 
+            margin: 40px auto 20px auto;
+            text-align: center;
+        }
+
+        .detalles-container {
+            display: inline-block; 
+            text-align: left;
+            margin: 20px auto 40px auto; 
+            padding: 20px;
+            background-color: #111;
+            border-radius: 8px;
+            border: 1px solid #222;
+        }
+        
+        .detalle-fila {
+            display: flex;
+            justify-content: space-between;
+            width: 350px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 2px;
+        }
+        .detalle-fila:last-child { border-bottom: none; }
+        
+        .detalle-fila strong { color: #fff; }
+        .detalle-fila span { color: #aaa; font-family: monospace; }
+        
+        .btn-logo-play {
+            display: block; 
+            width: fit-content; 
+            margin: 20px auto 20px auto; 
+            transition: transform 0.3s ease, opacity 0.3s;
+            line-height: 0; 
+        }
+
+        .btn-logo-play img {
+            width: 100%;
+            max-width: 150px;
+            height: auto;
+            border: none; 
+            box-shadow: none; 
+        }
+        
+        .btn-logo-play:hover {
+            transform: scale(1.05); 
+            opacity: 0.9;
+        }
+        
+        /* Estilos específicos para las mecánicas del juego */
+        .mecánicas-seccion {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: left;
+        }
+
+        .modo-juego {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #1a1a1a;
+            /* Borde Amarillo */
+            border-left: 5px solid #ffdd00;
+            border-radius: 4px;
+        }
+
+        .modo-juego h4 {
+            /* Título Amarillo */
+            color: #ffdd00;
+            font-size: 1.5em;
+            margin-top: 0;
+            border-bottom: 1px dashed #222;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .modo-juego ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .modo-juego ul li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        /* Marcador de Peligro (Rojo) */
+        .modo-juego ul li::before {
+            content: '»'; 
+            color: #ff0000; 
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+        
+        /* Marcador de Beneficio (Amarillo) */
+        .modo-juego ul li.beneficio::before {
+            content: '✓';
+            color: #ffdd00; 
+        }
+
+        .galeria {
+            margin-top: 50px;
+            padding: 20px 10px;
+            text-align: center;
+        }
+
+        .galeria h3 {
+            font-size: 1.8em;
+            color: #ffffff;
+            margin-bottom: 30px;
+        }
+
+        .capturas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .capturas-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .capturas-grid img:hover {
+            transform: scale(1.02);
+            /* Sombra de hover Amarillo */
+            box-shadow: 0 0 15px rgba(255, 221, 0, 0.3);
+        }
+
+        .divider {
+            border: 0;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #222, transparent);
+            margin: 30px 0;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        footer {
+            background-color: #0a0a0a; 
+            color: #888; 
+            text-align: center;
+            padding: 20px 10px;
+            margin-top: 40px;
+            font-size: 0.9em;
+            border-top: 1px solid #111; 
+        }
+
+        footer img {
+            max-width: 60px; 
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        footer a {
+            /* Enlaces de footer Amarillo */
+            color: #ffdd00; 
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            /* Hover de footer Amarillo más claro */
+            color: #ffee66; 
+        }
+        
+    </style>
+</head>
+<body>
+
+    <a href="index.html">
+        <img src="caratula-CAE-CCC.jpg" alt="Logo CAE CCC" class="logo">
+    </a>
+
+    <h1 class="titulo-pagina">CAE CCC — Comida, Cuchillos & Caos</h1>
+
+    <div class="video-container">
+        <img src="CAE LOGO.jpg" alt="Portada de CAE CCC: Comida, Cuchillos & Caos">
+    </div>
+
+    <h2 class="subtitulo">¡Esquiva el peligro, devora hasta las nubes!</h2>
+
+    <p style="max-width: 800px; margin: 0 auto 10px auto; padding: 0 20px;">
+        Controla a 🐽 en este frenético arcade de esquivar y recolectar. Tres modos de juego únicos que ponen a prueba tu habilidad, velocidad y gestión de recursos. ¡Prepárate para el caos que cae del cielo!
+    </p>
+
+    <a href="#" class="btn-logo-play" aria-label="Jugar Ahora (Versión Demo)">
+        <img src="play-button-generic.png" alt="Jugar CAE CCC">
+    </a>
+
+    <div class="detalles-container">
+        <div class="detalle-fila">
+            <strong>Project Status</strong>
+            <span>Pre-Released</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Genre</strong>
+            <span>Arcade / Dodge & Collect</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Lenguages</strong>
+            <span>HTML, CSS, JavaScript</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Mechanics</strong>
+            <span>Collect, Dodge, Roll, Power-ups</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Platform</strong>
+            <span>Web / Mobile</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Developed By</strong>
+            <span>Lucas Daniel Soriano</span>
+        </div>
+    </div>
+    
+    <hr class="divider">
+    
+    <section class="mecánicas-seccion">
+        <h2 class="subtitulo" style="margin-top: 0;">Análisis del Sistema (Modos de Juego)</h2>
+
+        <div class="modo-juego slide-up-on-scroll">
+            <h4>1. Modo Clásico 🍎 (Clásico)</h4>
+            <ul>
+                <li class="beneficio">Objetivo: Recoger <strong>Comida</strong> (🍎, 🍔, 🍕) para Puntuación y Calorías.</li>
+                <li>Peligro: Esquivar <strong>Cubiertos</strong> (🍴, 🔪) que restan puntos.</li>
+                <li class="beneficio">Mecánica: <strong>Potenciadores</strong> (☕, 🍷, 🍺) otorgan velocidad, salto o atracción de comida.</li>
+                <li>Dificultad: Seleccionable (Fácil, Medio, Difícil).</li>
+            </ul>
+        </div>
+
+        <div class="modo-juego slide-up-on-scroll" style="transition-delay: 0.15s;">
+            <h4>2. Supervivencia 🔪 (Supervivencia)</h4>
+            <ul>
+                <li class="beneficio">Objetivo: <strong>Sobrevivir el mayor tiempo</strong> posible.</li>
+                <li>Peligro: Único objeto: <strong>Cuchillos (🔪)</strong> con patrones de movimiento complejos (giratorio, persecución).</li>
+                <li>Mecánica: Pura habilidad de esquivar y saltar.</li>
+                <li>Riesgo: La partida termina al <strong>primer impacto</strong>.</li>
+            </ul>
+        </div>
+
+        <div class="modo-juego slide-up-on-scroll" style="transition-delay: 0.3s;">
+            <h4>3. Relámpago ⚡ (Alto Riesgo)</h4>
+            <ul>
+                <li>Recursos Clave: Gestión de <strong>Salud (HP)</strong> y <strong>Energía (Stamina)</strong>.</li>
+                <li class="beneficio">Habilidad: <strong>Rodar</strong> (Invulnerabilidad temporal) consume Energía.</li>
+                <li class="beneficio">Mecánica: Recoger <strong>Picante (🌶️)</strong> para activar <strong>Lluvia de Emojis</strong> y bonificación de puntos.</li>
+                <li>Peligros: Cuchillos, Fuegos (🔥) y zonas de bombardeo de emojis de daño.</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="galeria">
+        <h3>Capturas del Caos</h3>
+        <div class="capturas-grid">
+            <img src="captura-ccc-1.jpg" alt="Gameplay Clásico" class="slide-up-on-scroll">
+            <img src="captura-ccc-2.jpg" alt="Gameplay Supervivencia" class="slide-up-on-scroll">
+            <img src="captura-ccc-3.jpg" alt="Gameplay Relámpago" class="slide-up-on-scroll">
+            <img src="captura-ccc-4.jpg" alt="Pantalla de Power-ups" class="slide-up-on-scroll">
+        </div>
+    </section>
+
+    <footer>
+        <img src="logo-ccc.png" alt="Logo Lucas Daniel Soriano">
+        <p>© 2025 Lucas Daniel Soriano</p>
+        <p><a href="https://linktr.ee/LucasDanielSMM">Contacto</a></p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. ANIMACIÓN DE LA PORTADA
+            const video = document.querySelector('.video-container');
+            if (video) {
+                // Forzar re-pintura
+                video.offsetHeight; 
+                
+                // Aplicar la clase final que dispara la animación de 1s
+                video.classList.add('animar-video');
+            }
+
+            // 2. Animación de los elementos (al hacer scroll)
+            const observerOptions = {
+                root: null, 
+                rootMargin: '0px',
+                threshold: 0.01 // Se activa al 1% de entrada
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const slideElements = document.querySelectorAll('.slide-up-on-scroll');
+            slideElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+    
+</body>
+</html>
