@@ -3,189 +3,959 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <meta name="description" content="Portafolio de Lucas Daniel Soriano, Game Designer especializado en Unity, Scratch y RPG Maker.">
     
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-
-    <title>Lucas Daniel Soriano - Portafolio</title>
-    
+    <title>Lucas Daniel Soriano</title>
     <style>
-        :root {
-            --primario: #2c3e50;
-            --secundario: #3498db;
-            --fondo: #f4f4f4;
-            --texto: #333;
+        /* REGRESION: BOX-SIZING RESET */
+        *, *::before, *::after {
+            box-sizing: border-box; 
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--fondo);
-            color: var(--texto);
-            margin: 0;
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden; 
         }
 
-        header {
+        h1, p:first-of-type {
             text-align: center;
-            padding: 40px 0;
         }
 
-        .contenedor-proyectos {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        h1 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        p:first-of-type {
+            font-size: 1.2em;
+            color: #cccccc;
+            margin-top: 0;
+        }
+
+        p {
+            font-size: 1em;
+            color: #dddddd;
+        }
+
+        a {
+            color: #1e90ff;
+        }
+
+        a:active {
+            color: #00ff00;
+        }
+
+        iframe {
+            width: 100%;
+            max-width: 560px;
+            height: auto;
+            aspect-ratio: 16/9;
+            display: block;
+            margin: 10px auto;
+            border: none;
+        }
+
+        /* ESTILOS DE CAJAS DE JUEGOS */
+        .cajas-juegos {
+            display: flex;
+            flex-direction: row;        
+            flex-wrap: wrap;            
+            justify-content: center;
             gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
+            padding: 40px 10px;
+            
+        }
+        /* Quita el subrayado de los enlaces que contienen las cajas y tarjetas */
+        .cajas-juegos a,
+        .carrusel-contenedor a {
+            text-decoration: none; /* Esto elimina el subrayado */
+            color: inherit;      /* Asegura que el color del texto dentro del enlace se herede */
+        }
+        .caja {
+            width: 200px;
+            height: 280px;
+            background-color: #111;
+            border: 2px solid #333;
+            border-radius: 6px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .caja:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 24px rgba(255,105,180,0.4);
+        }
+
+        .caja img {
+            width: 100%;
+            height: 70%;
+            object-fit: cover;
+            border-bottom: 2px solid #333;
+        }
+
+        .caja h3 {
+            font-size: 1.1em;
+            margin: 8px 0 4px;
+            background: linear-gradient(90deg, red, pink, cyan);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .caja p {
+            font-size: 0.85em;
+            color: #ccc;
+            margin: 0 10px 10px;
+        }
+
+        @media (max-width: 600px) {
+            .cajas-juegos {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* --- ESTILOS DEL CARRUSEL --- */
+        .carrusel {
+            max-width: 100%;       
+            margin: 40px auto;
+            position: relative; 
+            overflow: hidden; 
+        }
+
+        .carrusel-contenedor {
+            display: flex; 
+            transition: transform 1.2s ease-in-out; 
         }
 
         .tarjeta {
-            background: white;
+            flex: 0 0 100%; 
+            text-align: center;
+            background-color: #111;
             border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 20px;
+            position: relative; 
             cursor: pointer;
-            transition: transform 0.3s ease;
-            position: relative;
+            overflow: hidden; 
         }
 
-        .tarjeta:hover {
-            transform: translateY(-5px);
+        /* Regla para PC: Muestra 4 tarjetas */
+        @media (min-width: 900px) {
+            .tarjeta {
+                flex: 0 0 25%; 
+            }
         }
 
         .tarjeta img {
             width: 100%;
-            height: 200px;
+            aspect-ratio: 16 / 9; 
             object-fit: cover;
+            max-width: 100%;
+            display: block; 
+            border-radius: 8px; 
         }
 
-        .info {
-            padding: 15px;
+        /* --- ESTILOS DE LUPA --- */
+        .lupa-overlay {
+            position: absolute;
+            top: 20px; 
+            left: 20px; 
+            width: calc(100% - 40px); 
+            height: auto; 
+            aspect-ratio: 16 / 9; 
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0; 
+            transition: opacity 0.3s ease;
+            border-radius: 8px; 
+            z-index: 5; 
         }
 
-        /* Botón Flotante + */
-        #menuBtn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background-color: var(--secundario);
+        .tarjeta:hover .lupa-overlay {
+            opacity: 1; 
+        }
+
+        .lupa-overlay::after {
+            content: "🔍"; 
+            font-size: 3em;
             color: white;
-            border-radius: 50%;
-            border: none;
-            font-size: 30px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            z-index: 100;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
         }
 
-        /* Modal de la Lupa */
+        /* --- ESTILOS DE BOTONES --- */
+        .carrusel-btn {
+            position: absolute; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            background: rgba(0, 0, 0, 0.4); 
+            border: 2px solid #1e90ff; 
+            font-size: 2em;
+            color: #1e90ff; 
+            padding: 10px;
+            line-height: 1;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s;
+            z-index: 10; 
+        }
+
+        .carrusel-btn:hover {
+            background-color: #1e90ff; 
+            color: #000; 
+        }
+
+        .carrusel-btn.izquierda {
+            left: 10px;
+        }
+
+        .carrusel-btn.derecha {
+            right: 10px;
+        }
+
+        /* Clase para ocultar botones si no son necesarios */
+        .carrusel-btn.oculto {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* --- EFECTO DE BRILLO --- */
+        .tarjeta h3, .tarjeta p {
+            position: relative;
+            z-index: 2; 
+        }
+
+        .tarjeta::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%; 
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent
+            );
+            transition: transform 0.5s ease; 
+            z-index: 1; 
+        }
+
+        .tarjeta:hover::after {
+            transform: translateX(200%); 
+        }
+
+        /* ESTILOS RGB, FOOTER, ETC. */
+        h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            text-align: center;
+            background: linear-gradient(90deg, red, orange, yellow, lime, green, cyan, turquoise, blue, indigo, violet, magenta, pink);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 300% 300%;
+            animation: rgbShift 8s infinite linear, neonPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes rgbShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes neonPulse {
+            0%, 100% {
+                text-shadow: 0 0 2px rgba(255, 105, 180, 0.4), 0 0 4px rgba(0, 255, 255, 0.3), 0 0 6px rgba(255, 0, 255, 0.3);    
+            }
+            50% {
+                text-shadow: 0 0 4px rgba(255, 105, 180, 0.5), 0 0 8px rgba(0, 255, 255, 0.4), 0 0 10px rgba(255, 0, 255, 0.4);
+            }
+        }
+
+        .divider {
+            border: 0;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #111, transparent);
+            margin: 30px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            margin: 10px auto;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            background-color: #1e90ff;
+            color: #fff;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #00bfff;
+        }
+
+        .btn:active {
+            background-color: #00ff00;
+            color: #000;
+        }
+
+        .btn-redes {
+            background-color: #28a745; 
+            color: #fff;
+        }
+
+        .btn-redes:hover {
+            background-color: #3bd85f; 
+        }
+
+        .btn-redes:active {
+            background-color: #fff;      
+            color: #28a745;             
+        }
+
+        .logo {
+            max-width: 120px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        footer {
+            background-color: #0a0a0a; 
+            color: #888; 
+            text-align: center;
+            padding: 20px 10px;
+            margin-top: 40px;
+            font-size: 0.9em;
+            border-top: 1px solid #111; 
+        }
+
+        footer img {
+            max-width: 60px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        footer a {
+            color: #28a745; 
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #3bd85f; 
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8em; }
+            p { font-size: 1.1em; }
+            h2 { font-size: 1.3em; }
+            .btn { width: 100%; }
+        }
+
+        /* --- ESTILOS PARA MODAL --- */
         .modal {
-            display: none;
+            display: none; 
             position: fixed;
-            z-index: 1000;
-            padding-top: 50px;
+            z-index: 9999; 
+            padding-top: 50px; 
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.9);
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9); 
         }
 
-        .modal-content {
+        .modal-contenido {
             margin: auto;
             display: block;
-            max-width: 80%;
-            max-height: 80%;
+            width: 90%;
+            max-width: 900px; 
+            animation: zoom 0.6s; 
         }
 
-        .cerrar {
+        @keyframes zoom {
+            from {transform: scale(0)} 
+            to {transform: scale(1)}
+        }
+
+        .cerrar-modal {
             position: absolute;
             top: 15px;
             right: 35px;
             color: #f1f1f1;
             font-size: 40px;
             font-weight: bold;
+            transition: 0.3s;
             cursor: pointer;
         }
-    </style>
-</head>
-<body>
 
-    <header>
-        <h1>Lucas Daniel Soriano</h1>
-        <p>Game Designer & Developer</p>
-    </header>
-
-    <div class="contenedor-proyectos">
-        <div class="tarjeta">
-            <img src="vireo-game.jpg" alt="Vireo CODE A">
-            <div class="info">
-                <h3>Vireo CODE A (RPG Maker MV)</h3>
-                <p>Juego Sci-fi con narrativa orgánica y mecánicas de exploración.</p>
-            </div>
-        </div>
-
-        <div class="tarjeta">
-            <img src="scratch-game.jpg" alt="Proyecto Scratch">
-            <div class="info">
-                <h3>MOVE-LANZER (Scratch)</h3>
-                <p>Sistema de oleadas y mecánicas de lanzamiento de proyectiles.</p>
-            </div>
-        </div>
-
-        <div class="tarjeta">
-            <img src="unity-game.jpg" alt="Proyecto Unity 3D">
-            <div class="info">
-                <h3>Unity 3D Project: CREATURA DINOMA</h3>
-                <p>Sistema de Captura, Venta y extraccion en entornos 3D.</p>
-            </div>
-        </div>
-    </div>
-
-    <button id="menuBtn">+</button>
-
-    <div id="miModal" class="modal">
-        <span class="cerrar">&times;</span>
-        <img class="modal-content" id="imgModal">
-    </div>
-
-    <script>
-        const modal = document.getElementById("miModal");
-        const imagenModal = document.getElementById("imgModal");
-        const cerrarModal = document.getElementsByClassName("cerrar")[0];
-        const menuBtn = document.getElementById("menuBtn");
-        const tarjetas = document.querySelectorAll('.tarjeta');
-
-        // Lógica para abrir la lupa y ocultar el botón +
-        tarjetas.forEach(tarjeta => {
-            tarjeta.addEventListener('click', () => {
-                const imagenSrc = tarjeta.querySelector('img').src;
-                modal.style.display = "block";
-                imagenModal.src = imagenSrc;
-                menuBtn.style.display = "none"; // Oculta el botón
-            });
-        });
-
-        // Función para cerrar y volver a mostrar el botón
-        function cerrarYMostrarBoton() {
-            modal.style.display = "none";
-            menuBtn.style.display = "block"; // Muestra el botón de nuevo
+        .cerrar-modal:hover,
+        .cerrar-modal:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
         }
 
-        cerrarModal.onclick = cerrarYMostrarBoton;
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                cerrarYMostrarBoton();
+        @media only screen and (max-width: 700px) {
+            .modal-contenido {
+                width: 100%;
             }
         }
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === "Escape") cerrarYMostrarBoton();
+        /* --- ESTILOS PARA SECCIONES DE PROYECTO (Zig-Zag) --- */
+        .proyecto-seccion {
+            padding: 20px 0;
+            margin-bottom: 40px;
+        }
+
+        .proyecto-cuerpo {
+            width: 100%; 
+        }
+
+        /* Ajuste: margen reducido para pegar título a descripción */
+        .proyecto-seccion h2 {
+            margin-bottom: 15px; 
+            line-height: 1.2;
+        }
+
+        .contenido-proyecto {
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px;
+            align-items: center; 
+        }
+
+        .texto-columna {
+            width: 100%;
+            text-align: center; 
+        }
+        
+        /* Ajuste para subir descripción */
+        .texto-columna p {
+            margin-top: 5px; 
+        }
+
+        .texto-columna .btn {
+            margin: 10px auto; 
+            display: block; 
+            width: fit-content; 
+        }
+
+        /* --- Ajustes para PC (min-width: 900px) --- */
+        @media (min-width: 900px) {
+            .proyecto-cuerpo {
+                max-width: 1200px; 
+                margin: 0 auto; 
+            }
+            
+            .contenido-proyecto {
+                flex-direction: row; 
+                align-items: center; /* Alineado verticalmente al video */
+                gap: 50px;
+            }
+            
+            .texto-columna {
+                flex: 1; 
+                max-width: 50%;
+                
+                /* CLAVE: Alineación centrada para Título y Descripción */
+                text-align: center; 
+                
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                
+                /* Ajuste para subir el bloque entero ligeramente */
+                margin-top: -100px; 
+            }
+            
+            /* Asegurar que el párrafo también se centre */
+            .texto-columna p {
+                text-align: center;
+            }
+            
+            .texto-columna .btn {
+                margin: 15px auto 0 auto; 
+                display: block; 
+            }
+
+            .video-columna {
+                flex: 1; 
+                max-width: 50%;
+                display: flex;
+                flex-direction: column;
+                align-items: center; 
+            }
+
+            .video-columna .informe {
+                margin-top: 10px;
+                text-align: center; 
+            }
+
+            .proyecto-impar .texto-columna { order: 0; }
+            .proyecto-impar .video-columna { order: 1; }
+            .proyecto-par .texto-columna { order: 1; }
+            .proyecto-par .video-columna { order: 0; }
+        }
+
+        /* =========================================
+           NUEVOS ESTILOS PARA EL MENÚ HAMBURGUESA
+           ========================================= */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 3em;     
+            line-height: 0.6;   
+            color: #ffffff;     
+            cursor: pointer;
+            z-index: 10001;     /* Mayor que el modal (9999) */
+            transition: transform 0.4s ease, color 0.4s ease;
+            user-select: none;  
+            font-weight: 300;
+        }
+
+        .menu-btn.activo {
+            transform: rotate(45deg); 
+            color: #000000;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            background-color: #ffffff;
+            z-index: 10000; 
+            
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+            /* Mobile Default */
+            width: 100%;
+            height: 100%;
+            transform: translateY(-20px); 
+        }
+
+        /* PC: Barra lateral derecha */
+        @media (min-width: 900px) {
+            .menu-overlay {
+                width: 350px; 
+                height: 100%;
+                border-left: 4px solid #1e90ff;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+                transform: translateX(100%); 
+            }
+        }
+
+        .menu-overlay.activo {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(0, 0);
+        }
+
+        .menu-links a {
+            display: block;
+            font-size: 2em;
+            font-weight: bold;
+            color: #000000; 
+            text-decoration: none;
+            margin: 15px 0;
+            position: relative;
+            transition: color 0.3s;
+            font-family: Arial, sans-serif; 
+            text-align: center;
+        }
+
+        .menu-links a:hover {
+            color: #1e90ff; 
+        }
+
+        .menu-links a::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 3px;
+            background: #1e90ff;
+            transition: width 0.3s;
+            margin: 5px auto 0;
+        }
+
+        .menu-links a:hover::after {
+            width: 100%;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="menu-btn" id="menuBtn">+</div>
+
+    <nav class="menu-overlay" id="menuOverlay">
+        <div class="menu-links">
+            <a href="index.html">INICIO</a>
+            <a href="portafolio.html">PORTAFOLIO</a>
+            <a href="comunidad.html">COMUNIDAD</a>
+            <a href="soporte.html">SOPORTE</a>
+            <a href="https://tutiendaexterna.com" target="_blank">TIENDA</a>
+            <a href="https://linktr.ee/LucasDaniel" target="_blank">CONTACTO</a>
+        </div>
+    </nav>
+    <div id="modal-imagen" class="modal">
+        <span class="cerrar-modal">&times;</span>
+        <img class="modal-contenido" id="imagen-modal" alt="Vista ampliada del proyecto">
+    </div>
+
+    <a href="index.html">
+    <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano" class="logo">
+    </a>
+
+    <h1>Lucas Daniel Soriano</h1>
+    <p><strong>Portafolio de Proyectos</strong></p>
+
+    <p><strong>Descripción:</strong> Soy Lucas, Game Designer, creador de experiencias inmersivas combinando precisión técnica y visión creativa. Desde la integración de sistemas de juego complejos en Unity hasta la construcción de bucles jugables atractivos, buscando siempre soluciones claras, mantenibles y reutilizables. Además, comparto mi proceso y avances de desarrollo indie en mis Redes.</p>
+
+    <section class="carrusel">
+        <button class="carrusel-btn izquierda">⟨</button>
+
+        <div class="carrusel-contenedor">
+            <div class="tarjeta">
+                <img src="portada-CAE-CCC.jpg" alt="CAE: CCC">
+                <h3>CAE: CCC</h3>
+                <p>Juego Arcade Emoji! hecho en HTML.</p>
+            </div>
+            <div class="tarjeta">
+                <img src="portada-move-lanzer.jpg" alt="MOVE-LANZER">
+                <h3>MOVE-LANZER</h3>
+                <p>Juego de oleadas infinitas hecho en Scratch.</p>
+            </div>
+            <div class="tarjeta">
+                <img src="portada-vireo-CODE.jpg" alt="Vireo CODE">
+                <h3>Vireo CODE</h3>
+                <p>RPG Sci-fi hecho en RPG Maker MV.</p>
+            </div>
+            <div class="tarjeta">
+                <img src="portada-creatura-dinoma.jpg" alt="CREATURA DINOMA">
+                <h3>CREATURA DINOMA</h3>
+                <p>Juego 3D de extracción hecho en Unity.</p>
+            </div>
+        </div>
+
+        <button class="carrusel-btn derecha">⟩</button>
+    </section>
+
+    <section class="proyecto-seccion proyecto-impar">
+        <div class="proyecto-cuerpo"> 
+            <div class="contenido-proyecto">
+                <div class="texto-columna">
+                    <h2>MOVE-LANZER: Scratch</h2>
+                    <p><strong>Descripción:</strong> Este es mi proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de la carrera Diseño y Produccion de videojuegos. Podés probarlo y editarlo acá:</p>
+                    <a href="https://scratch.mit.edu/projects/1208664342" class="btn">Jugar en Scratch</a> 
+                </div>
+                <div class="video-columna">
+                    <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
+                    <p class="informe"><strong>Informe:</strong> Acá describo cómo hice el proyecto de Scratch. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1H_EasA6_fBTmswYct79Bxj22b70S6vSK/edit?usp=sharing">Informe Completo</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="proyecto-seccion proyecto-par">
+        <div class="proyecto-cuerpo">
+            <div class="contenido-proyecto">
+                <div class="texto-columna">
+                    <h2>Vireo CODE: RPG Maker</h2>
+                    <p><strong>Descripción:</strong> Este es mi proyecto en RPG Maker MV. Es un juego de rol de estética Sci-fi que creé en la materia de Fundamentos de la Programación I en el segundo cuatrimestre del 2025. Podés descargarlo y jugarlo acá:</p>
+                    <a href="https://drive.google.com/drive/folders/1fmQCkMnAtXoqv5pZXHVjmH-JfM3LilDH?usp=drive_link" class="btn">Descargar</a>
+                </div>
+                <div class="video-columna">
+                    <iframe src="https://www.youtube.com/embed/t_Ud17NMSQQ?si=5u_qgy6hGDH1eisW" allowfullscreen></iframe>
+                    <p><strong>Informe:</strong> Acá describo cómo hice el proyecto de RPG MAKER MV. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1AyxeBXJah2CiWuHDM5pdYhdMJttzdoRP/edit?usp=sharing">Informe Completo</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="proyecto-seccion proyecto-impar">
+        <div class="proyecto-cuerpo">
+            <div class="contenido-proyecto">
+                <div class="texto-columna">
+                    <h2>CREATURA DINOMA: Unity</h2>
+                    <p><strong>Descripción:</strong> Este es mi proyecto de Unity, el cuál consiste en un videojuego del género Extracción en 3D, de Capturar, Transportar y Vender Criaturas. Podés descargarlo y jugarlo acá:</p>
+                    <a href="https://drive.google.com/drive/folders/1N632Wn_cmsnFj1Ge4oFEEcSdj-sIYoGV?usp=drive_link" class="btn">Descargar</a>
+                </div>
+                <div class="video-columna">
+                    <iframe src="https://www.youtube.com/embed/YGBjGzZh438" allowfullscreen></iframe>
+                    <p><strong>Informe:</strong> Acá describo cómo hice el proyecto de Unity, muestro algunas capturas de pantalla relevantes. Pueden descargar el informe completo desde acá: <a href="https://docs.google.com/document/d/1hRlHdFdcQsb9y8-r7JjA5UjjRilk5XoE/edit?usp=drive_link">Informe Completo</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cajas-juegos">
+        <a href="cae-ccc.html" class="enlace-tarjeta">
+            <div class="caja">
+                <img src="caratula-CAE-CCC.jpg" alt="CAE">
+                <h3>CAE</h3>
+                <p>Juego Arcade hecho Completamente en HTML.</p>
+            </div>
+        </a>
+        
+        <a href="move-lanzer.html" class="enlace-tarjeta">
+            <div class="caja">
+                <img src="caratula-move-lanzer.jpg" alt="MOVE-LANZER">
+                <h3>MOVE-LANZER</h3>
+                <p>Juego de oleadas infinitas hecho en Scratch.</p>
+            </div>
+        </a>
+        
+        <a href="vireo-code.html" class="enlace-tarjeta">
+            <div class="caja">
+                <img src="caratula-vireo-CODE.jpg" alt="Vireo CODE">
+                <h3>Vireo CODE</h3>
+                <p>RPG Sci-fi hecho en RPG Maker MV.</p>
+            </div>
+        </a>
+        
+        <a href="creatura-dinoma.html" class="enlace-tarjeta">
+            <div class="caja">
+                <img src="caratula-creatura-dinoma.jpg" alt="CREATURA DINOMA">
+                <h3>CREATURA DINOMA</h3>
+                <p>Juego 3D de extracción hecho en Unity.</p>
+            </div>
+        </a>
+    </section>
+
+    <div style="text-align:center; margin-top:30px;">
+        <a href="https://linktr.ee/LucasDaniel" class="btn btn-redes">Mis Redes</a>
+    </div>
+
+    <footer>
+        <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano">
+        <p>© 2025 Lucas Daniel Soriano</p>
+        <p><a href="https://linktr.ee/LucasDaniel">Contacto</a></p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const contenedor = document.querySelector('.carrusel-contenedor');
+            const tarjetas = document.querySelectorAll('.carrusel-contenedor .tarjeta');
+            const botonIzquierda = document.querySelector('.carrusel-btn.izquierda');
+            const botonDerecha = document.querySelector('.carrusel-btn.derecha');
+            
+            // Elementos del Modal
+            const modal = document.getElementById('modal-imagen');
+            const imagenModal = document.getElementById('imagen-modal');
+            const cerrarModal = document.querySelector('.cerrar-modal');
+
+            /* =========================================
+               LOGICA JS PARA EL MENU HAMBURGUESA
+               ========================================= */
+            const menuBtn = document.getElementById('menuBtn');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const menuLinks = document.querySelectorAll('.menu-links a');
+
+            if (menuBtn && menuOverlay) {
+                menuBtn.addEventListener('click', () => {
+                    menuBtn.classList.toggle('activo');
+                    menuOverlay.classList.toggle('activo');
+                });
+
+                // Cerrar al clickear un link
+                menuLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        menuBtn.classList.remove('activo');
+                        menuOverlay.classList.remove('activo');
+                    });
+                });
+            }
+            /* =========================================
+               FIN LOGICA MENU
+               ========================================= */
+
+            if (!contenedor || tarjetas.length === 0 || !botonIzquierda || !botonDerecha) {
+                return;
+            }
+
+            const totalTarjetas = tarjetas.length;
+            let indice = 0;
+            let autoScrollInterval;
+
+            // --- Lógica del Carrusel ---
+
+            // Función para calcular el índice máximo permitido
+            function getMaxIndice() {
+                // Ancho del contenedor visible
+                const anchoContenedor = document.querySelector('.carrusel').offsetWidth;
+                // Ancho de una sola tarjeta
+                const anchoTarjeta = tarjetas[0].offsetWidth;
+                
+                // Cuántas tarjetas caben en pantalla (aprox)
+                // En móvil será 1, en PC será 4
+                const tarjetasVisibles = Math.round(anchoContenedor / anchoTarjeta);
+                
+                // El índice máximo es Total - Visibles.
+                // Si tengo 4 tarjetas y veo 4, el max es 0 (no se mueve).
+                // Si tengo 4 tarjetas y veo 1, el max es 3.
+                let max = totalTarjetas - tarjetasVisibles;
+                
+                // Seguridad: no permitir negativos
+                return Math.max(0, max);
+            }
+
+            // Función para ocultar flechas si no son necesarias
+            function actualizarFlechas() {
+                const maxIndice = getMaxIndice();
+                if (maxIndice === 0) {
+                    botonIzquierda.classList.add('oculto');
+                    botonDerecha.classList.add('oculto');
+                    contenedor.style.transform = `translateX(0px)`;
+                    indice = 0;
+                } else {
+                    botonIzquierda.classList.remove('oculto');
+                    botonDerecha.classList.remove('oculto');
+                }
+            }
+
+            function mostrarTarjeta() {
+                const anchoTarjeta = tarjetas[0].offsetWidth; 
+                contenedor.style.transform = `translateX(-${indice * anchoTarjeta}px)`;
+            }
+
+            function iniciarAutoScroll() {
+                if (autoScrollInterval) {
+                    clearInterval(autoScrollInterval);
+                }
+                
+                // Solo iniciar autoscroll si hay desplazamiento posible
+                if (getMaxIndice() > 0) {
+                    autoScrollInterval = setInterval(() => {
+                        const maxIndice = getMaxIndice();
+                        indice = (indice < maxIndice) ? indice + 1 : 0;
+                        mostrarTarjeta();
+                    }, 5000); 
+                }
+            }
+
+            // Iniciar lógica
+            actualizarFlechas();
+            iniciarAutoScroll();
+
+            botonIzquierda.addEventListener('click', () => {
+                const maxIndice = getMaxIndice();
+                // Si estamos en 0, ir al final (maxIndice), si no, restar 1
+                indice = (indice > 0) ? indice - 1 : maxIndice; 
+                mostrarTarjeta();
+                iniciarAutoScroll(); 
+            });
+
+            botonDerecha.addEventListener('click', () => {
+                const maxIndice = getMaxIndice();
+                // Si estamos en el max, volver a 0, si no, sumar 1
+                indice = (indice < maxIndice) ? indice + 1 : 0; 
+                mostrarTarjeta();
+                iniciarAutoScroll();
+            });
+
+            // Swipe Táctil
+            let startX = 0;
+            contenedor.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            });
+
+            contenedor.addEventListener('touchend', (e) => {
+                let endX = e.changedTouches[0].clientX;
+                let diff = startX - endX;
+                const maxIndice = getMaxIndice();
+
+                if (diff > 50) { // Deslizar izquierda (Siguiente)
+                    indice = (indice < maxIndice) ? indice + 1 : 0;
+                    mostrarTarjeta();
+                    iniciarAutoScroll();
+                } else if (diff < -50) { // Deslizar derecha (Anterior)
+                    indice = (indice > 0) ? indice - 1 : maxIndice;
+                    mostrarTarjeta();
+                    iniciarAutoScroll();
+                }
+            });
+            
+            // Recalcular al cambiar tamaño de ventana
+            window.addEventListener('resize', () => {
+                // Asegurar que el índice no quede fuera de rango al cambiar de móvil a PC
+                const maxIndice = getMaxIndice();
+                if (indice > maxIndice) {
+                    indice = maxIndice;
+                }
+                mostrarTarjeta();
+                actualizarFlechas();
+            });
+
+            // --- Lógica del Modal (Lupa) ---
+            tarjetas.forEach(tarjeta => {
+                // (Mantener la creación de la lupa igual...)
+                const lupaOverlay = document.createElement('div');
+                lupaOverlay.classList.add('lupa-overlay');
+                tarjeta.appendChild(lupaOverlay);
+
+                tarjeta.addEventListener('click', () => {
+                    const imagenSrc = tarjeta.querySelector('img').src;
+                    modal.style.display = "block";
+                    imagenModal.src = imagenSrc;
+                    
+                    // --- NUEVO: OCULTAR EL BOTÓN + ---
+                    menuBtn.style.display = "none";
+                });
+            });
+
+            // Función para cerrar y volver a mostrar el botón
+            function cerrarYMostrarBoton() {
+                modal.style.display = "none";
+                // --- NUEVO: MOSTRAR EL BOTÓN + ---
+                menuBtn.style.display = "block";
+            }
+
+            cerrarModal.onclick = cerrarYMostrarBoton;
+
+            modal.onclick = function(e) {
+                if (e.target === modal) {
+                    cerrarYMostrarBoton();
+                }
+            }
+            
+            document.addEventListener('keydown', function(event) {
+                if (event.key === "Escape") {
+                    cerrarYMostrarBoton();
+                }
+            });
         });
     </script>
 </body>
-
 </html>
