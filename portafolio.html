@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="description" content="Portafolio de Lucas Daniel Soriano, Game Designer especializado en Unity, Scratch y RPG Maker.">
+    
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <title>Lucas Daniel Soriano - Portafolio</title>
+    
+    <style>
+        :root {
+            --primario: #2c3e50;
+            --secundario: #3498db;
+            --fondo: #f4f4f4;
+            --texto: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--fondo);
+            color: var(--texto);
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .contenedor-proyectos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tarjeta {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .tarjeta:hover {
+            transform: translateY(-5px);
+        }
+
+        .tarjeta img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .info {
+            padding: 15px;
+        }
+
+        /* Botón Flotante + */
+        #menuBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--secundario);
+            color: white;
+            border-radius: 50%;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+
+        /* Modal de la Lupa */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        .cerrar {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Lucas Daniel Soriano</h1>
+        <p>Game Designer & Developer</p>
+    </header>
+
+    <div class="contenedor-proyectos">
+        <div class="tarjeta">
+            <img src="vireo-game.jpg" alt="Vireo CODE A">
+            <div class="info">
+                <h3>Vireo CODE A (RPG Maker MV)</h3>
+                <p>Juego Sci-fi con narrativa orgánica y mecánicas de exploración.</p>
+            </div>
+        </div>
+
+        <div class="tarjeta">
+            <img src="scratch-game.jpg" alt="Proyecto Scratch">
+            <div class="info">
+                <h3>MOVE-LANZER (Scratch)</h3>
+                <p>Sistema de oleadas y mecánicas de lanzamiento de proyectiles.</p>
+            </div>
+        </div>
+
+        <div class="tarjeta">
+            <img src="unity-game.jpg" alt="Proyecto Unity 3D">
+            <div class="info">
+                <h3>Unity 3D Project: CREATURA DINOMA</h3>
+                <p>Desarrollo de fundamentos de programación en entornos 3D.</p>
+            </div>
+        </div>
+    </div>
+
+    <button id="menuBtn">+</button>
+
+    <div id="miModal" class="modal">
+        <span class="cerrar">&times;</span>
+        <img class="modal-content" id="imgModal">
+    </div>
+
+    <script>
+        const modal = document.getElementById("miModal");
+        const imagenModal = document.getElementById("imgModal");
+        const cerrarModal = document.getElementsByClassName("cerrar")[0];
+        const menuBtn = document.getElementById("menuBtn");
+        const tarjetas = document.querySelectorAll('.tarjeta');
+
+        // Lógica para abrir la lupa y ocultar el botón +
+        tarjetas.forEach(tarjeta => {
+            tarjeta.addEventListener('click', () => {
+                const imagenSrc = tarjeta.querySelector('img').src;
+                modal.style.display = "block";
+                imagenModal.src = imagenSrc;
+                menuBtn.style.display = "none"; // Oculta el botón
+            });
+        });
+
+        // Función para cerrar y volver a mostrar el botón
+        function cerrarYMostrarBoton() {
+            modal.style.display = "none";
+            menuBtn.style.display = "block"; // Muestra el botón de nuevo
+        }
+
+        cerrarModal.onclick = cerrarYMostrarBoton;
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                cerrarYMostrarBoton();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape") cerrarYMostrarBoton();
+        });
+    </script>
+</body>
+</html>
