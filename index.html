@@ -123,7 +123,7 @@
 
         /* --- ESTILOS DEL CARRUSEL --- */
         .carrusel {
-            max-width: 100%;      
+            max-width: 100%;       
             margin: 40px auto;
             position: relative; 
             overflow: hidden; 
@@ -320,7 +320,7 @@
         }
 
         .btn-redes:active {
-            background-color: #fff;     
+            background-color: #fff;      
             color: #28a745;             
         }
 
@@ -512,15 +512,120 @@
             .proyecto-par .texto-columna { order: 1; }
             .proyecto-par .video-columna { order: 0; }
         }
+
+        /* =========================================
+           NUEVOS ESTILOS PARA EL MENÚ HAMBURGUESA
+           ========================================= */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 3em;     
+            line-height: 0.6;   
+            color: #ffffff;     
+            cursor: pointer;
+            z-index: 10001;     /* Mayor que el modal (9999) */
+            transition: transform 0.4s ease, color 0.4s ease;
+            user-select: none;  
+            font-weight: 300;
+        }
+
+        .menu-btn.activo {
+            transform: rotate(45deg); 
+            color: #000000;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            background-color: #ffffff;
+            z-index: 10000; 
+            
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+            /* Mobile Default */
+            width: 100%;
+            height: 100%;
+            transform: translateY(-20px); 
+        }
+
+        /* PC: Barra lateral derecha */
+        @media (min-width: 900px) {
+            .menu-overlay {
+                width: 350px; 
+                height: 100%;
+                border-left: 4px solid #1e90ff;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+                transform: translateX(100%); 
+            }
+        }
+
+        .menu-overlay.activo {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(0, 0);
+        }
+
+        .menu-links a {
+            display: block;
+            font-size: 2em;
+            font-weight: bold;
+            color: #000000; 
+            text-decoration: none;
+            margin: 15px 0;
+            position: relative;
+            transition: color 0.3s;
+            font-family: Arial, sans-serif; 
+            text-align: center;
+        }
+
+        .menu-links a:hover {
+            color: #1e90ff; 
+        }
+
+        .menu-links a::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 3px;
+            background: #1e90ff;
+            transition: width 0.3s;
+            margin: 5px auto 0;
+        }
+
+        .menu-links a:hover::after {
+            width: 100%;
+        }
+
     </style>
 </head>
 
-<div id="modal-imagen" class="modal">
-    <span class="cerrar-modal">&times;</span>
-    <img class="modal-contenido" id="imagen-modal" alt="Vista ampliada del proyecto">
-</div>
-
 <body>
+
+    <div class="menu-btn" id="menuBtn">+</div>
+
+    <nav class="menu-overlay" id="menuOverlay">
+        <div class="menu-links">
+            <a href="index.html">INICIO</a>
+            <a href="portafolio.html">PORTAFOLIO</a>
+            <a href="comunidad.html">COMUNIDAD</a>
+            <a href="soporte.html">SOPORTE</a>
+            <a href="https://tutiendaexterna.com" target="_blank">TIENDA</a>
+            <a href="https://linktr.ee/LucasDaniel" target="_blank">CONTACTO</a>
+        </div>
+    </nav>
+    <div id="modal-imagen" class="modal">
+        <span class="cerrar-modal">&times;</span>
+        <img class="modal-contenido" id="imagen-modal" alt="Vista ampliada del proyecto">
+    </div>
 
     <a href="index.html">
     <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano" class="logo">
@@ -667,6 +772,31 @@
             const modal = document.getElementById('modal-imagen');
             const imagenModal = document.getElementById('imagen-modal');
             const cerrarModal = document.querySelector('.cerrar-modal');
+
+            /* =========================================
+               LOGICA JS PARA EL MENU HAMBURGUESA
+               ========================================= */
+            const menuBtn = document.getElementById('menuBtn');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const menuLinks = document.querySelectorAll('.menu-links a');
+
+            if (menuBtn && menuOverlay) {
+                menuBtn.addEventListener('click', () => {
+                    menuBtn.classList.toggle('activo');
+                    menuOverlay.classList.toggle('activo');
+                });
+
+                // Cerrar al clickear un link
+                menuLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        menuBtn.classList.remove('activo');
+                        menuOverlay.classList.remove('activo');
+                    });
+                });
+            }
+            /* =========================================
+               FIN LOGICA MENU
+               ========================================= */
 
             if (!contenedor || tarjetas.length === 0 || !botonIzquierda || !botonDerecha) {
                 return;
