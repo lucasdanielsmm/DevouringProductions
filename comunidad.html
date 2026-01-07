@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Devouring Lab - Comunidad</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+:root {
+  --bg-body:#f0f2f5; --bg-card:#fff; --accent:#4cc3ff;
+  --accent-hover:#3aa8e0; --text-main:#333; --text-sec:#999;
+  --border-color:#ebebeb; --radius:12px; --nav-height:64px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Segoe UI,Arial;background:var(--bg-body)}
+
+.navbar{
+  background:#fff;height:64px;display:flex;justify-content:space-between;
+  align-items:center;padding:0 30px;border-bottom:1px solid var(--border-color);
+  position:sticky;top:0;z-index:2000
+}
+.logo{font-weight:800;font-size:22px}
+.logo span{color:var(--accent)}
+
+.user-menu{position:relative}
+.nav-avatar{
+  width:32px;height:32px;border-radius:50%;cursor:pointer
+}
+.user-dropdown{
+  position:absolute;right:0;top:42px;background:#fff;width:230px;
+  border:1px solid var(--border-color);border-radius:8px;padding:12px;
+  z-index:3000
+}
+.hidden{display:none}
+.user-dropdown input,.user-dropdown button{
+  width:100%;margin-bottom:6px;padding:6px
+}
+button{
+  background:var(--accent);border:none;color:#fff;
+  font-weight:600;border-radius:6px;cursor:pointer
+}
+button.secondary{background:#ddd;color:#333}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+  <div class="logo">Devouring<span>Lab</span></div>
+
+  <div style="display:flex;gap:25px;align-items:center;color:#666">
+    <i class="fas fa-edit"></i>
+    <i class="fas fa-bell"></i>
+
+    <div class="user-menu">
+      <img id="navAvatar" class="nav-avatar" src="https://via.placeholder.com/32">
+      <div id="userDropdown" class="user-dropdown hidden">
+
+        <div id="loggedOut">
+          <input id="email" placeholder="Email">
+          <input id="password" type="password" placeholder="Contraseña">
+          <button onclick="login()">Entrar</button>
+          <button class="secondary" onclick="register()">Registrarse</button>
+        </div>
+
+        <div id="loggedIn" class="hidden">
+          <b id="userName"></b>
+          <input id="profileName" placeholder="Nombre">
+          <input id="profileAvatar" placeholder="URL Avatar">
+          <button onclick="saveProfile()">Guardar perfil</button>
+          <button class="secondary" onclick="logout()">Cerrar sesión</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main style="max-width:600px;margin:40px auto">
+
+  <div id="createPost" class="hidden" style="background:#fff;padding:16px;border-radius:12px;margin-bottom:20px">
+    <input id="postTitle" placeholder="Título">
+    <textarea id="postContent" placeholder="Escribe algo..." style="width:100%;margin:8px 0"></textarea>
+    <button onclick="createPost()">Publicar</button>
+  </div>
+
+  <div id="posts"></div>
+
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, addDoc, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* 🔴 REEMPLAZA ESTO 🔴 */
+const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_AUTH_DOMAIN",
+  projectId: "TU_PROJECT_ID",
+  appId: "TU_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
+
+/* UI */
+const avatar = document.getElementById("navAvatar");
+const dropdown = document.getElementById("userDropdown");
+const loggedIn = document.getElementById("loggedIn");
+const loggedOut = document.getElementById("loggedOut");
+const createPostBox = document.getElementById("createPost");
+const postsDiv = document.getElementById("posts");
+
+/* MENU */
+avatar.onclick = () => dropdown.classList.toggle("hidden");
+
+/* AUTH */
+window.register = async () => {
+  await createUserWithEmailAndPassword(auth, email.value, password.value);
+};
+window.login = async () => {
+  await signInWithEmailAndPassword(auth, email.value, password.value);
+};
+window.logout = async () => {
+  await signOut(auth);
+};
+
+/* PROFILE */
+window.saveProfile = async () => {
+  const u = auth.currentUser;
+  await setDoc(doc(db,"users",u.uid),{
+    name: profileName.value,
+    avatar: profileAvatar.value,
+    email: u.email
+  });
+};
+
+/* POSTS */
+window.createPost = async () => {
+  const u = auth.currentUser;
+  if(!u) return;
+
+  await addDoc(collection(db,"posts"),{
+    title: postTitle.value,
+    content: postContent.value,
+    uid: u.uid,
+    name: profileName.value,
+    avatar: profileAvatar.value,
+    created: Date.now()
+  });
+
+  postTitle.value="";
+  postContent.value="";
+};
+
+/* SESSION */
+onAuthStateChanged(auth, async (u)=>{
+  if(!u){
+    loggedOut.classList.remove("hidden");
+    loggedIn.classList.add("hidden");
+    createPostBox.classList.add("hidden");
+    avatar.src="https://via.placeholder.com/32";
+    return;
+  }
+
+  loggedOut.classList.add("hidden");
+  loggedIn.classList.remove("hidden");
+  createPostBox.classList.remove("hidden");
+
+  const snap = await getDoc(doc(db,"users",u.uid));
+  if(snap.exists()){
+    const d = snap.data();
+    userName.innerText = d.name;
+    profileName.value = d.name;
+    profileAvatar.value = d.avatar;
+    avatar.src = d.avatar;
+  }
+});
+
+/* LOAD POSTS */
+const q = query(collection(db,"posts"),orderBy("created","desc"));
+onSnapshot(q,(snap)=>{
+  postsDiv.innerHTML="";
+  snap.forEach(doc=>{
+    const p = doc.data();
+    postsDiv.innerHTML += `
+      <div style="background:#fff;padding:16px;border-radius:12px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+          <img src="${p.avatar}" style="width:36px;height:36px;border-radius:50%">
+          <b>${p.name}</b>
+        </div>
+        <h4>${p.title}</h4>
+        <p>${p.content}</p>
+      </div>`;
+  });
+});
+</script>
+
+</body>
+</html>
