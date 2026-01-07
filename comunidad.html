@@ -269,27 +269,42 @@ async function loadPosts() {
     const p = d.data();
 
     dynamicPosts.innerHTML += `
-      <article class="post-card" data-game="all">
-        <div class="user-header">
-          <div class="avatar-ring">
-            <img src="${p.avatar || 'https://via.placeholder.com/46'}">
-          </div>
-          <div>
-            <h4>${p.author}</h4>
-            <span>Ahora</span>
-          </div>
+<article class="post-card" data-game="${p.game || 'all'}">
+    <div class="user-header">
+        <div class="avatar-ring">
+            <img src="${p.avatar || 'assets/avatar.png'}">
         </div>
-        <h3 class="post-title">${p.title}</h3>
-        <p class="post-text">${p.text}</p>
-        ${p.image ? `<img src="${p.image}" style="width:100%;border-radius:8px">` : ""}
-      </article>
-    `;
-  });
-}
+        <div>
+            <h4 style="font-size:14px;">
+                ${p.author}
+            </h4>
+            <span style="font-size:12px;color:#999;">
+                ahora
+            </span>
+        </div>
+    </div>
+
+    <h3 class="post-title">${p.title}</h3>
+    <p class="post-text">${p.text}</p>
+
+    ${p.image ? `
+    <div class="image-grid grid-2">
+        <img src="${p.image}">
+    </div>` : ''}
+
+    <div class="post-footer">
+        <div class="interactions">
+            <div class="int-item">👍 ${p.likes || 0}</div>
+        </div>
+    </div>
+</article>
+`;
+
 </script>
 
 </body>
 </html>
+
 
 
 
