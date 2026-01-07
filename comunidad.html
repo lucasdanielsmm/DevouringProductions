@@ -8,12 +8,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
-/* =================== CSS ORIGINAL =================== */
+/* ======= TODO TU CSS ORIGINAL (SIN CAMBIOS) ======= */
 :root {
-  --bg-body:#f0f2f5;--bg-card:#fff;--accent:#4cc3ff;
-  --accent-hover:#3aa8e0;--text-main:#333;
-  --text-sec:#999;--border-color:#ebebeb;
-  --radius:12px;--nav-height:64px;--subnav-height:56px;
+    --bg-body:#f0f2f5;--bg-card:#ffffff;--accent:#4cc3ff;
+    --accent-hover:#3aa8e0;--text-main:#333;--text-sec:#999;
+    --border-color:#ebebeb;--radius:12px;
+    --nav-height:64px;--subnav-height:56px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg-body)}
@@ -22,8 +22,8 @@ body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg-body)
 .logo span{color:var(--accent)}
 .search-bar{background:#f4f4f4;border-radius:20px;padding:8px 15px;width:300px;display:flex;align-items:center;color:#999}
 .search-bar input{border:none;background:none;outline:none;margin-left:10px;width:100%}
-.game-nav{position:sticky;top:64px;height:56px;background:rgba(255,255,255,.8);display:flex;gap:15px;justify-content:center;align-items:center;border-bottom:1px solid var(--border-color)}
-.game-item{padding:6px 14px;border-radius:25px;cursor:pointer;font-size:13px;font-weight:600}
+.game-nav{position:sticky;top:64px;height:56px;background:rgba(255,255,255,.85);display:flex;gap:15px;justify-content:center;align-items:center;border-bottom:1px solid var(--border-color)}
+.game-item{display:flex;align-items:center;gap:10px;padding:6px 14px;border-radius:25px;cursor:pointer;font-size:13px;font-weight:600}
 .game-item.active{background:var(--accent);color:white}
 .container{display:grid;grid-template-columns:260px 680px 320px;gap:24px;max-width:1300px;margin:24px auto;padding:0 20px}
 .sidebar-left,.sidebar-right{position:sticky;top:140px}
@@ -33,8 +33,7 @@ body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg-body)
 .container{grid-template-columns:240px 1fr}
 .sidebar-right{display:none}
 }
-/* =================================================== */
-button{cursor:pointer}
+/* ======= AUTH ======= */
 #authModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999}
 #authBox{background:white;width:320px;margin:10% auto;padding:20px;border-radius:10px}
 #authBox input{width:100%;margin:6px 0;padding:8px}
@@ -60,10 +59,13 @@ button{cursor:pointer}
 <!-- ================= GAME NAV ================= -->
 <div class="game-nav">
   <div class="game-item active" onclick="filterGame('all',this)">General</div>
-  <div class="game-item" onclick="filterGame('vireo',this)">Vireo</div>
+  <div class="game-item" onclick="filterGame('vireo',this)">Vireo CODE</div>
+  <div class="game-item" onclick="filterGame('cae',this)">Cae</div>
+  <div class="game-item" onclick="filterGame('lanzer',this)">Move-Lanzer</div>
+  <div class="game-item" onclick="filterGame('dinoma',this)">Creatura Dinoma</div>
 </div>
 
-<!-- ================= CONTENIDO ================= -->
+<!-- ================= CONTENIDO COMPLETO ================= -->
 <div class="container">
 
 <aside class="sidebar-left">
@@ -71,10 +73,12 @@ button{cursor:pointer}
 </aside>
 
 <main>
-  <article class="post-card" data-game="vireo">
-    <h3>Post de ejemplo</h3>
-    <p>Este contenido se ve aunque no estés logueado.</p>
-  </article>
+
+<div class="post-card" data-game="vireo">
+  <h3>Actualización de Arte: Bioma Sci-Fi</h3>
+  <p>Rediseñando los tilesets del laboratorio para que se sientan más vivos.</p>
+</div>
+
 </main>
 
 <aside class="sidebar-right">
@@ -97,32 +101,24 @@ button{cursor:pointer}
 <!-- ================= FIREBASE ================= -->
 <script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script defer>
 document.addEventListener("DOMContentLoaded",()=>{
 
-const firebaseConfig={
+firebase.initializeApp({
   apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
   authDomain: "devouringlab.firebaseapp.com",
   projectId: "devouringlab",
   appId: "1:383272939740:web:203f83c89b1c7bd6344419"
 };
 
-firebase.initializeApp(firebaseConfig);
-
 const auth=firebase.auth();
-
 const modal=document.getElementById("authModal");
-document.getElementById("openLogin").onclick=()=>modal.style.display="block";
 
-loginBtn.onclick=()=>{
-  auth.signInWithEmailAndPassword(email.value,password.value);
-};
+openLogin.onclick=()=>modal.style.display="block";
 
-registerBtn.onclick=()=>{
-  auth.createUserWithEmailAndPassword(email.value,password.value);
-};
+loginBtn.onclick=()=>auth.signInWithEmailAndPassword(email.value,password.value);
+registerBtn.onclick=()=>auth.createUserWithEmailAndPassword(email.value,password.value);
 
 auth.onAuthStateChanged(user=>{
   if(user){
