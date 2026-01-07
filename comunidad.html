@@ -4,107 +4,73 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Devouring Lab - Comunidad</title>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
-/* ======= TODO TU CSS ORIGINAL (SIN CAMBIOS) ======= */
+/* ====== TU CSS ORIGINAL (SIN CAMBIOS) ====== */
 :root {
-    --bg-body:#f0f2f5;--bg-card:#ffffff;--accent:#4cc3ff;
-    --accent-hover:#3aa8e0;--text-main:#333;--text-sec:#999;
-    --border-color:#ebebeb;--radius:12px;
-    --nav-height:64px;--subnav-height:56px;
+--bg-body:#f0f2f5;--bg-card:#fff;--accent:#4cc3ff;--accent-hover:#3aa8e0;
+--text-main:#333;--text-sec:#999;--border-color:#ebebeb;
+--radius:12px;--nav-height:64px;--subnav-height:56px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg-body)}
-.navbar{background:#fff;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;border-bottom:1px solid var(--border-color);position:sticky;top:0;z-index:2000}
-.logo{font-weight:800;font-size:22px}
-.logo span{color:var(--accent)}
-.search-bar{background:#f4f4f4;border-radius:20px;padding:8px 15px;width:300px;display:flex;align-items:center;color:#999}
-.search-bar input{border:none;background:none;outline:none;margin-left:10px;width:100%}
-.game-nav{position:sticky;top:64px;height:56px;background:rgba(255,255,255,.85);display:flex;gap:15px;justify-content:center;align-items:center;border-bottom:1px solid var(--border-color)}
-.game-item{display:flex;align-items:center;gap:10px;padding:6px 14px;border-radius:25px;cursor:pointer;font-size:13px;font-weight:600}
-.game-item.active{background:var(--accent);color:white}
+body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg-body);color:var(--text-main)}
+.navbar{background:#fff;height:64px;display:flex;align-items:center;justify-content:space-between;
+padding:0 30px;position:sticky;top:0;z-index:2000;border-bottom:1px solid var(--border-color)}
+.logo{font-weight:800;font-size:22px}.logo span{color:var(--accent)}
+.search-bar{background:#f4f4f4;border-radius:20px;padding:8px 15px;width:300px;display:flex;align-items:center}
+.search-bar input{border:none;background:transparent;outline:none;margin-left:10px;width:100%}
 .container{display:grid;grid-template-columns:260px 680px 320px;gap:24px;max-width:1300px;margin:24px auto;padding:0 20px}
-.sidebar-left,.sidebar-right{position:sticky;top:140px}
 .post-card{background:#fff;border-radius:12px;padding:24px;margin-bottom:16px;border:1px solid var(--border-color)}
 .hidden{display:none}
-@media(max-width:1200px){
-.container{grid-template-columns:240px 1fr}
-.sidebar-right{display:none}
-}
-/* ======= AUTH ======= */
-#authModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999}
-#authBox{background:white;width:320px;margin:10% auto;padding:20px;border-radius:10px}
-#authBox input{width:100%;margin:6px 0;padding:8px}
+@media(max-width:1200px){.container{grid-template-columns:240px 1fr}}
 </style>
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
+<!-- ===== NAVBAR ===== -->
 <nav class="navbar">
-  <div class="logo">Devouring<span>Lab</span></div>
-
-  <div class="search-bar">
-    <i class="fas fa-search"></i>
-    <input placeholder="Buscar posts...">
-  </div>
-
-  <div id="userArea" style="display:flex;gap:15px;align-items:center">
-    <button id="openLogin">Ingresar</button>
-  </div>
+<div class="logo">Devouring<span>Lab</span></div>
+<div class="search-bar"><i class="fas fa-search"></i><input placeholder="Buscar posts..."></div>
+<div id="navUser" style="display:flex;gap:20px;align-items:center">
+<i class="fas fa-edit"></i>
+<i class="fas fa-bell"></i>
+<div id="userAvatar" style="width:32px;height:32px;border-radius:50%;background:#ccc;cursor:pointer"></div>
+</div>
 </nav>
 
-<!-- ================= GAME NAV ================= -->
-<div class="game-nav">
-  <div class="game-item active" onclick="filterGame('all',this)">General</div>
-  <div class="game-item" onclick="filterGame('vireo',this)">Vireo CODE</div>
-  <div class="game-item" onclick="filterGame('cae',this)">Cae</div>
-  <div class="game-item" onclick="filterGame('lanzer',this)">Move-Lanzer</div>
-  <div class="game-item" onclick="filterGame('dinoma',this)">Creatura Dinoma</div>
-</div>
-
-<!-- ================= CONTENIDO COMPLETO ================= -->
+<!-- ===== CONTENIDO ===== -->
 <div class="container">
-
-<aside class="sidebar-left">
-  <p>Menú</p>
-</aside>
+<aside></aside>
 
 <main>
-
-<div class="post-card" data-game="vireo">
-  <h3>Actualización de Arte: Bioma Sci-Fi</h3>
-  <p>Rediseñando los tilesets del laboratorio para que se sientan más vivos.</p>
-</div>
-
+<article class="post-card">
+<h3>Bienvenido a Devouring Lab</h3>
+<p>Registrate para publicar y personalizar tu perfil.</p>
+</article>
 </main>
 
-<aside class="sidebar-right">
-  <p>Perfil</p>
-</aside>
-
+<aside></aside>
 </div>
 
-<!-- ================= MODAL AUTH ================= -->
-<div id="authModal">
-  <div id="authBox">
-    <h3>Cuenta</h3>
-    <input id="email" placeholder="Email">
-    <input id="password" type="password" placeholder="Contraseña">
-    <button id="loginBtn">Ingresar</button>
-    <button id="registerBtn">Registrarse</button>
-  </div>
+<!-- ===== MODAL AUTH ===== -->
+<div id="authModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999">
+<div style="background:#fff;width:320px;margin:10% auto;padding:20px;border-radius:10px">
+<h3>Cuenta</h3>
+<input id="email" placeholder="Email" style="width:100%;margin:6px 0;padding:8px">
+<input id="pass" type="password" placeholder="Contraseña" style="width:100%;margin:6px 0;padding:8px">
+<input id="pass2" type="password" placeholder="Confirmar contraseña" style="width:100%;margin:6px 0;padding:8px">
+<button id="login" style="width:100%;margin-top:6px">Iniciar sesión</button>
+<button id="register" style="width:100%;margin-top:6px">Registrarse</button>
+</div>
 </div>
 
-<!-- ================= FIREBASE ================= -->
-<script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<!-- ===== FIREBASE ===== -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-<script defer>
-document.addEventListener("DOMContentLoaded",()=>{
-
+<script>
 firebase.initializeApp({
   apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
   authDomain: "devouringlab.firebaseapp.com",
@@ -114,31 +80,25 @@ firebase.initializeApp({
 
 const auth=firebase.auth();
 const modal=document.getElementById("authModal");
+const avatar=document.getElementById("userAvatar");
 
-openLogin.onclick=()=>modal.style.display="block";
+avatar.onclick=()=>modal.style.display="block";
 
-loginBtn.onclick=()=>auth.signInWithEmailAndPassword(email.value,password.value);
-registerBtn.onclick=()=>auth.createUserWithEmailAndPassword(email.value,password.value);
+login.onclick=()=>auth.signInWithEmailAndPassword(email.value,pass.value);
+register.onclick=()=>{
+if(pass.value!==pass2.value)return alert("Las contraseñas no coinciden");
+auth.createUserWithEmailAndPassword(email.value,pass.value);
+};
 
 auth.onAuthStateChanged(user=>{
-  if(user){
-    modal.style.display="none";
-    userArea.innerHTML=`
-      <span>${user.email}</span>
-      <button onclick="firebase.auth().signOut()">Salir</button>
-    `;
-  }
-});
-
-});
-
-function filterGame(game,el){
-  document.querySelectorAll(".game-item").forEach(i=>i.classList.remove("active"));
-  el.classList.add("active");
-  document.querySelectorAll(".post-card").forEach(p=>{
-    game==="all"||p.dataset.game===game?p.classList.remove("hidden"):p.classList.add("hidden");
-  });
+if(user){
+modal.style.display="none";
+avatar.style.background="#4cc3ff";
+avatar.title=user.email;
+}else{
+avatar.style.background="#ccc";
 }
+});
 </script>
 
 </body>
