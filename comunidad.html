@@ -4,32 +4,45 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Devouring Lab - Comunidad</title>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
-/* ====== ESTÉTICA COMUNIDAD4 (INTOCADA) ====== */
-:root {
+:root{
 --bg-body:#f0f2f5;--bg-card:#fff;--accent:#4cc3ff;
---text-main:#333;--text-sec:#999;--border-color:#ebebeb;
---radius:12px;
+--text-main:#333;--text-sec:#999;--border:#ebebeb;--radius:12px
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg-body)}
-.navbar{background:#fff;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;border-bottom:1px solid var(--border-color)}
-.logo{font-weight:800;font-size:22px}.logo span{color:var(--accent)}
+
+.navbar{
+height:64px;background:#fff;display:flex;align-items:center;
+justify-content:space-between;padding:0 30px;border-bottom:1px solid var(--border)
+}
+.logo{font-size:22px;font-weight:800}.logo span{color:var(--accent)}
 .search-bar{background:#f4f4f4;border-radius:20px;padding:8px 15px;width:300px;display:flex;align-items:center}
 .search-bar input{border:none;background:none;outline:none;margin-left:10px;width:100%}
+
 .container{max-width:900px;margin:30px auto}
-.post-card{background:#fff;border-radius:12px;padding:24px;margin-bottom:16px;border:1px solid var(--border-color)}
+
+.post-card{
+background:#fff;border-radius:12px;padding:24px;margin-bottom:16px;
+border:1px solid var(--border)
+}
 .user-header{display:flex;align-items:center;margin-bottom:12px}
-.avatar-ring{width:46px;height:46px;border-radius:50%;padding:2px;border:2px solid var(--accent);margin-right:12px}
+.avatar-ring{
+width:46px;height:46px;border-radius:50%;padding:2px;
+border:2px solid var(--accent);margin-right:12px
+}
 .avatar-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+
 .post-title{font-size:18px;font-weight:700;margin-bottom:8px}
 .post-text{font-size:14px;color:#555;margin-bottom:12px}
-.image-grid img{width:100%;border-radius:8px}
-.post-footer{border-top:1px solid var(--border-color);padding-top:10px;font-size:13px;color:#777}
-.comment{font-size:13px;margin-top:8px;padding-left:10px;border-left:2px solid #eee}
-button{cursor:pointer}
+.image-grid img{width:100%;border-radius:8px;margin-bottom:10px}
+.post-footer{border-top:1px solid var(--border);padding-top:10px;font-size:13px;color:#777}
+.comment{margin-top:6px;padding-left:10px;border-left:2px solid #eee;font-size:13px}
+
+button{cursor:pointer;padding:6px 12px;border-radius:6px;border:1px solid var(--border)}
 </style>
 </head>
 
@@ -47,32 +60,27 @@ button{cursor:pointer}
 
 <div class="container">
 
-<!-- PERFIL -->
 <div id="profile" class="post-card" style="display:none">
-  <h3>Editar perfil</h3>
-  <input id="profileName" placeholder="Nombre visible">
-  <input type="file" id="profileImage">
-  <button id="saveProfile">Guardar</button>
+<h3>Editar perfil</h3>
+<input id="profileName" placeholder="Nombre visible">
+<input type="file" id="profileImage">
+<button id="saveProfile">Guardar</button>
 </div>
 
-<!-- CREAR POST -->
 <div id="createPost" class="post-card" style="display:none">
-  <input id="postTitle" placeholder="Título" style="width:100%">
-  <textarea id="postText" placeholder="¿Qué estás creando?" style="width:100%;height:80px"></textarea>
-  <input type="file" id="postImage">
-  <button id="publishPost">Publicar</button>
+<input id="postTitle" placeholder="Título" style="width:100%">
+<textarea id="postText" placeholder="¿Qué estás creando?" style="width:100%;height:80px"></textarea>
+<input type="file" id="postImage">
+<button id="publishPost">Publicar</button>
 </div>
 
-<!-- FEED -->
 <div id="feed"></div>
 
 </div>
 
 <script type="module">
-/* ================= CONFIG ================= */
 const CLOUD_NAME="dyhvx2vsz",UPLOAD_PRESET="DevouringIMG";
 
-/* ================= FIREBASE ================= */
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import{getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import{getFirestore,doc,setDoc,getDoc,addDoc,collection,query,orderBy,onSnapshot,updateDoc,arrayUnion,arrayRemove,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -86,18 +94,17 @@ appId:"1:383272939740:web:203f83c89b1c7bd6344419"
 
 const auth=getAuth(app),db=getFirestore(app);
 
-/* ================= HELPERS ================= */
 async function uploadImage(f){
-const d=new FormData();d.append("file",f);d.append("upload_preset",UPLOAD_PRESET);
+const d=new FormData();
+d.append("file",f);
+d.append("upload_preset",UPLOAD_PRESET);
 const r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,{method:"POST",body:d});
 return(await r.json()).secure_url;
 }
 
-/* ================= AUTH ================= */
-loginBtn.onclick=async()=>signInWithEmailAndPassword(auth,prompt("Email"),prompt("Password"));
-registerBtn.onclick=async()=>createUserWithEmailAndPassword(auth,prompt("Email"),prompt("Password"));
+loginBtn.onclick=()=>signInWithEmailAndPassword(auth,prompt("Email"),prompt("Password"));
+registerBtn.onclick=()=>createUserWithEmailAndPassword(auth,prompt("Email"),prompt("Password"));
 
-/* ================= SESSION ================= */
 onAuthStateChanged(auth,async u=>{
 if(!u)return;
 loginBtn.style.display=registerBtn.style.display="none";
@@ -106,39 +113,43 @@ createPost.style.display=profile.style.display="block";
 const ref=doc(db,"users",u.uid);
 if(!(await getDoc(ref)).exists())await setDoc(ref,{name:u.email.split("@")[0],avatar:""});
 const d=(await getDoc(ref)).data();
-navAvatar.src=d.avatar||"https://via.placeholder.com/32";navAvatar.style.display="block";
+
+navAvatar.src=d.avatar||"https://via.placeholder.com/32";
+navAvatar.style.display="block";
 profileName.value=d.name;
 });
 
-/* ================= PROFILE ================= */
 saveProfile.onclick=async()=>{
 const u=auth.currentUser;
 let img="";
 if(profileImage.files[0])img=await uploadImage(profileImage.files[0]);
 await updateDoc(doc(db,"users",u.uid),{name:profileName.value,avatar:img});
+navAvatar.src=img;
 };
 
-/* ================= POST ================= */
 publishPost.onclick=async()=>{
 const u=auth.currentUser;
 const user=(await getDoc(doc(db,"users",u.uid))).data();
 let img="";
 if(postImage.files[0])img=await uploadImage(postImage.files[0]);
 await addDoc(collection(db,"posts"),{
-title:postTitle.value,text:postText.value,image:img,
-author:user.name,avatar:user.avatar,
-likes:[],comments:[],createdAt:serverTimestamp()
+title:postTitle.value,
+text:postText.value,
+image:img,
+author:user.name,
+avatar:user.avatar,
+likes:[],
+comments:[],
+createdAt:serverTimestamp()
 });
 postTitle.value=postText.value="";postImage.value="";
 };
 
-/* ================= FEED ================= */
 onSnapshot(query(collection(db,"posts"),orderBy("createdAt","desc")),snap=>{
 feed.innerHTML="";
 snap.forEach(d=>render(d.id,d.data()));
 });
 
-/* ================= RENDER ================= */
 function render(id,p){
 feed.innerHTML+=`
 <article class="post-card">
@@ -157,8 +168,7 @@ ${p.comments.map(c=>`<div class="comment"><b>${c.author}</b>: ${c.text}</div>`).
 </article>`;
 }
 
-/* ================= INTERACTIONS ================= */
-window.like=async(id)=>{
+window.like=async id=>{
 const u=auth.currentUser;if(!u)return;
 const r=doc(db,"posts",id);
 const s=(await getDoc(r)).data();
@@ -167,10 +177,9 @@ await updateDoc(r,{likes:arrayRemove(u.uid)}):
 await updateDoc(r,{likes:arrayUnion(u.uid)});
 };
 
-window.comment=async(id)=>{
+window.comment=async id=>{
 const u=auth.currentUser;if(!u)return;
-const t=prompt("Comentario");
-if(!t)return;
+const t=prompt("Comentario");if(!t)return;
 const user=(await getDoc(doc(db,"users",u.uid))).data();
 await updateDoc(doc(db,"posts",id),{
 comments:arrayUnion({author:user.name,text:t})
