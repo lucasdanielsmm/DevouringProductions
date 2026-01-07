@@ -7,28 +7,29 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
-/* ====== DISEÑO ORIGINAL (SIN CAMBIOS) ====== */
+/* ====== ESTÉTICA COMUNIDAD4 (INTOCADA) ====== */
 :root {
---bg-body:#f0f2f5;--bg-card:#fff;--accent:#4cc3ff;--accent-hover:#3aa8e0;
+--bg-body:#f0f2f5;--bg-card:#fff;--accent:#4cc3ff;
 --text-main:#333;--text-sec:#999;--border-color:#ebebeb;
---radius:12px;--nav-height:64px;--subnav-height:56px;
+--radius:12px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg-body)}
-.navbar{background:var(--bg-card);height:64px;display:flex;align-items:center;
-justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:2000;border-bottom:1px solid var(--border-color)}
+.navbar{background:#fff;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;border-bottom:1px solid var(--border-color)}
 .logo{font-weight:800;font-size:22px}.logo span{color:var(--accent)}
 .search-bar{background:#f4f4f4;border-radius:20px;padding:8px 15px;width:300px;display:flex;align-items:center}
 .search-bar input{border:none;background:none;outline:none;margin-left:10px;width:100%}
-.container{display:grid;grid-template-columns:260px 680px 320px;gap:24px;max-width:1300px;margin:24px auto;padding:0 20px}
-.post-card{background:var(--bg-card);border-radius:12px;padding:24px;margin-bottom:16px;border:1px solid var(--border-color)}
+.container{max-width:900px;margin:30px auto}
+.post-card{background:#fff;border-radius:12px;padding:24px;margin-bottom:16px;border:1px solid var(--border-color)}
 .user-header{display:flex;align-items:center;margin-bottom:12px}
 .avatar-ring{width:46px;height:46px;border-radius:50%;padding:2px;border:2px solid var(--accent);margin-right:12px}
 .avatar-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover}
 .post-title{font-size:18px;font-weight:700;margin-bottom:8px}
 .post-text{font-size:14px;color:#555;margin-bottom:12px}
 .image-grid img{width:100%;border-radius:8px}
-.post-footer{border-top:1px solid var(--border-color);padding-top:10px;color:#999;font-size:13px}
+.post-footer{border-top:1px solid var(--border-color);padding-top:10px;font-size:13px;color:#777}
+.comment{font-size:13px;margin-top:8px;padding-left:10px;border-left:2px solid #eee}
+button{cursor:pointer}
 </style>
 </head>
 
@@ -36,8 +37,8 @@ justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:2000;
 
 <nav class="navbar">
   <div class="logo">Devouring<span>Lab</span></div>
-  <div class="search-bar"><i class="fas fa-search"></i><input placeholder="Buscar posts"></div>
-  <div style="display:flex;gap:15px;align-items:center">
+  <div class="search-bar"><i class="fas fa-search"></i><input placeholder="Buscar"></div>
+  <div style="display:flex;gap:10px;align-items:center">
     <button id="loginBtn">Login</button>
     <button id="registerBtn">Register</button>
     <img id="navAvatar" style="display:none;width:32px;height:32px;border-radius:50%">
@@ -45,11 +46,18 @@ justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:2000;
 </nav>
 
 <div class="container">
-<main>
+
+<!-- PERFIL -->
+<div id="profile" class="post-card" style="display:none">
+  <h3>Editar perfil</h3>
+  <input id="profileName" placeholder="Nombre visible">
+  <input type="file" id="profileImage">
+  <button id="saveProfile">Guardar</button>
+</div>
 
 <!-- CREAR POST -->
 <div id="createPost" class="post-card" style="display:none">
-  <input id="postTitle" placeholder="Título" style="width:100%;margin-bottom:10px">
+  <input id="postTitle" placeholder="Título" style="width:100%">
   <textarea id="postText" placeholder="¿Qué estás creando?" style="width:100%;height:80px"></textarea>
   <input type="file" id="postImage">
   <button id="publishPost">Publicar</button>
@@ -58,158 +66,116 @@ justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:2000;
 <!-- FEED -->
 <div id="feed"></div>
 
-</main>
 </div>
 
-<!-- ================= SCRIPT ÚNICO ================= -->
 <script type="module">
-/* ================= CLOUDINARY ================= */
-const CLOUD_NAME = "dyhvx2vsz";
-const UPLOAD_PRESET = "DevouringIMG";
+/* ================= CONFIG ================= */
+const CLOUD_NAME="dyhvx2vsz",UPLOAD_PRESET="DevouringIMG";
 
 /* ================= FIREBASE ================= */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import{getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import{getFirestore,doc,setDoc,getDoc,addDoc,collection,query,orderBy,onSnapshot,updateDoc,arrayUnion,arrayRemove,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  addDoc,
-  collection,
-  query,
-  orderBy,
-  onSnapshot,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const app=initializeApp({
+apiKey:"AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
+authDomain:"devouringlab.firebaseapp.com",
+projectId:"devouringlab",
+appId:"1:383272939740:web:203f83c89b1c7bd6344419"
+});
 
-/* ================= CONFIG ================= */
-const firebaseConfig = {
-  apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
-  authDomain: "devouringlab.firebaseapp.com",
-  projectId: "devouringlab",
-  messagingSenderId: "383272939740",
-  appId: "1:383272939740:web:203f83c89b1c7bd6344419"
-};
+const auth=getAuth(app),db=getFirestore(app);
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-/* ================= DOM ================= */
-const loginBtn = document.getElementById("loginBtn");
-const registerBtn = document.getElementById("registerBtn");
-const navAvatar = document.getElementById("navAvatar");
-const createPost = document.getElementById("createPost");
-const publishPost = document.getElementById("publishPost");
-const feed = document.getElementById("feed");
-
-/* ================= CLOUDINARY ================= */
-async function uploadImage(file) {
-  const form = new FormData();
-  form.append("file", file);
-  form.append("upload_preset", UPLOAD_PRESET);
-
-  const res = await fetch(
-    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-    { method: "POST", body: form }
-  );
-
-  return (await res.json()).secure_url;
+/* ================= HELPERS ================= */
+async function uploadImage(f){
+const d=new FormData();d.append("file",f);d.append("upload_preset",UPLOAD_PRESET);
+const r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,{method:"POST",body:d});
+return(await r.json()).secure_url;
 }
 
 /* ================= AUTH ================= */
-loginBtn.onclick = async () => {
-  const email = prompt("Email");
-  const pass = prompt("Contraseña");
-  await signInWithEmailAndPassword(auth, email, pass);
-};
-
-registerBtn.onclick = async () => {
-  const email = prompt("Email");
-  const pass = prompt("Contraseña");
-  await createUserWithEmailAndPassword(auth, email, pass);
-};
+loginBtn.onclick=async()=>signInWithEmailAndPassword(auth,prompt("Email"),prompt("Password"));
+registerBtn.onclick=async()=>createUserWithEmailAndPassword(auth,prompt("Email"),prompt("Password"));
 
 /* ================= SESSION ================= */
-onAuthStateChanged(auth, async (user) => {
-  if (!user) return;
+onAuthStateChanged(auth,async u=>{
+if(!u)return;
+loginBtn.style.display=registerBtn.style.display="none";
+createPost.style.display=profile.style.display="block";
 
-  loginBtn.style.display = "none";
-  registerBtn.style.display = "none";
-  createPost.style.display = "block";
-
-  const ref = doc(db, "users", user.uid);
-  if (!(await getDoc(ref)).exists()) {
-    await setDoc(ref, {
-      displayName: user.email.split("@")[0],
-      photoURL: ""
-    });
-  }
-
-  const data = (await getDoc(ref)).data();
-  navAvatar.src = data.photoURL || "tu-logo.jpg";
-  navAvatar.style.display = "block";
+const ref=doc(db,"users",u.uid);
+if(!(await getDoc(ref)).exists())await setDoc(ref,{name:u.email.split("@")[0],avatar:""});
+const d=(await getDoc(ref)).data();
+navAvatar.src=d.avatar||"https://via.placeholder.com/32";navAvatar.style.display="block";
+profileName.value=d.name;
 });
 
-/* ================= PUBLICAR ================= */
-publishPost.onclick = async () => {
-  const user = auth.currentUser;
-  if (!user) return;
+/* ================= PROFILE ================= */
+saveProfile.onclick=async()=>{
+const u=auth.currentUser;
+let img="";
+if(profileImage.files[0])img=await uploadImage(profileImage.files[0]);
+await updateDoc(doc(db,"users",u.uid),{name:profileName.value,avatar:img});
+};
 
-  const u = (await getDoc(doc(db, "users", user.uid))).data();
-  let img = "";
-
-  if (postImage.files[0]) {
-    img = await uploadImage(postImage.files[0]);
-  }
-
-  await addDoc(collection(db, "posts"), {
-    title: postTitle.value,
-    text: postText.value,
-    image: img,
-    author: u.displayName,
-    avatar: u.photoURL,
-    createdAt: serverTimestamp()
-  });
-
-  postTitle.value = "";
-  postText.value = "";
-  postImage.value = "";
+/* ================= POST ================= */
+publishPost.onclick=async()=>{
+const u=auth.currentUser;
+const user=(await getDoc(doc(db,"users",u.uid))).data();
+let img="";
+if(postImage.files[0])img=await uploadImage(postImage.files[0]);
+await addDoc(collection(db,"posts"),{
+title:postTitle.value,text:postText.value,image:img,
+author:user.name,avatar:user.avatar,
+likes:[],comments:[],createdAt:serverTimestamp()
+});
+postTitle.value=postText.value="";postImage.value="";
 };
 
 /* ================= FEED ================= */
-const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-onSnapshot(q, (snap) => {
-  feed.innerHTML = "";
-  snap.forEach(d => feed.innerHTML += renderPost(d.data()));
+onSnapshot(query(collection(db,"posts"),orderBy("createdAt","desc")),snap=>{
+feed.innerHTML="";
+snap.forEach(d=>render(d.id,d.data()));
 });
 
 /* ================= RENDER ================= */
-function renderPost(p) {
-  return `
-  <article class="post-card">
-    <div class="user-header">
-      <div class="avatar-ring">
-        <img src="${p.avatar || 'tu-logo.jpg'}">
-      </div>
-      <div>
-        <h4 style="font-size:14px">${p.author}</h4>
-        <span style="font-size:12px;color:#999">General</span>
-      </div>
-    </div>
-    <h3 class="post-title">${p.title}</h3>
-    <p class="post-text">${p.text}</p>
-    ${p.image ? `<div class="image-grid"><img src="${p.image}"></div>` : ""}
-    <div class="post-footer">👍 ${p.likes || 0}</div>
-  </article>`;
+function render(id,p){
+feed.innerHTML+=`
+<article class="post-card">
+<div class="user-header">
+<div class="avatar-ring"><img src="${p.avatar||''}"></div>
+<b>${p.author}</b>
+</div>
+<h3 class="post-title">${p.title}</h3>
+<p class="post-text">${p.text}</p>
+${p.image?`<div class="image-grid"><img src="${p.image}"></div>`:""}
+<div class="post-footer">
+<button onclick="like('${id}')">👍 ${p.likes.length}</button>
+<button onclick="comment('${id}')">💬 ${p.comments.length}</button>
+${p.comments.map(c=>`<div class="comment"><b>${c.author}</b>: ${c.text}</div>`).join("")}
+</div>
+</article>`;
 }
+
+/* ================= INTERACTIONS ================= */
+window.like=async(id)=>{
+const u=auth.currentUser;if(!u)return;
+const r=doc(db,"posts",id);
+const s=(await getDoc(r)).data();
+s.likes.includes(u.uid)?
+await updateDoc(r,{likes:arrayRemove(u.uid)}):
+await updateDoc(r,{likes:arrayUnion(u.uid)});
+};
+
+window.comment=async(id)=>{
+const u=auth.currentUser;if(!u)return;
+const t=prompt("Comentario");
+if(!t)return;
+const user=(await getDoc(doc(db,"users",u.uid))).data();
+await updateDoc(doc(db,"posts",id),{
+comments:arrayUnion({author:user.name,text:t})
+});
+};
 </script>
 
 </body>
