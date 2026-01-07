@@ -157,17 +157,33 @@ ${p.image?`<img src="${p.image}" style="width:100%">`:""}
 }
 </script>
 <script type="module">
-/* ========= CLOUDINARY ========= */
+/* ================= CLOUDINARY ================= */
 const CLOUD_NAME = "dyhvx2vsz";
 const UPLOAD_PRESET = "DevouringIMG";
 
-/* ========= FIREBASE ========= */
+/* ================= FIREBASE ================= */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged }
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, addDoc, collection, getDocs, orderBy, query, serverTimestamp }
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { 
+  getAuth, 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+import { 
+  getFirestore, 
+  doc, 
+  setDoc, 
+  getDoc, 
+  addDoc, 
+  collection, 
+  getDocs, 
+  query, 
+  orderBy, 
+  serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* ================= CONFIG ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
   authDomain: "devouringlab.firebaseapp.com",
@@ -181,32 +197,35 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* ========= CLOUDINARY UPLOAD ========= */
-async function uploadImage(file){
-  const f = new FormData();
-  f.append("file", file);
-  f.append("upload_preset", UPLOAD_PRESET);
-  const r = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-    method: "POST",
-    body: f
-  });
-  return (await r.json()).secure_url;
+/* ================= CLOUDINARY UPLOAD ================= */
+async function uploadImage(file) {
+  const form = new FormData();
+  form.append("file", file);
+  form.append("upload_preset", UPLOAD_PRESET);
+
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+    { method: "POST", body: form }
+  );
+
+  return (await res.json()).secure_url;
 }
 
-/* ========= AUTH ========= */
+/* ================= LOGIN / REGISTER ================= */
 userAvatar.onclick = async () => {
-  if (!auth.currentUser) {
-    const email = prompt("Email");
-    const pass = prompt("Contraseña");
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-    } catch {
-      await createUserWithEmailAndPassword(auth, email, pass);
-    }
+  if (auth.currentUser) return;
+
+  const email = prompt("Email");
+  const pass = prompt("Contraseña");
+
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch {
+    await createUserWithEmailAndPassword(auth, email, pass);
   }
 };
 
-/* ========= SESSION ========= */
+/* ================= SESSION ================= */
 onAuthStateChanged(auth, async (user) => {
   if (!user) return;
 
@@ -214,7 +233,9 @@ onAuthStateChanged(auth, async (user) => {
   userAvatar.style.display = "block";
 
   const ref = doc(db, "users", user.uid);
-  if (!(await getDoc(ref)).exists()) {
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) {
     await setDoc(ref, {
       displayName: user.email.split("@")[0],
       photoURL: ""
@@ -223,6 +244,7 @@ onAuthStateChanged(auth, async (user) => {
 
   const data = (await getDoc(ref)).data();
   profileName.textContent = data.displayName;
+
   if (data.photoURL) {
     userAvatar.src = data.photoURL;
     profileAvatar.src = data.photoURL;
@@ -231,31 +253,41 @@ onAuthStateChanged(auth, async (user) => {
   loadPosts();
 });
 
-/* ========= POSTS ========= */
+/* ================= POSTS ================= */
 async function loadPosts() {
   dynamicPosts.innerHTML = "";
-  const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+
+  const q = query(
+    collection(db, "posts"),
+    orderBy("createdAt", "desc")
+  );
+
   const snap = await getDocs(q);
 
-  snap.forEach(docu => {
-    const p = docu.data();
+  snap.forEach(d => {
+    const p = d.data();
+
     dynamicPosts.innerHTML += `
-    <article class="post-card" data-game="all">
-      <div class="user-header">
-        <div class="avatar-ring"><img src="${p.avatar || 'https://via.placeholder.com/46'}"></div>
-        <div>
-          <h4 style="font-size:14px">${p.author}</h4>
-          <span style="font-size:12px;color:#999">Ahora</span>
+      <article class="post-card" data-game="all">
+        <div class="user-header">
+          <div class="avatar-ring">
+            <img src="${p.avatar || 'https://via.placeholder.com/46'}">
+          </div>
+          <div>
+            <h4>${p.author}</h4>
+            <span>Ahora</span>
+          </div>
         </div>
-      </div>
-      <h3 class="post-title">${p.title}</h3>
-      <p class="post-text">${p.text}</p>
-      ${p.image ? `<img src="${p.image}" style="width:100%;border-radius:8px">` : ""}
-    </article>`;
+        <h3 class="post-title">${p.title}</h3>
+        <p class="post-text">${p.text}</p>
+        ${p.image ? `<img src="${p.image}" style="width:100%;border-radius:8px">` : ""}
+      </article>
+    `;
   });
 }
 </script>
 
 </body>
 </html>
+
 
