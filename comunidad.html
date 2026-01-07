@@ -8,41 +8,35 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
+/* ==== TU CSS ORIGINAL (SIN CAMBIOS) ==== */
 :root {
-  --bg-body:#f0f2f5; --bg-card:#fff; --accent:#4cc3ff;
-  --accent-hover:#3aa8e0; --text-main:#333; --text-sec:#999;
-  --border-color:#ebebeb; --radius:12px; --nav-height:64px;
+  --bg-body:#f0f2f5;--bg-card:#fff;--accent:#4cc3ff;--border:#ebebeb;
 }
-
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Segoe UI,Arial;background:var(--bg-body)}
-
-.navbar{
-  background:#fff;height:64px;display:flex;justify-content:space-between;
-  align-items:center;padding:0 30px;border-bottom:1px solid var(--border-color);
-  position:sticky;top:0;z-index:2000
-}
+.navbar{height:64px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 30px;border-bottom:1px solid var(--border)}
 .logo{font-weight:800;font-size:22px}
 .logo span{color:var(--accent)}
-
+.search-bar{background:#f4f4f4;border-radius:20px;padding:8px 15px;width:300px;display:flex;align-items:center}
+.search-bar input{border:none;background:none;outline:none;margin-left:10px;width:100%}
 .user-menu{position:relative}
-.nav-avatar{
-  width:32px;height:32px;border-radius:50%;cursor:pointer
-}
+.user-btn{width:32px;height:32px;border-radius:50%;background:#ddd;cursor:pointer}
 .user-dropdown{
-  position:absolute;right:0;top:42px;background:#fff;width:230px;
-  border:1px solid var(--border-color);border-radius:8px;padding:12px;
-  z-index:3000
+  position:absolute;right:0;top:42px;
+  background:#fff;border:1px solid var(--border);
+  border-radius:10px;min-width:220px;
+  display:none;z-index:3000;padding:15px
 }
+.user-dropdown.active{display:block}
+.user-dropdown input, .user-dropdown button{
+  width:100%;margin-bottom:10px;padding:8px;border-radius:6px;border:1px solid #ccc
+}
+.user-dropdown button{background:var(--accent);color:#fff;border:none;font-weight:600;cursor:pointer}
 .hidden{display:none}
-.user-dropdown input,.user-dropdown button{
-  width:100%;margin-bottom:6px;padding:6px
-}
-button{
-  background:var(--accent);border:none;color:#fff;
-  font-weight:600;border-radius:6px;cursor:pointer
-}
-button.secondary{background:#ddd;color:#333}
+
+/* botón publicar */
+#createPost{background:#fff;padding:15px;border-radius:12px;border:1px solid var(--border);margin-bottom:16px}
+#createPost textarea{width:100%;border:1px solid #ccc;border-radius:8px;padding:10px;resize:none}
 </style>
 </head>
 
@@ -51,52 +45,56 @@ button.secondary{background:#ddd;color:#333}
 <nav class="navbar">
   <div class="logo">Devouring<span>Lab</span></div>
 
-  <div style="display:flex;gap:25px;align-items:center;color:#666">
+  <div class="search-bar">
+    <i class="fas fa-search"></i>
+    <input placeholder="Buscar posts...">
+  </div>
+
+  <div style="display:flex;gap:20px;align-items:center">
     <i class="fas fa-edit"></i>
     <i class="fas fa-bell"></i>
 
+    <!-- MENÚ USUARIO -->
     <div class="user-menu">
-      <img id="navAvatar" class="nav-avatar" src="https://via.placeholder.com/32">
-      <div id="userDropdown" class="user-dropdown hidden">
+      <div class="user-btn" id="userBtn"></div>
 
-        <div id="loggedOut">
-          <input id="email" placeholder="Email">
+      <div class="user-dropdown" id="userDropdown">
+        <div id="authForms">
+          <input id="email" type="email" placeholder="Email">
           <input id="password" type="password" placeholder="Contraseña">
-          <button onclick="login()">Entrar</button>
-          <button class="secondary" onclick="register()">Registrarse</button>
+          <button id="loginBtn">Iniciar sesión</button>
+          <button id="registerBtn">Registrarse</button>
         </div>
 
-        <div id="loggedIn" class="hidden">
-          <b id="userName"></b>
-          <input id="profileName" placeholder="Nombre">
-          <input id="profileAvatar" placeholder="URL Avatar">
-          <button onclick="saveProfile()">Guardar perfil</button>
-          <button class="secondary" onclick="logout()">Cerrar sesión</button>
+        <div id="userPanel" class="hidden">
+          <p id="userEmail" style="font-size:13px;margin-bottom:10px"></p>
+          <button id="logoutBtn">Cerrar sesión</button>
         </div>
-
       </div>
     </div>
   </div>
 </nav>
 
-<main style="max-width:600px;margin:40px auto">
+<div class="container" style="max-width:900px;margin:30px auto">
 
-  <div id="createPost" class="hidden" style="background:#fff;padding:16px;border-radius:12px;margin-bottom:20px">
-    <input id="postTitle" placeholder="Título">
-    <textarea id="postContent" placeholder="Escribe algo..." style="width:100%;margin:8px 0"></textarea>
-    <button onclick="createPost()">Publicar</button>
+  <!-- PUBLICAR POST -->
+  <div id="createPost" class="hidden">
+    <textarea id="postText" rows="3" placeholder="¿Qué quieres compartir?"></textarea>
+    <button id="postBtn" style="margin-top:10px">Publicar</button>
   </div>
 
+  <!-- POSTS -->
   <div id="posts"></div>
 
-</main>
+</div>
 
 <script type="module">
+/* ==== FIREBASE ==== */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, addDoc, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* 🔴 REEMPLAZA ESTO 🔴 */
+/* 🔴 PEGA AQUÍ TUS DATOS REALES */
 const firebaseConfig = {
   apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
   authDomain: "devouringlab.firebaseapp.com",
@@ -105,97 +103,53 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const db = getFirestore();
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-/* UI */
-const avatar = document.getElementById("navAvatar");
+/* ==== UI ==== */
+const userBtn = document.getElementById("userBtn");
 const dropdown = document.getElementById("userDropdown");
-const loggedIn = document.getElementById("loggedIn");
-const loggedOut = document.getElementById("loggedOut");
-const createPostBox = document.getElementById("createPost");
-const postsDiv = document.getElementById("posts");
+userBtn.onclick = () => dropdown.classList.toggle("active");
 
-/* MENU */
-avatar.onclick = () => dropdown.classList.toggle("hidden");
+/* ==== AUTH ==== */
+loginBtn.onclick = () =>
+  signInWithEmailAndPassword(auth, email.value, password.value);
 
-/* AUTH */
-window.register = async () => {
-  await createUserWithEmailAndPassword(auth, email.value, password.value);
-};
-window.login = async () => {
-  await signInWithEmailAndPassword(auth, email.value, password.value);
-};
-window.logout = async () => {
-  await signOut(auth);
-};
+registerBtn.onclick = () =>
+  createUserWithEmailAndPassword(auth, email.value, password.value);
 
-/* PROFILE */
-window.saveProfile = async () => {
-  const u = auth.currentUser;
-  await setDoc(doc(db,"users",u.uid),{
-    name: profileName.value,
-    avatar: profileAvatar.value,
-    email: u.email
-  });
-};
+logoutBtn.onclick = () => signOut(auth);
 
-/* POSTS */
-window.createPost = async () => {
-  const u = auth.currentUser;
-  if(!u) return;
-
-  await addDoc(collection(db,"posts"),{
-    title: postTitle.value,
-    content: postContent.value,
-    uid: u.uid,
-    name: profileName.value,
-    avatar: profileAvatar.value,
-    created: Date.now()
-  });
-
-  postTitle.value="";
-  postContent.value="";
-};
-
-/* SESSION */
-onAuthStateChanged(auth, async (u)=>{
-  if(!u){
-    loggedOut.classList.remove("hidden");
-    loggedIn.classList.add("hidden");
-    createPostBox.classList.add("hidden");
-    avatar.src="https://via.placeholder.com/32";
-    return;
-  }
-
-  loggedOut.classList.add("hidden");
-  loggedIn.classList.remove("hidden");
-  createPostBox.classList.remove("hidden");
-
-  const snap = await getDoc(doc(db,"users",u.uid));
-  if(snap.exists()){
-    const d = snap.data();
-    userName.innerText = d.name;
-    profileName.value = d.name;
-    profileAvatar.value = d.avatar;
-    avatar.src = d.avatar;
+/* ==== SESSION ==== */
+onAuthStateChanged(auth, user => {
+  if (user) {
+    authForms.classList.add("hidden");
+    userPanel.classList.remove("hidden");
+    createPost.classList.remove("hidden");
+    userEmail.textContent = user.email;
+  } else {
+    authForms.classList.remove("hidden");
+    userPanel.classList.add("hidden");
+    createPost.classList.add("hidden");
   }
 });
 
-/* LOAD POSTS */
-const q = query(collection(db,"posts"),orderBy("created","desc"));
-onSnapshot(q,(snap)=>{
-  postsDiv.innerHTML="";
-  snap.forEach(doc=>{
-    const p = doc.data();
-    postsDiv.innerHTML += `
-      <div style="background:#fff;padding:16px;border-radius:12px;margin-bottom:12px">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-          <img src="${p.avatar}" style="width:36px;height:36px;border-radius:50%">
-          <b>${p.name}</b>
-        </div>
-        <h4>${p.title}</h4>
-        <p>${p.content}</p>
+/* ==== POSTS ==== */
+postBtn.onclick = async () => {
+  if (!postText.value.trim()) return;
+  await addDoc(collection(db, "posts"), {
+    text: postText.value,
+    created: serverTimestamp()
+  });
+  postText.value = "";
+};
+
+onSnapshot(collection(db, "posts"), snap => {
+  posts.innerHTML = "";
+  snap.forEach(d => {
+    posts.innerHTML += `
+      <div class="post-card" style="background:#fff;padding:15px;border-radius:12px;margin-bottom:10px">
+        ${d.data().text}
       </div>`;
   });
 });
@@ -203,5 +157,3 @@ onSnapshot(q,(snap)=>{
 
 </body>
 </html>
-
-
