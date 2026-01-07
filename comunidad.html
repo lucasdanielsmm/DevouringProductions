@@ -9,71 +9,65 @@
 <style>
 /* === TU CSS ORIGINAL SIN CAMBIOS === */
 :root {
---bg-body:#f0f2f5;--bg-card:#fff;--accent:#4cc3ff;--accent-hover:#3aa8e0;
---text-main:#333;--text-sec:#999;--border-color:#ebebeb;
---radius:12px;--nav-height:64px;--subnav-height:56px;
+    --bg-body:#f0f2f5;--bg-card:#fff;--accent:#4cc3ff;--text-main:#333;
+    --text-sec:#999;--border-color:#ebebeb;--radius:12px;
+    --nav-height:64px;--subnav-height:56px
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg-body)}
-.profile-avatar{cursor:pointer}
+body{font-family:'Segoe UI',sans-serif;background:var(--bg-body)}
+.navbar{background:#fff;height:64px;display:flex;justify-content:space-between;
+align-items:center;padding:0 30px;border-bottom:1px solid var(--border-color)}
+.logo{font-size:22px;font-weight:800}
+.logo span{color:var(--accent)}
+.search-bar{background:#f4f4f4;border-radius:20px;padding:8px 15px;width:300px;
+display:flex;align-items:center}
+.search-bar input{border:none;background:none;outline:none;margin-left:10px;width:100%}
+.container{display:grid;grid-template-columns:260px 680px 320px;gap:24px;
+max-width:1300px;margin:24px auto;padding:0 20px}
+.sidebar-right{position:sticky;top:140px}
+.profile-widget{background:#fff;border-radius:12px;text-align:center;border:1px solid #ebebeb}
+.profile-bg{height:80px;background:linear-gradient(90deg,#3498db,#2c3e50)}
+.profile-avatar{width:70px;height:70px;border-radius:50%;border:4px solid #fff;
+margin-top:-35px;object-fit:cover;cursor:pointer}
 </style>
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
 <nav class="navbar">
-  <div class="logo">Devouring<span>Lab</span></div>
-
-  <div class="search-bar">
-    <i class="fas fa-search"></i>
-    <input type="text" placeholder="Buscar posts...">
-  </div>
-
-  <div style="display:flex;gap:25px;align-items:center">
-    <i class="fas fa-edit"></i>
-    <i class="fas fa-bell"></i>
-
-    <!-- NUEVO: avatar real -->
-    <img id="navbarAvatar"
-         src="avatar-default.png"
-         style="width:32px;height:32px;border-radius:50%;object-fit:cover">
-  </div>
+<div class="logo">Devouring<span>Lab</span></div>
+<div class="search-bar"><i class="fas fa-search"></i><input placeholder="Buscar posts"></div>
+<div style="display:flex;gap:25px;align-items:center">
+<i class="fas fa-edit"></i>
+<i class="fas fa-bell"></i>
+<img id="navbarAvatar" src="avatar-default.png"
+style="width:32px;height:32px;border-radius:50%;object-fit:cover">
+</div>
 </nav>
 
-<!-- ================= CONTENIDO ================= -->
 <div class="container">
 
-<!-- ======= MAIN ======= -->
 <main></main>
 
-<!-- ======= SIDEBAR PERFIL ======= -->
 <aside class="sidebar-right">
-
 <div class="profile-widget">
-  <div class="profile-bg"></div>
+<div class="profile-bg"></div>
 
-  <!-- NUEVO -->
-  <img id="profileAvatar"
-       src="avatar-default.png"
-       class="profile-avatar">
+<img id="profileAvatar" src="avatar-default.png" class="profile-avatar">
+<h3 id="profileName">Usuario</h3>
 
-  <h3 id="profileName" style="margin-top:5px">Usuario</h3>
+<input type="file" id="avatarInput" accept="image/*" hidden>
+<input id="nameInput" placeholder="Tu nombre"
+style="display:none;margin:8px auto;padding:6px 10px;border-radius:8px;border:1px solid #ddd">
 
-  <!-- NUEVO -->
-  <input type="file" id="avatarInput" accept="image/*" hidden>
-
-  <input id="nameInput"
-         placeholder="Tu nombre"
-         style="display:none;margin-top:6px;padding:6px;border-radius:8px;border:1px solid #ddd">
-
-  <button id="saveProfileBtn"
-          style="display:none;margin-top:8px;padding:6px 14px;border:none;border-radius:20px;background:#4cc3ff;color:white">
-    Guardar perfil
-  </button>
+<button id="saveProfileBtn"
+style="display:none;margin-top:8px;padding:6px 14px;border:none;
+background:#4cc3ff;color:white;border-radius:20px;cursor:pointer">
+Guardar perfil
+</button>
 </div>
-
 </aside>
+
 </div>
 
 <!-- ================= FIREBASE + CLOUDINARY ================= -->
@@ -82,84 +76,75 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* === TU CONFIG FIREBASE === */
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "devouringlab.firebaseapp.com",
-  projectId: "devouringlab",
+apiKey:"AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
+authDomain:"devouringlab.firebaseapp.com",
+projectId:"devouringlab",
+appId:"1:383272939740:web:203f83c89b1c7bd6344419"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* === CLOUDINARY === */
-const CLOUD_NAME = "TU_CLOUD_NAME";
-const UPLOAD_PRESET = "TU_UPLOAD_PRESET";
+/* CLOUDINARY */
+const CLOUD_NAME = "dyhvx2vsz";
+const UPLOAD_PRESET = "DevouringIMG";
 
-/* === ELEMENTOS === */
+/* ELEMENTOS */
+const avatar = document.getElementById("profileAvatar");
 const navbarAvatar = document.getElementById("navbarAvatar");
-const profileAvatar = document.getElementById("profileAvatar");
-const profileName = document.getElementById("profileName");
-const avatarInput = document.getElementById("avatarInput");
+const nameEl = document.getElementById("profileName");
 const nameInput = document.getElementById("nameInput");
+const avatarInput = document.getElementById("avatarInput");
 const saveBtn = document.getElementById("saveProfileBtn");
 
-/* === SUBIR IMAGEN === */
-async function uploadAvatar(file, uid) {
-  const form = new FormData();
-  form.append("file", file);
-  form.append("upload_preset", UPLOAD_PRESET);
-  form.append("public_id", uid);
-
-  const res = await fetch(
-    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-    { method: "POST", body: form }
-  );
-
-  return (await res.json()).secure_url;
+async function uploadAvatar(file, uid){
+const f = new FormData();
+f.append("file",file);
+f.append("upload_preset",UPLOAD_PRESET);
+f.append("public_id",uid);
+const r = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+{method:"POST",body:f});
+return (await r.json()).secure_url;
 }
 
-/* === AUTH === */
-onAuthStateChanged(auth, async user => {
-  if (!user) return;
+onAuthStateChanged(auth, async user=>{
+if(!user)return;
+nameInput.style.display="block";
+saveBtn.style.display="inline-block";
 
-  nameInput.style.display = "block";
-  saveBtn.style.display = "inline-block";
+const ref = doc(db,"users",user.uid);
+const snap = await getDoc(ref);
 
-  const ref = doc(db, "users", user.uid);
-  const snap = await getDoc(ref);
-
-  if (snap.exists()) {
-    const d = snap.data();
-    profileName.textContent = d.displayName || "Usuario";
-    profileAvatar.src = d.photoURL || "avatar-default.png";
-    navbarAvatar.src = d.photoURL || "avatar-default.png";
-    nameInput.value = d.displayName || "";
-  }
+if(snap.exists()){
+const d = snap.data();
+nameEl.textContent=d.displayName;
+avatar.src=d.photoURL;
+navbarAvatar.src=d.photoURL;
+nameInput.value=d.displayName;
+}
 });
 
-/* === EVENTOS === */
-profileAvatar.onclick = () => avatarInput.click();
+avatar.onclick=()=>avatarInput.click();
 
-saveBtn.onclick = async () => {
-  const user = auth.currentUser;
-  if (!user) return;
+saveBtn.onclick=async()=>{
+const u=auth.currentUser;
+if(!u)return;
 
-  let photoURL = profileAvatar.src;
+let photo=avatar.src;
+if(avatarInput.files[0]){
+photo=await uploadAvatar(avatarInput.files[0],u.uid);
+}
 
-  if (avatarInput.files[0]) {
-    photoURL = await uploadAvatar(avatarInput.files[0], user.uid);
-  }
+await setDoc(doc(db,"users",u.uid),{
+displayName:nameInput.value,
+photoURL:photo
+},{merge:true});
 
-  await setDoc(doc(db, "users", user.uid), {
-    displayName: nameInput.value,
-    photoURL
-  }, { merge: true });
-
-  profileName.textContent = nameInput.value;
-  profileAvatar.src = photoURL;
-  navbarAvatar.src = photoURL;
+avatar.src=photo;
+navbarAvatar.src=photo;
+nameEl.textContent=nameInput.value;
 };
 </script>
 
