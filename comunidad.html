@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
-/* ====== TU CSS ORIGINAL (SIN CAMBIOS) ====== */
+/* ====== DISEÑO ORIGINAL (SIN CAMBIOS) ====== */
 :root {
 --bg-body:#f0f2f5;--bg-card:#fff;--accent:#4cc3ff;--accent-hover:#3aa8e0;
 --text-main:#333;--text-sec:#999;--border-color:#ebebeb;
@@ -28,135 +28,40 @@ justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:2000;
 .post-title{font-size:18px;font-weight:700;margin-bottom:8px}
 .post-text{font-size:14px;color:#555;margin-bottom:12px}
 .image-grid img{width:100%;border-radius:8px}
+.post-footer{border-top:1px solid var(--border-color);padding-top:10px;color:#999;font-size:13px}
 </style>
 </head>
 
 <body>
 
 <nav class="navbar">
-<div class="logo">Devouring<span>Lab</span></div>
-<div class="search-bar"><i class="fas fa-search"></i><input placeholder="Buscar posts"></div>
-<div id="authUI" style="display:flex;gap:15px;align-items:center">
-<button id="loginBtn">Login</button>
-<button id="registerBtn">Register</button>
-<img id="navAvatar" style="display:none;width:32px;height:32px;border-radius:50%">
-</div>
+  <div class="logo">Devouring<span>Lab</span></div>
+  <div class="search-bar"><i class="fas fa-search"></i><input placeholder="Buscar posts"></div>
+  <div style="display:flex;gap:15px;align-items:center">
+    <button id="loginBtn">Login</button>
+    <button id="registerBtn">Register</button>
+    <img id="navAvatar" style="display:none;width:32px;height:32px;border-radius:50%">
+  </div>
 </nav>
 
 <div class="container">
-
 <main>
-<div id="dynamicPosts"></div>
-  
+
 <!-- CREAR POST -->
-<div id="createPost" style="display:none" class="post-card">
-<input id="postTitle" placeholder="Título" style="width:100%;margin-bottom:10px">
-<textarea id="postText" placeholder="¿Qué estás creando?" style="width:100%;height:80px"></textarea>
-<input type="file" id="postImage">
-<button id="publishPost">Publicar</button>
+<div id="createPost" class="post-card" style="display:none">
+  <input id="postTitle" placeholder="Título" style="width:100%;margin-bottom:10px">
+  <textarea id="postText" placeholder="¿Qué estás creando?" style="width:100%;height:80px"></textarea>
+  <input type="file" id="postImage">
+  <button id="publishPost">Publicar</button>
 </div>
 
 <!-- FEED -->
 <div id="feed"></div>
 
 </main>
-
 </div>
 
-<script type="module">
-/* ========= CLOUDINARY ========= */
-const CLOUD_NAME = "dyhvx2vsz";
-const UPLOAD_PRESET = "DevouringIMG";
-
-/* ========= FIREBASE ========= */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged }
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, addDoc, collection, getDocs, orderBy, query, serverTimestamp }
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-apiKey:"AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
-authDomain:"devouringlab.firebaseapp.com",
-projectId:"devouringlab",
-storageBucket:"devouringlab.appspot.com",
-messagingSenderId:"383272939740",
-appId:"1:383272939740:web:203f83c89b1c7bd6344419"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-/* ========= CLOUDINARY UPLOAD ========= */
-async function uploadImage(file){
-const f=new FormData();
-f.append("file",file);
-f.append("upload_preset",UPLOAD_PRESET);
-const r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,{method:"POST",body:f});
-return (await r.json()).secure_url;
-}
-
-/* ========= AUTH ========= */
-loginBtn.onclick=async()=>{
-const e=prompt("Email");const p=prompt("Password");
-await signInWithEmailAndPassword(auth,e,p);
-}
-registerBtn.onclick=async()=>{
-const e=prompt("Email");const p=prompt("Password");
-await createUserWithEmailAndPassword(auth,e,p);
-}
-
-/* ========= SESSION ========= */
-onAuthStateChanged(auth,async u=>{
-if(!u)return;
-loginBtn.style.display="none";registerBtn.style.display="none";
-createPost.style.display="block";
-
-const ref=doc(db,"users",u.uid);
-if(!(await getDoc(ref)).exists()){
-await setDoc(ref,{displayName:u.email.split("@")[0],photoURL:""});
-}
-const d=(await getDoc(ref)).data();
-navAvatar.src=d.photoURL||"https://via.placeholder.com/32";
-navAvatar.style.display="block";
-loadFeed();
-});
-
-/* ========= POST ========= */
-publishPost.onclick=async()=>{
-const u=auth.currentUser;
-const user=(await getDoc(doc(db,"users",u.uid))).data();
-let img="";
-if(postImage.files[0]) img=await uploadImage(postImage.files[0]);
-await addDoc(collection(db,"posts"),{
-title:postTitle.value,text:postText.value,image:img,
-author:user.displayName,avatar:user.photoURL,createdAt:serverTimestamp()
-});
-postTitle.value="";postText.value="";postImage.value="";
-loadFeed();
-}
-
-/* ========= FEED ========= */
-async function loadFeed(){
-feed.innerHTML="";
-const q=query(collection(db,"posts"),orderBy("createdAt","desc"));
-const s=await getDocs(q);
-s.forEach(d=>{
-const p=d.data();
-feed.innerHTML+=`
-<article class="post-card">
-<div class="user-header">
-<div class="avatar-ring"><img src="${p.avatar}"></div>
-<b>${p.author}</b>
-</div>
-<h3 class="post-title">${p.title}</h3>
-<p class="post-text">${p.text}</p>
-${p.image?`<img src="${p.image}" style="width:100%">`:""}
-</article>`;
-});
-}
-</script>
+<!-- ================= SCRIPT ÚNICO ================= -->
 <script type="module">
 /* ================= CLOUDINARY ================= */
 const CLOUD_NAME = "dyhvx2vsz";
@@ -164,24 +69,24 @@ const UPLOAD_PRESET = "DevouringIMG";
 
 /* ================= FIREBASE ================= */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { 
-  getAuth, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
-  onAuthStateChanged 
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-import { 
-  getFirestore, 
-  doc, 
-  setDoc, 
-  getDoc, 
-  addDoc, 
-  collection, 
-  getDocs, 
-  query, 
-  orderBy, 
-  serverTimestamp 
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  addDoc,
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ================= CONFIG ================= */
@@ -189,7 +94,6 @@ const firebaseConfig = {
   apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
   authDomain: "devouringlab.firebaseapp.com",
   projectId: "devouringlab",
-  storageBucket: "devouringlab.appspot.com",
   messagingSenderId: "383272939740",
   appId: "1:383272939740:web:203f83c89b1c7bd6344419"
 };
@@ -198,7 +102,15 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* ================= CLOUDINARY UPLOAD ================= */
+/* ================= DOM ================= */
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
+const navAvatar = document.getElementById("navAvatar");
+const createPost = document.getElementById("createPost");
+const publishPost = document.getElementById("publishPost");
+const feed = document.getElementById("feed");
+
+/* ================= CLOUDINARY ================= */
 async function uploadImage(file) {
   const form = new FormData();
   form.append("file", file);
@@ -212,31 +124,29 @@ async function uploadImage(file) {
   return (await res.json()).secure_url;
 }
 
-/* ================= LOGIN / REGISTER ================= */
-userAvatar.onclick = async () => {
-  if (auth.currentUser) return;
-
+/* ================= AUTH ================= */
+loginBtn.onclick = async () => {
   const email = prompt("Email");
   const pass = prompt("Contraseña");
+  await signInWithEmailAndPassword(auth, email, pass);
+};
 
-  try {
-    await signInWithEmailAndPassword(auth, email, pass);
-  } catch {
-    await createUserWithEmailAndPassword(auth, email, pass);
-  }
+registerBtn.onclick = async () => {
+  const email = prompt("Email");
+  const pass = prompt("Contraseña");
+  await createUserWithEmailAndPassword(auth, email, pass);
 };
 
 /* ================= SESSION ================= */
 onAuthStateChanged(auth, async (user) => {
   if (!user) return;
 
-  newPostBtn.style.display = "block";
-  userAvatar.style.display = "block";
+  loginBtn.style.display = "none";
+  registerBtn.style.display = "none";
+  createPost.style.display = "block";
 
   const ref = doc(db, "users", user.uid);
-  const snap = await getDoc(ref);
-
-  if (!snap.exists()) {
+  if (!(await getDoc(ref)).exists()) {
     await setDoc(ref, {
       displayName: user.email.split("@")[0],
       photoURL: ""
@@ -244,138 +154,63 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   const data = (await getDoc(ref)).data();
-  profileName.textContent = data.displayName;
+  navAvatar.src = data.photoURL || "tu-logo.jpg";
+  navAvatar.style.display = "block";
+});
 
-  if (data.photoURL) {
-    userAvatar.src = data.photoURL;
-    profileAvatar.src = data.photoURL;
+/* ================= PUBLICAR ================= */
+publishPost.onclick = async () => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const u = (await getDoc(doc(db, "users", user.uid))).data();
+  let img = "";
+
+  if (postImage.files[0]) {
+    img = await uploadImage(postImage.files[0]);
   }
 
-  loadPosts();
-});
+  await addDoc(collection(db, "posts"), {
+    title: postTitle.value,
+    text: postText.value,
+    image: img,
+    author: u.displayName,
+    avatar: u.photoURL,
+    createdAt: serverTimestamp()
+  });
 
-/* ================= POSTS ================= */
-async function loadPosts() {
-  dynamicPosts.innerHTML = "";
-
-  const q = query(
-    collection(db, "posts"),
-    orderBy("createdAt", "desc")
-  );
-
-  const snap = await getDocs(q);
-
-  snap.forEach(d => {
-    const p = d.data();
-
-    dynamicPosts.innerHTML += `
-<article class="post-card" data-game="${p.game || 'all'}">
-    <div class="user-header">
-        <div class="avatar-ring">
-            <img src="${p.avatar || 'assets/avatar.png'}">
-        </div>
-        <div>
-            <h4 style="font-size:14px;">
-                ${p.author}
-            </h4>
-            <span style="font-size:12px;color:#999;">
-                ahora
-            </span>
-        </div>
-    </div>
-
-    <h3 class="post-title">${p.title}</h3>
-    <p class="post-text">${p.text}</p>
-
-    ${p.image ? `
-    <div class="image-grid grid-2">
-        <img src="${p.image}">
-    </div>` : ''}
-
-    <div class="post-footer">
-        <div class="interactions">
-            <div class="int-item">👍 ${p.likes || 0}</div>
-        </div>
-    </div>
-</article>
-`;
-
-</script>
-
-<script type="module">
-/* ================= FIREBASE ================= */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, query, orderBy, onSnapshot } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
-  authDomain: "devouringlab.firebaseapp.com",
-  projectId: "devouringlab",
-  messagingSenderId: "383272939740",
-  appId: "1:383272939740:web:203f83c89b1c7bd6344419"
+  postTitle.value = "";
+  postText.value = "";
+  postImage.value = "";
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
 /* ================= FEED ================= */
-const dynamicPosts = document.getElementById("dynamicPosts");
-
-const q = query(
-  collection(db, "posts"),
-  orderBy("createdAt", "desc")
-);
-
-onSnapshot(q, (snapshot) => {
-  dynamicPosts.innerHTML = "";
-
-  snapshot.forEach(doc => {
-    const p = doc.data();
-
-    dynamicPosts.innerHTML += `
-    <article class="post-card" data-game="${p.game || 'all'}">
-        <div class="user-header">
-            <div class="avatar-ring">
-                <img src="${p.avatar || 'tu-logo.jpg'}">
-            </div>
-            <div>
-                <h4 style="font-size: 14px;">
-                    ${p.author || 'Usuario'}
-                </h4>
-                <span style="font-size: 12px; color: #999;">
-                    ${p.gameName || 'General'}
-                </span>
-            </div>
-        </div>
-
-        ${p.tag ? `<a href="#" class="topic-tag"># <span>${p.tag}</span></a>` : ''}
-
-        <h3 class="post-title">${p.title}</h3>
-        <p class="post-text">${p.text}</p>
-
-        ${p.image ? `
-        <div class="image-grid grid-2">
-            <img src="${p.image}">
-        </div>` : ''}
-
-        <div class="post-footer">
-            <div class="interactions">
-                <div class="int-item"><i class="far fa-eye"></i> ${p.views || 0}</div>
-                <div class="int-item"><i class="far fa-thumbs-up"></i> ${p.likes || 0}</div>
-            </div>
-        </div>
-    </article>
-    `;
-  });
+const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+onSnapshot(q, (snap) => {
+  feed.innerHTML = "";
+  snap.forEach(d => feed.innerHTML += renderPost(d.data()));
 });
-  
+
+/* ================= RENDER ================= */
+function renderPost(p) {
+  return `
+  <article class="post-card">
+    <div class="user-header">
+      <div class="avatar-ring">
+        <img src="${p.avatar || 'tu-logo.jpg'}">
+      </div>
+      <div>
+        <h4 style="font-size:14px">${p.author}</h4>
+        <span style="font-size:12px;color:#999">General</span>
+      </div>
+    </div>
+    <h3 class="post-title">${p.title}</h3>
+    <p class="post-text">${p.text}</p>
+    ${p.image ? `<div class="image-grid"><img src="${p.image}"></div>` : ""}
+    <div class="post-footer">👍 ${p.likes || 0}</div>
+  </article>`;
+}
 </script>
 
 </body>
 </html>
-
-
-
-
-
