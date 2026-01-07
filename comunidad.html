@@ -5,147 +5,209 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Devouring Lab - Comunidad</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-<style>
-/* === TU CSS ORIGINAL SIN CAMBIOS === */
-:root {
-    --bg-body:#f0f2f5;--bg-card:#fff;--accent:#4cc3ff;--text-main:#333;
-    --text-sec:#999;--border-color:#ebebeb;--radius:12px;
-    --nav-height:64px;--subnav-height:56px
-}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:var(--bg-body)}
-.navbar{background:#fff;height:64px;display:flex;justify-content:space-between;
-align-items:center;padding:0 30px;border-bottom:1px solid var(--border-color)}
-.logo{font-size:22px;font-weight:800}
-.logo span{color:var(--accent)}
-.search-bar{background:#f4f4f4;border-radius:20px;padding:8px 15px;width:300px;
-display:flex;align-items:center}
-.search-bar input{border:none;background:none;outline:none;margin-left:10px;width:100%}
-.container{display:grid;grid-template-columns:260px 680px 320px;gap:24px;
-max-width:1300px;margin:24px auto;padding:0 20px}
-.sidebar-right{position:sticky;top:140px}
-.profile-widget{background:#fff;border-radius:12px;text-align:center;border:1px solid #ebebeb}
-.profile-bg{height:80px;background:linear-gradient(90deg,#3498db,#2c3e50)}
-.profile-avatar{width:70px;height:70px;border-radius:50%;border:4px solid #fff;
-margin-top:-35px;object-fit:cover;cursor:pointer}
-</style>
 </head>
 
 <body>
 
+<!-- ================= NAVBAR ================= -->
 <nav class="navbar">
-<div class="logo">Devouring<span>Lab</span></div>
-<div class="search-bar"><i class="fas fa-search"></i><input placeholder="Buscar posts"></div>
-<div style="display:flex;gap:25px;align-items:center">
-<i class="fas fa-edit"></i>
-<i class="fas fa-bell"></i>
-<img id="navbarAvatar" src="avatar-default.png"
-style="width:32px;height:32px;border-radius:50%;object-fit:cover">
-</div>
+  <div class="logo">Devouring<span>Lab</span></div>
+  <div class="search-bar">
+    <i class="fas fa-search"></i>
+    <input type="text" placeholder="Buscar posts...">
+  </div>
+  <div id="authArea">
+    <button id="loginBtn">Login</button>
+    <button id="registerBtn">Register</button>
+  </div>
 </nav>
 
-<div class="container">
+<!-- ================= MAIN ================= -->
+<main style="max-width:800px;margin:40px auto">
 
-<main></main>
+<!-- PERFIL -->
+<section id="profile" style="display:none">
+  <h3>Mi perfil</h3>
+  <input type="text" id="displayName" placeholder="Nombre">
+  <input type="file" id="photoInput" accept="image/*">
+  <img id="profilePhoto" width="80">
+  <button id="saveProfile">Guardar perfil</button>
+</section>
 
-<aside class="sidebar-right">
-<div class="profile-widget">
-<div class="profile-bg"></div>
+<hr>
 
-<img id="profileAvatar" src="avatar-default.png" class="profile-avatar">
-<h3 id="profileName">Usuario</h3>
+<!-- CREAR POST -->
+<section id="createPost" style="display:none">
+  <h3>Nuevo post</h3>
+  <input id="postTitle" placeholder="Título"><br><br>
+  <textarea id="postText" placeholder="Contenido"></textarea><br><br>
+  <select id="postGame">
+    <option value="general">General</option>
+    <option value="vireo">Vireo</option>
+    <option value="cae">Cae</option>
+  </select><br><br>
+  <input type="file" id="postImage" accept="image/*"><br><br>
+  <button id="publishPost">Publicar</button>
+</section>
 
-<input type="file" id="avatarInput" accept="image/*" hidden>
-<input id="nameInput" placeholder="Tu nombre"
-style="display:none;margin:8px auto;padding:6px 10px;border-radius:8px;border:1px solid #ddd">
+<hr>
 
-<button id="saveProfileBtn"
-style="display:none;margin-top:8px;padding:6px 14px;border:none;
-background:#4cc3ff;color:white;border-radius:20px;cursor:pointer">
-Guardar perfil
-</button>
-</div>
-</aside>
+<!-- FEED -->
+<section id="feed"></section>
 
-</div>
+</main>
 
 <!-- ================= FIREBASE + CLOUDINARY ================= -->
 <script type="module">
+/* ================= CLOUDINARY ================= */
+const CLOUD_NAME = "dyhvx2vsz";
+const UPLOAD_PRESET = "DevouringIMG";
+
+/* ================= FIREBASE ================= */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { 
+  getFirestore, 
+  doc, setDoc, getDoc,
+  collection, addDoc, getDocs,
+  serverTimestamp, query, orderBy 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey:"AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
-authDomain:"devouringlab.firebaseapp.com",
-projectId:"devouringlab",
-appId:"1:383272939740:web:203f83c89b1c7bd6344419"
+  apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
+  authDomain: "devouringlab.firebaseapp.com",
+  projectId: "devouringlab"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* CLOUDINARY */
-const CLOUD_NAME = "dyhvx2vsz";
-const UPLOAD_PRESET = "DevouringIMG";
+/* ================= CLOUDINARY UPLOAD ================= */
+async function uploadToCloudinary(file) {
+  const form = new FormData();
+  form.append("file", file);
+  form.append("upload_preset", UPLOAD_PRESET);
 
-/* ELEMENTOS */
-const avatar = document.getElementById("profileAvatar");
-const navbarAvatar = document.getElementById("navbarAvatar");
-const nameEl = document.getElementById("profileName");
-const nameInput = document.getElementById("nameInput");
-const avatarInput = document.getElementById("avatarInput");
-const saveBtn = document.getElementById("saveProfileBtn");
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+    { method: "POST", body: form }
+  );
 
-async function uploadAvatar(file, uid){
-const f = new FormData();
-f.append("file",file);
-f.append("upload_preset",UPLOAD_PRESET);
-f.append("public_id",uid);
-const r = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-{method:"POST",body:f});
-return (await r.json()).secure_url;
+  const data = await res.json();
+  return data.secure_url;
 }
 
-onAuthStateChanged(auth, async user=>{
-if(!user)return;
-nameInput.style.display="block";
-saveBtn.style.display="inline-block";
+/* ================= AUTH ================= */
+loginBtn.onclick = async () => {
+  const email = prompt("Email");
+  const pass = prompt("Contraseña");
+  await signInWithEmailAndPassword(auth, email, pass);
+};
 
-const ref = doc(db,"users",user.uid);
-const snap = await getDoc(ref);
+registerBtn.onclick = async () => {
+  const email = prompt("Email");
+  const pass = prompt("Contraseña");
+  await createUserWithEmailAndPassword(auth, email, pass);
+};
 
-if(snap.exists()){
-const d = snap.data();
-nameEl.textContent=d.displayName;
-avatar.src=d.photoURL;
-navbarAvatar.src=d.photoURL;
-nameInput.value=d.displayName;
-}
+/* ================= SESSION ================= */
+onAuthStateChanged(auth, async user => {
+  if (!user) return;
+
+  profile.style.display = "block";
+  createPost.style.display = "block";
+
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) {
+    await setDoc(ref, {
+      displayName: user.email.split("@")[0],
+      photoURL: "",
+      createdAt: serverTimestamp()
+    });
+  }
+
+  const data = (await getDoc(ref)).data();
+  displayName.value = data.displayName;
+  profilePhoto.src = data.photoURL || "";
+  loadPosts();
 });
 
-avatar.onclick=()=>avatarInput.click();
+/* ================= SAVE PROFILE ================= */
+saveProfile.onclick = async () => {
+  const user = auth.currentUser;
+  if (!user) return;
 
-saveBtn.onclick=async()=>{
-const u=auth.currentUser;
-if(!u)return;
+  let photoURL = profilePhoto.src;
+  if (photoInput.files[0]) {
+    photoURL = await uploadToCloudinary(photoInput.files[0]);
+    profilePhoto.src = photoURL;
+  }
 
-let photo=avatar.src;
-if(avatarInput.files[0]){
-photo=await uploadAvatar(avatarInput.files[0],u.uid);
-}
+  await setDoc(doc(db, "users", user.uid), {
+    displayName: displayName.value,
+    photoURL
+  }, { merge: true });
 
-await setDoc(doc(db,"users",u.uid),{
-displayName:nameInput.value,
-photoURL:photo
-},{merge:true});
-
-avatar.src=photo;
-navbarAvatar.src=photo;
-nameEl.textContent=nameInput.value;
+  alert("Perfil actualizado");
 };
+
+/* ================= CREATE POST ================= */
+publishPost.onclick = async () => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const userData = (await getDoc(doc(db, "users", user.uid))).data();
+  let imageURL = "";
+
+  if (postImage.files[0]) {
+    imageURL = await uploadToCloudinary(postImage.files[0]);
+  }
+
+  await addDoc(collection(db, "posts"), {
+    uid: user.uid,
+    authorName: userData.displayName,
+    authorPhoto: userData.photoURL,
+    title: postTitle.value,
+    text: postText.value,
+    game: postGame.value,
+    imageURL,
+    createdAt: serverTimestamp()
+  });
+
+  postTitle.value = "";
+  postText.value = "";
+  postImage.value = "";
+  loadPosts();
+};
+
+/* ================= LOAD FEED ================= */
+async function loadPosts() {
+  feed.innerHTML = "";
+  const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+  const snap = await getDocs(q);
+
+  snap.forEach(docu => {
+    const p = docu.data();
+    feed.innerHTML += `
+      <article style="border:1px solid #ddd;padding:15px;margin-bottom:10px">
+        <img src="${p.authorPhoto}" width="32">
+        <b>${p.authorName}</b>
+        <h4>${p.title}</h4>
+        <p>${p.text}</p>
+        ${p.imageURL ? `<img src="${p.imageURL}" width="100%">` : ""}
+      </article>
+    `;
+  });
+}
 </script>
 
 </body>
