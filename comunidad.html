@@ -13,8 +13,772 @@
 </head>
 
 <body>
-<!-- TODO TU HTML ORIGINAL SIN CAMBIOS -->
-<!-- navbar, game-nav, container, modales, etc. -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devouring Lab - Comunidad</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-body: #f0f2f5;
+            --bg-card: #ffffff;
+            --accent: #4cc3ff; 
+            --accent-hover: #3aa8e0;
+            --text-main: #333333;
+            --text-sec: #999999;
+            --border-color: #ebebeb;
+            --radius: 12px;
+            --nav-height: 64px;
+            --subnav-height: 56px;
+            --overlay-color: rgba(0, 0, 0, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            overflow-y: scroll;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            background: var(--bg-card);
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky; top: 0; z-index: 2000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo { font-weight: 800; font-size: 22px; color: var(--text-main); letter-spacing: -0.5px; }
+        .logo span { color: var(--accent); }
+
+        .search-bar {
+            background: #f4f4f4; border-radius: 20px; padding: 8px 15px; width: 350px;
+            display: flex; align-items: center; color: var(--text-sec);
+        }
+        .search-bar input { border: none; background: transparent; outline: none; margin-left: 10px; width: 100%; }
+
+        .nav-actions { display: flex; gap: 20px; align-items: center; color: #666; position: relative; }
+        .nav-icon-btn { cursor: pointer; transition: color 0.2s; font-size: 18px; position: relative; }
+        .nav-icon-btn:hover { color: var(--accent); }
+        
+        .notification-badge { 
+            position: absolute; top: -5px; right: -5px; background: #ff4c4c; 
+            color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; display: none; 
+        }
+
+        /* NOTIFICACIONES DROPDOWN */
+        .dropdown-notif {
+            display: none; position: absolute; top: 100%; right: 40px; width: 300px;
+            background: white; border-radius: var(--radius); box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            padding: 10px; z-index: 2100; max-height: 400px; overflow-y: auto; border: 1px solid var(--border-color);
+        }
+        .dropdown-notif.show { display: block; }
+        .notif-item { padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; display: flex; gap: 10px; align-items: center; }
+
+        /* --- MENÚ USUARIO --- */
+        .user-menu-wrapper { position: relative; padding: 10px 0; }
+        .user-avatar-nav {
+            width: 36px; height: 36px; background: #ddd; border-radius: 50%; cursor: pointer;
+            object-fit: cover; border: 2px solid transparent;
+        }
+        .user-avatar-nav:hover { border-color: var(--accent); }
+        
+        /* --- JUEGOS NAV --- */
+        .game-nav {
+            position: sticky; top: var(--nav-height); z-index: 1900; height: var(--subnav-height);
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; gap: 15px;
+        }
+        .game-item {
+            display: flex; align-items: center; gap: 10px; padding: 6px 14px;
+            border-radius: 25px; cursor: pointer; transition: 0.2s;
+            font-size: 13px; font-weight: 600; color: #555; border: 1px solid transparent;
+        }
+        .game-item img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+        .game-item:hover { background: rgba(76, 195, 255, 0.1); color: var(--accent); }
+        .game-item.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .container {
+            display: grid; grid-template-columns: 260px 680px 320px; gap: 24px;
+            max-width: 1300px; margin: 24px auto; padding: 0 20px;
+        }
+
+        /* SIDEBAR LEFT */
+        .sidebar-left { position: sticky; top: 140px; height: fit-content; }
+        .menu-section { margin-bottom: 20px; }
+        .menu-title { font-size: 11px; color: var(--text-sec); font-weight: bold; margin-bottom: 10px; padding-left: 10px; letter-spacing: 0.5px; }
+        .nav-item {
+            display: flex; align-items: center; padding: 10px 14px; margin-bottom: 4px;
+            border-radius: 8px; color: #666; text-decoration: none; transition: 0.2s; font-size: 14px; cursor: pointer;
+        }
+        .nav-item:hover, .nav-item.active { background-color: #e6f7ff; color: var(--accent); font-weight: 600; }
+        .icon-box {
+            width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center;
+            justify-content: center; margin-right: 12px; background: #eee; color: #555; font-size: 12px;
+        }
+        .unity-icon { background: #000; color: #fff; }
+        .rpg-icon { background: #e74c3c; color: #fff; }
+        .scratch-icon { background: #f39c12; color: #fff; }
+
+        /* MAIN FEED */
+        .circles-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+        .circle-card {
+            background: var(--bg-card); border-radius: var(--radius); padding: 15px;
+            text-align: center; text-decoration: none; color: var(--text-main);
+            border: 1px solid var(--border-color); transition: 0.2s; cursor: pointer;
+        }
+        .circle-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+        .circle-icon {
+            width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 8px;
+            display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;
+        }
+        .grad-tavern { background: linear-gradient(135deg, #FF6B6B, #FFD93D); }
+        .grad-art { background: linear-gradient(135deg, #6C5CE7, #A29BFE); }
+        .grad-lab { background: linear-gradient(135deg, #00B894, #55E6C1); }
+        .grad-off { background: linear-gradient(135deg, #0984E3, #74B9FF); }
+
+        .feed-header {
+            background: var(--bg-card); padding: 0 20px; border-radius: var(--radius);
+            margin-bottom: 16px; display: flex; border: 1px solid var(--border-color);
+        }
+        .tab-btn { padding: 15px 20px; cursor: pointer; font-weight: 600; color: var(--text-sec); border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: var(--accent); border-bottom: 3px solid var(--accent); }
+
+        /* POST CARD */
+        .post-card {
+            background: var(--bg-card); border-radius: var(--radius); padding: 20px;
+            margin-bottom: 16px; border: 1px solid var(--border-color); transition: 0.2s;
+        }
+        .user-header { display: flex; align-items: center; margin-bottom: 12px; }
+        .avatar-ring { width: 42px; height: 42px; border-radius: 50%; padding: 2px; border: 2px solid transparent; margin-right: 12px; }
+        .avatar-ring.official { border-color: #ffd700; }
+        .avatar-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        
+        .level-badge { background: #333; color: #fff; font-size: 10px; padding: 1px 5px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
+        .title-badge { font-size: 10px; color: var(--accent); border: 1px solid var(--accent); padding: 0 4px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
+
+        .post-text { color: #444; font-size: 14px; line-height: 1.6; margin-bottom: 12px; white-space: pre-wrap; }
+        .hashtag-link { color: var(--accent); font-weight: 600; cursor: pointer; text-decoration: none; }
+        .hashtag-link:hover { text-decoration: underline; }
+        
+        .post-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 12px; color: var(--text-sec); font-size: 13px; margin-top: 10px;}
+        .interaction-btn { cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .interaction-btn:hover { color: var(--accent); }
+        .interaction-btn.liked { color: #ff4c4c; }
+
+        /* SIDEBAR RIGHT */
+        .sidebar-right { position: sticky; top: 140px; height: fit-content; }
+        .profile-widget { background: var(--bg-card); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-color); text-align: center; padding-bottom: 20px; margin-bottom: 16px; }
+        .profile-bg { height: 80px; background: linear-gradient(90deg, #3498db, #2c3e50); }
+        .profile-avatar { width: 75px; height: 75px; border-radius: 50%; border: 4px solid var(--bg-card); margin-top: -38px; background: #fff; object-fit: cover; }
+        
+        .stats-row { display: flex; justify-content: center; gap: 20px; margin: 15px 0; font-size: 13px; color: #666; }
+        .stat-val { font-weight: bold; color: var(--text-main); display: block; font-size: 15px; }
+        
+        .btn-outline { border: 1px solid var(--border-color); background: transparent; padding: 6px 15px; border-radius: 15px; cursor: pointer; font-size: 12px; margin-top: 5px;}
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+        .widget-box { background: var(--bg-card); border-radius: var(--radius); padding: 16px; border: 1px solid var(--border-color); margin-bottom: 16px; }
+        .widget-title { font-size: 13px; font-weight: 800; margin-bottom: 15px; color: #444; text-transform: uppercase; letter-spacing: 0.5px;}
+
+        /* USERS & TRENDS */
+        .rec-user { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .rec-info { display: flex; gap: 10px; align-items: center; }
+        .rec-btn { background: none; border: 1px solid var(--accent); color: var(--accent); border-radius: 20px; padding: 2px 10px; font-size: 11px; cursor: pointer; }
+        .rec-btn:hover { background: var(--accent); color: white; }
+
+        .trend-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 13px; cursor: pointer; }
+        .trend-item:hover .trend-name { color: var(--accent); }
+        .trend-name { font-weight: 600; display: block; }
+        .trend-count { color: #999; font-size: 11px; }
+
+        /* MODALS */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--overlay-color); z-index: 3000; justify-content: center; align-items: center; }
+        .modal-card { background: var(--bg-card); width: 550px; max-width: 90%; border-radius: 16px; padding: 25px; position: relative; animation: slideUp 0.3s ease; }
+        .modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .form-row { display: flex; gap: 15px; margin-bottom: 15px; }
+        .form-select, .form-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 14px; }
+        .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .modal-btn { padding: 8px 24px; border-radius: 20px; border: none; font-weight: 600; cursor: pointer; }
+        .btn-cancel { background: #eee; color: #666; }
+        .btn-submit { background: var(--accent); color: white; }
+
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @media (max-width: 1200px) { .container { grid-template-columns: 240px 1fr; } .sidebar-right { display: none; } }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Devouring<span>Lab</span></div>
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Buscar posts, tags, usuarios...">
+        </div>
+        
+        <div class="nav-actions">
+            <i class="fas fa-edit nav-icon-btn" id="openPublishBtn" title="Publicar"></i>
+            
+            <div style="position:relative;">
+                <i class="fas fa-bell nav-icon-btn" id="notifBtn"></i>
+                <div class="notification-badge" id="notifBadge">0</div>
+                <div class="dropdown-notif" id="notifDropdown">
+                    <div style="text-align:center; color:#999; font-size:12px; padding:10px;">Sin notificaciones nuevas</div>
+                </div>
+            </div>
+
+            <div class="user-menu-wrapper">
+                <img src="https://via.placeholder.com/36" class="user-avatar-nav" id="navAvatar">
+            </div>
+        </div>
+    </nav>
+
+    <div class="game-nav">
+        <div class="game-item active" onclick="filterGame('all', this)"><i class="fas fa-globe"></i> General</div>
+        <div class="game-item" onclick="filterGame('vireo', this)"><img src="https://via.placeholder.com/24"> Vireo CODE</div>
+        <div class="game-item" onclick="filterGame('cae', this)"><img src="https://via.placeholder.com/24"> Cae</div>
+        <div class="game-item" onclick="filterGame('lanzer', this)"><img src="https://via.placeholder.com/24"> Move-Lanzer</div>
+        <div class="game-item" onclick="filterGame('dinoma', this)"><img src="https://via.placeholder.com/24"> Creatura Dinoma</div>
+    </div>
+
+    <div class="container">
+        
+        <aside class="sidebar-left">
+            <div class="menu-section">
+                <div class="nav-item active" onclick="loadFeed('all')"><i class="fas fa-home" style="margin-right: 12px;"></i> Inicio</div>
+                <div class="nav-item" onclick="loadFeed('following')"><i class="fas fa-star" style="margin-right: 12px;"></i> Siguiendo</div>
+            </div>
+            <div class="menu-title">MIS INTERESES (Filtrar)</div>
+            <div class="menu-section">
+                <div class="nav-item" onclick="filterByInterest('Unity')"><div class="icon-box unity-icon"><i class="fab fa-unity"></i></div> Unity Dev</div>
+                <div class="nav-item" onclick="filterByInterest('RPG')"><div class="icon-box rpg-icon"><i class="fas fa-scroll"></i></div> RPG Maker</div>
+                <div class="nav-item" onclick="filterByInterest('Web')"><div class="icon-box scratch-icon"><i class="fas fa-globe"></i></div> Juegos Web</div>
+            </div>
+            <div class="menu-title">EXTRAS</div>
+            <a href="https://lucasdanielsmm.github.io/DevouringProductions/" target="_blank" class="nav-item"><i class="fas fa-link" style="margin-right: 12px;"></i> Web Oficial</a>
+        </aside>
+
+        <main>
+            <div class="circles-row">
+                <div class="circle-card" onclick="loadFeed('section', 'Taberna')"><div class="circle-icon grad-tavern"><i class="fas fa-mug-hot"></i></div><div style="font-size:12px; font-weight:600">Taberna</div></div>
+                <div class="circle-card" onclick="loadFeed('section', 'Galería')"><div class="circle-icon grad-art"><i class="fas fa-paint-brush"></i></div><div style="font-size:12px; font-weight:600">Galería</div></div>
+                <div class="circle-card" onclick="loadFeed('section', 'Lab')"><div class="circle-icon grad-lab"><i class="fas fa-flask"></i></div><div style="font-size:12px; font-weight:600">Lab</div></div>
+                <div class="circle-card" onclick="loadFeed('section', 'Guías')"><div class="circle-icon grad-off"><i class="fas fa-book"></i></div><div style="font-size:12px; font-weight:600">Guías</div></div>
+            </div>
+
+            <div class="feed-header">
+                <div class="tab-btn active" id="tabRecientes" onclick="loadFeed('all')">Recientes</div>
+                <div class="tab-btn" id="tabTop" onclick="alert('Funcionalidad Top próximamente')">Top</div>
+            </div>
+
+            <div id="postsContainer">
+                <p style="text-align:center; padding:20px; color:#999">Cargando comunidad...</p>
+            </div>
+        </main>
+
+        <aside class="sidebar-right">
+            <div class="profile-widget">
+                <div class="profile-bg"></div>
+                <img src="https://via.placeholder.com/75" class="profile-avatar" id="sidebarAvatar">
+                <h3 style="font-size: 16px; margin-top: 5px;" id="sidebarName">Visitante</h3>
+                <p style="font-size: 11px; margin-bottom: 10px;" id="sidebarLevel">Lv. 0 • Invitado</p>
+                
+                <div id="authActions">
+                    <button class="modal-btn btn-submit" id="sidebarLoginBtn" style="font-size:12px;">Iniciar Sesión con Google</button>
+                </div>
+
+                <div id="userStats" style="display:none;">
+                    <div class="stats-row">
+                        <div><span class="stat-val" id="statPosts">0</span>Posts</div>
+                        <div><span class="stat-val" id="statFollowers">0</span>Seguidores</div>
+                        <div><span class="stat-val" id="statFollowing">0</span>Siguiendo</div>
+                    </div>
+                    <button class="btn-outline" onclick="openEditProfile()">Editar Perfil</button>
+                    <button class="btn-outline" onclick="doLogout()" style="border-color:#ffcccc; color:red">Salir</button>
+                </div>
+            </div>
+
+            <div class="widget-box">
+                <div class="widget-title">Temas del momento</div>
+                <div id="trendsContainer">
+                    <p style="font-size:12px; color:#999">Calculando...</p>
+                </div>
+            </div>
+
+            <div class="widget-box">
+                <div class="widget-title">Usuarios Recomendados</div>
+                <div id="recommendedContainer">
+                    </div>
+            </div>
+        </aside>
+    </div>
+
+    <div class="modal-overlay" id="publishModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Crear Publicación</h3>
+                <i class="fas fa-times" style="cursor:pointer" onclick="closeModals()"></i>
+            </div>
+            
+            <div class="form-row">
+                <select id="postSection" class="form-select">
+                    <option value="Taberna">Taberna</option>
+                    <option value="Galería">Galería</option>
+                    <option value="Lab">Lab</option>
+                    <option value="Guías">Guías</option>
+                </select>
+                <select id="postGame" class="form-select">
+                    <option value="all">General</option>
+                    <option value="vireo">Vireo CODE</option>
+                    <option value="cae">Cae</option>
+                    <option value="lanzer">Move-Lanzer</option>
+                    <option value="dinoma">Creatura Dinoma</option>
+                </select>
+            </div>
+
+            <textarea id="postContent" class="form-input" style="height:120px; resize:none;" placeholder="Comparte tus ideas... Usa #hashtags"></textarea>
+            
+            <div style="margin-top:15px; display:flex; justify-content:space-between; align-items:center;">
+                <label for="fileInput" style="cursor:pointer; color:var(--accent); font-weight:600; font-size:14px;">
+                    <i class="fas fa-image"></i> Agregar Imagen
+                </label>
+                <input type="file" id="fileInput" style="display:none;" accept="image/*">
+                <span id="uploadStatus" style="font-size:12px; color:#999;"></span>
+            </div>
+            <img id="imagePreview" style="width:100%; border-radius:8px; margin-top:10px; display:none;">
+
+            <div class="modal-footer">
+                <div id="adminCheckContainer" style="display:none; margin-right:auto; align-items:center; font-size:12px;">
+                    <input type="checkbox" id="checkOfficial"> <label for="checkOfficial">Oficial</label>
+                </div>
+                <button class="modal-btn btn-cancel" onclick="closeModals()">Cancelar</button>
+                <button class="modal-btn btn-submit" id="submitPostBtn">Publicar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Editar Perfil</h3>
+                <i class="fas fa-times" style="cursor:pointer" onclick="closeModals()"></i>
+            </div>
+            <input type="text" id="editName" class="form-input" placeholder="Nuevo Nombre" style="margin-bottom:15px;">
+            <input type="text" id="editAvatar" class="form-input" placeholder="URL Nueva Foto (https://...)" style="margin-bottom:15px;">
+            <div class="modal-footer">
+                <button class="modal-btn btn-cancel" onclick="closeModals()">Cancelar</button>
+                <button class="modal-btn btn-submit" onclick="saveProfileChanges()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // CONFIGURACIÓN (TUS KEYS)
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
+            authDomain: "devouringlab.firebaseapp.com",
+            projectId: "devouringlab",
+            storageBucket: "devouringlab.firebasestorage.app",
+            messagingSenderId: "383272939740",
+            appId: "1:383272939740:web:203f83c89b1c7bd6344419"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        const CLOUD_NAME = "dyhvx2vsz";
+        const UPLOAD_PRESET = "DevouringIMG";
+        const ADMIN_UIDS = ["qlJIBLf1I1clEVk2uggolNWL4Ai1"]; // Tu UID de Admin
+
+        // ESTADO GLOBAL
+        let currentUser = null;
+        let currentUserData = null; // Datos Firestore (nivel, titulos)
+        let uploadedImageUrl = "";
+
+        // --- 1. GESTIÓN DE USUARIOS (NIVEL Y PERFIL) ---
+        const calculateStats = (userData) => {
+            if (!userData) return { level: 1, title: "Novato" };
+            const createdAt = userData.createdAt ? userData.createdAt.toDate() : new Date();
+            const years = (new Date() - createdAt) / (1000 * 60 * 60 * 24 * 365);
+            let level = Math.floor(years * 12); // 1 año = Lv 12
+            level += Math.floor((userData.postCount || 0) / 100); // +1 Lv cada 100 posts
+            if(level < 1) level = 1;
+
+            let title = "Novato";
+            const c = userData.postCount || 0;
+            if(c >= 5) title = "Explorador";
+            if(c >= 25) title = "Aventurero";
+            if(c >= 50) title = "Veterano";
+            if(userData.isAdmin || ADMIN_UIDS.includes(userData.uid)) title = "Game Designer";
+
+            return { level, title };
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            if (user) {
+                // Sincronizar usuario en Firestore
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (!userSnap.exists()) {
+                    await setDoc(userRef, {
+                        uid: user.uid,
+                        displayName: user.displayName,
+                        photoURL: user.photoURL,
+                        email: user.email,
+                        createdAt: serverTimestamp(),
+                        followers: [],
+                        following: [],
+                        postCount: 0,
+                        isAdmin: ADMIN_UIDS.includes(user.uid)
+                    });
+                    currentUserData = { postCount: 0, following: [] };
+                } else {
+                    currentUserData = userSnap.data();
+                }
+
+                // UI Sidebar Right
+                document.getElementById('authActions').style.display = 'none';
+                document.getElementById('userStats').style.display = 'block';
+                document.getElementById('sidebarName').innerText = currentUserData.displayName || user.displayName;
+                document.getElementById('sidebarAvatar').src = currentUserData.photoURL || user.photoURL;
+                document.getElementById('navAvatar').src = currentUserData.photoURL || user.photoURL;
+
+                const stats = calculateStats(currentUserData);
+                document.getElementById('sidebarLevel').innerHTML = `Lv. ${stats.level} • <span style="color:var(--accent)">${stats.title}</span>`;
+                document.getElementById('statPosts').innerText = currentUserData.postCount || 0;
+                document.getElementById('statFollowers').innerText = (currentUserData.followers || []).length;
+                document.getElementById('statFollowing').innerText = (currentUserData.following || []).length;
+
+            } else {
+                // Reset UI
+                document.getElementById('authActions').style.display = 'block';
+                document.getElementById('userStats').style.display = 'none';
+                document.getElementById('sidebarName').innerText = "Visitante";
+                document.getElementById('sidebarAvatar').src = "https://via.placeholder.com/75";
+                document.getElementById('sidebarLevel').innerText = "Lv. 0 • Invitado";
+                document.getElementById('navAvatar').src = "https://via.placeholder.com/36";
+            }
+            loadRecommendedUsers(); // Cargar usuarios aleatorios
+            loadFeed('all'); // Recargar feed
+        });
+
+        window.doLogout = () => signOut(auth);
+        document.getElementById('sidebarLoginBtn').addEventListener('click', () => signInWithPopup(auth, provider));
+        document.getElementById('navAvatar').addEventListener('click', () => {
+             if(!currentUser) signInWithPopup(auth, provider);
+        });
+
+        // --- 2. FEED Y POSTS ---
+        const parseText = (text) => {
+            let parsed = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="hashtag-link">$1</a>');
+            parsed = parsed.replace(/#(\w+)/g, '<span class="hashtag-link" onclick="window.searchTag(\'$1\')">#$1</span>');
+            return parsed;
+        };
+
+        window.loadFeed = (type = 'all', value = null) => {
+            const feedDiv = document.getElementById('postsContainer');
+            feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999">Cargando...</p>';
+
+            // Query básica (filtrado en cliente para simplificar combinación de filtros)
+            let q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(50));
+
+            onSnapshot(q, (snapshot) => {
+                feedDiv.innerHTML = "";
+                let posts = [];
+                snapshot.forEach(doc => posts.push({id: doc.id, ...doc.data()}));
+
+                // Filtros
+                if (type === 'following' && currentUserData) {
+                    posts = posts.filter(p => currentUserData.following.includes(p.authorUid));
+                } else if (type === 'game') {
+                    posts = posts.filter(p => p.game === value);
+                    // UI Activa
+                    document.querySelectorAll('.game-item').forEach(e => e.classList.remove('active'));
+                    if(document.querySelector(`[onclick*="${value}"]`)) 
+                       document.querySelector(`[onclick*="${value}"]`).classList.add('active');
+
+                } else if (type === 'section') {
+                    posts = posts.filter(p => p.section === value);
+                } else if (type === 'tag') {
+                    posts = posts.filter(p => (p.tags || []).includes(value));
+                    document.getElementById('searchInput').value = "#" + value;
+                }
+
+                calculateTrends(posts); // Calcular tendencias con los posts cargados
+
+                if(posts.length === 0) {
+                    feedDiv.innerHTML = '<div style="text-align:center; padding:30px; color:#999">No hay publicaciones aquí.</div>';
+                    return;
+                }
+
+                posts.forEach(post => {
+                    const isLiked = currentUser && (post.likes || []).includes(currentUser.uid);
+                    
+                    const html = `
+                        <article class="post-card">
+                            <div class="user-header">
+                                <div class="avatar-ring ${post.isOfficial ? 'official' : ''}">
+                                    <img src="${post.authorAvatar || 'https://via.placeholder.com/40'}">
+                                </div>
+                                <div>
+                                    <div style="font-weight:bold; font-size:14px;">
+                                        ${post.authorName} 
+                                        ${post.authorLevel ? `<span class="level-badge">Lv.${post.authorLevel}</span>` : ''}
+                                        ${post.authorTitle ? `<span class="title-badge">${post.authorTitle}</span>` : ''}
+                                        ${post.isOfficial ? '<i class="fas fa-check-circle" style="color:#ffd700; margin-left:5px"></i>' : ''}
+                                    </div>
+                                    <div style="font-size:11px; color:#999;">
+                                        ${post.timestamp ? new Date(post.timestamp.toDate()).toLocaleDateString() : 'Reciente'} • 
+                                        <b>${getGameName(post.game)}</b> • ${post.section}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="post-text">${parseText(post.content)}</div>
+                            ${post.image ? `<img src="${post.image}" style="width:100%; border-radius:8px; margin-bottom:10px; max-height:400px; object-fit:cover;">` : ''}
+
+                            <div class="post-footer">
+                                <div style="display:flex; gap:20px;">
+                                    <div class="interaction-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}', ${isLiked})">
+                                        <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i> ${(post.likes || []).length}
+                                    </div>
+                                    <div class="interaction-btn">
+                                        <i class="far fa-comment"></i> 0
+                                    </div>
+                                </div>
+                                <div style="font-size:11px; color:#ccc">ID: ${post.id.substring(0,4)}</div>
+                            </div>
+                        </article>
+                    `;
+                    feedDiv.innerHTML += html;
+                });
+            });
+        };
+
+        const getGameName = (key) => {
+            const map = { 'vireo': 'Vireo CODE', 'cae': 'Cae', 'lanzer': 'Move-Lanzer', 'dinoma': 'Creatura Dinoma', 'all': 'General' };
+            return map[key] || key;
+        };
+
+        // --- 3. PUBLICACIÓN ---
+        document.getElementById('openPublishBtn').addEventListener('click', () => {
+            if(!currentUser) return alert("Inicia sesión para publicar");
+            document.getElementById('publishModal').style.display = 'flex';
+            if(currentUserData.isAdmin) document.getElementById('adminCheckContainer').style.display = 'flex';
+        });
+
+        window.closeModals = () => {
+            document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+            uploadedImageUrl = "";
+            document.getElementById('imagePreview').style.display = 'none';
+        };
+
+        // SUBIDA CLOUDINARY
+        document.getElementById('fileInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // Preview
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const img = document.getElementById('imagePreview');
+                img.src = ev.target.result;
+                img.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+
+            const status = document.getElementById('uploadStatus');
+            status.innerText = "Subiendo...";
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', UPLOAD_PRESET);
+
+            try {
+                const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
+                const data = await res.json();
+                uploadedImageUrl = data.secure_url;
+                status.innerText = "Imagen lista";
+                status.style.color = "green";
+            } catch (err) {
+                console.error(err);
+                status.innerText = "Error";
+            }
+        });
+
+        // ENVIAR POST
+        document.getElementById('submitPostBtn').addEventListener('click', async () => {
+            const content = document.getElementById('postContent').value;
+            const section = document.getElementById('postSection').value;
+            const game = document.getElementById('postGame').value;
+            const isOfficial = document.getElementById('checkOfficial').checked;
+
+            if(!content && !uploadedImageUrl) return alert("Escribe algo o sube una imagen");
+
+            // Extraer hashtags
+            const tags = (content.match(/#[\w]+/g) || []).map(t => t.replace('#', ''));
+
+            try {
+                const stats = calculateStats(currentUserData);
+                await addDoc(collection(db, "posts"), {
+                    authorUid: currentUser.uid,
+                    authorName: currentUser.displayName,
+                    authorAvatar: currentUser.photoURL,
+                    authorLevel: stats.level,
+                    authorTitle: stats.title,
+                    content: content,
+                    section: section,
+                    game: game,
+                    tags: tags,
+                    image: uploadedImageUrl,
+                    likes: [],
+                    isOfficial: isOfficial && currentUserData.isAdmin,
+                    timestamp: serverTimestamp()
+                });
+
+                // Update Post Count
+                await updateDoc(doc(db, "users", currentUser.uid), { 
+                    postCount: (currentUserData.postCount || 0) + 1 
+                });
+
+                closeModals();
+                document.getElementById('postContent').value = "";
+            } catch (e) {
+                console.error(e);
+                alert("Error al publicar");
+            }
+        });
+
+        // --- 4. FUNCIONALIDADES SOCIALES ---
+        window.toggleLike = async (postId, isLiked) => {
+            if (!currentUser) return alert("Inicia sesión para dar like");
+            const postRef = doc(db, "posts", postId);
+            if (isLiked) await updateDoc(postRef, { likes: arrayRemove(currentUser.uid) });
+            else await updateDoc(postRef, { likes: arrayUnion(currentUser.uid) });
+        };
+
+        window.filterGame = (g) => loadFeed('game', g);
+        window.searchTag = (t) => loadFeed('tag', t);
+        
+        window.filterByInterest = (interest) => {
+            let target = 'all';
+            if(interest === 'Unity') target = 'dinoma';
+            if(interest === 'RPG') target = 'vireo';
+            if(interest === 'Web') target = 'cae';
+            loadFeed('game', target);
+        };
+
+        // Buscador
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') {
+                const val = e.target.value;
+                if(val.startsWith('#')) loadFeed('tag', val.replace('#',''));
+                else loadFeed('tag', val); // Búsqueda simple por tag
+            }
+        });
+
+        // --- 5. TENDENCIAS Y RECOMENDADOS ---
+        const calculateTrends = (posts) => {
+            const counts = {};
+            posts.forEach(p => {
+                if(p.tags) p.tags.forEach(t => counts[t] = (counts[t] || 0) + 1 + (p.likes?.length || 0));
+            });
+            const sorted = Object.keys(counts).sort((a,b) => counts[b] - counts[a]).slice(0, 3);
+            
+            const div = document.getElementById('trendsContainer');
+            div.innerHTML = "";
+            sorted.forEach(tag => {
+                div.innerHTML += `<div class="trend-item" onclick="searchTag('${tag}')">
+                    <span class="trend-name"># ${tag}</span><span class="trend-count">${counts[tag]} pts</span>
+                </div>`;
+            });
+        };
+
+        const loadRecommendedUsers = async () => {
+            const q = query(collection(db, "users"), limit(10));
+            const snap = await getDocs(q);
+            let users = [];
+            snap.forEach(d => users.push(d.data()));
+            users = users.sort(() => 0.5 - Math.random()).slice(0, 3); // 3 Aleatorios
+
+            const div = document.getElementById('recommendedContainer');
+            div.innerHTML = "";
+            users.forEach(u => {
+                if(currentUser && u.uid === currentUser.uid) return;
+                const isFollowing = currentUserData?.following?.includes(u.uid);
+                
+                div.innerHTML += `
+                    <div class="rec-user">
+                        <div class="rec-info">
+                            <img src="${u.photoURL || 'https://via.placeholder.com/32'}" style="width:32px; height:32px; border-radius:50%">
+                            <div>
+                                <div style="font-weight:bold; font-size:12px;">${u.displayName}</div>
+                            </div>
+                        </div>
+                        <button class="rec-btn" onclick="followUser('${u.uid}')">
+                            ${isFollowing ? 'Siguiendo' : 'Seguir'}
+                        </button>
+                    </div>
+                `;
+            });
+        };
+
+        window.followUser = async (uid) => {
+            if(!currentUser) return alert("Inicia sesión");
+            const myRef = doc(db, "users", currentUser.uid);
+            if(currentUserData.following.includes(uid)) {
+                await updateDoc(myRef, { following: arrayRemove(uid) });
+            } else {
+                await updateDoc(myRef, { following: arrayUnion(uid) });
+            }
+            location.reload(); // Recarga simple para actualizar estado
+        };
+
+        // --- 6. EDITAR PERFIL ---
+        window.openEditProfile = () => document.getElementById('profileModal').style.display = 'flex';
+        window.saveProfileChanges = async () => {
+            const name = document.getElementById('editName').value;
+            const photo = document.getElementById('editAvatar').value;
+            
+            if(name) {
+                await updateProfile(auth.currentUser, { displayName: name });
+                await updateDoc(doc(db, "users", currentUser.uid), { displayName: name });
+            }
+            if(photo) {
+                await updateProfile(auth.currentUser, { photoURL: photo });
+                await updateDoc(doc(db, "users", currentUser.uid), { photoURL: photo });
+            }
+            location.reload();
+        };
+
+        // NOTIFICACIONES (Toggle Visual)
+        document.getElementById('notifBtn').addEventListener('click', () => {
+            document.getElementById('notifDropdown').classList.toggle('show');
+        });
+
+    </script>
+</body>
+</html>
+
+
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -161,3 +925,4 @@ window.doLogout = () => signOut(auth);
 </script>
 </body>
 </html>
+
