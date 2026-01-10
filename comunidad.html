@@ -4,607 +4,689 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Devouring Lab - Comunidad</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        :root {
-            --bg-body: #f0f2f5;
-            --bg-card: #ffffff;
-            --accent: #4cc3ff; 
-            --accent-hover: #3aa8e0;
-            --text-main: #333333;
-            --text-sec: #999999;
-            --border-color: #ebebeb;
-            --radius: 12px;
-            --nav-height: 64px;
-            --subnav-height: 56px;
-            --overlay-color: rgba(0, 0, 0, 0.6);
-        }
-
+        /* --- ESTILOS BASE (Mismos de antes + Nuevos arreglos visuales) --- */
+        :root { --bg-body: #f0f2f5; --bg-card: #ffffff; --accent: #4cc3ff; --accent-hover: #3aa8e0; --text-main: #333; --border-color: #ebebeb; --radius: 12px; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-body); color: var(--text-main); }
         
-        body {
-            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            overflow-y: scroll;
-        }
-
-        /* --- NAVBAR --- */
-        .navbar {
-            background: var(--bg-card);
-            height: var(--nav-height);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            position: sticky; top: 0; z-index: 2000;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .logo { font-weight: 800; font-size: 22px; color: var(--text-main); letter-spacing: -0.5px; }
-        .logo span { color: var(--accent); }
-
-        .search-bar {
-            background: #f4f4f4; border-radius: 20px; padding: 8px 15px; width: 300px;
-            display: flex; align-items: center; color: var(--text-sec);
-        }
+        /* NAVBAR */
+        .navbar { background: var(--bg-card); height: 64px; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .logo { font-weight: 800; font-size: 22px; } .logo span { color: var(--accent); }
+        
+        .search-container { position: relative; width: 400px; }
+        .search-bar { background: #f4f4f4; border-radius: 20px; padding: 8px 15px; display: flex; align-items: center; }
         .search-bar input { border: none; background: transparent; outline: none; margin-left: 10px; width: 100%; }
-
-        .nav-actions { display: flex; gap: 25px; align-items: center; color: #666; }
-        .nav-icon-btn { cursor: pointer; transition: color 0.2s; font-size: 18px; }
-        .nav-icon-btn:hover { color: var(--accent); }
-
-        /* --- MENÚ USUARIO --- */
-        .user-menu-wrapper { position: relative; padding: 10px 0; }
-        .user-avatar-nav {
-            width: 32px; height: 32px; background: #ddd; border-radius: 50%; cursor: pointer;
-            object-fit: cover;
-        }
         
-        .user-dropdown-card {
-            display: none; position: absolute; top: 100%; right: 0; width: 260px;
-            background: var(--bg-card); border-radius: var(--radius);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15); padding: 20px; z-index: 2100;
-            text-align: center; border: 1px solid var(--border-color);
-        }
-        .user-menu-wrapper:hover .user-dropdown-card { display: block; animation: fadeIn 0.2s; }
+        .nav-actions { display: flex; gap: 20px; align-items: center; }
+        .icon-btn { cursor: pointer; font-size: 18px; color: #666; position: relative; }
+        .icon-btn:hover { color: var(--accent); }
+        .notification-badge { position: absolute; top: -5px; right: -5px; background: red; color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; display: none; }
+        
+        .user-nav-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; cursor: pointer; background: #ddd; }
 
-        .auth-btn {
-            display: block; width: 100%; padding: 10px; margin-top: 10px;
-            border-radius: 20px; border: none; cursor: pointer; font-weight: 600; font-size: 14px;
-        }
-        .btn-login { background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; gap: 10px;}
-        .btn-register { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
-        .btn-login:hover { background: var(--accent-hover); }
-
-        /* --- JUEGOS NAV --- */
-        .game-nav {
-            position: sticky; top: var(--nav-height); z-index: 1900; height: var(--subnav-height);
-            background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; gap: 15px;
-        }
-        .game-item {
-            display: flex; align-items: center; gap: 10px; padding: 6px 14px;
-            border-radius: 25px; cursor: pointer; transition: 0.2s;
-            font-size: 13px; font-weight: 600; color: #555; border: 1px solid transparent;
-        }
-        .game-item img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: #eee; }
-        .game-item:hover { background: rgba(76, 195, 255, 0.1); color: var(--accent); }
-        .game-item.active { background: var(--accent); color: white; border-color: var(--accent); }
-
-        /* --- LAYOUT --- */
-        .container {
-            display: grid; grid-template-columns: 260px 680px 320px; gap: 24px;
-            max-width: 1300px; margin: 24px auto; padding: 0 20px;
-        }
-
+        /* DROPDOWN NOTIFICACIONES */
+        .dropdown-menu { display: none; position: absolute; top: 100%; right: 0; width: 300px; background: white; border-radius: var(--radius); box-shadow: 0 5px 20px rgba(0,0,0,0.15); padding: 10px; z-index: 2000; max-height: 400px; overflow-y: auto; }
+        .show { display: block; }
+        .notif-item { padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; display: flex; gap: 10px; align-items: center; }
+        .notif-item:last-child { border-bottom: none; }
+        
+        /* LAYOUT */
+        .container { display: grid; grid-template-columns: 240px 640px 300px; gap: 24px; max-width: 1250px; margin: 24px auto; padding: 0 20px; }
+        
         /* SIDEBAR LEFT */
-        .sidebar-left { position: sticky; top: 140px; height: fit-content; }
-        .menu-section { margin-bottom: 20px; }
-        .menu-title { font-size: 12px; color: var(--text-sec); font-weight: bold; margin-bottom: 10px; padding-left: 10px; }
-        .nav-item {
-            display: flex; align-items: center; padding: 10px 14px; margin-bottom: 4px;
-            border-radius: 8px; color: #666; text-decoration: none; transition: 0.2s; font-size: 15px;
-        }
-        .nav-item:hover { background-color: rgba(76, 195, 255, 0.1); color: var(--accent); }
-        .nav-item.active { background-color: #e6f7ff; color: var(--accent); font-weight: 600; }
-        .icon-box {
-            width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center;
-            justify-content: center; margin-right: 12px; background: #eee; color: #555; font-size: 14px;
-        }
-        .unity-icon { background: #000; color: #fff; }
-        .rpg-icon { background: #e74c3c; color: #fff; }
-        .scratch-icon { background: #f39c12; color: #fff; }
-
-        /* CIRCLES */
-        .circles-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-        .circle-card {
-            background: var(--bg-card); border-radius: var(--radius); padding: 15px;
-            text-align: center; text-decoration: none; color: var(--text-main);
-            border: 1px solid var(--border-color); transition: 0.2s;
-        }
-        .circle-card:hover { transform: translateY(-3px); border-color: var(--accent); }
-        .circle-icon {
-            width: 48px; height: 48px; border-radius: 12px; margin: 0 auto 8px;
-            display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;
-        }
-        .grad-tavern { background: linear-gradient(135deg, #FF6B6B, #FFD93D); }
-        .grad-art { background: linear-gradient(135deg, #6C5CE7, #A29BFE); }
-        .grad-lab { background: linear-gradient(135deg, #00B894, #55E6C1); }
-        .grad-off { background: linear-gradient(135deg, #0984E3, #74B9FF); }
+        .menu-item { display: flex; align-items: center; padding: 10px 14px; color: #666; text-decoration: none; border-radius: 8px; margin-bottom: 5px; cursor: pointer; }
+        .menu-item:hover, .menu-item.active { background: #e6f7ff; color: var(--accent); font-weight: 600; }
+        .menu-title { font-size: 12px; font-weight: bold; color: #999; margin: 20px 0 10px 10px; }
 
         /* FEED */
-        .feed-header {
-            background: var(--bg-card); padding: 0 20px; border-radius: var(--radius);
-            margin-bottom: 16px; display: flex; border: 1px solid var(--border-color);
-        }
-        .tab-btn { padding: 15px 20px; cursor: pointer; font-weight: 600; color: var(--text-sec); border-bottom: 3px solid transparent; }
-        .tab-btn.active { color: var(--accent); border-bottom: 3px solid var(--accent); }
+        .game-nav { background: white; padding: 10px; border-radius: var(--radius); display: flex; justify-content: space-around; margin-bottom: 20px; }
+        .game-pill { cursor: pointer; padding: 5px 15px; border-radius: 20px; font-size: 13px; display: flex; align-items: center; gap: 5px; }
+        .game-pill.active { background: var(--accent); color: white; }
+        .game-pill img { width: 20px; height: 20px; border-radius: 50%; }
 
-        .post-card {
-            background: var(--bg-card); border-radius: var(--radius); padding: 24px;
-            margin-bottom: 16px; border: 1px solid var(--border-color); transition: 0.2s;
-        }
-        .post-card.hidden { display: none; }
-        .user-header { display: flex; align-items: center; margin-bottom: 12px; }
-        .avatar-ring { width: 46px; height: 46px; border-radius: 50%; padding: 2px; border: 2px solid var(--accent); margin-right: 12px; }
+        .circles-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+        .circle-card { background: white; padding: 15px; border-radius: var(--radius); text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .circle-card:hover { transform: translateY(-3px); }
+        .circle-icon { width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 10px; display: flex; justify-content: center; align-items: center; color: white; font-size: 18px; }
+
+        .feed-tabs { background: white; border-radius: var(--radius) var(--radius) 0 0; padding: 0 20px; display: flex; border-bottom: 1px solid #eee; }
+        .tab { padding: 15px 20px; cursor: pointer; font-weight: 600; color: #999; border-bottom: 3px solid transparent; }
+        .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+        .post-card { background: white; border-radius: var(--radius); padding: 20px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .post-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .user-info { display: flex; gap: 10px; align-items: center; }
+        .avatar-ring { width: 45px; height: 45px; border-radius: 50%; padding: 2px; border: 2px solid transparent; }
+        .avatar-ring.official { border-color: #ffd700; }
         .avatar-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .post-title { font-size: 18px; margin-bottom: 8px; line-height: 1.4; font-weight: 700; }
-        .post-text { color: #555; font-size: 14px; line-height: 1.6; margin-bottom: 12px; white-space: pre-wrap; }
-        .topic-tag { display: inline-block; background: #f2f4f6; color: #666; padding: 4px 10px; border-radius: 15px; font-size: 12px; margin-bottom: 12px; text-decoration: none; font-weight: 600; }
-        .image-grid { display: grid; gap: 8px; margin-bottom: 16px; border-radius: 8px; overflow: hidden; }
-        .grid-1 { grid-template-columns: 1fr; max-height: 400px; }
-        .image-grid img { width: 100%; height: 100%; object-fit: cover; }
-        .post-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 12px; color: var(--text-sec); font-size: 13px; }
-        .interactions { display: flex; gap: 24px; }
-        .int-item { cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        
+        .level-badge { background: #333; color: #fff; font-size: 10px; padding: 1px 4px; border-radius: 4px; margin-left: 5px; }
+        .title-badge { font-size: 11px; color: var(--accent); border: 1px solid var(--accent); padding: 0 4px; border-radius: 4px; margin-left: 5px; }
+
+        .post-content { font-size: 14px; line-height: 1.6; margin-bottom: 10px; white-space: pre-wrap; }
+        .hashtag-link { color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: none; }
+        .normal-link { color: var(--accent); text-decoration: underline; }
+        
+        .post-actions { display: flex; justify-content: space-between; color: #666; font-size: 13px; margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee; }
+        .action-item { cursor: pointer; display: flex; align-items: center; gap: 5px; }
+        .action-item.liked { color: #ff4c4c; }
 
         /* SIDEBAR RIGHT */
-        .sidebar-right { position: sticky; top: 140px; height: fit-content; }
-        .profile-widget { background: var(--bg-card); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-color); text-align: center; padding-bottom: 20px; margin-bottom: 16px; }
-        .profile-bg { height: 80px; background: linear-gradient(90deg, #3498db, #2c3e50); }
-        .profile-avatar { width: 70px; height: 70px; border-radius: 50%; border: 4px solid var(--bg-card); margin-top: -35px; background: #fff; object-fit: cover; }
-        .creator-btn { background: var(--text-main); color: white; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-size: 13px; margin-top: 10px; display: inline-block; cursor: pointer;}
-        .trending-widget { background: var(--bg-card); border-radius: var(--radius); padding: 16px; border: 1px solid var(--border-color); margin-bottom: 16px; }
-        .widget-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .trend-link { display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: #555; font-size: 13px; margin-bottom: 10px; }
-        .trend-link:hover { color: var(--accent); }
-        .check-in-box { background: var(--bg-card); border-radius: var(--radius); padding: 15px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border-color); cursor: pointer; }
+        .profile-card { background: white; border-radius: var(--radius); padding: 20px; text-align: center; margin-bottom: 20px; position: relative; overflow: hidden; }
+        .profile-bg-header { background: #2c3e50; height: 60px; position: absolute; top: 0; left: 0; width: 100%; }
+        .profile-big-avatar { width: 70px; height: 70px; border-radius: 50%; border: 3px solid white; position: relative; margin-top: 20px; object-fit: cover; background: white;}
+        .stats-row { display: flex; justify-content: center; gap: 20px; margin: 15px 0; font-size: 13px; }
+        .stat-box strong { display: block; font-size: 16px; color: #333; }
 
-        /* MODAL */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--overlay-color); z-index: 3000; justify-content: center; align-items: center; }
-        .modal-card { background: var(--bg-card); width: 600px; max-width: 90%; border-radius: 16px; padding: 25px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: slideUp 0.3s ease; }
-        .modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .modal-close { cursor: pointer; font-size: 20px; color: #999; }
-        .form-row { display: flex; gap: 15px; margin-bottom: 15px; }
-        .form-select, .form-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 14px; }
-        textarea.form-input { resize: vertical; min-height: 120px; }
-        .media-preview-container { margin-top: 10px; position: relative; display: none; }
-        .media-preview { width: 100%; max-height: 250px; border-radius: 8px; object-fit: cover; }
-        .upload-label { cursor: pointer; color: var(--accent); display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
-        .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
-        .modal-btn { padding: 8px 24px; border-radius: 20px; border: none; font-weight: 600; cursor: pointer; }
-        .btn-cancel { background: #eee; color: #666; }
-        .btn-submit { background: var(--accent); color: white; }
-        .admin-check { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #666; margin-right: auto; }
+        .widget-box { background: white; border-radius: var(--radius); padding: 15px; margin-bottom: 20px; }
+        .widget-title { font-size: 14px; font-weight: bold; margin-bottom: 15px; }
+        
+        .rec-user { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .rec-info { display: flex; gap: 8px; align-items: center; }
+        .btn-follow-sm { border: 1px solid var(--accent); color: var(--accent); background: none; border-radius: 15px; padding: 2px 10px; font-size: 11px; cursor: pointer; }
+        .btn-follow-sm:hover { background: var(--accent); color: white; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @media (max-width: 1200px) { .container { grid-template-columns: 240px 1fr; } .sidebar-right { display: none; } }
+        .trend-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 13px; cursor: pointer; }
+        .trend-item:hover { color: var(--accent); }
+        .trend-tag { font-weight: 600; }
+        .trend-meta { color: #999; font-size: 11px; }
+
+        .check-in-btn { width: 100%; background: white; border: 1px solid #ddd; padding: 10px; border-radius: var(--radius); cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+
+        /* MODALES */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 3000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 500px; max-width: 90%; }
+        .form-group { margin-bottom: 15px; }
+        .form-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+
+        @media (max-width: 1000px) { .container { grid-template-columns: 80px 1fr; } .sidebar-right { display: none; } .menu-title, .menu-text { display: none; } }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="logo">Devouring<span>Lab</span></div>
-        <div class="search-bar"><i class="fas fa-search"></i><input type="text" placeholder="Buscar posts..."></div>
-        
-        <div class="nav-actions">
-            <i class="fas fa-edit nav-icon-btn" id="openPublishBtn" title="Publicar"></i>
-            <i class="fas fa-bell nav-icon-btn"></i>
-            
-            <div class="user-menu-wrapper">
-                <img src="https://via.placeholder.com/32" class="user-avatar-nav" id="navAvatar">
-                <div class="user-dropdown-card" id="userMenu">
-                    <div id="loggedOutView">
-                        <p style="font-size:14px; color:#666;">¡Únete a la comunidad!</p>
-                        <button class="auth-btn btn-login" id="btnLoginGoogle"><i class="fab fa-google"></i> Acceder con Google</button>
-                    </div>
-                    <div id="loggedInView" style="display:none;">
-                        <p style="font-weight:bold;" id="menuUserName">Usuario</p>
-                        <p style="font-size:12px; color:#999; margin-bottom:10px;" id="menuUserEmail">email@ejemplo.com</p>
-                        <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
-                        <button class="auth-btn btn-register" id="btnLogout" style="border-color:#ff4c4c; color:#ff4c4c;">Cerrar Sesión</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="game-nav">
-        <div class="game-item active" onclick="filterGame('all', this)"><i class="fas fa-globe"></i> General</div>
-        <div class="game-item" onclick="filterGame('vireo', this)"><img src="https://via.placeholder.com/28"> Vireo CODE</div>
-        <div class="game-item" onclick="filterGame('cae', this)"><img src="https://via.placeholder.com/28"> Cae</div>
-        <div class="game-item" onclick="filterGame('lanzer', this)"><img src="https://via.placeholder.com/28"> Move-Lanzer</div>
-        <div class="game-item" onclick="filterGame('dinoma', this)"><img src="https://via.placeholder.com/28"> Creatura Dinoma</div>
-    </div>
-
-    <div class="container">
-        
-        <aside class="sidebar-left">
-            <div class="menu-section">
-                <a href="#" class="nav-item active"><i class="fas fa-home" style="margin-right: 12px;"></i> Inicio</a>
-                <a href="#" class="nav-item"><i class="fas fa-star" style="margin-right: 12px;"></i> Siguiendo</a>
-            </div>
-            <div class="menu-title">MIS INTERESES</div>
-            <div class="menu-section">
-                <a href="#" class="nav-item"><div class="icon-box unity-icon"><i class="fab fa-unity"></i></div> Unity Dev</a>
-                <a href="#" class="nav-item"><div class="icon-box rpg-icon"><i class="fas fa-scroll"></i></div> RPG Maker</a>
-            </div>
-            <div class="menu-title">OTROS</div>
-            <a href="https://lucasdanielsmm.github.io/DevouringProductions/" target="_blank" class="nav-item"><i class="fas fa-globe" style="margin-right: 12px;"></i> Web Oficial</a>
-        </aside>
-
-        <main id="mainFeed">
-            <div class="circles-row">
-                <a href="#" class="circle-card"><div class="circle-icon grad-tavern"><i class="fas fa-mug-hot"></i></div><div style="font-size:12px; font-weight:600">Taberna</div></a>
-                <a href="#" class="circle-card"><div class="circle-icon grad-art"><i class="fas fa-paint-brush"></i></div><div style="font-size:12px; font-weight:600">Galería</div></a>
-                <a href="#" class="circle-card"><div class="circle-icon grad-lab"><i class="fas fa-flask"></i></div><div style="font-size:12px; font-weight:600">Lab</div></a>
-                <a href="#" class="circle-card"><div class="circle-icon grad-off"><i class="fas fa-shield-alt"></i></div><div style="font-size:12px; font-weight:600">Oficial</div></a>
-            </div>
-
-            <div class="feed-header">
-                <div class="tab-btn active">Recientes</div>
-                <div class="tab-btn">Siguiendo</div>
-            </div>
-
-            <div id="postsContainer"></div>
-        </main>
-
-        <aside class="sidebar-right">
-            <div class="profile-widget">
-                <div class="profile-bg"></div>
-                <img src="https://via.placeholder.com/70" class="profile-avatar" id="sidebarAvatar">
-                <h3 style="font-size: 16px; margin-top: 5px;" id="sidebarName">Visitante</h3>
-                <p style="font-size: 12px; color: #888; margin-bottom: 10px;">¡Únete a la diversión!</p>
-                <div class="creator-btn" id="sidebarLoginBtn">Iniciar Sesión</div>
-            </div>
-
-            <div class="trending-widget">
-                <div class="widget-title"><i class="fas fa-hashtag" style="color:var(--accent)"></i> Temas del momento</div>
-                <a href="#" class="trend-link"><span># DevouringLab</span><span class="trend-label">Top</span></a>
-            </div>
-        </aside>
-    </div>
-
-    <div class="modal-overlay" id="publishModal">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3 style="font-size:18px;">Crear Publicación</h3>
-                <i class="fas fa-times modal-close" id="closeModalBtn"></i>
-            </div>
-            
-            <div class="form-row">
-                <select id="postSection" class="form-select">
-                    <option value="Taberna">Taberna</option>
-                    <option value="Galería">Galería</option>
-                    <option value="Lab">Lab</option>
-                    <option value="Guías">Guías</option>
-                </select>
-                <select id="postGame" class="form-select">
-                    <option value="all">General</option>
-                    <option value="vireo">Vireo CODE</option>
-                    <option value="cae">Cae</option>
-                    <option value="lanzer">Move-Lanzer</option>
-                    <option value="dinoma">Creatura Dinoma</option>
-                </select>
-            </div>
-
-            <textarea id="postContent" class="form-input" placeholder="Comparte tus ideas, bugs o arte..."></textarea>
-            <input type="text" id="postTags" class="form-input" placeholder="#Hashtags (ej: #Bug #FanArt)" style="margin-top:15px;">
-
-            <div style="margin-top:15px;">
-                <label for="fileInput" class="upload-label">
-                    <i class="fas fa-image" style="font-size:20px;"></i> Agregar Imagen/Video
-                </label>
-                <input type="file" id="fileInput" style="display:none;" accept="image/*">
-                <span id="uploadStatus" style="font-size:12px; color:#999; margin-left:10px;"></span>
-                <div class="media-preview-container" id="previewContainer">
-                    <img id="imagePreview" class="media-preview">
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <div class="admin-check" id="adminCheckContainer" style="display:none;">
-                    <input type="checkbox" id="checkOfficial"> <label for="checkOfficial">Post Oficial</label>
-                </div>
-                <button class="modal-btn btn-cancel" id="cancelBtn">Cancelar</button>
-                <button class="modal-btn btn-submit" id="submitPostBtn">Publicar</button>
-            </div>
+<nav class="navbar">
+    <div class="logo">Devouring<span>Lab</span></div>
+    
+    <div class="search-container">
+        <div class="search-bar">
+            <i class="fas fa-search" style="color:#999"></i>
+            <input type="text" id="searchInput" placeholder="Buscar posts, usuarios o #tags...">
         </div>
     </div>
 
-    <script type="module">
-        // 1. IMPORTAR LIBRERÍAS DE FIREBASE
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        // 2. PEGA TU FIREBASE CONFIG AQUÍ (PASO 1 DEL TUTORIAL)
-        const firebaseConfig = {
-            // !!!!!!! REEMPLAZA ESTO CON TUS DATOS REALES DE FIREBASE !!!!!!!
-            apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
-            authDomain: "devouringlab.firebaseapp.com",
-            projectId: "devouringlab",
-            storageBucket: "devouringlab.firebasestorage.app",
-            messagingSenderId: "383272939740",
-            appId: "1:383272939740:web:203f83c89b1c7bd6344419"
-        };
-
-        // 3. INICIALIZAR APP
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
-
-        // 4. CONFIGURACIÓN ADMIN Y CLOUDINARY
-        const ADMIN_UIDS = [
-            "qlJIBLf1I1clEVk2uggolNWL4Ai1" // Ejemplo: "kjsdhf734hkjdf87"
-        ];
-        const CLOUD_NAME = "dyhvx2vsz";
-        const UPLOAD_PRESET = "DevouringIMG";
-
-        // 5. VARIABLES DE ESTADO
-        let currentUser = null;
-        let currentGameContext = 'all';
-        let uploadedImageUrl = "";
-
-        // 6. REFERENCIAS DOM
-        const modal = document.getElementById('publishModal');
-        const openBtn = document.getElementById('openPublishBtn');
-        const closeBtn = document.getElementById('closeModalBtn');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const submitBtn = document.getElementById('submitPostBtn');
-        const fileInput = document.getElementById('fileInput');
-        const btnLoginGoogle = document.getElementById('btnLoginGoogle');
-        const btnLogout = document.getElementById('btnLogout');
-        const sidebarLoginBtn = document.getElementById('sidebarLoginBtn');
-
-        // --- AUTENTICACIÓN ---
+    <div class="nav-actions">
+        <i class="fas fa-edit icon-btn" onclick="openPostModal()" title="Publicar"></i>
         
-        // Iniciar Sesión con Google
-        const login = async () => {
-            try {
-                await signInWithPopup(auth, provider);
-            } catch (error) {
-                console.error("Error login:", error);
-                alert("Error al iniciar sesión: " + error.message);
-            }
-        };
+        <div style="position: relative;">
+            <i class="fas fa-bell icon-btn" id="notifBtn"></i>
+            <div class="notification-badge" id="notifBadge">0</div>
+            <div class="dropdown-menu" id="notifDropdown">
+                <div style="padding:10px; text-align:center; color:#999">No tienes notificaciones</div>
+            </div>
+        </div>
 
-        btnLoginGoogle.addEventListener('click', login);
-        sidebarLoginBtn.addEventListener('click', login);
+        <img id="navAvatar" class="user-nav-avatar" onclick="toggleProfileMenu()">
+    </div>
+</nav>
 
-        // Cerrar Sesión
-        btnLogout.addEventListener('click', () => signOut(auth));
+<div class="container">
+    
+    <aside class="sidebar-left">
+        <div class="menu-item active" onclick="loadFeed('all')"><i class="fas fa-home"></i> <span class="menu-text" style="margin-left:10px;">Inicio</span></div>
+        <div class="menu-item" onclick="loadFeed('following')"><i class="fas fa-star"></i> <span class="menu-text" style="margin-left:10px;">Siguiendo</span></div>
 
-        // Listener de Estado (se ejecuta al loguearse/desloguearse)
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            if (user) {
-                // UI Logueado
-                document.getElementById('loggedOutView').style.display = 'none';
-                document.getElementById('loggedInView').style.display = 'block';
-                document.getElementById('navAvatar').src = user.photoURL;
-                document.getElementById('menuUserName').innerText = user.displayName;
-                document.getElementById('menuUserEmail').innerText = user.email;
+        <div class="menu-title">MIS INTERESES (Dinámico)</div>
+        <div class="menu-item" onclick="filterByInterest('Unity')"><i class="fab fa-unity"></i> <span class="menu-text" style="margin-left:10px;">Unity Dev</span></div>
+        <div class="menu-item" onclick="filterByInterest('RPG')"><i class="fas fa-scroll"></i> <span class="menu-text" style="margin-left:10px;">RPG Maker</span></div>
+        <div class="menu-item" onclick="filterByInterest('Web')"><i class="fas fa-globe"></i> <span class="menu-text" style="margin-left:10px;">Juegos Web</span></div>
+    </aside>
 
-                // Sidebar
-                document.getElementById('sidebarAvatar').src = user.photoURL;
-                document.getElementById('sidebarName').innerText = user.displayName;
-                document.querySelector('.profile-widget p').innerText = "Miembro verificado";
-                sidebarLoginBtn.style.display = 'none'; // Ocultar boton login sidebar
+    <main>
+        <div class="game-nav">
+            <div class="game-pill active" onclick="filterGame('all', this)">General</div>
+            <div class="game-pill" onclick="filterGame('vireo', this)"><img src="https://via.placeholder.com/20/ff0000"> Vireo CODE</div>
+            <div class="game-pill" onclick="filterGame('cae', this)"><img src="https://via.placeholder.com/20/00ff00"> Cae</div>
+            <div class="game-pill" onclick="filterGame('lanzer', this)"><img src="https://via.placeholder.com/20/0000ff"> Move-Lanzer</div>
+            <div class="game-pill" onclick="filterGame('dinoma', this)"><img src="https://via.placeholder.com/20/ffff00"> Creatura Dinoma</div>
+        </div>
+
+        <div class="circles-row">
+            <div class="circle-card" onclick="filterSection('Taberna')"><div class="circle-icon" style="background:orange"><i class="fas fa-mug-hot"></i></div><div>Taberna</div></div>
+            <div class="circle-card" onclick="filterSection('Galería')"><div class="circle-icon" style="background:purple"><i class="fas fa-paint-brush"></i></div><div>Galería</div></div>
+            <div class="circle-card" onclick="filterSection('Lab')"><div class="circle-icon" style="background:green"><i class="fas fa-flask"></i></div><div>Lab</div></div>
+            <div class="circle-card" onclick="filterSection('Oficial')"><div class="circle-icon" style="background:blue"><i class="fas fa-shield-alt"></i></div><div>Oficial</div></div>
+        </div>
+
+        <div class="feed-tabs">
+            <div class="tab active" id="tabRecientes" onclick="switchTab('recientes')">Recomendados</div>
+            <div class="tab" id="tabSiguiendo" onclick="switchTab('siguiendo')">Siguiendo</div>
+            <div class="tab" id="tabGuias" onclick="switchTab('guias')">Guías</div>
+        </div>
+
+        <div id="feedContainer" style="margin-top: 15px;">
+            <p style="text-align:center; padding:20px;">Cargando...</p>
+        </div>
+    </main>
+
+    <aside class="sidebar-right">
+        <div class="profile-card" id="profileCard">
+            <div class="profile-bg-header"></div>
+            <img src="https://via.placeholder.com/70" class="profile-big-avatar" id="cardAvatar">
+            <h3 style="margin-top:10px" id="cardName">Visitante</h3>
+            <div style="font-size:12px; color:#666; margin-bottom:10px;" id="cardLevel">Lv. 0 • Novato</div>
+            <button id="btnLoginSidebar" style="background:#333; color:white; border:none; padding:5px 20px; border-radius:15px; cursor:pointer;">Iniciar Sesión</button>
+            
+            <div id="userStats" style="display:none;">
+                <div class="stats-row">
+                    <div class="stat-box"><strong id="statPosts">0</strong> Post</div>
+                    <div class="stat-box"><strong id="statFollowers">0</strong> Seguidores</div>
+                </div>
+                <button onclick="openEditProfile()" style="width:100%; border:1px solid #ddd; background:white; padding:5px; border-radius:15px; cursor:pointer;">Editar Perfil</button>
+            </div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title"><i class="fas fa-hashtag" style="color:var(--accent)"></i> Temas del momento</div>
+            <div id="trendsContainer">
+                <p style="font-size:12px; color:#999">Calculando tendencias...</p>
+            </div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title"><i class="fas fa-user-plus" style="color:var(--accent)"></i> Usuarios Recomendados</div>
+            <div id="recommendedContainer"></div>
+        </div>
+
+        <button class="check-in-btn">
+            <span><i class="fas fa-calendar-check" style="color:var(--accent)"></i> Check-in</span>
+            <i class="fas fa-chevron-right" style="font-size:12px; color:#ccc;"></i>
+        </button>
+    </aside>
+
+</div>
+
+<div class="modal" id="postModal">
+    <div class="modal-content">
+        <h3>Crear Publicación</h3>
+        <input type="text" id="postTitle" class="form-input" placeholder="Título (opcional)" style="margin:10px 0;">
+        <textarea id="postContent" class="form-input" style="height:100px; resize:none;" placeholder="Escribe algo... Usa #hashtags"></textarea>
+        
+        <div style="display:flex; gap:10px; margin-top:10px;">
+            <select id="postGame" class="form-input">
+                <option value="all">General</option>
+                <option value="vireo">Vireo CODE</option>
+                <option value="cae">Cae</option>
+                <option value="lanzer">Move-Lanzer</option>
+                <option value="dinoma">Creatura Dinoma</option>
+            </select>
+            <select id="postSection" class="form-input">
+                <option value="Taberna">Taberna</option>
+                <option value="Galería">Galería</option>
+                <option value="Lab">Lab</option>
+                <option value="Guías">Guías</option>
+            </select>
+        </div>
+        
+        <input type="text" id="imgUrlInput" class="form-input" placeholder="URL de imagen (o dejar vacío)" style="margin-top:10px;">
+
+        <div style="text-align:right; margin-top:20px;">
+            <button onclick="document.getElementById('postModal').style.display='none'" style="padding:8px 20px; border:none; background:#eee; cursor:pointer; border-radius:20px;">Cancelar</button>
+            <button onclick="submitPost()" style="padding:8px 20px; border:none; background:var(--accent); color:white; cursor:pointer; border-radius:20px;">Publicar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="profileModal">
+    <div class="modal-content">
+        <h3>Editar Perfil</h3>
+        <input type="text" id="editName" class="form-input" placeholder="Nuevo Nombre" style="margin:10px 0;">
+        <input type="text" id="editAvatar" class="form-input" placeholder="URL Nueva Foto Perfil" style="margin:10px 0;">
+        <div style="text-align:right;">
+            <button onclick="document.getElementById('profileModal').style.display='none'" style="margin-right:10px;">Cancelar</button>
+            <button onclick="saveProfileChanges()" style="background:var(--accent); color:white; border:none; padding:8px 20px; border-radius:15px;">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // --- 1. CONFIGURACIÓN (PON TUS DATOS AQUÍ) ---
+    const firebaseConfig = {
+        // !!! SUSTITUIR CON TU CONFIGURACIÓN DE FIREBASE !!!
+        apiKey: "TU_API_KEY",
+        authDomain: "TU_PROYECTO.firebaseapp.com",
+        projectId: "TU_PROJECT_ID",
+        storageBucket: "TU_BUCKET",
+        messagingSenderId: "123",
+        appId: "1:123"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+
+    // Estado global
+    let currentUser = null;
+    let currentUserData = null; // Datos extendidos de Firestore (nivel, titulos)
+    let currentFeedFilter = { type: 'all', value: null }; // type: 'all', 'game', 'section', 'tag', 'following'
+
+    // --- 2. GESTIÓN DE USUARIOS Y NIVELES ---
+
+    // Función: Calcular Nivel y Título
+    const calculateLevelAndTitle = (userData) => {
+        if (!userData) return { level: 1, title: "Novato" };
+
+        const createdAt = userData.createdAt ? userData.createdAt.toDate() : new Date();
+        const now = new Date();
+        const years = (now - createdAt) / (1000 * 60 * 60 * 24 * 365);
+        
+        // Nivel base por antigüedad (1 año = Lv 12)
+        let level = Math.floor(years * 12);
+        
+        // Nivel secreto: 1 Lv por cada 100 posts
+        const postCount = userData.postCount || 0;
+        level += Math.floor(postCount / 100);
+        if (level < 1) level = 1;
+
+        // Títulos por hitos de post
+        let title = "Novato";
+        if (postCount >= 5) title = "Explorador";
+        if (postCount >= 25) title = "Aventurero";
+        if (postCount >= 50) title = "Veterano";
+        
+        // Títulos especiales (Admin o Intereses)
+        // Ejemplo: Si soy yo (Admin UID hardcoded o campo isAdmin)
+        if (userData.isAdmin) title = "Game Designer";
+
+        return { level, title };
+    };
+
+    // Auth State
+    onAuthStateChanged(auth, async (user) => {
+        currentUser = user;
+        const btnLogin = document.getElementById('btnLoginSidebar');
+        const userStats = document.getElementById('userStats');
+        const navAvatar = document.getElementById('navAvatar');
+
+        if (user) {
+            // Guardar/Actualizar usuario en Firestore
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
+
+            if (!userSnap.exists()) {
+                await setDoc(userRef, {
+                    uid: user.uid,
+                    displayName: user.displayName,
+                    photoURL: user.photoURL,
+                    email: user.email,
+                    createdAt: serverTimestamp(),
+                    followers: [],
+                    following: [],
+                    postCount: 0,
+                    interests: {}, // { 'vireo': 5, 'unity': 2 }
+                    isAdmin: false // Cambiar a true manualmente en consola para ti
+                });
+                currentUserData = { createdAt: new Date(), postCount: 0 }; // Mock inicial
             } else {
-                // UI Deslogueado
-                document.getElementById('loggedOutView').style.display = 'block';
-                document.getElementById('loggedInView').style.display = 'none';
-                document.getElementById('navAvatar').src = "https://via.placeholder.com/32";
-                
-                // Sidebar
-                document.getElementById('sidebarAvatar').src = "https://via.placeholder.com/70";
-                document.getElementById('sidebarName').innerText = "Visitante";
-                document.querySelector('.profile-widget p').innerText = "¡Únete a la diversión!";
-                sidebarLoginBtn.style.display = 'inline-block';
+                currentUserData = userSnap.data();
             }
-        });
 
-        // --- LEER POSTS DE FIREBASE (TIEMPO REAL) ---
-        const postsContainer = document.getElementById('postsContainer');
-        const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
+            // UI
+            btnLogin.style.display = 'none';
+            userStats.style.display = 'block';
+            document.getElementById('cardName').innerText = currentUserData.displayName || user.displayName;
+            document.getElementById('cardAvatar').src = currentUserData.photoURL || user.photoURL;
+            navAvatar.src = currentUserData.photoURL || user.photoURL;
+            
+            // Stats y Nivel
+            const stats = calculateLevelAndTitle(currentUserData);
+            document.getElementById('cardLevel').innerHTML = `Lv. ${stats.level} • <span style="color:var(--accent)">${stats.title}</span>`;
+            document.getElementById('statPosts').innerText = currentUserData.postCount || 0;
+            document.getElementById('statFollowers').innerText = (currentUserData.followers || []).length;
+            
+            // Cargar notificaciones
+            loadNotifications();
+
+        } else {
+            // Reset UI
+            btnLogin.style.display = 'inline-block';
+            userStats.style.display = 'none';
+            document.getElementById('cardName').innerText = "Visitante";
+            document.getElementById('cardAvatar').src = "https://via.placeholder.com/70";
+            document.getElementById('cardLevel').innerText = "Lv. 0 • Invitado";
+            navAvatar.src = "https://via.placeholder.com/32";
+        }
+        
+        loadRecommendedUsers(); // Cargar aleatorios
+    });
+
+    // Login/Logout
+    document.getElementById('btnLoginSidebar').addEventListener('click', () => signInWithPopup(auth, provider));
+    document.getElementById('navAvatar').addEventListener('click', () => {
+        if(currentUser) {
+           if(confirm("¿Cerrar sesión?")) signOut(auth);
+        } else {
+            signInWithPopup(auth, provider);
+        }
+    });
+
+    // --- 3. FEED Y POSTS ---
+
+    // Función: Detectar Links y Hashtags
+    const parseContent = (text) => {
+        // Links
+        let parsed = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="normal-link">$1</a>');
+        // Hashtags (Clickables)
+        parsed = parsed.replace(/#(\w+)/g, '<span class="hashtag-link" onclick="window.searchTag(\'$1\')">#$1</span>');
+        return parsed;
+    };
+
+    // Cargar Posts
+    const loadFeed = (type = 'all', value = null) => {
+        currentFeedFilter = { type, value };
+        const feedDiv = document.getElementById('feedContainer');
+        feedDiv.innerHTML = '<p style="text-align:center">Cargando...</p>';
+
+        let q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(50));
+
+        // Filtros (Firestore simple, filtrado en cliente para demo compleja)
+        // Nota: Para "Following", lo ideal es filtrar en query, pero requiere índices complejos.
+        // Haremos filtrado en cliente para simplificar este código.
 
         onSnapshot(q, (snapshot) => {
-            postsContainer.innerHTML = ""; // Limpiar antes de renderizar
+            feedDiv.innerHTML = "";
+            let posts = [];
             
-            snapshot.forEach((doc) => {
-                const post = doc.data();
-                renderPost(post, doc.id);
-            });
-            // Reaplicar filtro actual
-            window.filterGame(currentGameContext, document.querySelector(`.game-item[onclick*="${currentGameContext}"]`) || document.querySelector('.game-item'));
-        });
+            snapshot.forEach(doc => posts.push({id: doc.id, ...doc.data()}));
 
-        function renderPost(post, id) {
-            const article = document.createElement('article');
-            article.className = 'post-card';
-            article.setAttribute('data-game', post.game);
-            
-            let gameName = "General";
-            if(post.game === "vireo") gameName = "Vireo CODE";
-            if(post.game === "cae") gameName = "Cae";
-            if(post.game === "lanzer") gameName = "Move-Lanzer";
-            if(post.game === "dinoma") gameName = "Creatura Dinoma";
-
-            const officialBadge = post.isOfficial ? '<i class="fas fa-check-circle" style="color: #ffd700; margin-left:5px;" title="Oficial"></i>' : '';
-            const borderStyle = post.isOfficial ? 'border: 2px solid #ffd700;' : '';
-            const bgStyle = post.isOfficial ? 'background-color: #fffdf5;' : '';
-
-            if(post.isOfficial) article.style.cssText = bgStyle;
-
-            // Formato de fecha simple
-            let timeString = "Reciente";
-            if(post.timestamp) {
-                const date = post.timestamp.toDate();
-                timeString = date.toLocaleDateString() + " " + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            // Lógica de Filtrado Local (poderosa para demos)
+            if (type === 'following' && currentUser && currentUserData) {
+                posts = posts.filter(p => currentUserData.following.includes(p.authorUid));
+            } else if (type === 'game') {
+                posts = posts.filter(p => p.game === value);
+            } else if (type === 'section') {
+                posts = posts.filter(p => p.section === value);
+            } else if (type === 'tag') {
+                posts = posts.filter(p => (p.tags || []).includes(value));
+            } else if (type === 'interest') {
+                // Mapeo Intereses
+                let targetGame = '';
+                if(value === 'Unity') targetGame = 'dinoma';
+                if(value === 'RPG') targetGame = 'vireo';
+                if(value === 'Scratch') targetGame = 'lanzer';
+                if(value === 'Web') targetGame = 'cae';
+                posts = posts.filter(p => p.game === targetGame);
             }
 
-            article.innerHTML = `
-                <div class="user-header">
-                    <div class="avatar-ring" style="${borderStyle}"><img src="${post.authorAvatar}"></div>
-                    <div>
-                        <h4 style="font-size: 14px;">${post.authorName} ${officialBadge}</h4>
-                        <span style="font-size: 12px; color: #999;">${timeString} • <b>${gameName}</b> (${post.section})</span>
-                    </div>
-                </div>
-                ${post.tags ? `<a href="#" class="topic-tag">${post.tags}</a>` : ''}
-                <p class="post-text">${post.content}</p>
-                ${post.image ? `<div class="image-grid grid-1"><img src="${post.image}"></div>` : ''}
-                <div class="post-footer">
-                    <div class="interactions">
-                        <div class="int-item"><i class="far fa-heart"></i> Me gusta</div>
-                    </div>
+            // Calcular Tendencias basado en estos posts (simple)
+            calculateTrends(posts);
+
+            if(posts.length === 0) {
+                feedDiv.innerHTML = '<div style="text-align:center; padding:20px; color:#999">No hay publicaciones aquí.</div>';
+                return;
+            }
+
+            posts.forEach(post => {
+                const isLiked = currentUser && (post.likes || []).includes(currentUser.uid);
+                
+                // HTML del Post
+                const html = `
+                    <article class="post-card">
+                        <div class="post-header">
+                            <div class="user-info">
+                                <div class="avatar-ring ${post.isOfficial ? 'official' : ''}">
+                                    <img src="${post.authorPhoto || 'https://via.placeholder.com/40'}" onclick="window.searchUser('${post.authorUid}')" style="cursor:pointer">
+                                </div>
+                                <div>
+                                    <div style="font-weight:bold; font-size:14px;">
+                                        ${post.authorName} 
+                                        ${post.authorLevel ? `<span class="level-badge">Lv.${post.authorLevel}</span>` : ''}
+                                        ${post.authorTitle ? `<span class="title-badge">${post.authorTitle}</span>` : ''}
+                                    </div>
+                                    <div style="font-size:11px; color:#999;">${new Date(post.timestamp?.toDate()).toLocaleDateString()} • ${post.game}</div>
+                                </div>
+                            </div>
+                            ${currentUser && post.authorUid === currentUser.uid ? `<i class="fas fa-pen" style="cursor:pointer; font-size:12px; color:#ccc" onclick="editPost('${post.id}', '${post.content}')"></i>` : ''}
+                        </div>
+                        
+                        ${post.title ? `<h4 style="margin-bottom:5px">${post.title}</h4>` : ''}
+                        <div class="post-content">${parseContent(post.content)}</div>
+                        ${post.image ? `<img src="${post.image}" style="width:100%; border-radius:8px; margin-bottom:10px;">` : ''}
+
+                        <div class="post-actions">
+                            <div class="action-item ${isLiked ? 'liked' : ''}" onclick="window.toggleLike('${post.id}', ${isLiked})">
+                                <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i> ${(post.likes || []).length}
+                            </div>
+                            <div class="action-item">
+                                <i class="far fa-comment"></i> ${(post.comments || []).length}
+                            </div>
+                            <div class="action-item">
+                                <i class="fas fa-eye"></i> ${post.views || 0}
+                            </div>
+                        </div>
+                    </article>
+                `;
+                feedDiv.innerHTML += html;
+            });
+        });
+    };
+
+    // --- 4. PUBLICACIÓN Y EDICIÓN ---
+
+    window.openPostModal = () => {
+        if (!currentUser) return alert("Inicia sesión para publicar");
+        document.getElementById('postModal').style.display = 'flex';
+    };
+
+    window.submitPost = async () => {
+        const title = document.getElementById('postTitle').value;
+        const content = document.getElementById('postContent').value;
+        const game = document.getElementById('postGame').value;
+        const section = document.getElementById('postSection').value;
+        const img = document.getElementById('imgUrlInput').value;
+
+        // Extraer hashtags del contenido automáticamente
+        const tags = (content.match(/#[\w]+/g) || []).map(t => t.replace('#', ''));
+        if(tags.length === 0) return alert("Debes incluir al menos un #hashtag");
+
+        try {
+            // Stats del usuario actual para el post
+            const stats = calculateLevelAndTitle(currentUserData);
+
+            await addDoc(collection(db, "posts"), {
+                authorUid: currentUser.uid,
+                authorName: currentUser.displayName,
+                authorPhoto: currentUser.photoURL,
+                authorLevel: stats.level,
+                authorTitle: stats.title,
+                title: title,
+                content: content,
+                game: game,
+                section: section,
+                image: img,
+                tags: tags,
+                likes: [],
+                views: 0,
+                comments: [],
+                isOfficial: currentUserData.isAdmin || false,
+                timestamp: serverTimestamp()
+            });
+
+            // Recompensa: Incrementar contador posts del usuario
+            const userRef = doc(db, "users", currentUser.uid);
+            await updateDoc(userRef, { postCount: (currentUserData.postCount || 0) + 1 });
+
+            document.getElementById('postModal').style.display = 'none';
+            // Limpiar inputs
+            document.getElementById('postContent').value = "";
+        } catch (e) {
+            console.error(e);
+            alert("Error al publicar");
+        }
+    };
+
+    // --- 5. INTERACCIONES SOCIALES ---
+
+    window.toggleLike = async (postId, isLiked) => {
+        if (!currentUser) return alert("Inicia sesión");
+        const postRef = doc(db, "posts", postId);
+        
+        if (isLiked) {
+            await updateDoc(postRef, { likes: arrayRemove(currentUser.uid) });
+        } else {
+            await updateDoc(postRef, { likes: arrayUnion(currentUser.uid) });
+            // Notificación al dueño del post (si no soy yo)
+            // TODO: Buscar dueño del post y crear doc en 'notifications'
+        }
+    };
+
+    window.searchTag = (tag) => loadFeed('tag', tag);
+    window.filterGame = (game, el) => {
+        document.querySelectorAll('.game-pill').forEach(e => e.classList.remove('active'));
+        el.classList.add('active');
+        loadFeed('game', game);
+    };
+    window.filterSection = (sec) => loadFeed('section', sec);
+    window.filterByInterest = (interest) => loadFeed('interest', interest);
+    
+    // Búsqueda Barra
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') {
+            const val = e.target.value;
+            if(val.startsWith('#')) loadFeed('tag', val.replace('#',''));
+            else loadFeed('tag', val); // Búsqueda simple (usa tags para demo)
+        }
+    });
+
+    // --- 6. ALGORITMO DE TENDENCIAS Y RECOMENDADOS ---
+
+    const calculateTrends = (currentPosts) => {
+        // Lógica: Contar tags usados y sumar likes de esos posts
+        const tagCounts = {};
+        currentPosts.forEach(post => {
+            if(post.tags) {
+                post.tags.forEach(tag => {
+                    if(!tagCounts[tag]) tagCounts[tag] = 0;
+                    tagCounts[tag] += (post.likes?.length || 0) + 1; // 1 punto por existir, +1 por like
+                });
+            }
+        });
+
+        // Ordenar y tomar top 3
+        const sortedTags = Object.keys(tagCounts).sort((a,b) => tagCounts[b] - tagCounts[a]).slice(0, 3);
+        
+        const container = document.getElementById('trendsContainer');
+        container.innerHTML = "";
+        sortedTags.forEach((tag, index) => {
+            container.innerHTML += `
+                <div class="trend-item" onclick="window.searchTag('${tag}')">
+                    <span class="trend-tag"># ${tag}</span>
+                    <span class="trend-meta">${tagCounts[tag]} interacciones</span>
                 </div>
             `;
-            postsContainer.appendChild(article);
+        });
+    };
+
+    const loadRecommendedUsers = async () => {
+        // Traer 10 usuarios y mostrar 3 aleatorios
+        const q = query(collection(db, "users"), limit(10));
+        const snap = await getDocs(q);
+        let users = [];
+        snap.forEach(d => users.push(d.data()));
+
+        // Barajar
+        users = users.sort(() => 0.5 - Math.random()).slice(0, 3);
+        
+        const container = document.getElementById('recommendedContainer');
+        container.innerHTML = "";
+        
+        users.forEach(u => {
+            if(currentUser && u.uid === currentUser.uid) return; // No mostrarme a mí mismo
+            const isFollowing = currentUserData?.following?.includes(u.uid);
+            
+            container.innerHTML += `
+                <div class="rec-user">
+                    <div class="rec-info">
+                        <img src="${u.photoURL || 'https://via.placeholder.com/32'}" style="width:32px; height:32px; border-radius:50%">
+                        <div>
+                            <div style="font-weight:bold; font-size:12px;">${u.displayName}</div>
+                            <div style="font-size:10px; color:#999">Lv. ${calculateLevelAndTitle(u).level}</div>
+                        </div>
+                    </div>
+                    <button class="btn-follow-sm" onclick="window.followUser('${u.uid}')">
+                        ${isFollowing ? 'Siguiendo' : 'Seguir'}
+                    </button>
+                </div>
+            `;
+        });
+    };
+
+    window.followUser = async (targetUid) => {
+        if(!currentUser) return alert("Inicia sesión");
+        const myRef = doc(db, "users", currentUser.uid);
+        
+        // Toggle simple
+        if(currentUserData.following.includes(targetUid)) {
+            await updateDoc(myRef, { following: arrayRemove(targetUid) });
+            alert("Dejado de seguir");
+        } else {
+            await updateDoc(myRef, { following: arrayUnion(targetUid) });
+            alert("¡Siguiendo!");
         }
+        // Recargar página o estado para reflejar cambios (simplificado)
+        location.reload(); 
+    };
 
-        // --- FILTRO JUEGOS ---
-        window.filterGame = (game, element) => {
-            currentGameContext = game;
-            document.querySelectorAll('.game-item').forEach(i => i.classList.remove('active'));
-            if(element) element.classList.add('active');
-            
-            const posts = document.querySelectorAll('.post-card');
-            posts.forEach(post => {
-                if (game === 'all') post.classList.remove('hidden');
-                else (post.getAttribute('data-game') === game) ? post.classList.remove('hidden') : post.classList.add('hidden');
-            });
+    // --- 7. EDICIÓN PERFIL ---
+    window.openEditProfile = () => document.getElementById('profileModal').style.display = 'flex';
+    
+    window.saveProfileChanges = async () => {
+        const newName = document.getElementById('editName').value;
+        const newPhoto = document.getElementById('editAvatar').value;
+        
+        if(newName) {
+            await updateProfile(auth.currentUser, { displayName: newName });
+            await updateDoc(doc(db, "users", currentUser.uid), { displayName: newName });
         }
+        if(newPhoto) {
+            await updateProfile(auth.currentUser, { photoURL: newPhoto });
+            await updateDoc(doc(db, "users", currentUser.uid), { photoURL: newPhoto });
+        }
+        
+        location.reload();
+    };
 
-        // --- SUBIDA IMAGEN CLOUDINARY ---
-        fileInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            // Preview
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                document.getElementById('imagePreview').src = e.target.result;
-                document.getElementById('previewContainer').style.display = 'block';
-            }
-            reader.readAsDataURL(file);
-
-            // Upload
-            const statusText = document.getElementById('uploadStatus');
-            statusText.innerText = "Subiendo...";
-            
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', UPLOAD_PRESET);
-
-            try {
-                const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await res.json();
-                uploadedImageUrl = data.secure_url;
-                statusText.innerText = "¡Listo!";
-                statusText.style.color = "green";
-            } catch (err) {
-                console.error(err);
-                statusText.innerText = "Error subida.";
-                statusText.style.color = "red";
-            }
+    // --- 8. NOTIFICACIONES (BÁSICO) ---
+    // En una app real, usarías una colección 'notifications' y un listener real-time
+    const loadNotifications = () => {
+        // Simulación: Comprobar si hay posts nuevos en "Oficial" recientemente o likes
+        // Aquí solo activo el badge visualmente para el ejemplo
+        document.getElementById('notifBtn').addEventListener('click', () => {
+            const drop = document.getElementById('notifDropdown');
+            drop.classList.toggle('show');
         });
+    };
 
-        // --- PUBLICAR EN FIREBASE ---
-        openBtn.addEventListener('click', () => {
-            if (!currentUser) {
-                alert("Debes iniciar sesión con Google para publicar.");
-                return;
-            }
-            document.getElementById('postGame').value = currentGameContext;
-            
-            // Verificar si es admin para mostrar el checkbox
-            if(ADMIN_UIDS.includes(currentUser.uid)) {
-                document.getElementById('adminCheckContainer').style.display = 'flex';
-            } else {
-                document.getElementById('adminCheckContainer').style.display = 'none';
-            }
+    // INIT
+    loadFeed('all');
 
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        });
+    // Exponer al window para HTML onclicks
+    window.loadFeed = loadFeed;
+    window.switchTab = (tab) => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        if(tab === 'recientes') { document.getElementById('tabRecientes').classList.add('active'); loadFeed('all'); }
+        if(tab === 'siguiendo') { document.getElementById('tabSiguiendo').classList.add('active'); loadFeed('following'); }
+        if(tab === 'guias') { document.getElementById('tabGuias').classList.add('active'); loadFeed('section', 'Guías'); }
+    };
 
-        submitBtn.addEventListener('click', async () => {
-            const content = document.getElementById('postContent').value;
-            const section = document.getElementById('postSection').value;
-            const game = document.getElementById('postGame').value;
-            const tags = document.getElementById('postTags').value;
-            const isOfficialCheck = document.getElementById('checkOfficial').checked;
+</script>
 
-            if(!content && !uploadedImageUrl) {
-                alert("El post está vacío.");
-                return;
-            }
-
-            // Validar admin de nuevo al enviar (seguridad frontend)
-            const isOfficial = isOfficialCheck && ADMIN_UIDS.includes(currentUser.uid);
-
-            submitBtn.disabled = true;
-            submitBtn.innerText = "Publicando...";
-
-            try {
-                await addDoc(collection(db, "posts"), {
-                    authorName: currentUser.displayName,
-                    authorAvatar: currentUser.photoURL,
-                    authorUid: currentUser.uid,
-                    content: content,
-                    section: section,
-                    game: game,
-                    tags: tags,
-                    image: uploadedImageUrl,
-                    isOfficial: isOfficial,
-                    timestamp: serverTimestamp()
-                });
-                closeModal();
-            } catch (e) {
-                console.error("Error al publicar: ", e);
-                alert("Error al guardar en base de datos.");
-            }
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Publicar";
-        });
-
-        // --- CERRAR MODAL ---
-        const closeModal = () => {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            // Reset Form
-            document.getElementById('postContent').value = "";
-            document.getElementById('postTags').value = "";
-            fileInput.value = "";
-            document.getElementById('previewContainer').style.display = 'none';
-            document.getElementById('uploadStatus').innerText = "";
-            uploadedImageUrl = "";
-            document.getElementById('checkOfficial').checked = false;
-        };
-        closeBtn.addEventListener('click', closeModal);
-        cancelBtn.addEventListener('click', closeModal);
-        window.onclick = (e) => { if(e.target == modal) closeModal(); };
-
-    </script>
 </body>
 </html>
-
