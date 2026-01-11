@@ -468,13 +468,14 @@
             await updateDoc(ref, { [field]: increment(1) });
         };
 
-        // --- 3. FEED Y POSTS ---
+// --- FEED Y POSTS CORREGIDO ---
         window.loadFeed = (type = 'all', value = null) => {
             const feedDiv = document.getElementById('postsContainer');
-            feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999">Cargando...</p>';
+            // Mantenemos el loader visual
+            feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
 
-            // Consulta simplificada para evitar errores de Indice: Solo Timestamp
-            // Ordenamos Pinned en el cliente
+            // CORRECCIÓN: Quitamos orderBy("isPinned") para evitar error de índice
+            // Solo ordenamos por fecha. El filtrado de Pinned lo haremos en Javascript abajo.
             let q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(50));
 
             onSnapshot(q, (snapshot) => {
@@ -482,23 +483,42 @@
                 let posts = [];
                 snapshot.forEach(doc => posts.push({id: doc.id, ...doc.data()}));
 
-                // Filtros cliente
-                if (type === 'following' && currentUserData) posts = posts.filter(p => currentUserData.following.includes(p.authorUid));
-                if (type === 'game') {
+                // 1. FILTRADO
+                if (type === 'following' && currentUserData) {
+                    posts = posts.filter(p => currentUserData.following.includes(p.authorUid));
+                } 
+                else if (type === 'game') {
+                    // Normalizamos a minúsculas para evitar errores
                     posts = posts.filter(p => p.game === value);
+                    // Actualizar UI botones
                     document.querySelectorAll('.game-item').forEach(e => e.classList.remove('active'));
-                    const activeBtn = document.querySelector(`.game-item[onclick*="'${value}'"]`);
-                    if(activeBtn) activeBtn.classList.add('active');
+                    // Buscamos el botón que tenga el onclick con ese valor
+                    const btn = document.querySelector(`.game-item[onclick*="'${value}'"]`);
+                    if(btn) btn.classList.add('active');
                 }
-                if (type === 'section') posts = posts.filter(p => p.section === value);
-                if (type === 'tag') posts = posts.filter(p => (p.tags || []).includes(value));
-                
-                // Sort Pinned & Top
+                else if (type === 'section') {
+                    posts = posts.filter(p => p.section === value);
+                } 
+                else if (type === 'tag') {
+                    posts = posts.filter(p => (p.tags || []).includes(value));
+                    document.getElementById('searchInput').value = "#" + value;
+                }
+
+                // 2. ORDENAMIENTO (LOGICA CORREGIDA)
                 if (type === 'top') {
-                    posts = posts.sort((a,b) => (b.likes?.length || 0) - (a.likes?.length || 0));
+                    // Ordenar por cantidad de likes
+                    posts.sort((a,b) => (b.likes?.length || 0) - (a.likes?.length || 0));
+                    // Resaltar tab Top
+                    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+                    document.getElementById('tabTop').classList.add('active');
                 } else {
-                    // Ordenar Pinned primero
-                    posts = posts.sort((a,b) => (b.isPinned === true) - (a.isPinned === true));
+                    // Ordenar por defecto: Primero FIJADOS, luego por FECHA (ya viene por fecha de Firebase)
+                    posts.sort((a,b) => (b.isPinned === true) - (a.isPinned === true));
+                    // Resaltar tab Recientes
+                    if(type === 'all') {
+                        document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+                        document.getElementById('tabRecientes').classList.add('active');
+                    }
                 }
 
                 calculateTrends(posts); 
@@ -512,6 +532,7 @@
                     const isLiked = currentUser && (post.likes || []).includes(currentUser.uid);
                     const isAdmin = currentUser && ADMIN_UIDS.includes(currentUser.uid);
                     
+                    // Renderizado
                     const html = `
                         <article class="post-card ${post.isPinned ? 'pinned' : ''}" onmouseenter="incrementViews('${post.id}', '${post.game}')">
                             ${post.isPinned ? '<div class="pin-badge"><i class="fas fa-thumbtack"></i></div>' : ''}
@@ -546,7 +567,7 @@
                                         <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i> ${(post.likes || []).length}
                                     </div>
                                     <div class="interaction-btn" onclick="openComments('${post.id}')">
-                                        <i class="far fa-comment"></i> <span id="count-c-${post.id}">Ver</span>
+                                        <i class="far fa-comment"></i> <span id="count-c-${post.id}">Comentar</span>
                                     </div>
                                     <div style="font-size:12px; color:#999; display:flex; align-items:center; gap:5px;">
                                         <i class="far fa-eye"></i> ${post.views || 0}
@@ -877,3 +898,4 @@
     </script>
 </body>
 </html>
+
