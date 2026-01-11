@@ -7,165 +7,76 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        :root {
-            --bg-body: #f0f2f5;
-            --bg-card: #ffffff;
-            --accent: #4cc3ff; 
-            --accent-hover: #3aa8e0;
-            --text-main: #333333;
-            --text-sec: #999999;
-            --border-color: #ebebeb;
-            --radius: 12px;
-            --nav-height: 64px;
-            --subnav-height: 56px;
-            --overlay-color: rgba(0, 0, 0, 0.6);
-        }
-
+        /* --- ESTILOS (Mismos que tu diseño anterior) --- */
+        :root { --bg-body: #f0f2f5; --bg-card: #ffffff; --accent: #4cc3ff; --accent-hover: #3aa8e0; --text-main: #333333; --text-sec: #999999; --border-color: #ebebeb; --radius: 12px; --nav-height: 64px; --subnav-height: 56px; --overlay-color: rgba(0, 0, 0, 0.6); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; background-color: var(--bg-body); color: var(--text-main); overflow-y: scroll; }
         
-        body {
-            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            overflow-y: scroll;
-        }
-
-        /* --- NAVBAR --- */
-        .navbar {
-            background: var(--bg-card);
-            height: var(--nav-height);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            position: sticky; top: 0; z-index: 2000;
-            border-bottom: 1px solid var(--border-color);
-        }
-
+        /* NAVBAR */
+        .navbar { background: var(--bg-card); height: var(--nav-height); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; position: sticky; top: 0; z-index: 2000; border-bottom: 1px solid var(--border-color); }
         .logo { font-weight: 800; font-size: 22px; color: var(--text-main); letter-spacing: -0.5px; }
         .logo span { color: var(--accent); }
-
         .search-wrapper { position: relative; width: 350px; }
-        .search-bar {
-            background: #f4f4f4; border-radius: 20px; padding: 8px 15px; 
-            display: flex; align-items: center; color: var(--text-sec);
-        }
+        .search-bar { background: #f4f4f4; border-radius: 20px; padding: 8px 15px; display: flex; align-items: center; color: var(--text-sec); }
         .search-bar input { border: none; background: transparent; outline: none; margin-left: 10px; width: 100%; }
-
         .nav-actions { display: flex; gap: 20px; align-items: center; color: #666; position: relative; }
         .nav-icon-btn { cursor: pointer; transition: color 0.2s; font-size: 18px; position: relative; }
         .nav-icon-btn:hover { color: var(--accent); }
-        
-        .notification-badge { 
-            position: absolute; top: -5px; right: -5px; background: #ff4c4c; 
-            color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; display: none; 
-        }
-
-        /* DROPDOWNS */
-        .dropdown-box {
-            display: none; position: absolute; top: 100%; right: 0; width: 300px;
-            background: white; border-radius: var(--radius); box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-            padding: 0; z-index: 2100; max-height: 400px; overflow-y: auto; border: 1px solid var(--border-color);
-        }
+        .notification-badge { position: absolute; top: -5px; right: -5px; background: #ff4c4c; color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; display: none; }
+        .dropdown-box { display: none; position: absolute; top: 100%; right: 0; width: 300px; background: white; border-radius: var(--radius); box-shadow: 0 5px 20px rgba(0,0,0,0.15); padding: 0; z-index: 2100; max-height: 400px; overflow-y: auto; border: 1px solid var(--border-color); }
         .dropdown-box.show { display: block; }
         .notif-item { padding: 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; display: flex; gap: 10px; align-items: start; }
         .notif-item:hover { background: #fafafa; }
         .notif-icon { color: var(--accent); margin-top: 2px;}
-
         .user-menu-wrapper { position: relative; padding: 10px 0; }
-        .user-avatar-nav {
-            width: 36px; height: 36px; background: #ddd; border-radius: 50%; cursor: pointer;
-            object-fit: cover; border: 2px solid transparent;
-        }
+        .user-avatar-nav { width: 36px; height: 36px; background: #ddd; border-radius: 50%; cursor: pointer; object-fit: cover; border: 2px solid transparent; }
         .user-avatar-nav:hover { border-color: var(--accent); }
         
-        /* --- JUEGOS NAV --- */
-        .game-nav {
-            position: sticky; top: var(--nav-height); z-index: 1900; height: var(--subnav-height);
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; gap: 15px;
-        }
-        .game-item {
-            display: flex; align-items: center; gap: 10px; padding: 6px 14px;
-            border-radius: 25px; cursor: pointer; transition: 0.2s;
-            font-size: 13px; font-weight: 600; color: #555; border: 1px solid transparent;
-        }
+        /* JUEGOS NAV */
+        .game-nav { position: sticky; top: var(--nav-height); z-index: 1900; height: var(--subnav-height); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; gap: 15px; }
+        .game-item { display: flex; align-items: center; gap: 10px; padding: 6px 14px; border-radius: 25px; cursor: pointer; transition: 0.2s; font-size: 13px; font-weight: 600; color: #555; border: 1px solid transparent; }
         .game-item img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
         .game-item:hover { background: rgba(76, 195, 255, 0.1); color: var(--accent); }
         .game-item.active { background: var(--accent); color: white; border-color: var(--accent); }
 
-        /* --- LAYOUT --- */
-        .container {
-            display: grid; grid-template-columns: 260px 680px 320px; gap: 24px;
-            max-width: 1300px; margin: 24px auto; padding: 0 20px;
-        }
-
-        /* SIDEBAR LEFT */
+        /* LAYOUT */
+        .container { display: grid; grid-template-columns: 260px 680px 320px; gap: 24px; max-width: 1300px; margin: 24px auto; padding: 0 20px; }
         .sidebar-left { position: sticky; top: 140px; height: fit-content; }
         .menu-section { margin-bottom: 20px; }
         .menu-title { font-size: 11px; color: var(--text-sec); font-weight: bold; margin-bottom: 10px; padding-left: 10px; letter-spacing: 0.5px; }
-        .nav-item {
-            display: flex; align-items: center; padding: 10px 14px; margin-bottom: 4px;
-            border-radius: 8px; color: #666; text-decoration: none; transition: 0.2s; font-size: 14px; cursor: pointer;
-        }
+        .nav-item { display: flex; align-items: center; padding: 10px 14px; margin-bottom: 4px; border-radius: 8px; color: #666; text-decoration: none; transition: 0.2s; font-size: 14px; cursor: pointer; }
         .nav-item:hover, .nav-item.active { background-color: #e6f7ff; color: var(--accent); font-weight: 600; }
-        .icon-box {
-            width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center;
-            justify-content: center; margin-right: 12px; background: #eee; color: #555; font-size: 12px;
-        }
-        .unity-icon { background: #000; color: #fff; }
-        .rpg-icon { background: #e74c3c; color: #fff; }
-        .scratch-icon { background: #f39c12; color: #fff; }
+        .icon-box { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-right: 12px; background: #eee; color: #555; font-size: 12px; }
+        .unity-icon { background: #000; color: #fff; } .rpg-icon { background: #e74c3c; color: #fff; } .scratch-icon { background: #f39c12; color: #fff; }
 
         /* MAIN FEED */
         .circles-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-        .circle-card {
-            background: var(--bg-card); border-radius: var(--radius); padding: 15px;
-            text-align: center; text-decoration: none; color: var(--text-main);
-            border: 1px solid var(--border-color); transition: 0.2s; cursor: pointer;
-        }
+        .circle-card { background: var(--bg-card); border-radius: var(--radius); padding: 15px; text-align: center; text-decoration: none; color: var(--text-main); border: 1px solid var(--border-color); transition: 0.2s; cursor: pointer; }
         .circle-card:hover { transform: translateY(-3px); border-color: var(--accent); }
-        .circle-icon {
-            width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 8px;
-            display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;
-        }
-        .grad-tavern { background: linear-gradient(135deg, #FF6B6B, #FFD93D); }
-        .grad-art { background: linear-gradient(135deg, #6C5CE7, #A29BFE); }
-        .grad-lab { background: linear-gradient(135deg, #00B894, #55E6C1); }
-        .grad-off { background: linear-gradient(135deg, #0984E3, #74B9FF); }
+        .circle-icon { width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
+        .grad-tavern { background: linear-gradient(135deg, #FF6B6B, #FFD93D); } .grad-art { background: linear-gradient(135deg, #6C5CE7, #A29BFE); } .grad-lab { background: linear-gradient(135deg, #00B894, #55E6C1); } .grad-off { background: linear-gradient(135deg, #0984E3, #74B9FF); }
 
-        .feed-header {
-            background: var(--bg-card); padding: 0 20px; border-radius: var(--radius);
-            margin-bottom: 16px; display: flex; border: 1px solid var(--border-color);
-        }
+        .feed-header { background: var(--bg-card); padding: 0 20px; border-radius: var(--radius); margin-bottom: 16px; display: flex; border: 1px solid var(--border-color); }
         .tab-btn { padding: 15px 20px; cursor: pointer; font-weight: 600; color: var(--text-sec); border-bottom: 3px solid transparent; }
         .tab-btn.active { color: var(--accent); border-bottom: 3px solid var(--accent); }
 
         /* POST CARD */
-        .post-card {
-            background: var(--bg-card); border-radius: var(--radius); padding: 20px;
-            margin-bottom: 16px; border: 1px solid var(--border-color); transition: 0.2s; position: relative;
-        }
+        .post-card { background: var(--bg-card); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; border: 1px solid var(--border-color); transition: 0.2s; position: relative; }
         .post-card.pinned { background-color: #fffdf0; border: 1px solid #ffeeba; }
-        
         .user-header { display: flex; align-items: center; margin-bottom: 12px; }
         .avatar-ring { width: 42px; height: 42px; border-radius: 50%; padding: 2px; border: 2px solid transparent; margin-right: 12px; }
         .avatar-ring.official { border-color: #ffd700; }
         .avatar-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        
         .level-badge { background: #333; color: #fff; font-size: 10px; padding: 1px 5px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
         .title-badge { font-size: 10px; color: var(--accent); border: 1px solid var(--accent); padding: 0 4px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
         .pin-badge { position: absolute; top: 20px; right: 20px; color: #f39c12; font-size: 14px; }
-
         .post-text { color: #444; font-size: 14px; line-height: 1.6; margin-bottom: 12px; white-space: pre-wrap; }
         .hashtag-link { color: var(--accent); font-weight: 600; cursor: pointer; text-decoration: none; }
         .hashtag-link:hover { text-decoration: underline; }
-        
         .post-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 12px; color: var(--text-sec); font-size: 13px; margin-top: 10px;}
         .interaction-btn { cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
         .interaction-btn:hover { color: var(--accent); }
         .interaction-btn.liked { color: #ff4c4c; }
-
         .mod-actions { display: flex; gap: 10px; font-size: 12px; margin-left: auto; margin-right: 10px;}
         .mod-btn { cursor: pointer; color: #999; }
         .mod-btn:hover { color: var(--text-main); }
@@ -175,23 +86,15 @@
         .profile-widget { background: var(--bg-card); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-color); text-align: center; padding-bottom: 20px; margin-bottom: 16px; }
         .profile-bg { height: 80px; background: linear-gradient(90deg, #3498db, #2c3e50); }
         .profile-avatar { width: 75px; height: 75px; border-radius: 50%; border: 4px solid var(--bg-card); margin-top: -38px; background: #fff; object-fit: cover; }
-        
         .stats-row { display: flex; justify-content: center; gap: 20px; margin: 15px 0; font-size: 13px; color: #666; }
         .stat-val { font-weight: bold; color: var(--text-main); display: block; font-size: 15px; }
-        
         .btn-outline { border: 1px solid var(--border-color); background: transparent; padding: 6px 15px; border-radius: 15px; cursor: pointer; font-size: 12px; margin-top: 5px;}
         .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-
         .widget-box { background: var(--bg-card); border-radius: var(--radius); padding: 16px; border: 1px solid var(--border-color); margin-bottom: 16px; }
         .widget-title { font-size: 13px; font-weight: 800; margin-bottom: 15px; color: #444; text-transform: uppercase; letter-spacing: 0.5px;}
 
         /* CHECK-IN */
-        .check-in-box {
-            background: linear-gradient(90deg, #e3f2fd, #bbdefb);
-            color: #1976d2; padding: 12px; border-radius: var(--radius);
-            margin-bottom: 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
-            font-weight: bold; font-size: 14px;
-        }
+        .check-in-box { background: linear-gradient(90deg, #e3f2fd, #bbdefb); color: #1976d2; padding: 12px; border-radius: var(--radius); margin-bottom: 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-weight: bold; font-size: 14px; }
         .check-in-box.checked { background: #e8f5e9; color: #2e7d32; cursor: default; }
 
         /* TENDENCIAS */
@@ -327,7 +230,7 @@
             <div class="widget-box">
                 <div class="widget-title">Temas del momento</div>
                 <div id="trendsContainer">
-                    <p style="font-size:12px; color:#999">Calculando...</p>
+                    <p style="font-size:12px; color:#999">Cargando...</p>
                 </div>
             </div>
 
@@ -400,9 +303,6 @@
                 <input type="file" id="avatarInput" style="display:none;" accept="image/*">
                 <span id="avatarStatus" style="font-size:12px; color:#999;"></span>
             </div>
-
-            <label style="font-size:12px;">Título Personalizado (Check-in)</label>
-            <input type="text" id="editCustomTitle" class="form-input" placeholder="Ej: Maestro de Unity">
 
             <div class="modal-footer">
                 <button class="modal-btn btn-cancel" onclick="closeModals()">Cancelar</button>
@@ -480,22 +380,19 @@
         const calculateStats = (userData) => {
             if (!userData) return { level: 1, title: "Novato" };
             
-            // Nivel: 1 año = Lv 12. +1 Lv cada 100 posts.
             const createdAt = userData.createdAt ? userData.createdAt.toDate() : new Date();
             const years = (new Date() - createdAt) / (1000 * 60 * 60 * 24 * 365);
             let level = Math.floor(years * 12); 
             level += Math.floor((userData.postCount || 0) / 100); 
             if(level < 1) level = 1;
 
-            // Títulos
-            let title = userData.customTitle || "Novato"; // Prioridad custom
+            let title = "Novato";
             const c = userData.postCount || 0;
-            if(!userData.customTitle) {
-                if(c >= 5) title = "Explorador";
-                if(c >= 10) title = "Aventurero";
-                if(c >= 25) title = "Veterano";
-                if(ADMIN_UIDS.includes(userData.uid)) title = "Game Designer";
-            }
+            
+            if(c >= 5) title = "Explorador";
+            if(c >= 10) title = "Aventurero";
+            if(c >= 25) title = "Veterano";
+            if(ADMIN_UIDS.includes(userData.uid)) title = "Game Designer";
 
             return { level, title };
         };
@@ -516,7 +413,7 @@
                         followers: [],
                         following: [],
                         postCount: 0,
-                        interestStats: { dinoma:0, vireo:0, cae:0, lanzer:0 } // Para "Mis Intereses"
+                        interestStats: { dinoma:0, vireo:0, cae:0, lanzer:0 } 
                     });
                     currentUserData = { postCount: 0, following: [], interestStats: {} };
                 } else {
@@ -536,10 +433,7 @@
                 document.getElementById('statFollowers').innerText = (currentUserData.followers || []).length;
                 document.getElementById('statFollowing').innerText = (currentUserData.following || []).length;
 
-                // Update "Mis Intereses" visualmente basado en stats
                 updateInterestsUI(currentUserData.interestStats || {});
-                
-                // Check-in status
                 checkDailyStatus();
                 loadNotifications();
 
@@ -557,23 +451,20 @@
 
         // --- 2. LOGIC MIS INTERESES ---
         const updateInterestsUI = (stats) => {
-            // Encuentra la categoría más vista y resáltala
             const max = Object.entries(stats).reduce((a, b) => a[1] > b[1] ? a : b, ['none', 0]);
             const topGame = max[0];
             
-            // Reset styles
             ['navUnity', 'navRPG', 'navWeb'].forEach(id => document.getElementById(id).classList.remove('active'));
 
-            if(topGame === 'dinoma') document.getElementById('navUnity').classList.add('active'); // Unity -> Dinoma
-            if(topGame === 'vireo') document.getElementById('navRPG').classList.add('active'); // RPG -> Vireo
-            if(topGame === 'cae') document.getElementById('navWeb').classList.add('active'); // Web -> Cae
+            if(topGame === 'dinoma') document.getElementById('navUnity').classList.add('active'); 
+            if(topGame === 'vireo') document.getElementById('navRPG').classList.add('active'); 
+            if(topGame === 'cae') document.getElementById('navWeb').classList.add('active'); 
         };
 
         const trackInterest = async (game) => {
             if(!currentUser) return;
             const ref = doc(db, "users", currentUser.uid);
             const field = `interestStats.${game}`;
-            // Incrementa contador de interés en background
             await updateDoc(ref, { [field]: increment(1) });
         };
 
@@ -582,7 +473,9 @@
             const feedDiv = document.getElementById('postsContainer');
             feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999">Cargando...</p>';
 
-            let q = query(collection(db, "posts"), orderBy("isPinned", "desc"), orderBy("timestamp", "desc"), limit(50));
+            // Consulta simplificada para evitar errores de Indice: Solo Timestamp
+            // Ordenamos Pinned en el cliente
+            let q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(50));
 
             onSnapshot(q, (snapshot) => {
                 feedDiv.innerHTML = "";
@@ -593,14 +486,20 @@
                 if (type === 'following' && currentUserData) posts = posts.filter(p => currentUserData.following.includes(p.authorUid));
                 if (type === 'game') {
                     posts = posts.filter(p => p.game === value);
-                    // UI
                     document.querySelectorAll('.game-item').forEach(e => e.classList.remove('active'));
                     const activeBtn = document.querySelector(`.game-item[onclick*="'${value}'"]`);
                     if(activeBtn) activeBtn.classList.add('active');
                 }
                 if (type === 'section') posts = posts.filter(p => p.section === value);
                 if (type === 'tag') posts = posts.filter(p => (p.tags || []).includes(value));
-                if (type === 'top') posts = posts.sort((a,b) => (b.likes?.length || 0) - (a.likes?.length || 0));
+                
+                // Sort Pinned & Top
+                if (type === 'top') {
+                    posts = posts.sort((a,b) => (b.likes?.length || 0) - (a.likes?.length || 0));
+                } else {
+                    // Ordenar Pinned primero
+                    posts = posts.sort((a,b) => (b.isPinned === true) - (a.isPinned === true));
+                }
 
                 calculateTrends(posts); 
 
@@ -662,8 +561,6 @@
         };
 
         /* --- 4. CALCULOS Y ALGORITMOS --- */
-        
-        // TEMAS DEL MOMENTO: (Likes * 2) + (Vistas * 1) + (Reciente * Multiplicador)
         const calculateTrends = (posts) => {
             const scores = {};
             posts.forEach(p => {
@@ -676,6 +573,10 @@
             
             const div = document.getElementById('trendsContainer');
             div.innerHTML = "";
+            if(sorted.length === 0) {
+                div.innerHTML = "<p style='font-size:12px;color:#999'>Sin tendencias aún</p>";
+                return;
+            }
             sorted.forEach(tag => {
                 div.innerHTML += `<div class="trend-item" onclick="searchTag('${tag}')">
                     <span class="trend-name"># ${tag}</span><span class="trend-count">Trending</span>
@@ -683,16 +584,14 @@
             });
         };
 
-        // Increment Views (con debounce simple para no abusar)
         const viewedPosts = new Set();
         window.incrementViews = async (postId, game) => {
             if(viewedPosts.has(postId)) return;
             viewedPosts.add(postId);
             await updateDoc(doc(db, "posts", postId), { views: increment(1) });
-            trackInterest(game); // Actualiza stats de interés
+            trackInterest(game); 
         };
 
-        // Parse Text (Hashtags)
         const parseText = (text) => {
             let parsed = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="hashtag-link">$1</a>');
             parsed = parsed.replace(/#(\w+)/g, '<span class="hashtag-link" onclick="window.searchTag(\'$1\')">#$1</span>');
@@ -705,8 +604,6 @@
         };
 
         // --- 5. ACCIONES DE USUARIO ---
-        
-        // CHECK-IN
         const checkDailyStatus = async () => {
             if(!currentUserData.lastCheckIn) return;
             const last = currentUserData.lastCheckIn.toDate().toDateString();
@@ -726,10 +623,10 @@
             await updateDoc(doc(db, "users", currentUser.uid), { lastCheckIn: serverTimestamp() });
             btn.classList.add('checked');
             btn.innerHTML = `<div><i class="fas fa-check"></i> Completado</div>`;
-            alert(`¡Check-in realizado! Título actual: ${currentUserData.customTitle || 'Ninguno'}`);
+            const stats = calculateStats(currentUserData);
+            alert(`¡Check-in realizado!`);
         });
 
-        // PUBLICAR
         document.getElementById('submitPostBtn').addEventListener('click', async () => {
             const content = document.getElementById('postContent').value;
             const section = document.getElementById('postSection').value;
@@ -761,7 +658,6 @@
                     timestamp: serverTimestamp()
                 });
 
-                // Increment Post Count REAL
                 await updateDoc(doc(db, "users", currentUser.uid), { 
                     postCount: increment(1)
                 });
@@ -774,7 +670,6 @@
             }
         });
 
-        // COMENTARIOS
         window.openComments = (postId) => {
             if(!currentUser) return alert("Inicia sesión");
             currentPostIdForComments = postId;
@@ -814,11 +709,9 @@
                 authorUid: currentUser.uid,
                 timestamp: serverTimestamp()
             });
-            // Notificar dueño del post (requiere leer el post, omitido por brevedad en este bloque pero va aquí)
             document.getElementById('commentInput').value = "";
         };
 
-        // --- 6. MODERACIÓN Y UTILIDADES ---
         window.toggleLike = async (postId, isLiked, authorUid) => {
             if (!currentUser) return alert("Inicia sesión");
             const postRef = doc(db, "posts", postId);
@@ -836,12 +729,11 @@
             if(confirm("¿Borrar post permanentemente?")) await deleteDoc(doc(db, "posts", postId));
         };
 
-        // NOTIFICACIONES
         const createNotification = async (type, toUid) => {
             await addDoc(collection(db, "notifications"), {
                 toUid: toUid,
                 fromUser: currentUser.displayName,
-                type: type, // 'like', 'follow'
+                type: type, 
                 read: false,
                 timestamp: serverTimestamp()
             });
@@ -877,7 +769,6 @@
             });
         };
 
-        // EDICION PERFIL (CON SUBIDA DE IMAGEN)
         window.openEditProfile = () => document.getElementById('profileModal').style.display = 'flex';
         
         document.getElementById('avatarInput').addEventListener('change', async (e) => {
@@ -895,7 +786,6 @@
 
         window.saveProfileChanges = async () => {
             const name = document.getElementById('editName').value;
-            const title = document.getElementById('editCustomTitle').value;
             
             const updates = {};
             if(name) {
@@ -906,13 +796,11 @@
                 await updateProfile(auth.currentUser, { photoURL: newAvatarUrl });
                 updates.photoURL = newAvatarUrl;
             }
-            if(title) updates.customTitle = title;
 
             await updateDoc(doc(db, "users", currentUser.uid), updates);
             location.reload();
         };
 
-        /* --- EXTRAS UI --- */
         window.filterGame = (g) => loadFeed('game', g);
         window.searchTag = (t) => loadFeed('tag', t);
         window.filterByInterest = (interest) => {
@@ -923,7 +811,6 @@
             loadFeed('game', target);
         };
         
-        // Search
         document.getElementById('searchInput').addEventListener('keypress', (e) => {
             if(e.key === 'Enter') {
                 const val = e.target.value;
@@ -932,7 +819,6 @@
             }
         });
 
-        // Recommended Users
         const loadRecommendedUsers = async () => {
             const q = query(collection(db, "users"), limit(10));
             const snap = await getDocs(q);
@@ -963,7 +849,6 @@
             alert("Siguiendo!");
         };
 
-        // Subida Imagen Post
         document.getElementById('fileInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             const formData = new FormData();
