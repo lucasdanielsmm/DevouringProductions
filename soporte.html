@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soporte - Devouring Productions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #9b59b6; /* Morado Devouring */
+            --primary-dark: #8e44ad;
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
+            --text-main: #ecf0f1;
+            --text-muted: #bdc3c7;
+            --accent-green: #2ecc71; /* Para Unity/RPG */
+            --accent-blue: #3498db; /* Para Web/Scratch */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        h1 { margin: 0; text-transform: uppercase; letter-spacing: 3px; font-size: 2rem; }
+        .subtitle { color: var(--primary); font-weight: bold; margin-top: 5px; }
+
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            flex: 1; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* SELECTOR DE JUEGOS */
+        .section-title { text-align: center; margin: 40px 0 20px; border-bottom: 1px solid #333; line-height: 0.1em; } 
+        .section-title span { background: var(--bg-dark); padding: 0 10px; color: var(--text-muted); }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .game-card {
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover, .game-card.selected {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            background: #252525;
+            box-shadow: 0 5px 15px rgba(155, 89, 182, 0.2);
+        }
+
+        .game-card i, .game-card .custom-icon { 
+            font-size: 2rem; 
+            margin-bottom: 10px; 
+            display: block; 
+            line-height: 1;
+        }
+        
+        .game-tag { font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 5px; }
+        
+        /* Colores por tecnologia */
+        .tag-html { background: #e34c26; color: white; }
+        .tag-scratch { background: #f39c12; color: white; }
+        .tag-rpg { background: #3498db; color: white; }
+        .tag-unity { background: #2ecc71; color: #121212; font-weight: bold; }
+
+        /* FAQs */
+        .faq-container { min-height: 300px; }
+        
+        .faq-item {
+            background: var(--bg-card);
+            border-left: 4px solid var(--primary);
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            display: none; 
+        }
+        
+        .faq-item.show { display: block; animation: fadeIn 0.5s; }
+
+        .faq-question { font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .faq-answer { margin-top: 10px; color: var(--text-muted); display: none; font-size: 0.95rem; border-top: 1px solid #333; padding-top: 10px; }
+        
+        .faq-item.active .faq-answer { display: block; }
+        .faq-item.active .faq-question i { transform: rotate(180deg); }
+
+        /* CONTACTO */
+        .contact-box {
+            background: #1a1a1a;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            margin-top: 50px;
+            border: 1px dashed var(--primary);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        .btn:hover { background: var(--primary-dark); }
+
+        /* FOOTER */
+        footer {
+            background: var(--bg-card);
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+            border-top: 1px solid #333;
+            color: var(--text-muted);
+        }
+        footer p { margin: 5px 0; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Devouring Productions</h1>
+    <div class="subtitle">CENTRO DE SOPORTE</div>
+</header>
+
+<div class="container">
+
+    <h2 class="section-title"><span>SELECCIONA EL PROYECTO</span></h2>
+
+    <div class="game-grid">
+        <div class="game-card" onclick="filterFaq('all', this)">
+            <i class="fas fa-layer-group" style="color: #fff;"></i>
+            <strong>Ver Todo</strong>
+        </div>
+
+        <div class="game-card" onclick="filterFaq('cae', this)">
+            <div class="custom-icon">🍎</div>
+            <strong>CAE: CCC</strong>
+            <br><span class="game-tag tag-html">HTML</span>
+        </div>
+
+        <div class="game-card" onclick="filterFaq('move', this)">
+            <i class="fas fa-ghost" style="color: #f39c12;"></i>
+            <strong>MOVE-LANZER</strong>
+            <br><span class="game-tag tag-scratch">Scratch</span>
+        </div>
+
+        <div class="game-card" onclick="filterFaq('vireo', this)">
+            <i class="fas fa-dungeon" style="color: #3498db;"></i>
+            <strong>Vireo CODE</strong>
+            <br><span class="game-tag tag-rpg">RPG Maker MV</span>
+        </div>
+
+        <div class="game-card" onclick="filterFaq('creatura', this)">
+            <i class="fas fa-dna" style="color: #2ecc71;"></i>
+            <strong>CREATURA DINOMA</strong>
+            <br><span class="game-tag tag-unity">Unity 3D</span>
+        </div>
+    </div>
+
+    <h2 class="section-title"><span>BASE DE CONOCIMIENTOS</span></h2>
+
+    <div class="faq-container" id="faqList">
+        
+        <div class="faq-item cae">
+            <div class="faq-question">El juego no carga en el navegador <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Intenta borrar la caché de tu navegador (Ctrl + F5) o prueba abrir el juego en modo Incógnito. Asegúrate de que tu navegador soporta WebGL.</div>
+        </div>
+        <div class="faq-item cae">
+            <div class="faq-question">El juego va lento o con lag <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Cierra otras pestañas del navegador. Aunque es un juego Arcade simple, los navegadores a veces limitan los recursos si tienes muchas cosas abiertas.</div>
+        </div>
+
+        <div class="faq-item move">
+            <div class="faq-question">Pantalla blanca al iniciar <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Scratch requiere un navegador moderno. Si estás jugando la versión descargable, asegúrate de tener el reproductor correcto instalado.</div>
+        </div>
+        <div class="faq-item move">
+            <div class="faq-question">Las oleadas no avanzan (Bug) <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">A veces los enemigos pueden quedar atascados fuera de pantalla. Intenta reiniciar el nivel presionando la Bandera Verde.</div>
+        </div>
+
+        <div class="faq-item vireo">
+            <div class="faq-question">¿Cómo pongo Pantalla Completa? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Presiona <strong>F4</strong> para alternar pantalla completa. Presiona <strong>F1</strong> para ver las opciones de configuración.</div>
+        </div>
+        <div class="faq-item vireo">
+            <div class="faq-question">Error: "Failed to load audio/image" <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Esto suele ocurrir si extrajiste mal el archivo ZIP. Asegúrate de descomprimir TODA la carpeta antes de ejecutar "Game.exe".</div>
+        </div>
+
+        <div class="faq-item creatura">
+            <div class="faq-question">El juego se cierra (Crash) al iniciar la partida <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Verifica que los drivers de tu tarjeta gráfica estén actualizados. El juego requiere al menos 4GB de RAM para cargar el mapa completo.</div>
+        </div>
+        <div class="faq-item creatura">
+            <div class="faq-question">Bugs de físicas con los enemigos o criaturas <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Como es un juego de extracción con físicas complejas, a veces pueden comportarse extraño. Envíanos una captura si esto impide completar la misión.</div>
+        </div>
+
+        <div class="faq-item all cae move vireo creatura">
+            <div class="faq-question">¿Puedo subir videos a YouTube/Twitch? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">¡Sí, por favor! Tienes permiso total de Devouring Productions para monetizar contenido sobre cualquiera de nuestros juegos.</div>
+        </div>
+
+    </div>
+
+    <div class="contact-box">
+        <h3>¿No encontraste solución?</h3>
+        <p style="color: #bdc3c7;">Para reportar bugs específicos, por favor incluye: Nombre del juego, qué estabas haciendo y una captura.</p>
+        <a href="mailto:tu-email@devouring.com" class="btn"><i class="fas fa-envelope"></i> Contactar Soporte</a>
+    </div>
+
+</div>
+
+<footer>
+    <p>También puedes unirte a nuestra Comunidad oficial.</p>
+    <p style="font-size: 0.9em; opacity: 0.6;">&copy; 2026 Devouring Productions. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+    function filterFaq(category, element) {
+        const items = document.querySelectorAll('.faq-item');
+        const cards = document.querySelectorAll('.game-card');
+        cards.forEach(card => card.classList.remove('selected'));
+        if(element) element.classList.add('selected');
+        items.forEach(item => {
+            if (category === 'all' || item.classList.contains(category)) {
+                item.classList.add('show');
+            } else {
+                item.classList.remove('show');
+                item.classList.remove('active');
+            }
+        });
+    }
+
+    document.querySelectorAll('.faq-item').forEach(item => {
+        item.addEventListener('click', () => {
+            item.classList.toggle('active');
+        });
+    });
+
+    filterFaq('all', document.querySelector('.game-card'));
+</script>
+
+</body>
+</html>
