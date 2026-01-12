@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- ESTILOS (Mismos que tu diseño anterior) --- */
+        /* --- ESTILOS (Mismos de siempre con pequeñas mejoras) --- */
         :root { --bg-body: #f0f2f5; --bg-card: #ffffff; --accent: #4cc3ff; --accent-hover: #3aa8e0; --text-main: #333333; --text-sec: #999999; --border-color: #ebebeb; --radius: 12px; --nav-height: 64px; --subnav-height: 56px; --overlay-color: rgba(0, 0, 0, 0.6); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; background-color: var(--bg-body); color: var(--text-main); overflow-y: scroll; }
@@ -26,8 +26,6 @@
         .dropdown-box { display: none; position: absolute; top: 100%; right: 0; width: 300px; background: white; border-radius: var(--radius); box-shadow: 0 5px 20px rgba(0,0,0,0.15); padding: 0; z-index: 2100; max-height: 400px; overflow-y: auto; border: 1px solid var(--border-color); }
         .dropdown-box.show { display: block; }
         .notif-item { padding: 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; display: flex; gap: 10px; align-items: start; }
-        .notif-item:hover { background: #fafafa; }
-        .notif-icon { color: var(--accent); margin-top: 2px;}
         .user-menu-wrapper { position: relative; padding: 10px 0; }
         .user-avatar-nav { width: 36px; height: 36px; background: #ddd; border-radius: 50%; cursor: pointer; object-fit: cover; border: 2px solid transparent; }
         .user-avatar-nav:hover { border-color: var(--accent); }
@@ -158,25 +156,25 @@
     </nav>
 
     <div class="game-nav">
-        <div class="game-item active" onclick="filterGame('all', this)"><i class="fas fa-globe"></i> General</div>
-        <div class="game-item" onclick="filterGame('vireo', this)"><img src="https://via.placeholder.com/24"> Vireo CODE</div>
-        <div class="game-item" onclick="filterGame('cae', this)"><img src="https://via.placeholder.com/24"> Cae</div>
-        <div class="game-item" onclick="filterGame('lanzer', this)"><img src="https://via.placeholder.com/24"> Move-Lanzer</div>
-        <div class="game-item" onclick="filterGame('dinoma', this)"><img src="https://via.placeholder.com/24"> Creatura Dinoma</div>
+        <div class="game-item active" id="game-all" onclick="changeCategory('game', 'all')"><i class="fas fa-globe"></i> General</div>
+        <div class="game-item" id="game-vireo" onclick="changeCategory('game', 'vireo')"><img src="https://via.placeholder.com/24"> Vireo CODE</div>
+        <div class="game-item" id="game-cae" onclick="changeCategory('game', 'cae')"><img src="https://via.placeholder.com/24"> Cae</div>
+        <div class="game-item" id="game-lanzer" onclick="changeCategory('game', 'lanzer')"><img src="https://via.placeholder.com/24"> Move-Lanzer</div>
+        <div class="game-item" id="game-dinoma" onclick="changeCategory('game', 'dinoma')"><img src="https://via.placeholder.com/24"> Creatura Dinoma</div>
     </div>
 
     <div class="container">
         
         <aside class="sidebar-left">
             <div class="menu-section">
-                <div class="nav-item active" onclick="loadFeed('all')"><i class="fas fa-home" style="margin-right: 12px;"></i> Inicio</div>
-                <div class="nav-item" onclick="loadFeed('following')"><i class="fas fa-star" style="margin-right: 12px;"></i> Siguiendo</div>
+                <div class="nav-item active" id="nav-home" onclick="changeCategory('all', null)"><i class="fas fa-home" style="margin-right: 12px;"></i> Inicio</div>
+                <div class="nav-item" id="nav-following" onclick="changeCategory('following', null)"><i class="fas fa-star" style="margin-right: 12px;"></i> Siguiendo</div>
             </div>
             <div class="menu-title">MIS INTERESES (Dinámico)</div>
             <div class="menu-section">
-                <div class="nav-item" id="navUnity" onclick="filterByInterest('Unity')"><div class="icon-box unity-icon"><i class="fab fa-unity"></i></div> Unity Dev</div>
-                <div class="nav-item" id="navRPG" onclick="filterByInterest('RPG')"><div class="icon-box rpg-icon"><i class="fas fa-scroll"></i></div> RPG Maker</div>
-                <div class="nav-item" id="navWeb" onclick="filterByInterest('Web')"><div class="icon-box scratch-icon"><i class="fas fa-globe"></i></div> Juegos Web</div>
+                <div class="nav-item" id="navUnity" onclick="changeCategory('game', 'dinoma')"><div class="icon-box unity-icon"><i class="fab fa-unity"></i></div> Unity Dev</div>
+                <div class="nav-item" id="navRPG" onclick="changeCategory('game', 'vireo')"><div class="icon-box rpg-icon"><i class="fas fa-scroll"></i></div> RPG Maker</div>
+                <div class="nav-item" id="navWeb" onclick="changeCategory('game', 'cae')"><div class="icon-box scratch-icon"><i class="fas fa-globe"></i></div> Juegos Web</div>
             </div>
             <div class="menu-title">EXTRAS</div>
             <a href="https://lucasdanielsmm.github.io/DevouringProductions/" target="_blank" class="nav-item"><i class="fas fa-link" style="margin-right: 12px;"></i> Web Oficial</a>
@@ -184,15 +182,15 @@
 
         <main>
             <div class="circles-row">
-                <div class="circle-card" onclick="loadFeed('section', 'Taberna')"><div class="circle-icon grad-tavern"><i class="fas fa-mug-hot"></i></div><div style="font-size:12px; font-weight:600">Taberna</div></div>
-                <div class="circle-card" onclick="loadFeed('section', 'Galería')"><div class="circle-icon grad-art"><i class="fas fa-paint-brush"></i></div><div style="font-size:12px; font-weight:600">Galería</div></div>
-                <div class="circle-card" onclick="loadFeed('section', 'Lab')"><div class="circle-icon grad-lab"><i class="fas fa-flask"></i></div><div style="font-size:12px; font-weight:600">Lab</div></div>
-                <div class="circle-card" onclick="loadFeed('section', 'Guías')"><div class="circle-icon grad-off"><i class="fas fa-book"></i></div><div style="font-size:12px; font-weight:600">Guías</div></div>
+                <div class="circle-card" onclick="changeCategory('section', 'Taberna')"><div class="circle-icon grad-tavern"><i class="fas fa-mug-hot"></i></div><div style="font-size:12px; font-weight:600">Taberna</div></div>
+                <div class="circle-card" onclick="changeCategory('section', 'Galería')"><div class="circle-icon grad-art"><i class="fas fa-paint-brush"></i></div><div style="font-size:12px; font-weight:600">Galería</div></div>
+                <div class="circle-card" onclick="changeCategory('section', 'Lab')"><div class="circle-icon grad-lab"><i class="fas fa-flask"></i></div><div style="font-size:12px; font-weight:600">Lab</div></div>
+                <div class="circle-card" onclick="changeCategory('section', 'Guías')"><div class="circle-icon grad-off"><i class="fas fa-book"></i></div><div style="font-size:12px; font-weight:600">Guías</div></div>
             </div>
 
             <div class="feed-header">
-                <div class="tab-btn active" id="tabRecientes" onclick="loadFeed('all')">Recientes</div>
-                <div class="tab-btn" id="tabTop" onclick="loadFeed('top')">Top</div>
+                <div class="tab-btn active" id="tabRecientes" onclick="changeSort('recent')">Recientes</div>
+                <div class="tab-btn" id="tabTop" onclick="changeSort('top')">Top</div>
             </div>
 
             <div id="postsContainer">
@@ -230,7 +228,7 @@
             <div class="widget-box">
                 <div class="widget-title">Temas del momento</div>
                 <div id="trendsContainer">
-                    <p style="font-size:12px; color:#999">Cargando...</p>
+                    <p style="font-size:12px; color:#999">Calculando...</p>
                 </div>
             </div>
 
@@ -322,7 +320,7 @@
                 <button class="modal-btn btn-submit" style="padding:0 20px;" onclick="submitComment()">Enviar</button>
             </div>
             <div class="comments-list" id="commentsList">
-                </div>
+            </div>
         </div>
     </div>
 
@@ -331,7 +329,7 @@
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, where, getDocs, limit, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // CONFIGURACIÓN (TUS KEYS)
+        // CONFIGURACIÓN
         const firebaseConfig = {
             apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
             authDomain: "devouringlab.firebaseapp.com",
@@ -348,35 +346,24 @@
 
         const CLOUD_NAME = "dyhvx2vsz";
         const UPLOAD_PRESET = "DevouringIMG";
-        const ADMIN_UIDS = ["qlJIBLf1I1clEVk2uggolNWL4Ai1"]; // Tu UID de Admin
+        const ADMIN_UIDS = ["qlJIBLf1I1clEVk2uggolNWL4Ai1"]; 
 
-        // ESTADO GLOBAL
+        // ESTADO GLOBAL DE FILTROS
         let currentUser = null;
         let currentUserData = null; 
-        let uploadedImageUrl = ""; // Para posts
-        let newAvatarUrl = ""; // Para perfil
+        let uploadedImageUrl = ""; 
+        let newAvatarUrl = ""; 
         let currentPostIdForComments = null;
+        let commentsUnsubscribe = null;
 
-        /* --- UTILIDADES DE TIEMPO --- */
-        const formatTimeRelative = (timestamp) => {
-            if(!timestamp) return "Reciente";
-            const date = timestamp.toDate();
-            const now = new Date();
-            const diffMs = now - date;
-            const diffSec = Math.floor(diffMs / 1000);
-            const diffMin = Math.floor(diffSec / 60);
-            const diffHour = Math.floor(diffMin / 60);
-            const diffDay = Math.floor(diffHour / 24);
-
-            if (diffSec < 60) return "Hace un momento";
-            if (diffMin < 60) return `Hace ${diffMin} min`;
-            if (diffHour < 24) return `Hace ${diffHour} h`;
-            if (diffDay === 1) return "Ayer";
-            if (diffDay < 7) return `Hace ${diffDay} días`;
-            return date.toLocaleDateString();
+        // ESTADO DE LA APLICACIÓN (NUEVO SISTEMA)
+        let appState = {
+            filterType: 'all',  // 'all' (inicio), 'game', 'section', 'following', 'tag'
+            filterValue: null,
+            sort: 'recent'      // 'recent', 'top'
         };
 
-        /* --- 1. GESTIÓN DE USUARIOS Y NIVELES --- */
+        /* --- 1. GESTIÓN DE USUARIOS REAL-TIME --- */
         const calculateStats = (userData) => {
             if (!userData) return { level: 1, title: "Novato" };
             
@@ -389,6 +376,7 @@
             let title = "Novato";
             const c = userData.postCount || 0;
             
+            // Lógica predeterminada de títulos
             if(c >= 5) title = "Explorador";
             if(c >= 10) title = "Aventurero";
             if(c >= 25) title = "Veterano";
@@ -397,47 +385,62 @@
             return { level, title };
         };
 
+        const updateUserUI = (user, data) => {
+            document.getElementById('authActions').style.display = 'none';
+            document.getElementById('userStats').style.display = 'block';
+            document.getElementById('sidebarName').innerText = data.displayName || user.displayName;
+            document.getElementById('sidebarAvatar').src = data.photoURL || user.photoURL;
+            document.getElementById('navAvatar').src = data.photoURL || user.photoURL;
+
+            const stats = calculateStats(data);
+            document.getElementById('sidebarLevel').innerHTML = `Lv. ${stats.level} • <span style="color:var(--accent)">${stats.title}</span>`;
+            document.getElementById('statPosts').innerText = data.postCount || 0;
+            document.getElementById('statFollowers').innerText = (data.followers || []).length;
+            document.getElementById('statFollowing').innerText = (data.following || []).length;
+            
+            // Check-in status
+            if(data.lastCheckIn) {
+                const last = data.lastCheckIn.toDate().toDateString();
+                const today = new Date().toDateString();
+                const btn = document.getElementById('checkInBtn');
+                if(last === today) {
+                    btn.classList.add('checked');
+                    btn.innerHTML = `<div><i class="fas fa-check"></i> Completado</div>`;
+                } else {
+                    btn.classList.remove('checked');
+                    btn.innerHTML = `<div><i class="fas fa-calendar-check"></i> Check-in Diario</div><i class="fas fa-chevron-right"></i>`;
+                }
+            }
+        };
+
+        // SETUP REAL-TIME LISTENER PARA USUARIO
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             if (user) {
-                const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
-
-                if (!userSnap.exists()) {
-                    await setDoc(userRef, {
-                        uid: user.uid,
-                        displayName: user.displayName,
-                        photoURL: user.photoURL,
-                        email: user.email,
-                        createdAt: serverTimestamp(),
-                        followers: [],
-                        following: [],
-                        postCount: 0,
-                        interestStats: { dinoma:0, vireo:0, cae:0, lanzer:0 } 
-                    });
-                    currentUserData = { postCount: 0, following: [], interestStats: {} };
-                } else {
-                    currentUserData = userSnap.data();
-                }
-
-                // UI update
-                document.getElementById('authActions').style.display = 'none';
-                document.getElementById('userStats').style.display = 'block';
-                document.getElementById('sidebarName').innerText = currentUserData.displayName || user.displayName;
-                document.getElementById('sidebarAvatar').src = currentUserData.photoURL || user.photoURL;
-                document.getElementById('navAvatar').src = currentUserData.photoURL || user.photoURL;
-
-                const stats = calculateStats(currentUserData);
-                document.getElementById('sidebarLevel').innerHTML = `Lv. ${stats.level} • <span style="color:var(--accent)">${stats.title}</span>`;
-                document.getElementById('statPosts').innerText = currentUserData.postCount || 0;
-                document.getElementById('statFollowers').innerText = (currentUserData.followers || []).length;
-                document.getElementById('statFollowing').innerText = (currentUserData.following || []).length;
-
-                updateInterestsUI(currentUserData.interestStats || {});
-                checkDailyStatus();
+                // Escuchar cambios en tiempo real (check-in, posts, etc)
+                onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+                    if (docSnap.exists()) {
+                        currentUserData = docSnap.data();
+                        updateUserUI(user, currentUserData);
+                        updateInterestsUI(currentUserData.interestStats || {});
+                    } else {
+                        // Crear usuario si no existe
+                        setDoc(doc(db, "users", user.uid), {
+                            uid: user.uid,
+                            displayName: user.displayName,
+                            photoURL: user.photoURL,
+                            email: user.email,
+                            createdAt: serverTimestamp(),
+                            followers: [],
+                            following: [],
+                            postCount: 0,
+                            interestStats: { dinoma:0, vireo:0, cae:0, lanzer:0 } 
+                        });
+                    }
+                });
                 loadNotifications();
-
             } else {
+                // UI Deslogueado
                 document.getElementById('authActions').style.display = 'block';
                 document.getElementById('userStats').style.display = 'none';
                 document.getElementById('sidebarName').innerText = "Visitante";
@@ -446,36 +449,44 @@
                 document.getElementById('navAvatar').src = "https://via.placeholder.com/36";
             }
             loadRecommendedUsers();
-            loadFeed('all'); 
+            loadFeed(); 
         });
 
-        // --- 2. LOGIC MIS INTERESES ---
-        const updateInterestsUI = (stats) => {
-            const max = Object.entries(stats).reduce((a, b) => a[1] > b[1] ? a : b, ['none', 0]);
-            const topGame = max[0];
+        /* --- 2. SISTEMA DE FILTRADO Y FEED --- */
+
+        // Funciones para botones HTML
+        window.changeCategory = (type, value) => {
+            appState.filterType = type;
+            appState.filterValue = value;
             
-            ['navUnity', 'navRPG', 'navWeb'].forEach(id => document.getElementById(id).classList.remove('active'));
+            // Actualizar UI Botones
+            document.querySelectorAll('.game-item, .nav-item').forEach(e => e.classList.remove('active'));
+            
+            if(type === 'all') document.getElementById('nav-home').classList.add('active');
+            else if(type === 'following') document.getElementById('nav-following').classList.add('active');
+            else if(type === 'game') {
+                const btn = document.getElementById('game-' + value);
+                if(btn) btn.classList.add('active');
+            }
 
-            if(topGame === 'dinoma') document.getElementById('navUnity').classList.add('active'); 
-            if(topGame === 'vireo') document.getElementById('navRPG').classList.add('active'); 
-            if(topGame === 'cae') document.getElementById('navWeb').classList.add('active'); 
+            loadFeed();
         };
 
-        const trackInterest = async (game) => {
-            if(!currentUser) return;
-            const ref = doc(db, "users", currentUser.uid);
-            const field = `interestStats.${game}`;
-            await updateDoc(ref, { [field]: increment(1) });
-        };
+        window.changeSort = (mode) => {
+            appState.sort = mode;
+            // Actualizar UI Tabs
+            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+            if(mode === 'recent') document.getElementById('tabRecientes').classList.add('active');
+            if(mode === 'top') document.getElementById('tabTop').classList.add('active');
+            
+            loadFeed();
+        }
 
-// --- FEED Y POSTS CORREGIDO ---
-        window.loadFeed = (type = 'all', value = null) => {
+        window.loadFeed = () => {
             const feedDiv = document.getElementById('postsContainer');
-            // Mantenemos el loader visual
             feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
 
-            // CORRECCIÓN: Quitamos orderBy("isPinned") para evitar error de índice
-            // Solo ordenamos por fecha. El filtrado de Pinned lo haremos en Javascript abajo.
+            // 1. Siempre pedimos ordenados por fecha al servidor
             let q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(50));
 
             onSnapshot(q, (snapshot) => {
@@ -483,44 +494,33 @@
                 let posts = [];
                 snapshot.forEach(doc => posts.push({id: doc.id, ...doc.data()}));
 
-                // 1. FILTRADO
-                if (type === 'following' && currentUserData) {
+                // 2. FILTRADO (Cliente)
+                if (appState.filterType === 'following' && currentUserData) {
                     posts = posts.filter(p => currentUserData.following.includes(p.authorUid));
                 } 
-                else if (type === 'game') {
-                    // Normalizamos a minúsculas para evitar errores
-                    posts = posts.filter(p => p.game === value);
-                    // Actualizar UI botones
-                    document.querySelectorAll('.game-item').forEach(e => e.classList.remove('active'));
-                    // Buscamos el botón que tenga el onclick con ese valor
-                    const btn = document.querySelector(`.game-item[onclick*="'${value}'"]`);
-                    if(btn) btn.classList.add('active');
+                else if (appState.filterType === 'game') {
+                    // Si elijo "General", muestro solo posts con game=='all'
+                    posts = posts.filter(p => p.game === appState.filterValue);
                 }
-                else if (type === 'section') {
-                    posts = posts.filter(p => p.section === value);
+                else if (appState.filterType === 'section') {
+                    posts = posts.filter(p => p.section === appState.filterValue);
                 } 
-                else if (type === 'tag') {
-                    posts = posts.filter(p => (p.tags || []).includes(value));
-                    document.getElementById('searchInput').value = "#" + value;
+                else if (appState.filterType === 'tag') {
+                    posts = posts.filter(p => (p.tags || []).includes(appState.filterValue));
+                    document.getElementById('searchInput').value = "#" + appState.filterValue;
                 }
+                // Si filterType es 'all', mostramos todo (Home behavior)
 
-                // 2. ORDENAMIENTO (LOGICA CORREGIDA)
-                if (type === 'top') {
-                    // Ordenar por cantidad de likes
+                // 3. ORDENAMIENTO (Cliente)
+                if (appState.sort === 'top') {
+                    // Ordenar por Likes
                     posts.sort((a,b) => (b.likes?.length || 0) - (a.likes?.length || 0));
-                    // Resaltar tab Top
-                    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-                    document.getElementById('tabTop').classList.add('active');
                 } else {
-                    // Ordenar por defecto: Primero FIJADOS, luego por FECHA (ya viene por fecha de Firebase)
+                    // Ordenar por defecto: Primero FIJADOS, luego por FECHA (ya viene fecha de Firebase)
                     posts.sort((a,b) => (b.isPinned === true) - (a.isPinned === true));
-                    // Resaltar tab Recientes
-                    if(type === 'all') {
-                        document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-                        document.getElementById('tabRecientes').classList.add('active');
-                    }
                 }
 
+                // Calcular Tendencias globalmente o basado en vista actual
                 calculateTrends(posts); 
 
                 if(posts.length === 0) {
@@ -528,11 +528,11 @@
                     return;
                 }
 
+                // RENDER
                 posts.forEach(post => {
                     const isLiked = currentUser && (post.likes || []).includes(currentUser.uid);
                     const isAdmin = currentUser && ADMIN_UIDS.includes(currentUser.uid);
                     
-                    // Renderizado
                     const html = `
                         <article class="post-card ${post.isPinned ? 'pinned' : ''}" onmouseenter="incrementViews('${post.id}', '${post.game}')">
                             ${post.isPinned ? '<div class="pin-badge"><i class="fas fa-thumbtack"></i></div>' : ''}
@@ -581,7 +581,8 @@
             });
         };
 
-        /* --- 4. CALCULOS Y ALGORITMOS --- */
+        /* --- 3. FUNCIONES AUXILIARES Y LOGICA --- */
+        
         const calculateTrends = (posts) => {
             const scores = {};
             posts.forEach(p => {
@@ -599,23 +600,42 @@
                 return;
             }
             sorted.forEach(tag => {
-                div.innerHTML += `<div class="trend-item" onclick="searchTag('${tag}')">
+                div.innerHTML += `<div class="trend-item" onclick="changeCategory('tag', '${tag}')">
                     <span class="trend-name"># ${tag}</span><span class="trend-count">Trending</span>
                 </div>`;
             });
+        };
+
+        const updateInterestsUI = (stats) => {
+            const max = Object.entries(stats).reduce((a, b) => a[1] > b[1] ? a : b, ['none', 0]);
+            const topGame = max[0];
+            ['navUnity', 'navRPG', 'navWeb'].forEach(id => document.getElementById(id).classList.remove('active'));
+            if(topGame === 'dinoma') document.getElementById('navUnity').classList.add('active'); 
+            if(topGame === 'vireo') document.getElementById('navRPG').classList.add('active'); 
+            if(topGame === 'cae') document.getElementById('navWeb').classList.add('active'); 
+        };
+
+        const trackInterest = async (game) => {
+            if(!currentUser) return;
+            const ref = doc(db, "users", currentUser.uid);
+            const field = `interestStats.${game}`;
+            await updateDoc(ref, { [field]: increment(1) });
         };
 
         const viewedPosts = new Set();
         window.incrementViews = async (postId, game) => {
             if(viewedPosts.has(postId)) return;
             viewedPosts.add(postId);
-            await updateDoc(doc(db, "posts", postId), { views: increment(1) });
-            trackInterest(game); 
+            // Pequeña espera para no spamear DB al hacer scroll rápido
+            setTimeout(async () => {
+                await updateDoc(doc(db, "posts", postId), { views: increment(1) });
+                trackInterest(game); 
+            }, 1000);
         };
 
         const parseText = (text) => {
             let parsed = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="hashtag-link">$1</a>');
-            parsed = parsed.replace(/#(\w+)/g, '<span class="hashtag-link" onclick="window.searchTag(\'$1\')">#$1</span>');
+            parsed = parsed.replace(/#(\w+)/g, '<span class="hashtag-link" onclick="window.changeCategory(\'tag\', \'$1\')">#$1</span>');
             return parsed;
         };
         
@@ -624,28 +644,31 @@
             return map[key] || key;
         };
 
-        // --- 5. ACCIONES DE USUARIO ---
-        const checkDailyStatus = async () => {
-            if(!currentUserData.lastCheckIn) return;
-            const last = currentUserData.lastCheckIn.toDate().toDateString();
-            const today = new Date().toDateString();
-            if(last === today) {
-                const btn = document.getElementById('checkInBtn');
-                btn.classList.add('checked');
-                btn.innerHTML = `<div><i class="fas fa-check"></i> Completado</div>`;
-            }
+        const formatTimeRelative = (timestamp) => {
+            if(!timestamp) return "Reciente";
+            const date = timestamp.toDate();
+            const now = new Date();
+            const diffMs = now - date;
+            const diffSec = Math.floor(diffMs / 1000);
+            const diffMin = Math.floor(diffSec / 60);
+            const diffHour = Math.floor(diffMin / 60);
+            const diffDay = Math.floor(diffHour / 24);
+            if (diffSec < 60) return "Hace un momento";
+            if (diffMin < 60) return `Hace ${diffMin} min`;
+            if (diffHour < 24) return `Hace ${diffHour} h`;
+            if (diffDay === 1) return "Ayer";
+            if (diffDay < 7) return `Hace ${diffDay} días`;
+            return date.toLocaleDateString();
         };
 
+        // --- ACCIONES ---
+        
         document.getElementById('checkInBtn').addEventListener('click', async () => {
             if(!currentUser) return alert("Inicia sesión");
-            const btn = document.getElementById('checkInBtn');
-            if(btn.classList.contains('checked')) return;
+            if(document.getElementById('checkInBtn').classList.contains('checked')) return;
             
             await updateDoc(doc(db, "users", currentUser.uid), { lastCheckIn: serverTimestamp() });
-            btn.classList.add('checked');
-            btn.innerHTML = `<div><i class="fas fa-check"></i> Completado</div>`;
-            const stats = calculateStats(currentUserData);
-            alert(`¡Check-in realizado!`);
+            // El onSnapshot actualizará la UI automáticamente
         });
 
         document.getElementById('submitPostBtn').addEventListener('click', async () => {
@@ -656,7 +679,6 @@
 
             const tags = (content.match(/#[\w]+/g) || []).map(t => t.replace('#', ''));
             if(tags.length === 0) return alert("Debes incluir al menos un #hashtag");
-
             if(!content && !uploadedImageUrl) return alert("Escribe algo o sube una imagen");
 
             try {
@@ -678,11 +700,7 @@
                     isOfficial: isOfficial && currentUserData.isAdmin,
                     timestamp: serverTimestamp()
                 });
-
-                await updateDoc(doc(db, "users", currentUser.uid), { 
-                    postCount: increment(1)
-                });
-
+                await updateDoc(doc(db, "users", currentUser.uid), { postCount: increment(1) });
                 closeModals();
                 document.getElementById('postContent').value = "";
             } catch (e) {
@@ -691,20 +709,26 @@
             }
         });
 
+        // --- COMENTARIOS ARREGLADOS ---
         window.openComments = (postId) => {
             if(!currentUser) return alert("Inicia sesión");
             currentPostIdForComments = postId;
             document.getElementById('commentsModal').style.display = 'flex';
-            loadComments(postId);
-        };
-
-        const loadComments = (postId) => {
+            
             const list = document.getElementById('commentsList');
-            list.innerHTML = "Cargando...";
+            list.innerHTML = "<p style='text-align:center; color:#999'>Cargando comentarios...</p>";
+
+            // Limpiar listener anterior si existe
+            if(commentsUnsubscribe) commentsUnsubscribe();
+
             const q = query(collection(db, "comments"), where("postId", "==", postId), orderBy("timestamp", "desc"));
-            onSnapshot(q, (snap) => {
+            
+            // Nueva suscripción
+            commentsUnsubscribe = onSnapshot(q, (snap) => {
                 list.innerHTML = "";
-                if(snap.empty) list.innerHTML = "<div style='text-align:center; padding:10px; color:#999'>Sé el primero en comentar.</div>";
+                if(snap.empty) {
+                    list.innerHTML = "<div style='text-align:center; padding:10px; color:#999'>Sé el primero en comentar.</div>";
+                }
                 snap.forEach(d => {
                     const c = d.data();
                     list.innerHTML += `
@@ -716,23 +740,37 @@
                             </div>
                         </div>`;
                 });
+            }, (error) => {
+                console.error("Error comentarios:", error);
+                list.innerHTML = "<p style='color:red'>Error cargando comentarios.</p>";
             });
         };
 
         window.submitComment = async () => {
             const txt = document.getElementById('commentInput').value;
             if(!txt) return;
-            await addDoc(collection(db, "comments"), {
-                postId: currentPostIdForComments,
-                text: txt,
-                authorName: currentUser.displayName,
-                authorAvatar: currentUser.photoURL,
-                authorUid: currentUser.uid,
-                timestamp: serverTimestamp()
-            });
-            document.getElementById('commentInput').value = "";
+            const btn = document.querySelector('#commentsModal .btn-submit');
+            btn.disabled = true;
+            btn.innerText = "...";
+            
+            try {
+                await addDoc(collection(db, "comments"), {
+                    postId: currentPostIdForComments,
+                    text: txt,
+                    authorName: currentUser.displayName,
+                    authorAvatar: currentUser.photoURL,
+                    authorUid: currentUser.uid,
+                    timestamp: serverTimestamp()
+                });
+                document.getElementById('commentInput').value = "";
+            } catch (e) {
+                console.error(e);
+            }
+            btn.disabled = false;
+            btn.innerText = "Enviar";
         };
 
+        // --- INTERACCIONES ---
         window.toggleLike = async (postId, isLiked, authorUid) => {
             if (!currentUser) return alert("Inicia sesión");
             const postRef = doc(db, "posts", postId);
@@ -742,14 +780,10 @@
                 if(authorUid !== currentUser.uid) createNotification("like", authorUid);
             }
         };
+        window.togglePin = async (postId, currentStatus) => await updateDoc(doc(db, "posts", postId), { isPinned: !currentStatus });
+        window.deletePost = async (postId) => { if(confirm("¿Borrar?")) await deleteDoc(doc(db, "posts", postId)); };
 
-        window.togglePin = async (postId, currentStatus) => {
-            await updateDoc(doc(db, "posts", postId), { isPinned: !currentStatus });
-        };
-        window.deletePost = async (postId) => {
-            if(confirm("¿Borrar post permanentemente?")) await deleteDoc(doc(db, "posts", postId));
-        };
-
+        // --- NOTIFICACIONES ---
         const createNotification = async (type, toUid) => {
             await addDoc(collection(db, "notifications"), {
                 toUid: toUid,
@@ -759,7 +793,6 @@
                 timestamp: serverTimestamp()
             });
         };
-
         const loadNotifications = () => {
             const q = query(collection(db, "notifications"), where("toUid", "==", currentUser.uid), orderBy("timestamp", "desc"), limit(10));
             onSnapshot(q, (snap) => {
@@ -768,101 +801,59 @@
                 let unread = 0;
                 box.innerHTML = "";
                 if(snap.empty) box.innerHTML = "<div style='padding:10px; text-align:center'>Nada por aquí</div>";
-                
                 snap.forEach(d => {
                     const n = d.data();
                     if(!n.read) unread++;
                     let icon = n.type === 'like' ? '<i class="fas fa-heart notif-icon"></i>' : '<i class="fas fa-user-plus notif-icon"></i>';
                     let text = n.type === 'like' ? 'le gustó tu post' : 'te empezó a seguir';
-                    box.innerHTML += `
-                        <div class="notif-item">
-                            ${icon}
-                            <div><b>${n.fromUser}</b> ${text}</div>
-                        </div>
-                    `;
+                    box.innerHTML += `<div class="notif-item">${icon}<div><b>${n.fromUser}</b> ${text}</div></div>`;
                 });
-                if(unread > 0) {
-                    badge.style.display = 'block';
-                    badge.innerText = unread;
-                } else {
-                    badge.style.display = 'none';
-                }
+                if(unread > 0) { badge.style.display = 'block'; badge.innerText = unread; } 
+                else { badge.style.display = 'none'; }
             });
         };
 
+        // --- PERFIL Y EXTRAS ---
         window.openEditProfile = () => document.getElementById('profileModal').style.display = 'flex';
-        
         document.getElementById('avatarInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
-            if(!file) return;
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', UPLOAD_PRESET);
+            const formData = new FormData(); formData.append('file', file); formData.append('upload_preset', UPLOAD_PRESET);
             document.getElementById('avatarStatus').innerText = "Subiendo...";
             const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
             const data = await res.json();
             newAvatarUrl = data.secure_url;
             document.getElementById('avatarStatus').innerText = "Listo";
         });
-
         window.saveProfileChanges = async () => {
             const name = document.getElementById('editName').value;
-            
             const updates = {};
-            if(name) {
-                await updateProfile(auth.currentUser, { displayName: name });
-                updates.displayName = name;
-            }
-            if(newAvatarUrl) {
-                await updateProfile(auth.currentUser, { photoURL: newAvatarUrl });
-                updates.photoURL = newAvatarUrl;
-            }
-
+            if(name) { await updateProfile(auth.currentUser, { displayName: name }); updates.displayName = name; }
+            if(newAvatarUrl) { await updateProfile(auth.currentUser, { photoURL: newAvatarUrl }); updates.photoURL = newAvatarUrl; }
             await updateDoc(doc(db, "users", currentUser.uid), updates);
             location.reload();
         };
 
-        window.filterGame = (g) => loadFeed('game', g);
-        window.searchTag = (t) => loadFeed('tag', t);
-        window.filterByInterest = (interest) => {
-            let target = 'all';
-            if(interest === 'Unity') target = 'dinoma';
-            if(interest === 'RPG') target = 'vireo';
-            if(interest === 'Web') target = 'cae';
-            loadFeed('game', target);
-        };
-        
+        // --- BUSCADOR Y RECOMENDADOS ---
         document.getElementById('searchInput').addEventListener('keypress', (e) => {
             if(e.key === 'Enter') {
                 const val = e.target.value;
-                if(val.startsWith('#')) loadFeed('tag', val.replace('#',''));
-                else loadFeed('tag', val);
+                if(val.startsWith('#')) changeCategory('tag', val.replace('#',''));
+                else changeCategory('tag', val);
             }
         });
-
         const loadRecommendedUsers = async () => {
             const q = query(collection(db, "users"), limit(10));
             const snap = await getDocs(q);
             let users = [];
             snap.forEach(d => users.push(d.data()));
             users = users.sort(() => 0.5 - Math.random()).slice(0, 3);
-
             const div = document.getElementById('recommendedContainer');
             div.innerHTML = "";
             users.forEach(u => {
                 if(currentUser && u.uid === currentUser.uid) return;
-                div.innerHTML += `
-                    <div class="rec-user">
-                        <div class="rec-info">
-                            <img src="${u.photoURL || 'https://via.placeholder.com/32'}" style="width:32px; height:32px; border-radius:50%">
-                            <div><div style="font-weight:bold; font-size:12px;">${u.displayName}</div></div>
-                        </div>
-                        <button class="rec-btn" onclick="followUser('${u.uid}')">Seguir</button>
-                    </div>
-                `;
+                div.innerHTML += `<div class="rec-user"><div class="rec-info"><img src="${u.photoURL || 'https://via.placeholder.com/32'}" style="width:32px; height:32px; border-radius:50%"><div><div style="font-weight:bold; font-size:12px;">${u.displayName}</div></div></div><button class="rec-btn" onclick="followUser('${u.uid}')">Seguir</button></div>`;
             });
         };
-
         window.followUser = async (uid) => {
             if(!currentUser) return alert("Inicia sesión");
             await updateDoc(doc(db, "users", currentUser.uid), { following: arrayUnion(uid) });
@@ -870,11 +861,10 @@
             alert("Siguiendo!");
         };
 
+        // --- UPLOAD POST IMG ---
         document.getElementById('fileInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', UPLOAD_PRESET);
+            const formData = new FormData(); formData.append('file', file); formData.append('upload_preset', UPLOAD_PRESET);
             document.getElementById('uploadStatus').innerText = "Subiendo...";
             const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
             const data = await res.json();
@@ -884,6 +874,7 @@
             document.getElementById('imagePreview').style.display = 'block';
         });
 
+        // --- BOILERPLATE ---
         window.doLogout = () => signOut(auth);
         document.getElementById('sidebarLoginBtn').addEventListener('click', () => signInWithPopup(auth, provider));
         document.getElementById('navAvatar').addEventListener('click', () => { if(!currentUser) signInWithPopup(auth, provider); });
@@ -898,4 +889,3 @@
     </script>
 </body>
 </html>
-
