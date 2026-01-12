@@ -156,7 +156,7 @@
     </nav>
 
     <div class="game-nav">
-        <div class="game-item active" id="game-all" onclick="changeCategory('all', null)"><i class="fas fa-globe"></i> General</div>
+        <div class="game-item active" id="game-all" onclick="changeCategory('all', 'all')"><i class="fas fa-globe"></i> General</div>
         <div class="game-item" id="game-vireo" onclick="changeCategory('game', 'vireo')"><img src="https://via.placeholder.com/24"> Vireo CODE</div>
         <div class="game-item" id="game-cae" onclick="changeCategory('game', 'cae')"><img src="https://via.placeholder.com/24"> Cae</div>
         <div class="game-item" id="game-lanzer" onclick="changeCategory('game', 'lanzer')"><img src="https://via.placeholder.com/24"> Move-Lanzer</div>
@@ -167,7 +167,7 @@
         
         <aside class="sidebar-left">
             <div class="menu-section">
-                <div class="nav-item active" id="nav-home" onclick="changeCategory('all', null)"><i class="fas fa-home" style="margin-right: 12px;"></i> Inicio</div>
+                <div class="nav-item active" id="nav-home" onclick="changeCategory('all', 'all')"><i class="fas fa-home" style="margin-right: 12px;"></i> Inicio</div>
                 <div class="nav-item" id="nav-following" onclick="changeCategory('following', null)"><i class="fas fa-star" style="margin-right: 12px;"></i> Siguiendo</div>
             </div>
             <div class="menu-title">MIS INTERESES (Dinámico)</div>
@@ -327,7 +327,7 @@
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, where, getDocs, limit, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // CONFIGURACIÓN (TUS KEYS)
+        // CONFIGURACIÓN FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
             authDomain: "devouringlab.firebaseapp.com",
@@ -353,9 +353,15 @@
         let currentPostIdForComments = null;
         let commentsUnsubscribe = null;
 
-        let appState = { filterType: 'all', filterValue: null, sort: 'recent' };
+        // ESTADO DE LA APP (Corrección de filtros)
+        let appState = { 
+            filterType: 'all', 
+            filterValue: 'all', 
+            sort: 'recent',
+            feedUnsubscribe: null 
+        };
 
-        /* --- 1. USUARIO --- */
+        /* --- 1. GESTIÓN DE USUARIOS --- */
         const calculateStats = (userData) => {
             if (!userData) return { level: 1, title: "Novato" };
             const createdAt = userData.createdAt ? userData.createdAt.toDate() : new Date();
@@ -363,14 +369,9 @@
             let level = Math.floor(years * 12); 
             level += Math.floor((userData.postCount || 0) / 100); 
             if(level < 1) level = 1;
-
             let title = "Novato";
-            const c = userData.postCount || 0;
-            if(c >= 5) title = "Explorador";
-            if(c >= 10) title = "Aventurero";
-            if(c >= 25) title = "Veterano";
+            if((userData.postCount || 0) >= 5) title = "Explorador";
             if(ADMIN_UIDS.includes(userData.uid)) title = "Game Designer";
-
             return { level, title };
         };
 
@@ -380,25 +381,11 @@
             document.getElementById('sidebarName').innerText = data.displayName || user.displayName;
             document.getElementById('sidebarAvatar').src = data.photoURL || user.photoURL;
             document.getElementById('navAvatar').src = data.photoURL || user.photoURL;
-
             const stats = calculateStats(data);
             document.getElementById('sidebarLevel').innerHTML = `Lv. ${stats.level} • <span style="color:var(--accent)">${stats.title}</span>`;
             document.getElementById('statPosts').innerText = data.postCount || 0;
             document.getElementById('statFollowers').innerText = (data.followers || []).length;
             document.getElementById('statFollowing').innerText = (data.following || []).length;
-            
-            if(data.lastCheckIn) {
-                const last = data.lastCheckIn.toDate().toDateString();
-                const today = new Date().toDateString();
-                const btn = document.getElementById('checkInBtn');
-                if(last === today) {
-                    btn.classList.add('checked');
-                    btn.innerHTML = `<div><i class="fas fa-check"></i> Completado</div>`;
-                } else {
-                    btn.classList.remove('checked');
-                    btn.innerHTML = `<div><i class="fas fa-calendar-check"></i> Check-in Diario</div><i class="fas fa-chevron-right"></i>`;
-                }
-            }
         };
 
         onAuthStateChanged(auth, async (user) => {
@@ -408,46 +395,25 @@
                     if (docSnap.exists()) {
                         currentUserData = docSnap.data();
                         updateUserUI(user, currentUserData);
-                        updateInterestsUI(currentUserData.interestStats || {});
                     } else {
                         setDoc(doc(db, "users", user.uid), {
-                            uid: user.uid,
-                            displayName: user.displayName,
-                            photoURL: user.photoURL,
-                            email: user.email,
-                            createdAt: serverTimestamp(),
-                            followers: [],
-                            following: [],
-                            postCount: 0,
-                            interestStats: { dinoma:0, vireo:0, cae:0, lanzer:0 } 
+                            uid: user.uid, displayName: user.displayName, photoURL: user.photoURL,
+                            createdAt: serverTimestamp(), followers: [], following: [], postCount: 0
                         });
                     }
                 });
-                loadNotifications();
-            } else {
-                document.getElementById('authActions').style.display = 'block';
-                document.getElementById('userStats').style.display = 'none';
-                document.getElementById('sidebarName').innerText = "Visitante";
-                document.getElementById('sidebarAvatar').src = "https://via.placeholder.com/75";
-                document.getElementById('sidebarLevel').innerText = "Lv. 0 • Invitado";
-                document.getElementById('navAvatar').src = "https://via.placeholder.com/36";
             }
+            loadFeed(); // Carga inicial
             loadRecommendedUsers();
-            loadFeed(); 
         });
 
-        /* --- 2. FILTROS Y FEED CORREGIDOS --- */
+        /* --- 2. LÓGICA DE CARGA (ELIMINACIÓN DEL ERROR OCULTO) --- */
         window.changeCategory = (type, value) => {
             appState.filterType = type;
             appState.filterValue = value;
-            document.querySelectorAll('.game-item, .nav-item').forEach(e => e.classList.remove('active'));
-            
+            document.querySelectorAll('.game-item, .nav-item, .circle-card').forEach(e => e.classList.remove('active'));
             if(type === 'all') document.getElementById('nav-home').classList.add('active');
-            else if(type === 'following') document.getElementById('nav-following').classList.add('active');
-            else if(type === 'game') {
-                const btn = document.getElementById('game-' + value);
-                if(btn) btn.classList.add('active');
-            }
+            if(type === 'game' && value !== 'all') document.getElementById('game-' + value)?.classList.add('active');
             loadFeed();
         };
 
@@ -457,384 +423,137 @@
             if(mode === 'recent') document.getElementById('tabRecientes').classList.add('active');
             if(mode === 'top') document.getElementById('tabTop').classList.add('active');
             loadFeed();
-        }
+        };
 
         window.loadFeed = () => {
             const feedDiv = document.getElementById('postsContainer');
             feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
 
-            let q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(100));
+            // 1. LIMPIEZA DE CONEXIÓN ANTERIOR (Evita saturación)
+            if (appState.feedUnsubscribe) appState.feedUnsubscribe();
 
-            onSnapshot(q, (snapshot) => {
-                feedDiv.innerHTML = "";
+            // 2. CONSULTA SIMPLE (Evita problemas de índices de Firebase)
+            const q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(50));
+
+            // 3. SUSCRIPCIÓN EN TIEMPO REAL
+            appState.feedUnsubscribe = onSnapshot(q, (snapshot) => {
                 let posts = [];
                 snapshot.forEach(doc => posts.push({id: doc.id, ...doc.data()}));
 
-                // ============ LOGICA DE FILTRADO MAESTRA (CORREGIDA) ============
+                // 4. FILTRADO INTELIGENTE EN EL CLIENTE
+                let filtered = posts;
                 
                 if (appState.filterType === 'search') {
                     const term = appState.filterValue.toLowerCase();
-                    posts = posts.filter(p => 
-                        (p.content && p.content.toLowerCase().includes(term)) ||
-                        (p.authorName && p.authorName.toLowerCase().includes(term)) ||
-                        (p.tags && p.tags.some(t => t.toLowerCase().includes(term)))
-                    );
-                } 
-                else {
-                    if (appState.filterType === 'following' && currentUserData) {
-                        posts = posts.filter(p => currentUserData.following.includes(p.authorUid));
-                    } 
-                    else if (appState.filterType === 'game') {
-                        // Si no es "all" (General), filtramos por juego
-                        if(appState.filterValue !== 'all') {
-                            posts = posts.filter(p => p.game === appState.filterValue);
-                        }
-                        // Si es "all", mostramos todo (no hace falta filter)
-                    } 
-                    else if (appState.filterType === 'section') {
-                        posts = posts.filter(p => p.section === appState.filterValue);
-                    } 
-                    else if (appState.filterType === 'tag') {
-                        posts = posts.filter(p => (p.tags || []).includes(appState.filterValue));
-                        document.getElementById('searchInput').value = "#" + appState.filterValue;
-                    }
-                    // 'all' no entra en condiciones y muestra todo por defecto
+                    filtered = posts.filter(p => p.content?.toLowerCase().includes(term) || p.authorName?.toLowerCase().includes(term));
+                } else if (appState.filterType === 'game' && appState.filterValue !== 'all') {
+                    filtered = posts.filter(p => p.game === appState.filterValue);
+                } else if (appState.filterType === 'section') {
+                    filtered = posts.filter(p => p.section === appState.filterValue);
+                } else if (appState.filterType === 'tag') {
+                    filtered = posts.filter(p => p.tags?.includes(appState.filterValue));
+                } else if (appState.filterType === 'following' && currentUserData) {
+                    filtered = posts.filter(p => currentUserData.following.includes(p.authorUid));
                 }
 
+                // Ordenación Top si es necesario
                 if (appState.sort === 'top') {
-                    posts.sort((a,b) => (b.likes?.length || 0) - (a.likes?.length || 0));
-                } else {
-                    posts.sort((a,b) => (b.isPinned === true) - (a.isPinned === true));
+                    filtered.sort((a,b) => (b.likes?.length || 0) - (a.likes?.length || 0));
                 }
 
-                calculateTrends(posts); 
-
-                if(posts.length === 0) {
-                    feedDiv.innerHTML = '<div style="text-align:center; padding:30px; color:#999">No hay publicaciones aquí.</div>';
-                    return;
-                }
-
-                posts.forEach(post => {
-                    const isLiked = currentUser && (post.likes || []).includes(currentUser.uid);
-                    const isAdmin = currentUser && ADMIN_UIDS.includes(currentUser.uid);
-                    
-                    const html = `
-                        <article class="post-card ${post.isPinned ? 'pinned' : ''}" onmouseenter="incrementViews('${post.id}', '${post.game}')">
-                            ${post.isPinned ? '<div class="pin-badge"><i class="fas fa-thumbtack"></i></div>' : ''}
-                            <div class="user-header">
-                                <div class="avatar-ring ${post.isOfficial ? 'official' : ''}">
-                                    <img src="${post.authorAvatar || 'https://via.placeholder.com/40'}">
-                                </div>
-                                <div>
-                                    <div style="font-weight:bold; font-size:14px;">
-                                        ${post.authorName} 
-                                        ${post.authorLevel ? `<span class="level-badge">Lv.${post.authorLevel}</span>` : ''}
-                                        ${post.authorTitle ? `<span class="title-badge">${post.authorTitle}</span>` : ''}
-                                        ${post.isOfficial ? '<i class="fas fa-check-circle" style="color:#ffd700; margin-left:5px"></i>' : ''}
-                                    </div>
-                                    <div style="font-size:11px; color:#999;">
-                                        ${formatTimeRelative(post.timestamp)} • <b>${getGameName(post.game)}</b> (${post.section})
-                                    </div>
-                                </div>
-                                ${isAdmin ? `
-                                <div class="mod-actions">
-                                    <i class="fas fa-thumbtack mod-btn" title="Fijar" onclick="togglePin('${post.id}', ${post.isPinned})"></i>
-                                    <i class="fas fa-trash mod-btn" title="Borrar" onclick="deletePost('${post.id}')"></i>
-                                </div>` : ''}
-                            </div>
-                            
-                            <div class="post-text">${parseText(post.content)}</div>
-                            ${post.image ? `<img src="${post.image}" style="width:100%; border-radius:8px; margin-bottom:10px; max-height:400px; object-fit:cover;">` : ''}
-
-                            <div class="post-footer">
-                                <div style="display:flex; gap:20px;">
-                                    <div class="interaction-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}', ${isLiked}, '${post.authorUid}')">
-                                        <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i> ${(post.likes || []).length}
-                                    </div>
-                                    <div class="interaction-btn" onclick="openComments('${post.id}')">
-                                        <i class="far fa-comment"></i> <span id="count-c-${post.id}">Comentar</span>
-                                    </div>
-                                    <div style="font-size:12px; color:#999; display:flex; align-items:center; gap:5px;">
-                                        <i class="far fa-eye"></i> ${post.views || 0}
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                    `;
-                    feedDiv.innerHTML += html;
-                });
+                renderPosts(filtered);
             });
         };
 
-        /* --- 3. UTILIDADES --- */
-        const calculateTrends = (posts) => {
-            const scores = {};
-            posts.forEach(p => {
-                if(p.tags) p.tags.forEach(t => {
-                    const score = ((p.likes?.length || 0) * 2) + ((p.views || 0) * 1);
-                    scores[t] = (scores[t] || 0) + score + 1;
-                });
-            });
-            const sorted = Object.keys(scores).sort((a,b) => scores[b] - scores[a]).slice(0, 3);
-            const div = document.getElementById('trendsContainer');
-            div.innerHTML = "";
-            sorted.forEach(tag => {
-                div.innerHTML += `<div class="trend-item" onclick="changeCategory('tag', '${tag}')"><span class="trend-name"># ${tag}</span><span class="trend-count">Trending</span></div>`;
-            });
-        };
-
-        const updateInterestsUI = (stats) => {
-            const max = Object.entries(stats).reduce((a, b) => a[1] > b[1] ? a : b, ['none', 0]);
-            const topGame = max[0];
-            ['navUnity', 'navRPG', 'navWeb'].forEach(id => document.getElementById(id).classList.remove('active'));
-            if(topGame === 'dinoma') document.getElementById('navUnity').classList.add('active'); 
-            if(topGame === 'vireo') document.getElementById('navRPG').classList.add('active'); 
-            if(topGame === 'cae') document.getElementById('navWeb').classList.add('active'); 
-        };
-
-        const trackInterest = async (game) => {
-            if(!currentUser) return;
-            const ref = doc(db, "users", currentUser.uid);
-            const field = `interestStats.${game}`;
-            await updateDoc(ref, { [field]: increment(1) });
-        };
-
-        const viewedPosts = new Set();
-        window.incrementViews = async (postId, game) => {
-            if(viewedPosts.has(postId)) return;
-            viewedPosts.add(postId);
-            setTimeout(async () => {
-                await updateDoc(doc(db, "posts", postId), { views: increment(1) });
-                trackInterest(game); 
-            }, 1000);
-        };
-
-        const parseText = (text) => {
-            let parsed = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="hashtag-link">$1</a>');
-            parsed = parsed.replace(/#(\w+)/g, '<span class="hashtag-link" onclick="window.changeCategory(\'tag\', \'$1\')">#$1</span>');
-            return parsed;
-        };
-        
-        const getGameName = (key) => {
-            const map = { 'vireo': 'Vireo CODE', 'cae': 'Cae', 'lanzer': 'Move-Lanzer', 'dinoma': 'Creatura Dinoma', 'all': 'General' };
-            return map[key] || key;
-        };
-
-        const formatTimeRelative = (timestamp) => {
-            if(!timestamp) return "Reciente";
-            const date = timestamp.toDate();
-            const now = new Date();
-            const diffMs = now - date;
-            const diffSec = Math.floor(diffMs / 1000);
-            const diffMin = Math.floor(diffSec / 60);
-            if (diffSec < 60) return "Hace un momento";
-            if (diffMin < 60) return `Hace ${diffMin} min`;
-            return date.toLocaleDateString();
-        };
-
-        // --- ACCIONES ---
-        document.getElementById('checkInBtn').addEventListener('click', async () => {
-            if(!currentUser) return alert("Inicia sesión");
-            if(document.getElementById('checkInBtn').classList.contains('checked')) return;
-            await updateDoc(doc(db, "users", currentUser.uid), { lastCheckIn: serverTimestamp() });
-        });
-
-        document.getElementById('submitPostBtn').addEventListener('click', async () => {
-            const content = document.getElementById('postContent').value;
-            const section = document.getElementById('postSection').value;
-            const game = document.getElementById('postGame').value;
-            const isOfficial = document.getElementById('checkOfficial').checked;
-            const tags = (content.match(/#[\w]+/g) || []).map(t => t.replace('#', ''));
-            if(tags.length === 0) return alert("Debes incluir al menos un #hashtag");
-            if(!content && !uploadedImageUrl) return alert("Escribe algo o sube una imagen");
-
-            try {
-                const stats = calculateStats(currentUserData);
-                await addDoc(collection(db, "posts"), {
-                    authorUid: currentUser.uid,
-                    authorName: currentUser.displayName,
-                    authorAvatar: currentUser.photoURL,
-                    authorLevel: stats.level,
-                    authorTitle: stats.title,
-                    content: content,
-                    section: section,
-                    game: game,
-                    tags: tags,
-                    image: uploadedImageUrl,
-                    likes: [],
-                    views: 0,
-                    isPinned: false,
-                    isOfficial: isOfficial && currentUserData.isAdmin,
-                    timestamp: serverTimestamp()
-                });
-                await updateDoc(doc(db, "users", currentUser.uid), { postCount: increment(1) });
-                closeModals();
-                document.getElementById('postContent').value = "";
-            } catch (e) {
-                console.error(e);
-                alert("Error al publicar");
+        const renderPosts = (posts) => {
+            const feedDiv = document.getElementById('postsContainer');
+            if(posts.length === 0) {
+                feedDiv.innerHTML = '<div style="text-align:center; padding:30px; color:#999">No hay publicaciones disponibles aquí.</div>';
+                return;
             }
-        });
 
-        window.openComments = (postId) => {
-            if(!currentUser) return alert("Inicia sesión");
-            currentPostIdForComments = postId;
-            document.getElementById('commentsModal').style.display = 'flex';
-            const list = document.getElementById('commentsList');
-            list.innerHTML = "<p style='text-align:center; color:#999'>Cargando comentarios...</p>";
-            if(commentsUnsubscribe) commentsUnsubscribe();
-
-            const q = query(collection(db, "comments"), where("postId", "==", postId));
-            
-            commentsUnsubscribe = onSnapshot(q, (snap) => {
-                list.innerHTML = "";
-                let comments = [];
-                snap.forEach(d => comments.push(d.data()));
-                comments.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
-
-                if(comments.length === 0) list.innerHTML = "<div style='text-align:center; padding:10px; color:#999'>Sé el primero en comentar.</div>";
+            feedDiv.innerHTML = posts.map(post => {
+                const isLiked = currentUser && (post.likes || []).includes(currentUser.uid);
+                const isAdmin = currentUser && ADMIN_UIDS.includes(currentUser.uid);
                 
-                comments.forEach(c => {
-                    list.innerHTML += `
-                        <div class="comment-item">
-                            <img src="${c.authorAvatar}" style="width:30px; height:30px; border-radius:50%">
-                            <div class="comment-content">
-                                <div style="font-weight:bold; font-size:12px">${c.authorName}</div>
-                                <div>${c.text}</div>
+                return `
+                    <article class="post-card ${post.isPinned ? 'pinned' : ''}">
+                        ${post.isPinned ? '<div class="pin-badge"><i class="fas fa-thumbtack"></i></div>' : ''}
+                        <div class="user-header">
+                            <div class="avatar-ring ${post.isOfficial ? 'official' : ''}">
+                                <img src="${post.authorAvatar || 'https://via.placeholder.com/40'}">
                             </div>
-                        </div>`;
-                });
-            });
+                            <div>
+                                <div style="font-weight:bold; font-size:14px;">${post.authorName}</div>
+                                <div style="font-size:11px; color:#999;">${post.section} • ${post.game}</div>
+                            </div>
+                            ${isAdmin ? `<div class="mod-actions"><i class="fas fa-trash mod-btn" onclick="deletePost('${post.id}')"></i></div>` : ''}
+                        </div>
+                        <div class="post-text">${parseText(post.content)}</div>
+                        ${post.image ? `<img src="${post.image}" style="width:100%; border-radius:8px; margin-bottom:10px;">` : ''}
+                        <div class="post-footer">
+                            <div class="interaction-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}', ${isLiked})">
+                                <i class="fas fa-heart"></i> ${(post.likes || []).length}
+                            </div>
+                            <div class="interaction-btn" onclick="openComments('${post.id}')">
+                                <i class="far fa-comment"></i> Comentar
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
         };
 
-        window.submitComment = async () => {
-            const txt = document.getElementById('commentInput').value;
-            if(!txt) return;
-            await addDoc(collection(db, "comments"), {
-                postId: currentPostIdForComments,
-                text: txt,
-                authorName: currentUser.displayName,
-                authorAvatar: currentUser.photoURL,
-                authorUid: currentUser.uid,
-                timestamp: serverTimestamp()
-            });
-            document.getElementById('commentInput').value = "";
+        /* --- 3. ACCIONES Y UTILIDADES --- */
+        const parseText = (text) => {
+            return text.replace(/#(\w+)/g, '<span class="hashtag-link" onclick="changeCategory(\'tag\', \'$1\')">#$1</span>');
         };
 
-        window.toggleLike = async (postId, isLiked, authorUid) => {
+        window.toggleLike = async (postId, isLiked) => {
             if (!currentUser) return alert("Inicia sesión");
-            const postRef = doc(db, "posts", postId);
-            if (isLiked) await updateDoc(postRef, { likes: arrayRemove(currentUser.uid) });
-            else {
-                await updateDoc(postRef, { likes: arrayUnion(currentUser.uid) });
-                if(authorUid !== currentUser.uid) createNotification("like", authorUid);
-            }
-        };
-        window.togglePin = async (postId, currentStatus) => await updateDoc(doc(db, "posts", postId), { isPinned: !currentStatus });
-        window.deletePost = async (postId) => { if(confirm("¿Borrar?")) await deleteDoc(doc(db, "posts", postId)); };
-
-        const createNotification = async (type, toUid) => {
-            await addDoc(collection(db, "notifications"), {
-                toUid: toUid,
-                fromUser: currentUser.displayName,
-                type: type, 
-                read: false,
-                timestamp: serverTimestamp()
-            });
-        };
-        const loadNotifications = () => {
-            const q = query(collection(db, "notifications"), where("toUid", "==", currentUser.uid), limit(10));
-            onSnapshot(q, (snap) => {
-                const box = document.getElementById('notifDropdown');
-                const badge = document.getElementById('notifBadge');
-                let unread = 0;
-                box.innerHTML = "";
-                let notifs = [];
-                snap.forEach(d => notifs.push(d.data()));
-                notifs.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
-
-                if(notifs.length === 0) box.innerHTML = "<div style='padding:10px; text-align:center'>Nada por aquí</div>";
-                notifs.forEach(n => {
-                    if(!n.read) unread++;
-                    let icon = n.type === 'like' ? '<i class="fas fa-heart notif-icon"></i>' : '<i class="fas fa-user-plus notif-icon"></i>';
-                    let text = n.type === 'like' ? 'le gustó tu post' : 'te empezó a seguir';
-                    box.innerHTML += `<div class="notif-item">${icon}<div><b>${n.fromUser}</b> ${text}</div></div>`;
-                });
-                if(unread > 0) { badge.style.display = 'block'; badge.innerText = unread; } else { badge.style.display = 'none'; }
-            });
+            const ref = doc(db, "posts", postId);
+            await updateDoc(ref, { likes: isLiked ? arrayRemove(currentUser.uid) : arrayUnion(currentUser.uid) });
         };
 
-        window.openEditProfile = () => document.getElementById('profileModal').style.display = 'flex';
-        document.getElementById('avatarInput').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            const formData = new FormData(); formData.append('file', file); formData.append('upload_preset', UPLOAD_PRESET);
-            document.getElementById('avatarStatus').innerText = "Subiendo...";
-            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
-            const data = await res.json();
-            newAvatarUrl = data.secure_url;
-            document.getElementById('avatarStatus').innerText = "Listo";
-        });
-        window.saveProfileChanges = async () => {
-            const name = document.getElementById('editName').value;
-            const updates = {};
-            if(name) { await updateProfile(auth.currentUser, { displayName: name }); updates.displayName = name; }
-            if(newAvatarUrl) { await updateProfile(auth.currentUser, { photoURL: newAvatarUrl }); updates.photoURL = newAvatarUrl; }
-            await updateDoc(doc(db, "users", currentUser.uid), updates);
-            location.reload();
-        };
+        window.deletePost = async (id) => { if(confirm("¿Borrar?")) await deleteDoc(doc(db, "posts", id)); };
 
-        window.filterGame = (g) => changeCategory('game', g);
-        window.searchTag = (t) => changeCategory('tag', t);
-        
-        // Corregido: Buscador ahora activa la recarga del feed correctamente
-        document.getElementById('searchInput').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') {
-                changeCategory('search', e.target.value);
+        document.getElementById('searchInput').addEventListener('keyup', (e) => {
+            if(e.target.value.length > 2 || e.target.value === "") {
+                appState.filterType = e.target.value === "" ? 'all' : 'search';
+                appState.filterValue = e.target.value;
+                loadFeed();
             }
         });
 
-        const loadRecommendedUsers = async () => {
-            const q = query(collection(db, "users"), limit(10));
-            const snap = await getDocs(q);
-            let users = [];
-            snap.forEach(d => users.push(d.data()));
-            users = users.sort(() => 0.5 - Math.random()).slice(0, 3);
-            const div = document.getElementById('recommendedContainer');
-            div.innerHTML = "";
-            users.forEach(u => {
-                if(currentUser && u.uid === currentUser.uid) return;
-                div.innerHTML += `<div class="rec-user"><div class="rec-info"><img src="${u.photoURL || 'https://via.placeholder.com/32'}" style="width:32px; height:32px; border-radius:50%"><div><div style="font-weight:bold; font-size:12px;">${u.displayName}</div></div></div><button class="rec-btn" onclick="followUser('${u.uid}')">Seguir</button></div>`;
-            });
-        };
-        window.followUser = async (uid) => {
-            if(!currentUser) return alert("Inicia sesión");
-            await updateDoc(doc(db, "users", currentUser.uid), { following: arrayUnion(uid) });
-            createNotification("follow", uid);
-            alert("Siguiendo!");
-        };
-
-        document.getElementById('fileInput').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            const formData = new FormData(); formData.append('file', file); formData.append('upload_preset', UPLOAD_PRESET);
-            document.getElementById('uploadStatus').innerText = "Subiendo...";
-            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
-            const data = await res.json();
-            uploadedImageUrl = data.secure_url;
-            document.getElementById('uploadStatus').innerText = "Imagen lista";
-            document.getElementById('imagePreview').src = uploadedImageUrl;
-            document.getElementById('imagePreview').style.display = 'block';
-        });
-
-        window.doLogout = () => signOut(auth);
-        document.getElementById('sidebarLoginBtn').addEventListener('click', () => signInWithPopup(auth, provider));
-        document.getElementById('navAvatar').addEventListener('click', () => { if(!currentUser) signInWithPopup(auth, provider); });
-        window.closeModals = () => document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+        // Eventos de interfaz
         document.getElementById('openPublishBtn').addEventListener('click', () => {
             if(!currentUser) return alert("Inicia sesión");
             document.getElementById('publishModal').style.display = 'flex';
-            if(currentUserData.isAdmin) document.getElementById('adminCheckContainer').style.display = 'flex';
         });
-        document.getElementById('notifBtn').addEventListener('click', () => document.getElementById('notifDropdown').classList.toggle('show'));
+
+        window.closeModals = () => document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+
+        document.getElementById('submitPostBtn').addEventListener('click', async () => {
+            const content = document.getElementById('postContent').value;
+            if(!content) return;
+            const stats = calculateStats(currentUserData);
+            await addDoc(collection(db, "posts"), {
+                authorUid: currentUser.uid, authorName: currentUser.displayName, authorAvatar: currentUser.photoURL,
+                content, section: document.getElementById('postSection').value, game: document.getElementById('postGame').value,
+                timestamp: serverTimestamp(), likes: [], views: 0, image: uploadedImageUrl
+            });
+            closeModals();
+        });
+
+        const loadRecommendedUsers = async () => {
+            const snap = await getDocs(query(collection(db, "users"), limit(5)));
+            const div = document.getElementById('recommendedContainer');
+            div.innerHTML = "";
+            snap.forEach(d => {
+                const u = d.data();
+                div.innerHTML += `<div class="rec-user"><b>${u.displayName}</b></div>`;
+            });
+        };
 
     </script>
 </body>
