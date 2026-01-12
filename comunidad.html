@@ -134,7 +134,7 @@
         <div class="search-wrapper">
             <div class="search-bar">
                 <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Buscar posts, usuarios o hashtags...">
+                <input type="text" id="searchInput" placeholder="Buscar en todo...">
             </div>
         </div>
         
@@ -245,6 +245,7 @@
                 <h3>Crear Publicación</h3>
                 <i class="fas fa-times" style="cursor:pointer" onclick="closeModals()"></i>
             </div>
+            
             <div class="form-row">
                 <select id="postSection" class="form-select">
                     <option value="Taberna">Taberna</option>
@@ -260,7 +261,9 @@
                     <option value="dinoma">Creatura Dinoma</option>
                 </select>
             </div>
+
             <textarea id="postContent" class="form-input" style="height:120px; resize:none;" placeholder="Comparte tus ideas... Usa #hashtags (mínimo 1)"></textarea>
+            
             <div style="margin-top:15px; display:flex; justify-content:space-between; align-items:center;">
                 <label for="fileInput" style="cursor:pointer; color:var(--accent); font-weight:600; font-size:14px;">
                     <i class="fas fa-image"></i> Agregar Imagen
@@ -269,6 +272,7 @@
                 <span id="uploadStatus" style="font-size:12px; color:#999;"></span>
             </div>
             <img id="imagePreview" style="width:100%; border-radius:8px; margin-top:10px; display:none;">
+
             <div class="modal-footer">
                 <div id="adminCheckContainer" style="display:none; margin-right:auto; align-items:center; font-size:12px;">
                     <input type="checkbox" id="checkOfficial"> <label for="checkOfficial">Oficial</label>
@@ -287,6 +291,7 @@
             </div>
             <label style="font-size:12px;">Nombre de usuario</label>
             <input type="text" id="editName" class="form-input" placeholder="Tu nombre" style="margin-bottom:15px;">
+            
             <label style="font-size:12px;">Foto de Perfil</label>
             <div style="display:flex; gap:10px; align-items:center; margin-bottom:15px;">
                 <label for="avatarInput" class="btn-outline" style="cursor:pointer; display:inline-block; margin:0;">
@@ -295,6 +300,7 @@
                 <input type="file" id="avatarInput" style="display:none;" accept="image/*">
                 <span id="avatarStatus" style="font-size:12px; color:#999;"></span>
             </div>
+
             <div class="modal-footer">
                 <button class="modal-btn btn-cancel" onclick="closeModals()">Cancelar</button>
                 <button class="modal-btn btn-submit" onclick="saveProfileChanges()">Guardar</button>
@@ -321,6 +327,7 @@
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, where, getDocs, limit, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // CONFIGURACIÓN (TUS KEYS)
         const firebaseConfig = {
             apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
             authDomain: "devouringlab.firebaseapp.com",
@@ -457,41 +464,49 @@
             const feedDiv = document.getElementById('postsContainer');
             feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
 
-            // Solo ordenamos por fecha en servidor para evitar error de índice
-            let q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(50));
+            // AUMENTAMOS LIMITE PARA QUE LA BUSQUEDA CLIENTE SEA MEJOR
+            let q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(100));
 
             onSnapshot(q, (snapshot) => {
                 feedDiv.innerHTML = "";
                 let posts = [];
                 snapshot.forEach(doc => posts.push({id: doc.id, ...doc.data()}));
 
-                // FILTRADO (Cliente)
-                if (appState.filterType === 'following' && currentUserData) {
-                    posts = posts.filter(p => currentUserData.following.includes(p.authorUid));
-                } else if (appState.filterType === 'game') {
-                    if (appState.filterValue === 'all') {
-                        // General = solo los publicados en "General"
-                        posts = posts.filter(p => p.game === 'all');
-                    } else {
-                        posts = posts.filter(p => p.game === appState.filterValue);
-                    }
-                } else if (appState.filterType === 'section') {
-                    posts = posts.filter(p => p.section === appState.filterValue);
-                } else if (appState.filterType === 'tag') {
-                    posts = posts.filter(p => (p.tags || []).includes(appState.filterValue));
-                    document.getElementById('searchInput').value = "#" + appState.filterValue;
-                } else if (appState.filterType === 'search') {
-                    // BUSCADOR GLOBAL: Contenido + Usuario + Tags
+                // ============ LOGICA DE FILTRADO MAESTRA ============
+                
+                // 1. SI HAY BUSQUEDA, SE IGNORA TODO LO DEMAS
+                if (appState.filterType === 'search') {
                     const term = appState.filterValue.toLowerCase();
                     posts = posts.filter(p => 
-                        p.content.toLowerCase().includes(term) ||
-                        p.authorName.toLowerCase().includes(term) ||
+                        (p.content && p.content.toLowerCase().includes(term)) ||
+                        (p.authorName && p.authorName.toLowerCase().includes(term)) ||
                         (p.tags && p.tags.some(t => t.toLowerCase().includes(term)))
                     );
+                } 
+                else {
+                    // 2. FILTROS NORMALES (Si no se busca)
+                    if (appState.filterType === 'following' && currentUserData) {
+                        posts = posts.filter(p => currentUserData.following.includes(p.authorUid));
+                    } 
+                    else if (appState.filterType === 'game') {
+                        // General = "all"
+                        if(appState.filterValue === 'all') {
+                            posts = posts.filter(p => p.game === 'all');
+                        } else {
+                            posts = posts.filter(p => p.game === appState.filterValue);
+                        }
+                    } 
+                    else if (appState.filterType === 'section') {
+                        posts = posts.filter(p => p.section === appState.filterValue);
+                    } 
+                    else if (appState.filterType === 'tag') {
+                        posts = posts.filter(p => (p.tags || []).includes(appState.filterValue));
+                        document.getElementById('searchInput').value = "#" + appState.filterValue;
+                    }
+                    // Si es 'all' (INICIO), no filtramos nada, mostramos todo.
                 }
-                // Si es 'all' (Inicio), no filtramos nada
 
-                // ORDENAMIENTO
+                // 3. ORDENAMIENTO (Aplica a todo)
                 if (appState.sort === 'top') {
                     posts.sort((a,b) => (b.likes?.length || 0) - (a.likes?.length || 0));
                 } else {
@@ -533,8 +548,10 @@
                                     <i class="fas fa-trash mod-btn" title="Borrar" onclick="deletePost('${post.id}')"></i>
                                 </div>` : ''}
                             </div>
+                            
                             <div class="post-text">${parseText(post.content)}</div>
                             ${post.image ? `<img src="${post.image}" style="width:100%; border-radius:8px; margin-bottom:10px; max-height:400px; object-fit:cover;">` : ''}
+
                             <div class="post-footer">
                                 <div style="display:flex; gap:20px;">
                                     <div class="interaction-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}', ${isLiked}, '${post.authorUid}')">
@@ -674,14 +691,12 @@
             list.innerHTML = "<p style='text-align:center; color:#999'>Cargando comentarios...</p>";
             if(commentsUnsubscribe) commentsUnsubscribe();
 
-            // Quitamos orderBy para evitar error de índice
             const q = query(collection(db, "comments"), where("postId", "==", postId));
             
             commentsUnsubscribe = onSnapshot(q, (snap) => {
                 list.innerHTML = "";
                 let comments = [];
                 snap.forEach(d => comments.push(d.data()));
-                // Ordenamos en cliente
                 comments.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
 
                 if(comments.length === 0) list.innerHTML = "<div style='text-align:center; padding:10px; color:#999'>Sé el primero en comentar.</div>";
@@ -735,7 +750,6 @@
             });
         };
         const loadNotifications = () => {
-            // Sin orderBy para evitar error de índice
             const q = query(collection(db, "notifications"), where("toUid", "==", currentUser.uid), limit(10));
             onSnapshot(q, (snap) => {
                 const box = document.getElementById('notifDropdown');
@@ -776,7 +790,7 @@
             location.reload();
         };
 
-        window.filterGame = (g) => loadFeed('game', g);
+        window.filterGame = (g) => changeCategory('game', g);
         window.searchTag = (t) => changeCategory('tag', t);
         window.filterByInterest = (interest) => {
             let target = 'all';
