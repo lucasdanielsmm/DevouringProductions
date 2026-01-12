@@ -460,11 +460,11 @@
             loadFeed();
         }
 
-        window.loadFeed = () => {
+window.loadFeed = () => {
             const feedDiv = document.getElementById('postsContainer');
-            feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
+            feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999"><i class="fas fa-spinner fa-spin"></i> Cargando comunidad...</p>';
 
-            // AUMENTAMOS LIMITE PARA QUE LA BUSQUEDA CLIENTE SEA MEJOR
+            // Traemos los últimos 100 posts para filtrar en el cliente (más rápido y evita errores de índice en Firebase)
             let q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(100));
 
             onSnapshot(q, (snapshot) => {
@@ -472,40 +472,104 @@
                 let posts = [];
                 snapshot.forEach(doc => posts.push({id: doc.id, ...doc.data()}));
 
-                // ============ LOGICA DE FILTRADO MAESTRA ============
+                // --- LÓGICA DE FILTRADO DE ALTO NIVEL ---
                 
-                // 1. SI HAY BUSQUEDA, SE IGNORA TODO LO DEMAS
-                if (appState.filterType === 'search') {
-                    const term = appState.filterValue.toLowerCase();
-                    posts = posts.filter(p => 
-                        (p.content && p.content.toLowerCase().includes(term)) ||
-                        (p.authorName && p.authorName.toLowerCase().includes(term)) ||
-                        (p.tags && p.tags.some(t => t.toLowerCase().includes(term)))
+                let filteredPosts = [...posts];
+
+                // 1. PRIORIDAD MÁXIMA: EL BUSCADOR
+                // Si hay algo escrito en el buscador, IGNORAMOS el resto de filtros de categorías
+                const searchFieldValue = document.getElementById('searchInput').value.trim().toLowerCase();
+                
+                if (searchFieldValue !== "") {
+                    filteredPosts = posts.filter(p => 
+                        (p.content && p.content.toLowerCase().includes(searchFieldValue)) ||
+                        (p.authorName && p.authorName.toLowerCase().includes(searchFieldValue)) ||
+                        (p.tags && p.tags.some(t => t.toLowerCase().includes(searchFieldValue)))
                     );
                 } 
                 else {
-                    // 2. FILTROS NORMALES (Si no se busca)
+                    // 2. FILTROS DE NAVEGACIÓN (Solo si no estamos buscando)
                     if (appState.filterType === 'following' && currentUserData) {
-                        posts = posts.filter(p => currentUserData.following.includes(p.authorUid));
+                        filteredPosts = posts.filter(p => currentUserData.following && currentUserData.following.includes(p.authorUid));
                     } 
                     else if (appState.filterType === 'game') {
-                        // General = "all"
-                        if(appState.filterValue === 'all') {
-                            posts = posts.filter(p => p.game === 'all');
-                        } else {
-                            posts = posts.filter(p => p.game === appState.filterValue);
-                        }
+                        // Si es 'all' en juegos, es la pestaña GENERAL
+                        filteredPosts = posts.filter(p => p.game === appState.filterValue);
                     } 
                     else if (appState.filterType === 'section') {
-                        posts = posts.filter(p => p.section === appState.filterValue);
+                        // Filtro para Taberna, Galería, Lab, etc.
+                        filteredPosts = posts.filter(p => p.section === appState.filterValue);
                     } 
                     else if (appState.filterType === 'tag') {
-                        posts = posts.filter(p => (p.tags || []).includes(appState.filterValue));
-                        document.getElementById('searchInput').value = "#" + appState.filterValue;
+                        filteredPosts = posts.filter(p => (p.tags || []).includes(appState.filterValue));
                     }
-                    // Si es 'all' (INICIO), no filtramos nada, mostramos todo.
+                    // Si filterType es 'all' (INICIO), no entra en ningún IF y filteredPosts sigue siendo la lista completa.
                 }
 
+                // 3. ORDENAMIENTO
+                if (appState.sort === 'top') {
+                    filteredPosts.sort((a,b) => (b.likes?.length || 0) - (a.likes?.length || 0));
+                } else {
+                    // Por defecto: Fijados primero, luego por fecha (la fecha ya viene de la query)
+                    filteredPosts.sort((a,b) => (b.isPinned === true) - (a.isPinned === true));
+                }
+
+                // Renderizar
+                if(filteredPosts.length === 0) {
+                    feedDiv.innerHTML = '<div style="text-align:center; padding:30px; color:#999">No se encontraron publicaciones.</div>';
+                    return;
+                }
+
+                filteredPosts.forEach(post => {
+                    const isLiked = currentUser && (post.likes || []).includes(currentUser.uid);
+                    // ... (resto del HTML del renderizado de la card que ya tenías)
+                    renderPostCard(feedDiv, post, isLiked);
+                });
+            });
+        };
+
+        // Función auxiliar para el renderizado (para no repetir código)
+        function renderPostCard(container, post, isLiked) {
+            const isAdmin = currentUser && ADMIN_UIDS.includes(currentUser.uid);
+            const html = `
+                <article class="post-card ${post.isPinned ? 'pinned' : ''}" onmouseenter="incrementViews('${post.id}', '${post.game}')">
+                    ${post.isPinned ? '<div class="pin-badge"><i class="fas fa-thumbtack"></i></div>' : ''}
+                    <div class="user-header">
+                        <div class="avatar-ring ${post.isOfficial ? 'official' : ''}">
+                            <img src="${post.authorAvatar || 'https://via.placeholder.com/40'}">
+                        </div>
+                        <div>
+                            <div style="font-weight:bold; font-size:14px;">
+                                ${post.authorName} 
+                                <span class="level-badge">Lv.${post.authorLevel || 1}</span>
+                            </div>
+                            <div style="font-size:11px; color:#999;">
+                                ${formatTimeRelative(post.timestamp)} • <b>${getGameName(post.game)}</b> (${post.section})
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-text">${parseText(post.content)}</div>
+                    ${post.image ? `<img src="${post.image}" style="width:100%; border-radius:8px; margin-bottom:10px;">` : ''}
+                    <div class="post-footer">
+                        <div class="interaction-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}', ${isLiked}, '${post.authorUid}')">
+                            <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i> ${(post.likes || []).length}
+                        </div>
+                        <div class="interaction-btn" onclick="openComments('${post.id}')">
+                            <i class="far fa-comment"></i> Comentar
+                        </div>
+                        <div style="font-size:12px; color:#999;"><i class="far fa-eye"></i> ${post.views || 0}</div>
+                    </div>
+                </article>
+            `;
+            container.innerHTML += html;
+        }
+
+        // CORRECCIÓN DEL BUSCADOR (Evento real-time)
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            // No necesitamos esperar a "Enter", filtramos mientras escribe para que se vea que funciona
+            appState.filterType = e.target.value.trim() === "" ? 'all' : 'search';
+            loadFeed();
+        });
                 // 3. ORDENAMIENTO (Aplica a todo)
                 if (appState.sort === 'top') {
                     posts.sort((a,b) => (b.likes?.length || 0) - (a.likes?.length || 0));
@@ -852,3 +916,4 @@
     </script>
 </body>
 </html>
+
