@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- ESTILOS (Mismos de siempre con pequeñas mejoras) --- */
+        /* --- ESTILOS BASE --- */
         :root { --bg-body: #f0f2f5; --bg-card: #ffffff; --accent: #4cc3ff; --accent-hover: #3aa8e0; --text-main: #333333; --text-sec: #999999; --border-color: #ebebeb; --radius: 12px; --nav-height: 64px; --subnav-height: 56px; --overlay-color: rgba(0, 0, 0, 0.6); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; background-color: var(--bg-body); color: var(--text-main); overflow-y: scroll; }
@@ -134,7 +134,7 @@
         <div class="search-wrapper">
             <div class="search-bar">
                 <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Buscar posts, tags, usuarios...">
+                <input type="text" id="searchInput" placeholder="Buscar posts, usuarios o hashtags...">
             </div>
         </div>
         
@@ -234,8 +234,7 @@
 
             <div class="widget-box">
                 <div class="widget-title">Usuarios Recomendados</div>
-                <div id="recommendedContainer">
-                    </div>
+                <div id="recommendedContainer"></div>
             </div>
         </aside>
     </div>
@@ -246,7 +245,6 @@
                 <h3>Crear Publicación</h3>
                 <i class="fas fa-times" style="cursor:pointer" onclick="closeModals()"></i>
             </div>
-            
             <div class="form-row">
                 <select id="postSection" class="form-select">
                     <option value="Taberna">Taberna</option>
@@ -262,9 +260,7 @@
                     <option value="dinoma">Creatura Dinoma</option>
                 </select>
             </div>
-
             <textarea id="postContent" class="form-input" style="height:120px; resize:none;" placeholder="Comparte tus ideas... Usa #hashtags (mínimo 1)"></textarea>
-            
             <div style="margin-top:15px; display:flex; justify-content:space-between; align-items:center;">
                 <label for="fileInput" style="cursor:pointer; color:var(--accent); font-weight:600; font-size:14px;">
                     <i class="fas fa-image"></i> Agregar Imagen
@@ -273,7 +269,6 @@
                 <span id="uploadStatus" style="font-size:12px; color:#999;"></span>
             </div>
             <img id="imagePreview" style="width:100%; border-radius:8px; margin-top:10px; display:none;">
-
             <div class="modal-footer">
                 <div id="adminCheckContainer" style="display:none; margin-right:auto; align-items:center; font-size:12px;">
                     <input type="checkbox" id="checkOfficial"> <label for="checkOfficial">Oficial</label>
@@ -292,7 +287,6 @@
             </div>
             <label style="font-size:12px;">Nombre de usuario</label>
             <input type="text" id="editName" class="form-input" placeholder="Tu nombre" style="margin-bottom:15px;">
-            
             <label style="font-size:12px;">Foto de Perfil</label>
             <div style="display:flex; gap:10px; align-items:center; margin-bottom:15px;">
                 <label for="avatarInput" class="btn-outline" style="cursor:pointer; display:inline-block; margin:0;">
@@ -301,7 +295,6 @@
                 <input type="file" id="avatarInput" style="display:none;" accept="image/*">
                 <span id="avatarStatus" style="font-size:12px; color:#999;"></span>
             </div>
-
             <div class="modal-footer">
                 <button class="modal-btn btn-cancel" onclick="closeModals()">Cancelar</button>
                 <button class="modal-btn btn-submit" onclick="saveProfileChanges()">Guardar</button>
@@ -319,8 +312,7 @@
                 <input type="text" id="commentInput" class="form-input" placeholder="Escribe un comentario...">
                 <button class="modal-btn btn-submit" style="padding:0 20px;" onclick="submitComment()">Enviar</button>
             </div>
-            <div class="comments-list" id="commentsList">
-            </div>
+            <div class="comments-list" id="commentsList"></div>
         </div>
     </div>
 
@@ -329,7 +321,6 @@
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, where, getDocs, limit, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // CONFIGURACIÓN
         const firebaseConfig = {
             apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
             authDomain: "devouringlab.firebaseapp.com",
@@ -348,7 +339,6 @@
         const UPLOAD_PRESET = "DevouringIMG";
         const ADMIN_UIDS = ["qlJIBLf1I1clEVk2uggolNWL4Ai1"]; 
 
-        // ESTADO GLOBAL DE FILTROS
         let currentUser = null;
         let currentUserData = null; 
         let uploadedImageUrl = ""; 
@@ -356,17 +346,12 @@
         let currentPostIdForComments = null;
         let commentsUnsubscribe = null;
 
-        // ESTADO DE LA APLICACIÓN (NUEVO SISTEMA)
-        let appState = {
-            filterType: 'all',  // 'all' (inicio), 'game', 'section', 'following', 'tag'
-            filterValue: null,
-            sort: 'recent'      // 'recent', 'top'
-        };
+        // ESTADO DE FILTROS
+        let appState = { filterType: 'all', filterValue: null, sort: 'recent' };
 
-        /* --- 1. GESTIÓN DE USUARIOS REAL-TIME --- */
+        /* --- 1. USUARIO --- */
         const calculateStats = (userData) => {
             if (!userData) return { level: 1, title: "Novato" };
-            
             const createdAt = userData.createdAt ? userData.createdAt.toDate() : new Date();
             const years = (new Date() - createdAt) / (1000 * 60 * 60 * 24 * 365);
             let level = Math.floor(years * 12); 
@@ -375,8 +360,6 @@
 
             let title = "Novato";
             const c = userData.postCount || 0;
-            
-            // Lógica predeterminada de títulos
             if(c >= 5) title = "Explorador";
             if(c >= 10) title = "Aventurero";
             if(c >= 25) title = "Veterano";
@@ -398,7 +381,6 @@
             document.getElementById('statFollowers').innerText = (data.followers || []).length;
             document.getElementById('statFollowing').innerText = (data.following || []).length;
             
-            // Check-in status
             if(data.lastCheckIn) {
                 const last = data.lastCheckIn.toDate().toDateString();
                 const today = new Date().toDateString();
@@ -413,18 +395,15 @@
             }
         };
 
-        // SETUP REAL-TIME LISTENER PARA USUARIO
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             if (user) {
-                // Escuchar cambios en tiempo real (check-in, posts, etc)
                 onSnapshot(doc(db, "users", user.uid), (docSnap) => {
                     if (docSnap.exists()) {
                         currentUserData = docSnap.data();
                         updateUserUI(user, currentUserData);
                         updateInterestsUI(currentUserData.interestStats || {});
                     } else {
-                        // Crear usuario si no existe
                         setDoc(doc(db, "users", user.uid), {
                             uid: user.uid,
                             displayName: user.displayName,
@@ -440,7 +419,6 @@
                 });
                 loadNotifications();
             } else {
-                // UI Deslogueado
                 document.getElementById('authActions').style.display = 'block';
                 document.getElementById('userStats').style.display = 'none';
                 document.getElementById('sidebarName').innerText = "Visitante";
@@ -452,14 +430,10 @@
             loadFeed(); 
         });
 
-        /* --- 2. SISTEMA DE FILTRADO Y FEED --- */
-
-        // Funciones para botones HTML
+        /* --- 2. FILTROS Y FEED --- */
         window.changeCategory = (type, value) => {
             appState.filterType = type;
             appState.filterValue = value;
-            
-            // Actualizar UI Botones
             document.querySelectorAll('.game-item, .nav-item').forEach(e => e.classList.remove('active'));
             
             if(type === 'all') document.getElementById('nav-home').classList.add('active');
@@ -468,17 +442,14 @@
                 const btn = document.getElementById('game-' + value);
                 if(btn) btn.classList.add('active');
             }
-
             loadFeed();
         };
 
         window.changeSort = (mode) => {
             appState.sort = mode;
-            // Actualizar UI Tabs
             document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
             if(mode === 'recent') document.getElementById('tabRecientes').classList.add('active');
             if(mode === 'top') document.getElementById('tabTop').classList.add('active');
-            
             loadFeed();
         }
 
@@ -486,7 +457,7 @@
             const feedDiv = document.getElementById('postsContainer');
             feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
 
-            // 1. Siempre pedimos ordenados por fecha al servidor
+            // Solo ordenamos por fecha en servidor para evitar error de índice
             let q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(50));
 
             onSnapshot(q, (snapshot) => {
@@ -494,33 +465,39 @@
                 let posts = [];
                 snapshot.forEach(doc => posts.push({id: doc.id, ...doc.data()}));
 
-                // 2. FILTRADO (Cliente)
+                // FILTRADO (Cliente)
                 if (appState.filterType === 'following' && currentUserData) {
                     posts = posts.filter(p => currentUserData.following.includes(p.authorUid));
-                } 
-                else if (appState.filterType === 'game') {
-                    // Si elijo "General", muestro solo posts con game=='all'
-                    posts = posts.filter(p => p.game === appState.filterValue);
-                }
-                else if (appState.filterType === 'section') {
+                } else if (appState.filterType === 'game') {
+                    if (appState.filterValue === 'all') {
+                        // General = solo los publicados en "General"
+                        posts = posts.filter(p => p.game === 'all');
+                    } else {
+                        posts = posts.filter(p => p.game === appState.filterValue);
+                    }
+                } else if (appState.filterType === 'section') {
                     posts = posts.filter(p => p.section === appState.filterValue);
-                } 
-                else if (appState.filterType === 'tag') {
+                } else if (appState.filterType === 'tag') {
                     posts = posts.filter(p => (p.tags || []).includes(appState.filterValue));
                     document.getElementById('searchInput').value = "#" + appState.filterValue;
+                } else if (appState.filterType === 'search') {
+                    // BUSCADOR GLOBAL: Contenido + Usuario + Tags
+                    const term = appState.filterValue.toLowerCase();
+                    posts = posts.filter(p => 
+                        p.content.toLowerCase().includes(term) ||
+                        p.authorName.toLowerCase().includes(term) ||
+                        (p.tags && p.tags.some(t => t.toLowerCase().includes(term)))
+                    );
                 }
-                // Si filterType es 'all', mostramos todo (Home behavior)
+                // Si es 'all' (Inicio), no filtramos nada
 
-                // 3. ORDENAMIENTO (Cliente)
+                // ORDENAMIENTO
                 if (appState.sort === 'top') {
-                    // Ordenar por Likes
                     posts.sort((a,b) => (b.likes?.length || 0) - (a.likes?.length || 0));
                 } else {
-                    // Ordenar por defecto: Primero FIJADOS, luego por FECHA (ya viene fecha de Firebase)
                     posts.sort((a,b) => (b.isPinned === true) - (a.isPinned === true));
                 }
 
-                // Calcular Tendencias globalmente o basado en vista actual
                 calculateTrends(posts); 
 
                 if(posts.length === 0) {
@@ -528,7 +505,6 @@
                     return;
                 }
 
-                // RENDER
                 posts.forEach(post => {
                     const isLiked = currentUser && (post.likes || []).includes(currentUser.uid);
                     const isAdmin = currentUser && ADMIN_UIDS.includes(currentUser.uid);
@@ -557,10 +533,8 @@
                                     <i class="fas fa-trash mod-btn" title="Borrar" onclick="deletePost('${post.id}')"></i>
                                 </div>` : ''}
                             </div>
-                            
                             <div class="post-text">${parseText(post.content)}</div>
                             ${post.image ? `<img src="${post.image}" style="width:100%; border-radius:8px; margin-bottom:10px; max-height:400px; object-fit:cover;">` : ''}
-
                             <div class="post-footer">
                                 <div style="display:flex; gap:20px;">
                                     <div class="interaction-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}', ${isLiked}, '${post.authorUid}')">
@@ -581,8 +555,7 @@
             });
         };
 
-        /* --- 3. FUNCIONES AUXILIARES Y LOGICA --- */
-        
+        /* --- 3. UTILIDADES --- */
         const calculateTrends = (posts) => {
             const scores = {};
             posts.forEach(p => {
@@ -592,17 +565,10 @@
                 });
             });
             const sorted = Object.keys(scores).sort((a,b) => scores[b] - scores[a]).slice(0, 3);
-            
             const div = document.getElementById('trendsContainer');
             div.innerHTML = "";
-            if(sorted.length === 0) {
-                div.innerHTML = "<p style='font-size:12px;color:#999'>Sin tendencias aún</p>";
-                return;
-            }
             sorted.forEach(tag => {
-                div.innerHTML += `<div class="trend-item" onclick="changeCategory('tag', '${tag}')">
-                    <span class="trend-name"># ${tag}</span><span class="trend-count">Trending</span>
-                </div>`;
+                div.innerHTML += `<div class="trend-item" onclick="changeCategory('tag', '${tag}')"><span class="trend-name"># ${tag}</span><span class="trend-count">Trending</span></div>`;
             });
         };
 
@@ -626,7 +592,6 @@
         window.incrementViews = async (postId, game) => {
             if(viewedPosts.has(postId)) return;
             viewedPosts.add(postId);
-            // Pequeña espera para no spamear DB al hacer scroll rápido
             setTimeout(async () => {
                 await updateDoc(doc(db, "posts", postId), { views: increment(1) });
                 trackInterest(game); 
@@ -651,24 +616,16 @@
             const diffMs = now - date;
             const diffSec = Math.floor(diffMs / 1000);
             const diffMin = Math.floor(diffSec / 60);
-            const diffHour = Math.floor(diffMin / 60);
-            const diffDay = Math.floor(diffHour / 24);
             if (diffSec < 60) return "Hace un momento";
             if (diffMin < 60) return `Hace ${diffMin} min`;
-            if (diffHour < 24) return `Hace ${diffHour} h`;
-            if (diffDay === 1) return "Ayer";
-            if (diffDay < 7) return `Hace ${diffDay} días`;
             return date.toLocaleDateString();
         };
 
         // --- ACCIONES ---
-        
         document.getElementById('checkInBtn').addEventListener('click', async () => {
             if(!currentUser) return alert("Inicia sesión");
             if(document.getElementById('checkInBtn').classList.contains('checked')) return;
-            
             await updateDoc(doc(db, "users", currentUser.uid), { lastCheckIn: serverTimestamp() });
-            // El onSnapshot actualizará la UI automáticamente
         });
 
         document.getElementById('submitPostBtn').addEventListener('click', async () => {
@@ -676,7 +633,6 @@
             const section = document.getElementById('postSection').value;
             const game = document.getElementById('postGame').value;
             const isOfficial = document.getElementById('checkOfficial').checked;
-
             const tags = (content.match(/#[\w]+/g) || []).map(t => t.replace('#', ''));
             if(tags.length === 0) return alert("Debes incluir al menos un #hashtag");
             if(!content && !uploadedImageUrl) return alert("Escribe algo o sube una imagen");
@@ -709,28 +665,28 @@
             }
         });
 
-        // --- COMENTARIOS ARREGLADOS ---
+        // --- COMENTARIOS SOLUCIONADO ---
         window.openComments = (postId) => {
             if(!currentUser) return alert("Inicia sesión");
             currentPostIdForComments = postId;
             document.getElementById('commentsModal').style.display = 'flex';
-            
             const list = document.getElementById('commentsList');
             list.innerHTML = "<p style='text-align:center; color:#999'>Cargando comentarios...</p>";
-
-            // Limpiar listener anterior si existe
             if(commentsUnsubscribe) commentsUnsubscribe();
 
-            const q = query(collection(db, "comments"), where("postId", "==", postId), orderBy("timestamp", "desc"));
+            // Quitamos orderBy para evitar error de índice
+            const q = query(collection(db, "comments"), where("postId", "==", postId));
             
-            // Nueva suscripción
             commentsUnsubscribe = onSnapshot(q, (snap) => {
                 list.innerHTML = "";
-                if(snap.empty) {
-                    list.innerHTML = "<div style='text-align:center; padding:10px; color:#999'>Sé el primero en comentar.</div>";
-                }
-                snap.forEach(d => {
-                    const c = d.data();
+                let comments = [];
+                snap.forEach(d => comments.push(d.data()));
+                // Ordenamos en cliente
+                comments.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+
+                if(comments.length === 0) list.innerHTML = "<div style='text-align:center; padding:10px; color:#999'>Sé el primero en comentar.</div>";
+                
+                comments.forEach(c => {
                     list.innerHTML += `
                         <div class="comment-item">
                             <img src="${c.authorAvatar}" style="width:30px; height:30px; border-radius:50%">
@@ -740,37 +696,23 @@
                             </div>
                         </div>`;
                 });
-            }, (error) => {
-                console.error("Error comentarios:", error);
-                list.innerHTML = "<p style='color:red'>Error cargando comentarios.</p>";
             });
         };
 
         window.submitComment = async () => {
             const txt = document.getElementById('commentInput').value;
             if(!txt) return;
-            const btn = document.querySelector('#commentsModal .btn-submit');
-            btn.disabled = true;
-            btn.innerText = "...";
-            
-            try {
-                await addDoc(collection(db, "comments"), {
-                    postId: currentPostIdForComments,
-                    text: txt,
-                    authorName: currentUser.displayName,
-                    authorAvatar: currentUser.photoURL,
-                    authorUid: currentUser.uid,
-                    timestamp: serverTimestamp()
-                });
-                document.getElementById('commentInput').value = "";
-            } catch (e) {
-                console.error(e);
-            }
-            btn.disabled = false;
-            btn.innerText = "Enviar";
+            await addDoc(collection(db, "comments"), {
+                postId: currentPostIdForComments,
+                text: txt,
+                authorName: currentUser.displayName,
+                authorAvatar: currentUser.photoURL,
+                authorUid: currentUser.uid,
+                timestamp: serverTimestamp()
+            });
+            document.getElementById('commentInput').value = "";
         };
 
-        // --- INTERACCIONES ---
         window.toggleLike = async (postId, isLiked, authorUid) => {
             if (!currentUser) return alert("Inicia sesión");
             const postRef = doc(db, "posts", postId);
@@ -783,7 +725,6 @@
         window.togglePin = async (postId, currentStatus) => await updateDoc(doc(db, "posts", postId), { isPinned: !currentStatus });
         window.deletePost = async (postId) => { if(confirm("¿Borrar?")) await deleteDoc(doc(db, "posts", postId)); };
 
-        // --- NOTIFICACIONES ---
         const createNotification = async (type, toUid) => {
             await addDoc(collection(db, "notifications"), {
                 toUid: toUid,
@@ -794,26 +735,28 @@
             });
         };
         const loadNotifications = () => {
-            const q = query(collection(db, "notifications"), where("toUid", "==", currentUser.uid), orderBy("timestamp", "desc"), limit(10));
+            // Sin orderBy para evitar error de índice
+            const q = query(collection(db, "notifications"), where("toUid", "==", currentUser.uid), limit(10));
             onSnapshot(q, (snap) => {
                 const box = document.getElementById('notifDropdown');
                 const badge = document.getElementById('notifBadge');
                 let unread = 0;
                 box.innerHTML = "";
-                if(snap.empty) box.innerHTML = "<div style='padding:10px; text-align:center'>Nada por aquí</div>";
-                snap.forEach(d => {
-                    const n = d.data();
+                let notifs = [];
+                snap.forEach(d => notifs.push(d.data()));
+                notifs.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+
+                if(notifs.length === 0) box.innerHTML = "<div style='padding:10px; text-align:center'>Nada por aquí</div>";
+                notifs.forEach(n => {
                     if(!n.read) unread++;
                     let icon = n.type === 'like' ? '<i class="fas fa-heart notif-icon"></i>' : '<i class="fas fa-user-plus notif-icon"></i>';
                     let text = n.type === 'like' ? 'le gustó tu post' : 'te empezó a seguir';
                     box.innerHTML += `<div class="notif-item">${icon}<div><b>${n.fromUser}</b> ${text}</div></div>`;
                 });
-                if(unread > 0) { badge.style.display = 'block'; badge.innerText = unread; } 
-                else { badge.style.display = 'none'; }
+                if(unread > 0) { badge.style.display = 'block'; badge.innerText = unread; } else { badge.style.display = 'none'; }
             });
         };
 
-        // --- PERFIL Y EXTRAS ---
         window.openEditProfile = () => document.getElementById('profileModal').style.display = 'flex';
         document.getElementById('avatarInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
@@ -833,14 +776,22 @@
             location.reload();
         };
 
-        // --- BUSCADOR Y RECOMENDADOS ---
+        window.filterGame = (g) => loadFeed('game', g);
+        window.searchTag = (t) => changeCategory('tag', t);
+        window.filterByInterest = (interest) => {
+            let target = 'all';
+            if(interest === 'Unity') target = 'dinoma';
+            if(interest === 'RPG') target = 'vireo';
+            if(interest === 'Web') target = 'cae';
+            changeCategory('game', target);
+        };
+        
         document.getElementById('searchInput').addEventListener('keypress', (e) => {
             if(e.key === 'Enter') {
-                const val = e.target.value;
-                if(val.startsWith('#')) changeCategory('tag', val.replace('#',''));
-                else changeCategory('tag', val);
+                changeCategory('search', e.target.value);
             }
         });
+
         const loadRecommendedUsers = async () => {
             const q = query(collection(db, "users"), limit(10));
             const snap = await getDocs(q);
@@ -861,7 +812,6 @@
             alert("Siguiendo!");
         };
 
-        // --- UPLOAD POST IMG ---
         document.getElementById('fileInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             const formData = new FormData(); formData.append('file', file); formData.append('upload_preset', UPLOAD_PRESET);
@@ -874,7 +824,6 @@
             document.getElementById('imagePreview').style.display = 'block';
         });
 
-        // --- BOILERPLATE ---
         window.doLogout = () => signOut(auth);
         document.getElementById('sidebarLoginBtn').addEventListener('click', () => signInWithPopup(auth, provider));
         document.getElementById('navAvatar').addEventListener('click', () => { if(!currentUser) signInWithPopup(auth, provider); });
