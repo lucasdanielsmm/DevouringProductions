@@ -493,53 +493,7 @@
                 });
             });
         };
-        window.changeSort = (mode) => {
-            appState.sort = mode;
-            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-            if(mode === 'recent') document.getElementById('tabRecientes').classList.add('active');
-            if(mode === 'top') document.getElementById('tabTop').classList.add('active');
-            loadFeed();
-        }
-
-        // LÓGICA DE CARGA MAESTRA (Transplantada y adaptada)
-        window.loadFeed = () => {
-            const feedDiv = document.getElementById('postsContainer');
-            feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
-
-            if (appState.feedUnsubscribe) appState.feedUnsubscribe();
-
-            // Usamos una consulta general para permitir el filtrado dinámico en cliente
-            const q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(50));
-
-            appState.feedUnsubscribe = onSnapshot(q, (snapshot) => {
-                let posts = [];
-                snapshot.forEach(doc => posts.push({id: doc.id, ...doc.data()}));
-
-                // --- LÓGICA DE FILTRADO MAESTRA (Desde comunidadReparada) ---
-                let filtered = posts;
-                
-                if (appState.filterType === 'search') {
-                    const term = appState.filterValue.toLowerCase();
-                    filtered = posts.filter(p => 
-                        (p.content && p.content.toLowerCase().includes(term)) ||
-                        (p.authorName && p.authorName.toLowerCase().includes(term)) ||
-                        (p.tags && p.tags.some(t => t.toLowerCase().includes(term)))
-                    );
-                } else if (appState.filterType === 'game' && appState.filterValue !== 'all') {
-                    filtered = posts.filter(p => p.game === appState.filterValue);
-                } else if (appState.filterType === 'section') {
-                    filtered = posts.filter(p => p.section === appState.filterValue);
-                } else if (appState.filterType === 'tag') {
-                    filtered = posts.filter(p => (p.tags || []).includes(appState.filterValue));
-                } else if (appState.filterType === 'following' && currentUserData) {
-                    filtered = posts.filter(p => currentUserData.following.includes(p.authorUid));
-                }
-                // Nota: Si filterType es 'all' o 'game' con valor 'all', filtered se mantiene igual a posts (todos)
-
-                // Ordenación
-                if (appState.sort === 'top') {
-                    filtered.sort((a,b) => (b.likes?.length || 0) - (a.likes?.length || 0));
-                }
+        
 
                 calculateTrends(filtered);
 
@@ -883,4 +837,5 @@
     </script>
 </body>
 </html>
+
 
