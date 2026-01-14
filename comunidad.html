@@ -444,27 +444,55 @@
         });
 
         /* --- 2. FILTROS Y FEED (Lógica Restaurada Completa) --- */
-        window.changeCategory = (type, value) => {
-            appState.filterType = type;
-            appState.filterValue = value;
-            
-            // UI Update (Limpieza)
-            document.querySelectorAll('.game-item, .nav-item, .circle-card').forEach(e => e.classList.remove('active'));
-            
-            // UI Set Active
-            if(type === 'all') document.getElementById('nav-home').classList.add('active');
-            if(type === 'following') document.getElementById('nav-following').classList.add('active');
-            
-            if(type === 'game') {
-                if(value === 'all') document.getElementById('game-all').classList.add('active');
-                else document.getElementById('game-' + value)?.classList.add('active');
-            }
-            
-            if(type === 'section') document.getElementById('sect-' + value)?.classList.add('active');
+        // 1. Asegúrate de que changeCategory limpie el feed y maneje correctamente los valores
+        window.changeCategory = (cat, val) => {
+            currentCategory = cat;
+            currentValue = val;
 
+            // Actualizar UI de botones activos
+            document.querySelectorAll('.game-item, .nav-item, .circle-card').forEach(el => el.classList.remove('active'));
+    
+            if(cat === 'game') {
+                const target = document.getElementById(`game-${val}`);
+                if(target) target.classList.add('active');
+            } else if(cat === 'section') {
+                const target = document.getElementById(`sect-${val}`);
+                if(target) target.classList.add('active');
+            }
+
+            // Reiniciar y volver a cargar
+            const feedContainer = document.getElementById('feedContainer');
+            if(feedContainer) feedContainer.innerHTML = '<div style="text-align:center; padding:20px;">Cargando...</div>';
             loadFeed();
         };
 
+        // 2. Ajusta la lógica de filtrado en loadFeed para que sea inclusiva
+        const loadFeed = () => {
+            const q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(20));
+    
+            onSnapshot(q, (snapshot) => {
+                const feedContainer = document.getElementById('feedContainer');
+                feedContainer.innerHTML = ""; // Limpiar siempre al recibir cambios
+
+                snapshot.forEach(doc => {
+                    const post = doc.data();
+            
+                    // LÓGICA DE FILTRADO CORREGIDA
+                    let show = false;
+                    if (currentCategory === 'all') show = true;
+                    else if (currentCategory === 'game' && currentValue === 'all') show = true;
+                    else if (currentCategory === 'game' && post.game === currentValue) show = true;
+                    else if (currentCategory === 'section' && post.section === currentValue) show = true;
+                    else if (currentCategory === 'following') {
+                        if (currentUserData.following && currentUserData.following.includes(post.authorUid)) show = true;
+                    }
+
+                    if (show) {
+                        renderPost(doc.id, post); // Llama a tu función de dibujo de post
+                    }
+                });
+            });
+        };
         window.changeSort = (mode) => {
             appState.sort = mode;
             document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
@@ -855,3 +883,4 @@
     </script>
 </body>
 </html>
+
