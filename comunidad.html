@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- ESTILOS BASE (Mantenidos del original completo) --- */
+        /* --- ESTILOS BASE --- */
         :root { --bg-body: #f0f2f5; --bg-card: #ffffff; --accent: #4cc3ff; --accent-hover: #3aa8e0; --text-main: #333333; --text-sec: #999999; --border-color: #ebebeb; --radius: 12px; --nav-height: 64px; --subnav-height: 56px; --overlay-color: rgba(0, 0, 0, 0.6); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; background-color: var(--bg-body); color: var(--text-main); overflow-y: scroll; }
@@ -51,7 +51,7 @@
         .circles-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
         .circle-card { background: var(--bg-card); border-radius: var(--radius); padding: 15px; text-align: center; text-decoration: none; color: var(--text-main); border: 1px solid var(--border-color); transition: 0.2s; cursor: pointer; }
         .circle-card:hover { transform: translateY(-3px); border-color: var(--accent); }
-        .circle-card.active { border-color: var(--accent); background-color: #f0faff; } /* Añadido estado activo */
+        .circle-card.active { border-color: var(--accent); background-color: #f0faff; }
         .circle-icon { width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
         .grad-tavern { background: linear-gradient(135deg, #FF6B6B, #FFD93D); } .grad-art { background: linear-gradient(135deg, #6C5CE7, #A29BFE); } .grad-lab { background: linear-gradient(135deg, #00B894, #55E6C1); } .grad-off { background: linear-gradient(135deg, #0984E3, #74B9FF); }
 
@@ -157,7 +157,7 @@
     </nav>
 
     <div class="game-nav">
-        <div class="game-item active" id="game-all" onclick="changeCategory('game', 'all')"><i class="fas fa-globe"></i> General</div>
+        <div class="game-item active" id="game-all" onclick="changeCategory('all', 'all')"><i class="fas fa-globe"></i> General</div>
         <div class="game-item" id="game-vireo" onclick="changeCategory('game', 'vireo')"><img src="https://via.placeholder.com/24"> Vireo CODE</div>
         <div class="game-item" id="game-cae" onclick="changeCategory('game', 'cae')"><img src="https://via.placeholder.com/24"> Cae</div>
         <div class="game-item" id="game-lanzer" onclick="changeCategory('game', 'lanzer')"><img src="https://via.placeholder.com/24"> Move-Lanzer</div>
@@ -168,7 +168,7 @@
         
         <aside class="sidebar-left">
             <div class="menu-section">
-                <div class="nav-item active" id="nav-home" onclick="changeCategory('all', null)"><i class="fas fa-home" style="margin-right: 12px;"></i> Inicio</div>
+                <div class="nav-item active" id="nav-home" onclick="changeCategory('all', 'all')"><i class="fas fa-home" style="margin-right: 12px;"></i> Inicio</div>
                 <div class="nav-item" id="nav-following" onclick="changeCategory('following', null)"><i class="fas fa-star" style="margin-right: 12px;"></i> Siguiendo</div>
             </div>
             <div class="menu-title">MIS INTERESES (Dinámico)</div>
@@ -354,10 +354,10 @@
         let currentPostIdForComments = null;
         let commentsUnsubscribe = null;
 
-        // ESTADO DE LA APP (Sistema Robusto del archivo Reparado)
+        // ESTADO DE LA APP (Actualizado)
         let appState = { 
             filterType: 'all', 
-            filterValue: null, 
+            filterValue: 'all', 
             sort: 'recent',
             feedUnsubscribe: null 
         };
@@ -443,18 +443,24 @@
             loadFeed(); 
         });
 
-        /* --- 2. FILTROS Y FEED (MEZCLA ROBUSTA Y COMPLETA) --- */
+        /* --- 2. FILTROS Y FEED (Lógica Restaurada Completa) --- */
         window.changeCategory = (type, value) => {
             appState.filterType = type;
             appState.filterValue = value;
             
-            // UI Update
+            // UI Update (Limpieza)
             document.querySelectorAll('.game-item, .nav-item, .circle-card').forEach(e => e.classList.remove('active'));
             
+            // UI Set Active
             if(type === 'all') document.getElementById('nav-home').classList.add('active');
-            else if(type === 'following') document.getElementById('nav-following').classList.add('active');
-            else if(type === 'game') document.getElementById('game-' + value)?.classList.add('active');
-            else if(type === 'section') document.getElementById('sect-' + value)?.classList.add('active');
+            if(type === 'following') document.getElementById('nav-following').classList.add('active');
+            
+            if(type === 'game') {
+                if(value === 'all') document.getElementById('game-all').classList.add('active');
+                else document.getElementById('game-' + value)?.classList.add('active');
+            }
+            
+            if(type === 'section') document.getElementById('sect-' + value)?.classList.add('active');
 
             loadFeed();
         };
@@ -467,24 +473,23 @@
             loadFeed();
         }
 
-        // FUNCIÓN DE CARGA REPARADA + RENDERIZADO COMPLETO
+        // LÓGICA DE CARGA MAESTRA (Transplantada y adaptada)
         window.loadFeed = () => {
             const feedDiv = document.getElementById('postsContainer');
             feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
 
-            // 1. Limpieza de suscripción anterior (Crucial para que no se dupliquen/fallen los filtros)
             if (appState.feedUnsubscribe) appState.feedUnsubscribe();
 
-            // 2. Query simple para traer todo y filtrar en cliente (Evita errores de índices)
-            let q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(100));
+            // Usamos una consulta general para permitir el filtrado dinámico en cliente
+            const q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(50));
 
             appState.feedUnsubscribe = onSnapshot(q, (snapshot) => {
                 let posts = [];
                 snapshot.forEach(doc => posts.push({id: doc.id, ...doc.data()}));
 
-                // 3. Lógica de Filtrado
+                // --- LÓGICA DE FILTRADO MAESTRA (Desde comunidadReparada) ---
                 let filtered = posts;
-
+                
                 if (appState.filterType === 'search') {
                     const term = appState.filterValue.toLowerCase();
                     filtered = posts.filter(p => 
@@ -492,30 +497,25 @@
                         (p.authorName && p.authorName.toLowerCase().includes(term)) ||
                         (p.tags && p.tags.some(t => t.toLowerCase().includes(term)))
                     );
-                } 
-                else if (appState.filterType === 'following' && currentUserData) {
-                    filtered = posts.filter(p => currentUserData.following.includes(p.authorUid));
-                } 
-                else if (appState.filterType === 'game' && appState.filterValue !== 'all') {
+                } else if (appState.filterType === 'game' && appState.filterValue !== 'all') {
                     filtered = posts.filter(p => p.game === appState.filterValue);
-                } 
-                else if (appState.filterType === 'section') {
+                } else if (appState.filterType === 'section') {
                     filtered = posts.filter(p => p.section === appState.filterValue);
-                } 
-                else if (appState.filterType === 'tag') {
+                } else if (appState.filterType === 'tag') {
                     filtered = posts.filter(p => (p.tags || []).includes(appState.filterValue));
-                    document.getElementById('searchInput').value = "#" + appState.filterValue;
+                } else if (appState.filterType === 'following' && currentUserData) {
+                    filtered = posts.filter(p => currentUserData.following.includes(p.authorUid));
                 }
+                // Nota: Si filterType es 'all' o 'game' con valor 'all', filtered se mantiene igual a posts (todos)
 
-                // 4. Lógica de Ordenamiento
+                // Ordenación
                 if (appState.sort === 'top') {
                     filtered.sort((a,b) => (b.likes?.length || 0) - (a.likes?.length || 0));
                 }
 
-                // 5. Utilidades (Tendencias)
                 calculateTrends(filtered);
 
-                // 6. Renderizado Rico (Usando el diseño completo)
+                // --- RENDERIZADO RICO (Mantenido de comunidad.html) ---
                 if(filtered.length === 0) {
                     feedDiv.innerHTML = '<div style="text-align:center; padding:30px; color:#999">No hay publicaciones aquí.</div>';
                     return;
@@ -572,6 +572,21 @@
             });
         };
 
+        // --- BUSCADOR EN TIEMPO REAL (Actualizado) ---
+        document.getElementById('searchInput').addEventListener('keyup', (e) => {
+            // Lógica reactiva inmediata
+            if(e.target.value.length > 2 || e.target.value === "") {
+                appState.filterType = e.target.value === "" ? 'all' : 'search';
+                appState.filterValue = e.target.value;
+                // Si limpia el buscador, volvemos a 'all' explícitamente
+                if(e.target.value === "") {
+                    changeCategory('all', 'all');
+                } else {
+                    loadFeed();
+                }
+            }
+        });
+
         /* --- 3. UTILIDADES --- */
         const calculateTrends = (posts) => {
             const scores = {};
@@ -616,6 +631,7 @@
         };
 
         const parseText = (text) => {
+            if(!text) return "";
             let parsed = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="hashtag-link">$1</a>');
             parsed = parsed.replace(/#(\w+)/g, '<span class="hashtag-link" onclick="window.changeCategory(\'tag\', \'$1\')">#$1</span>');
             return parsed;
@@ -793,12 +809,6 @@
         window.filterGame = (g) => changeCategory('game', g);
         window.searchTag = (t) => changeCategory('tag', t);
         
-        document.getElementById('searchInput').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') {
-                changeCategory('search', e.target.value);
-            }
-        });
-
         const loadRecommendedUsers = async () => {
             const q = query(collection(db, "users"), limit(10));
             const snap = await getDocs(q);
