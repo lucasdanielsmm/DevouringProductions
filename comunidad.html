@@ -1,185 +1,151 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Devouring Lab - Comunidad</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Devouring Lab - Comunidad</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
-        import {
-            getFirestore, collection, addDoc, query, orderBy, limit,
-            onSnapshot, serverTimestamp, doc, updateDoc, arrayUnion, arrayRemove
-        } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
-        import {
-            getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup
-        } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
-
-        /* ================= CONFIG ================= */
-
-        const firebaseConfig = {
-            apiKey: "TU_API_KEY",
-            authDomain: "devouringlab.firebaseapp.com",
-            projectId: "devouringlab",
-            storageBucket: "devouringlab.appspot.com",
-            messagingSenderId: "383272939740",
-            appId: "1:383272939740:web:203f83c89b1c7bd6344419"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
-
-        let currentUser = null;
-
-        /* ================= ESTADO GLOBAL ================= */
-
-        const appState = {
-            filterType: "all",
-            filterValue: null,
-            sort: "recent",
-            unsubscribe: null
-        };
-
-        /* ================= AUTENTICACIÓN ================= */
-
-        onAuthStateChanged(auth, user => {
-            currentUser = user;
-            loadFeed();
-        });
-
-        /* ================= FILTROS ================= */
-
-        window.changeCategory = (type, value) => {
-            appState.filterType = type;
-            appState.filterValue = value;
-            loadFeed();
-        };
-
-        window.changeSort = (mode) => {
-            appState.sort = mode;
-            loadFeed();
-        };
-
-        /* ================= FEED (ARREGLADO) ================= */
-
-        function loadFeed() {
-            const container = document.getElementById("postsContainer");
-            container.innerHTML = `<p style="text-align:center;color:#999;padding:20px">Cargando…</p>`;
-
-            if (appState.unsubscribe) appState.unsubscribe();
-
-            const q = query(
-                collection(db, "posts"),
-                orderBy("timestamp", "desc"),
-                limit(100)
-            );
-
-            appState.unsubscribe = onSnapshot(q, snap => {
-                let posts = [];
-                snap.forEach(d => posts.push({ id: d.id, ...d.data() }));
-
-                /* ===== FILTRADO CORRECTO ===== */
-                let filtered = posts;
-
-                if (appState.filterType === "section" && appState.filterValue) {
-                    filtered = posts.filter(p => p.section === appState.filterValue);
-                }
-
-                if (appState.filterType === "game" && appState.filterValue) {
-                    filtered = filtered.filter(p => p.game === appState.filterValue);
-                }
-
-                if (appState.sort === "top") {
-                    filtered.sort((a, b) =>
-                        (b.likes?.length || 0) - (a.likes?.length || 0)
-                    );
-                }
-
-                renderPosts(filtered);
-            });
-        }
-
-        /* ================= RENDER ================= */
-
-        function renderPosts(posts) {
-            const container = document.getElementById("postsContainer");
-
-            if (posts.length === 0) {
-                container.innerHTML = `<p style="text-align:center;color:#999;padding:30px">
-                    No hay publicaciones aquí.
-                </p>`;
-                return;
-            }
-
-            container.innerHTML = posts.map(post => {
-                const liked = currentUser && post.likes?.includes(currentUser.uid);
-
-                return `
-                    <article class="post-card">
-                        <div class="post-header">
-                            <strong>${post.authorName || "Usuario"}</strong>
-                            <span style="color:#999;font-size:12px">
-                                ${post.section || "General"} · ${post.game || ""}
-                            </span>
-                        </div>
-
-                        <div class="post-content">${post.content || ""}</div>
-
-                        ${post.image ? `<img src="${post.image}" class="post-img">` : ""}
-
-                        <div class="post-actions">
-                            <button onclick="toggleLike('${post.id}', ${liked})">
-                                <i class="fa-heart ${liked ? "fas" : "far"}"></i>
-                                ${(post.likes || []).length}
-                            </button>
-                        </div>
-                    </article>
-                `;
-            }).join("");
-        }
-
-        /* ================= LIKES ================= */
-
-        window.toggleLike = async (id, liked) => {
-            if (!currentUser) {
-                signInWithPopup(auth, provider);
-                return;
-            }
-            const ref = doc(db, "posts", id);
-            await updateDoc(ref, {
-                likes: liked
-                    ? arrayRemove(currentUser.uid)
-                    : arrayUnion(currentUser.uid)
-            });
-        };
-    </script>
-
-    <style>
-        body { font-family: Arial, sans-serif; background:#f0f2f5; margin:0 }
-        main { max-width:700px; margin:auto; padding:20px }
-        .post-card { background:white; border-radius:10px; padding:15px; margin-bottom:15px }
-        .post-header { display:flex; justify-content:space-between; margin-bottom:8px }
-        .post-img { width:100%; border-radius:8px; margin-top:10px }
-        .post-actions button { background:none; border:none; cursor:pointer }
-    </style>
+<style>
+body{margin:0;font-family:Segoe UI,Arial;background:#f0f2f5}
+.navbar{height:64px;background:#fff;border-bottom:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:10}
+.logo{font-weight:800;font-size:20px}
+.logo span{color:#4cc3ff}
+.container{display:grid;grid-template-columns:260px 1fr;max-width:1200px;margin:24px auto;gap:24px;padding:0 16px}
+.sidebar-left{position:sticky;top:88px}
+.nav-item{padding:10px 14px;border-radius:8px;cursor:pointer;margin-bottom:6px;color:#555}
+.nav-item.active,.nav-item:hover{background:#e6f7ff;color:#4cc3ff;font-weight:600}
+.circles-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.circle-card{background:#fff;border-radius:12px;padding:12px;text-align:center;cursor:pointer;border:1px solid #ddd}
+.feed-header{display:flex;background:#fff;border-radius:12px;border:1px solid #ddd;margin-bottom:16px}
+.tab-btn{padding:14px 20px;cursor:pointer;font-weight:600;color:#999}
+.tab-btn.active{color:#4cc3ff;border-bottom:3px solid #4cc3ff}
+.post-card{background:#fff;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #ddd}
+.post-header{display:flex;justify-content:space-between;font-size:13px;color:#666}
+.post-text{margin:10px 0;font-size:14px;line-height:1.6}
+.post-footer{display:flex;gap:14px;font-size:13px;color:#999}
+.post-footer span{cursor:pointer}
+.post-footer span:hover{color:#4cc3ff}
+</style>
 </head>
 
 <body>
-    <main>
-        <div style="margin-bottom:20px">
-            <button onclick="changeCategory('all')">Comunidad</button>
-            <button onclick="changeCategory('section','Taberna')">Taberna</button>
-            <button onclick="changeCategory('section','Galería')">Galería</button>
-            <button onclick="changeCategory('section','Lab')">Lab</button>
-        </div>
 
-        <div id="postsContainer">
-            <p style="text-align:center;color:#999">Cargando comunidad…</p>
-        </div>
-    </main>
+<div class="navbar">
+  <div class="logo">Devouring<span>Lab</span></div>
+</div>
+
+<div class="container">
+
+<aside class="sidebar-left">
+  <div class="nav-item active" onclick="changeCategory('all',null)">Inicio</div>
+  <div class="nav-item" onclick="changeCategory('following',null)">Siguiendo</div>
+</aside>
+
+<main>
+
+<div class="circles-row">
+  <div class="circle-card" onclick="changeCategory('section','Taberna')">🍺 Taberna</div>
+  <div class="circle-card" onclick="changeCategory('section','Galería')">🎨 Galería</div>
+  <div class="circle-card" onclick="changeCategory('section','Lab')">🧪 Lab</div>
+  <div class="circle-card" onclick="changeCategory('section','Guías')">📘 Guías</div>
+</div>
+
+<div class="feed-header">
+  <div class="tab-btn active" id="tabRecientes" onclick="changeSort('recent')">Recientes</div>
+  <div class="tab-btn" id="tabTop" onclick="changeSort('top')">Top</div>
+</div>
+
+<div id="postsContainer">
+  <p style="text-align:center;color:#999">Cargando comunidad…</p>
+</div>
+
+</main>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
+  authDomain: "devouringlab.firebaseapp.com",
+  projectId: "devouringlab",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let appState = {
+  filterType: "all",
+  filterValue: null,
+  sort: "recent",
+  unsub: null
+};
+
+window.changeCategory = (type,val)=>{
+  appState.filterType = type;
+  appState.filterValue = val;
+  loadFeed();
+};
+
+window.changeSort = (s)=>{
+  appState.sort = s;
+  document.getElementById("tabRecientes").classList.toggle("active",s==="recent");
+  document.getElementById("tabTop").classList.toggle("active",s==="top");
+  loadFeed();
+};
+
+function loadFeed(){
+  const cont = document.getElementById("postsContainer");
+  cont.innerHTML = `<p style="text-align:center;color:#999">Cargando…</p>`;
+  if(appState.unsub) appState.unsub();
+
+  const q = query(collection(db,"posts"), orderBy("timestamp","desc"));
+
+  appState.unsub = onSnapshot(q,snap=>{
+    let posts=[];
+    snap.forEach(d=>posts.push(d.data()));
+
+    let filtered = posts;
+
+    if(appState.filterType==="section"){
+      filtered = posts.filter(p=>p.section===appState.filterValue);
+    }
+
+    if(appState.sort==="top"){
+      filtered.sort((a,b)=>(b.likes?.length||0)-(a.likes?.length||0));
+    }
+
+    render(filtered);
+  });
+}
+
+function render(posts){
+  const cont = document.getElementById("postsContainer");
+  if(!posts.length){
+    cont.innerHTML=`<p style="text-align:center;color:#999">No hay publicaciones</p>`;
+    return;
+  }
+
+  cont.innerHTML = posts.map(p=>`
+    <div class="post-card">
+      <div class="post-header">
+        <strong>${p.authorName||"Usuario"}</strong>
+        <span>${p.section||"General"}</span>
+      </div>
+      <div class="post-text">${p.content||""}</div>
+      <div class="post-footer">
+        <span>❤️ ${(p.likes||[]).length}</span>
+        <span>💬 ${(p.comments||[]).length}</span>
+      </div>
+    </div>
+  `).join("");
+}
+
+loadFeed();
+</script>
+
 </body>
 </html>
