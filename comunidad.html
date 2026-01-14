@@ -51,7 +51,7 @@
         .circles-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
         .circle-card { background: var(--bg-card); border-radius: var(--radius); padding: 15px; text-align: center; text-decoration: none; color: var(--text-main); border: 1px solid var(--border-color); transition: 0.2s; cursor: pointer; }
         .circle-card:hover { transform: translateY(-3px); border-color: var(--accent); }
-        .circle-card.active { border-color: var(--accent); background-color: #f0faff; }
+        .circle-card.active { border-color: var(--accent); background-color: #f0faff; } /* Añadido estado activo */
         .circle-icon { width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
         .grad-tavern { background: linear-gradient(135deg, #FF6B6B, #FFD93D); } .grad-art { background: linear-gradient(135deg, #6C5CE7, #A29BFE); } .grad-lab { background: linear-gradient(135deg, #00B894, #55E6C1); } .grad-off { background: linear-gradient(135deg, #0984E3, #74B9FF); }
 
@@ -467,7 +467,7 @@
             loadFeed();
         }
 
-        // === FEED FIX DEFINITIVO (RESTAURADO CON LÓGICA PERDIDA) ===
+        // === FEED FIX DEFINITIVO ===
         window.loadFeed = () => {
             const feedDiv = document.getElementById('postsContainer');
             feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
@@ -484,9 +484,6 @@
             appState.feedUnsubscribe = onSnapshot(q, (snapshot) => {
                 let posts = [];
                 snapshot.forEach(d => posts.push({ id: d.id, ...d.data() }));
-
-                // RESTAURADO: LÓGICA DE TEMAS DEL MOMENTO
-                calculateTrends(posts);
 
                 let filtered = posts;
 
@@ -535,23 +532,9 @@
 
                 feedDiv.innerHTML = filtered.map(post => {
                     const liked = currentUser && (post.likes || []).includes(currentUser.uid);
-                    
-                    // RESTAURADO: PERMISOS PARA BOTONES
-                    const isAdmin = currentUserData && (currentUserData.isAdmin || ADMIN_UIDS.includes(currentUser.uid));
-                    const isAuthor = currentUser && currentUser.uid === post.authorUid;
 
-                    // RESTAURADO: BOTONES DE ACCIÓN (PIN/DELETE)
-                    let modButtons = '';
-                    if(isAdmin || isAuthor) {
-                        modButtons = `<div class="mod-actions" style="margin-left:auto; display:flex; gap:10px;">`;
-                        if(isAdmin) modButtons += `<i class="fas fa-thumbtack mod-btn" title="Fijar" onclick="togglePin('${post.id}', ${post.isPinned})" style="${post.isPinned ? 'color:var(--accent)' : ''}"></i>`;
-                        if(isAdmin || isAuthor) modButtons += `<i class="fas fa-trash mod-btn" title="Borrar" onclick="deletePost('${post.id}')"></i>`;
-                        modButtons += `</div>`;
-                    }
-
-                    // RESTAURADO: TRIGGER DE VISTAS Y CONTADOR VISUAL
                     return `
-                    <article class="post-card ${post.isPinned ? 'pinned' : ''}" onmouseenter="incrementViews('${post.id}', '${post.game}')">
+                    <article class="post-card ${post.isPinned ? 'pinned' : ''}">
                         ${post.isPinned ? '<div class="pin-badge"><i class="fas fa-thumbtack"></i></div>' : ''}
                         <div class="user-header">
                             <div class="avatar-ring ${post.isOfficial ? 'official' : ''}">
@@ -563,7 +546,6 @@
                                     ${getGameName(post.game)} • ${post.section}
                                 </div>
                             </div>
-                            ${modButtons} 
                         </div>
 
                         <div class="post-text">${parseText(post.content || '')}</div>
@@ -575,10 +557,6 @@
                             </div>
                             <div class="interaction-btn" onclick="openComments('${post.id}')">
                                 <i class="far fa-comment"></i>
-                            </div>
-                            
-                            <div style="font-size:12px; color:#999; margin-left:auto;">
-                                <i class="far fa-eye"></i> ${post.views || 0}
                             </div>
                         </div>
                     </article>`;
@@ -599,7 +577,6 @@
             const sorted = Object.keys(scores).sort((a,b) => scores[b] - scores[a]).slice(0, 3);
             const div = document.getElementById('trendsContainer');
             div.innerHTML = "";
-            if(sorted.length === 0) div.innerHTML = "<p style='font-size:12px;color:#999'>Sin tendencias.</p>";
             sorted.forEach(tag => {
                 div.innerHTML += `<div class="trend-item" onclick="changeCategory('tag', '${tag}')"><span class="trend-name"># ${tag}</span><span class="trend-count">Trending</span></div>`;
             });
@@ -625,12 +602,9 @@
         window.incrementViews = async (postId, game) => {
             if(viewedPosts.has(postId)) return;
             viewedPosts.add(postId);
-            // Pequeño delay para no saturar si pasas rápido el mouse
             setTimeout(async () => {
-                try {
-                    await updateDoc(doc(db, "posts", postId), { views: increment(1) });
-                    if(game && game !== 'all') trackInterest(game); 
-                } catch(e) { console.log("View error", e); }
+                await updateDoc(doc(db, "posts", postId), { views: increment(1) });
+                trackInterest(game); 
             }, 1000);
         };
 
@@ -864,3 +838,5 @@
     </script>
 </body>
 </html>
+
+
