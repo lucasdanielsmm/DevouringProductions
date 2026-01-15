@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- ESTILOS BASE (Mantenidos del original completo) --- */
+        /* --- ESTILOS BASE --- */
         :root { --bg-body: #f0f2f5; --bg-card: #ffffff; --accent: #4cc3ff; --accent-hover: #3aa8e0; --text-main: #333333; --text-sec: #999999; --border-color: #ebebeb; --radius: 12px; --nav-height: 64px; --subnav-height: 56px; --overlay-color: rgba(0, 0, 0, 0.6); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; background-color: var(--bg-body); color: var(--text-main); overflow-y: scroll; }
@@ -51,7 +51,7 @@
         .circles-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
         .circle-card { background: var(--bg-card); border-radius: var(--radius); padding: 15px; text-align: center; text-decoration: none; color: var(--text-main); border: 1px solid var(--border-color); transition: 0.2s; cursor: pointer; }
         .circle-card:hover { transform: translateY(-3px); border-color: var(--accent); }
-        .circle-card.active { border-color: var(--accent); background-color: #f0faff; } /* Añadido estado activo */
+        .circle-card.active { border-color: var(--accent); background-color: #f0faff; } 
         .circle-icon { width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
         .grad-tavern { background: linear-gradient(135deg, #FF6B6B, #FFD93D); } .grad-art { background: linear-gradient(135deg, #6C5CE7, #A29BFE); } .grad-lab { background: linear-gradient(135deg, #00B894, #55E6C1); } .grad-off { background: linear-gradient(135deg, #0984E3, #74B9FF); }
 
@@ -59,26 +59,44 @@
         .tab-btn { padding: 15px 20px; cursor: pointer; font-weight: 600; color: var(--text-sec); border-bottom: 3px solid transparent; }
         .tab-btn.active { color: var(--accent); border-bottom: 3px solid var(--accent); }
 
-        /* POST CARD */
-        .post-card { background: var(--bg-card); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; border: 1px solid var(--border-color); transition: 0.2s; position: relative; }
-        .post-card.pinned { background-color: #fffdf0; border: 1px solid #ffeeba; }
-        .user-header { display: flex; align-items: center; margin-bottom: 12px; }
-        .avatar-ring { width: 42px; height: 42px; border-radius: 50%; padding: 2px; border: 2px solid transparent; margin-right: 12px; }
+        /* POST CARD REDISEÑADO */
+        .post-card { background: var(--bg-card); border-radius: var(--radius); padding: 0; margin-bottom: 24px; border: 1px solid var(--border-color); transition: 0.2s; position: relative; overflow: hidden; }
+        .post-card:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .post-card.pinned { border: 1px solid #ffeeba; background-color: #fffbf0; }
+        
+        .post-header-wrap { padding: 16px 20px 0 20px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .user-header { display: flex; align-items: center; }
+        .avatar-ring { width: 45px; height: 45px; border-radius: 50%; padding: 2px; border: 2px solid #eee; margin-right: 12px; position: relative; }
         .avatar-ring.official { border-color: #ffd700; }
         .avatar-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .level-badge { background: #333; color: #fff; font-size: 10px; padding: 1px 5px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
-        .title-badge { font-size: 10px; color: var(--accent); border: 1px solid var(--accent); padding: 0 4px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
-        .pin-badge { position: absolute; top: 20px; right: 20px; color: #f39c12; font-size: 14px; }
-        .post-text { color: #444; font-size: 14px; line-height: 1.6; margin-bottom: 12px; white-space: pre-wrap; }
+        
+        .post-meta-info { display: flex; flex-direction: column; }
+        .author-name { font-weight: 700; font-size: 15px; color: #222; }
+        .post-details { font-size: 12px; color: #888; margin-top: 2px; }
+        .game-tag-badge { background: #f0f2f5; padding: 2px 8px; border-radius: 10px; font-weight: 600; color: #555; margin-right: 5px; }
+        
+        .mod-actions { display: flex; gap: 12px; font-size: 14px; }
+        .mod-btn { cursor: pointer; color: #ccc; transition: 0.2s; padding: 5px; border-radius: 50%; }
+        .mod-btn:hover { background: #f5f5f5; color: var(--text-main); }
+        .mod-btn.pinned-active { color: #f39c12; transform: rotate(-45deg); }
+        .mod-btn.delete-active:hover { color: #ff4c4c; background: #ffebeb; }
+
+        .post-content-area { padding: 16px 20px; }
+        .post-text { color: #1c1e21; font-size: 15px; line-height: 1.6; white-space: pre-wrap; margin-bottom: 12px; }
         .hashtag-link { color: var(--accent); font-weight: 600; cursor: pointer; text-decoration: none; }
         .hashtag-link:hover { text-decoration: underline; }
-        .post-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 12px; color: var(--text-sec); font-size: 13px; margin-top: 10px;}
-        .interaction-btn { cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
-        .interaction-btn:hover { color: var(--accent); }
-        .interaction-btn.liked { color: #ff4c4c; }
-        .mod-actions { display: flex; gap: 10px; font-size: 12px; margin-left: auto; margin-right: 10px;}
-        .mod-btn { cursor: pointer; color: #999; }
-        .mod-btn:hover { color: var(--text-main); }
+        
+        .post-image-container { width: 100%; border-radius: 8px; overflow: hidden; border: 1px solid #eee; margin-top: 10px; }
+        .post-image-container img { width: 100%; display: block; object-fit: cover; max-height: 500px; }
+
+        .post-footer { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; border-top: 1px solid #f5f5f5; margin-top: 5px; }
+        .interaction-group { display: flex; gap: 20px; }
+        .interaction-btn { cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; color: #65676b; font-size: 14px; font-weight: 600; padding: 6px 10px; border-radius: 6px; }
+        .interaction-btn:hover { background: #f0f2f5; }
+        .interaction-btn.liked { color: #e0245e; }
+        .interaction-btn.liked i { animation: pulse 0.3s ease; }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
 
         /* SIDEBAR RIGHT */
         .sidebar-right { position: sticky; top: 140px; height: fit-content; }
@@ -97,10 +115,12 @@
         .check-in-box.checked { background: #e8f5e9; color: #2e7d32; cursor: default; }
 
         /* TENDENCIAS */
-        .trend-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 13px; cursor: pointer; }
-        .trend-item:hover .trend-name { color: var(--accent); }
-        .trend-name { font-weight: 600; display: block; }
-        .trend-count { color: #999; font-size: 11px; }
+        .trend-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; cursor: pointer; padding: 6px; border-radius: 6px; transition:0.2s; }
+        .trend-item:hover { background: #f9f9f9; }
+        .trend-info { display:flex; flex-direction:column; }
+        .trend-name { font-weight: 700; color: #333; }
+        .trend-desc { font-size: 11px; color: #999; }
+        .trend-icon { color: var(--accent); opacity: 0.5; }
 
         /* RECOMENDADOS */
         .rec-user { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
@@ -205,6 +225,7 @@
                 <img src="https://via.placeholder.com/75" class="profile-avatar" id="sidebarAvatar">
                 <h3 style="font-size: 16px; margin-top: 5px;" id="sidebarName">Visitante</h3>
                 <p style="font-size: 11px; margin-bottom: 10px;" id="sidebarLevel">Lv. 0 • Invitado</p>
+                <div id="dailyTitleContainer" style="font-size:10px; color:var(--accent); font-weight:bold; margin-bottom:5px;"></div>
                 
                 <div id="authActions">
                     <button class="modal-btn btn-submit" id="sidebarLoginBtn" style="font-size:12px;">Iniciar Sesión</button>
@@ -227,7 +248,7 @@
             </div>
 
             <div class="widget-box">
-                <div class="widget-title">Temas del momento</div>
+                <div class="widget-title"><i class="fas fa-fire" style="color:#ff6b6b; margin-right:5px;"></i> Tendencias</div>
                 <div id="trendsContainer">
                     <p style="font-size:12px; color:#999">Calculando...</p>
                 </div>
@@ -328,7 +349,7 @@
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, where, getDocs, limit, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // CONFIGURACIÓN (TUS KEYS)
+        // CONFIGURACIÓN
         const firebaseConfig = {
             apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
             authDomain: "devouringlab.firebaseapp.com",
@@ -345,6 +366,7 @@
 
         const CLOUD_NAME = "dyhvx2vsz";
         const UPLOAD_PRESET = "DevouringIMG";
+        // UID de administradores para botones de moderación
         const ADMIN_UIDS = ["qlJIBLf1I1clEVk2uggolNWL4Ai1"]; 
 
         let currentUser = null;
@@ -354,7 +376,6 @@
         let currentPostIdForComments = null;
         let commentsUnsubscribe = null;
 
-        // ESTADO DE LA APP (Sistema Robusto del archivo Reparado)
         let appState = { 
             filterType: 'all', 
             filterValue: null, 
@@ -362,7 +383,25 @@
             feedUnsubscribe: null 
         };
 
-        /* --- 1. USUARIO --- */
+        /* --- 1. LÓGICA DE TÍTULO DIARIO --- */
+        const getDailyTitle = () => {
+            const titles = [
+                "El Visionario", "El Errante", "El Arquitecto", "La Sombra", 
+                "El Sabio", "El Guerrero", "El Místico", "El Bardo", 
+                "Cazador de Bugs", "Maestro del Código", "Pixel Artist", 
+                "El Alquimista", "El Estratega", "El Audaz"
+            ];
+            // Semilla basada solo en la fecha (cambia cada día para TODOS)
+            const dateStr = new Date().toDateString();
+            let hash = 0;
+            for (let i = 0; i < dateStr.length; i++) {
+                hash = dateStr.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const index = Math.abs(hash) % titles.length;
+            return titles[index];
+        };
+
+        /* --- 2. USUARIO Y ESTADÍSTICAS --- */
         const calculateStats = (userData) => {
             if (!userData) return { level: 1, title: "Novato" };
             const createdAt = userData.createdAt ? userData.createdAt.toDate() : new Date();
@@ -371,14 +410,14 @@
             level += Math.floor((userData.postCount || 0) / 100); 
             if(level < 1) level = 1;
 
-            let title = "Novato";
+            let rank = "Novato";
             const c = userData.postCount || 0;
-            if(c >= 5) title = "Explorador";
-            if(c >= 10) title = "Aventurero";
-            if(c >= 25) title = "Veterano";
-            if(ADMIN_UIDS.includes(userData.uid)) title = "Game Designer";
+            if(c >= 5) rank = "Explorador";
+            if(c >= 10) rank = "Aventurero";
+            if(c >= 25) rank = "Veterano";
+            if(ADMIN_UIDS.includes(userData.uid)) rank = "Game Designer";
 
-            return { level, title };
+            return { level, rank };
         };
 
         const updateUserUI = (user, data) => {
@@ -389,7 +428,11 @@
             document.getElementById('navAvatar').src = data.photoURL || user.photoURL;
 
             const stats = calculateStats(data);
-            document.getElementById('sidebarLevel').innerHTML = `Lv. ${stats.level} • <span style="color:var(--accent)">${stats.title}</span>`;
+            const dailyTitle = getDailyTitle();
+            
+            document.getElementById('sidebarLevel').innerHTML = `Lv. ${stats.level} • <span style="color:var(--accent)">${stats.rank}</span>`;
+            document.getElementById('dailyTitleContainer').innerHTML = `<i class="fas fa-crown"></i> Título Diario: ${dailyTitle}`;
+
             document.getElementById('statPosts').innerText = data.postCount || 0;
             document.getElementById('statFollowers').innerText = (data.followers || []).length;
             document.getElementById('statFollowing').innerText = (data.following || []).length;
@@ -437,25 +480,22 @@
                 document.getElementById('sidebarName').innerText = "Visitante";
                 document.getElementById('sidebarAvatar').src = "https://via.placeholder.com/75";
                 document.getElementById('sidebarLevel').innerText = "Lv. 0 • Invitado";
+                document.getElementById('dailyTitleContainer').innerHTML = "";
                 document.getElementById('navAvatar').src = "https://via.placeholder.com/36";
             }
             loadRecommendedUsers();
             loadFeed(); 
         });
 
-        /* --- 2. FILTROS Y FEED (MEZCLA ROBUSTA Y COMPLETA) --- */
+        /* --- 3. FEED Y FILTROS --- */
         window.changeCategory = (type, value) => {
             appState.filterType = type;
             appState.filterValue = value;
-            
-            // UI Update
             document.querySelectorAll('.game-item, .nav-item, .circle-card').forEach(e => e.classList.remove('active'));
-            
             if(type === 'all') document.getElementById('nav-home').classList.add('active');
             else if(type === 'following') document.getElementById('nav-following').classList.add('active');
             else if(type === 'game') document.getElementById('game-' + value)?.classList.add('active');
             else if(type === 'section') document.getElementById('sect-' + value)?.classList.add('active');
-
             loadFeed();
         };
 
@@ -467,63 +507,37 @@
             loadFeed();
         }
 
-        // === FEED FIX DEFINITIVO ===
         window.loadFeed = () => {
             const feedDiv = document.getElementById('postsContainer');
             feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
-
-            // Limpieza CRÍTICA
             if (appState.feedUnsubscribe) appState.feedUnsubscribe();
 
-            const q = query(
-                collection(db, "posts"),
-                orderBy("timestamp", "desc"),
-                limit(100)
-            );
+            const q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(100));
 
             appState.feedUnsubscribe = onSnapshot(q, (snapshot) => {
                 let posts = [];
                 snapshot.forEach(d => posts.push({ id: d.id, ...d.data() }));
 
-                let filtered = posts;
+                // Calcular Tendencias con la nueva lógica antes de filtrar
+                calculateTrends(posts);
 
-                // === FILTROS CORREGIDOS ===
+                let filtered = posts;
                 switch (appState.filterType) {
                     case 'following':
-                        if (currentUserData)
-                            filtered = posts.filter(p => currentUserData.following.includes(p.authorUid));
+                        if (currentUserData) filtered = posts.filter(p => currentUserData.following.includes(p.authorUid));
                         break;
-
                     case 'game':
-                        if (appState.filterValue !== 'all')
-                            filtered = posts.filter(p => p.game === appState.filterValue);
+                        if (appState.filterValue !== 'all') filtered = posts.filter(p => p.game === appState.filterValue);
                         break;
-
-                    case 'section':
-                        filtered = posts.filter(p => p.section === appState.filterValue);
-                        break;
-
-                    case 'tag':
-                        filtered = posts.filter(p => (p.tags || []).includes(appState.filterValue));
-                        break;
-  
+                    case 'section': filtered = posts.filter(p => p.section === appState.filterValue); break;
+                    case 'tag': filtered = posts.filter(p => (p.tags || []).includes(appState.filterValue)); break;
                     case 'search':
                         const t = appState.filterValue.toLowerCase();
-                        filtered = posts.filter(p =>
-                            p.content?.toLowerCase().includes(t) ||
-                            p.authorName?.toLowerCase().includes(t)
-                        );
-                        break;
-
-                    default:
-                        // Inicio / General → no filtra
+                        filtered = posts.filter(p => p.content?.toLowerCase().includes(t) || p.authorName?.toLowerCase().includes(t));
                         break;
                 }
 
-                // Orden
-                if (appState.sort === 'top') {
-                    filtered.sort((a, b) => (b.likes?.length || 0) - (a.likes?.length || 0));
-                }
+                if (appState.sort === 'top') filtered.sort((a, b) => (b.likes?.length || 0) - (a.likes?.length || 0));
 
                 if (!filtered.length) {
                     feedDiv.innerHTML = '<div style="text-align:center; padding:30px; color:#999">No hay publicaciones.</div>';
@@ -532,31 +546,50 @@
 
                 feedDiv.innerHTML = filtered.map(post => {
                     const liked = currentUser && (post.likes || []).includes(currentUser.uid);
-
+                    // Comprobar si es admin para botones de moderación
+                    const isAdmin = currentUser && ADMIN_UIDS.includes(currentUser.uid);
+                    
                     return `
-                    <article class="post-card ${post.isPinned ? 'pinned' : ''}">
-                        ${post.isPinned ? '<div class="pin-badge"><i class="fas fa-thumbtack"></i></div>' : ''}
-                        <div class="user-header">
-                            <div class="avatar-ring ${post.isOfficial ? 'official' : ''}">
-                                <img src="${post.authorAvatar || 'https://via.placeholder.com/40'}">
-                            </div>
-                            <div>
-                                <b>${post.authorName}</b>
-                                <div style="font-size:11px;color:#999">
-                                    ${getGameName(post.game)} • ${post.section}
+                    <article class="post-card ${post.isPinned ? 'pinned' : ''}" onmouseenter="incrementViews('${post.id}', '${post.game}')">
+                        <div class="post-header-wrap">
+                            <div class="user-header">
+                                <div class="avatar-ring ${post.isOfficial ? 'official' : ''}">
+                                    <img src="${post.authorAvatar || 'https://via.placeholder.com/40'}">
                                 </div>
+                                <div class="post-meta-info">
+                                    <span class="author-name">${post.authorName}</span>
+                                    <div class="post-details">
+                                        <span class="game-tag-badge">${getGameName(post.game)}</span>
+                                        ${formatTimeRelative(post.timestamp)}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mod-actions">
+                                ${post.isPinned ? '<i class="fas fa-thumbtack" style="color:#f39c12"></i>' : ''}
+                                ${isAdmin ? `
+                                    <i class="fas fa-thumbtack mod-btn ${post.isPinned ? 'pinned-active' : ''}" onclick="togglePin('${post.id}', ${post.isPinned})" title="Fijar Post"></i>
+                                    <i class="fas fa-trash mod-btn delete-active" onclick="deletePost('${post.id}')" title="Eliminar Post"></i>
+                                ` : ''}
                             </div>
                         </div>
 
-                        <div class="post-text">${parseText(post.content || '')}</div>
-                        ${post.image ? `<img src="${post.image}" style="width:100%;border-radius:8px;margin-bottom:10px">` : ''}
+                        <div class="post-content-area">
+                            <div class="post-text">${parseText(post.content || '')}</div>
+                            ${post.image ? `<div class="post-image-container"><img src="${post.image}"></div>` : ''}
+                        </div>
 
                         <div class="post-footer">
-                            <div class="interaction-btn ${liked ? 'liked' : ''}" onclick="toggleLike('${post.id}', ${liked}, '${post.authorUid}')">
-                                <i class="${liked ? 'fas' : 'far'} fa-heart"></i> ${(post.likes || []).length}
+                            <div class="interaction-group">
+                                <div class="interaction-btn ${liked ? 'liked' : ''}" onclick="toggleLike('${post.id}', ${liked}, '${post.authorUid}')">
+                                    <i class="${liked ? 'fas' : 'far'} fa-heart"></i> ${(post.likes || []).length}
+                                </div>
+                                <div class="interaction-btn" onclick="openComments('${post.id}')">
+                                    <i class="far fa-comment"></i> Comentar
+                                </div>
                             </div>
-                            <div class="interaction-btn" onclick="openComments('${post.id}')">
-                                <i class="far fa-comment"></i>
+                            <div style="font-size:11px; color:#ccc;">
+                                <i class="far fa-eye"></i> ${post.views || 0}
                             </div>
                         </div>
                     </article>`;
@@ -564,38 +597,78 @@
             });
         };
 
-
-        /* --- 3. UTILIDADES --- */
+        /* --- 4. TENDENCIAS (LÓGICA MEJORADA) --- */
         const calculateTrends = (posts) => {
-            const scores = {};
+            const tagStats = {}; 
+            const recentTags = [];
+            
+            // Recorrer posts para recolectar datos
             posts.forEach(p => {
-                if(p.tags) p.tags.forEach(t => {
-                    const score = ((p.likes?.length || 0) * 2) + ((p.views || 0) * 1);
-                    scores[t] = (scores[t] || 0) + score + 1;
-                });
+                if (p.tags) {
+                    p.tags.forEach(t => {
+                        if(!tagStats[t]) tagStats[t] = { likes: 0, count: 0 };
+                        tagStats[t].likes += (p.likes?.length || 0);
+                        tagStats[t].count++;
+                        recentTags.push(t); // Como los posts vienen ordenados por fecha, el primero es el más reciente
+                    });
+                }
             });
-            const sorted = Object.keys(scores).sort((a,b) => scores[b] - scores[a]).slice(0, 3);
+
+            // 1. Hashtag más reciente (el primero del array recentTags que existe)
+            const mostRecent = recentTags.length > 0 ? recentTags[0] : null;
+
+            // 2. Hashtag con más likes (excluyendo el reciente para no repetir)
+            let mostLiked = null;
+            const sortedByLikes = Object.keys(tagStats).sort((a,b) => tagStats[b].likes - tagStats[a].likes);
+            mostLiked = sortedByLikes.find(t => t !== mostRecent);
+
+            // 3. Otro (Random de los restantes)
+            let randomTag = null;
+            const remaining = Object.keys(tagStats).filter(t => t !== mostRecent && t !== mostLiked);
+            if (remaining.length > 0) {
+                randomTag = remaining[Math.floor(Math.random() * remaining.length)];
+            }
+
+            // Renderizar
             const div = document.getElementById('trendsContainer');
             div.innerHTML = "";
-            sorted.forEach(tag => {
-                div.innerHTML += `<div class="trend-item" onclick="changeCategory('tag', '${tag}')"><span class="trend-name"># ${tag}</span><span class="trend-count">Trending</span></div>`;
+            const trendsToShow = [
+                { tag: mostRecent, label: "Nuevo", icon: "fa-clock" },
+                { tag: mostLiked, label: "Popular", icon: "fa-heart" },
+                { tag: randomTag, label: "Descubre", icon: "fa-random" }
+            ];
+
+            let hasTrends = false;
+            trendsToShow.forEach(item => {
+                if(item.tag) {
+                    hasTrends = true;
+                    div.innerHTML += `
+                    <div class="trend-item" onclick="changeCategory('tag', '${item.tag}')">
+                        <div class="trend-info">
+                            <span class="trend-name"># ${item.tag}</span>
+                            <span class="trend-desc">${item.label}</span>
+                        </div>
+                        <i class="fas ${item.icon} trend-icon"></i>
+                    </div>`;
+                }
             });
+
+            if(!hasTrends) div.innerHTML = "<p style='font-size:12px; color:#999'>No hay tendencias aún.</p>";
         };
 
+        /* --- UTILIDADES --- */
         const updateInterestsUI = (stats) => {
             const max = Object.entries(stats).reduce((a, b) => a[1] > b[1] ? a : b, ['none', 0]);
-            const topGame = max[0];
             ['navUnity', 'navRPG', 'navWeb'].forEach(id => document.getElementById(id).classList.remove('active'));
-            if(topGame === 'dinoma') document.getElementById('navUnity').classList.add('active'); 
-            if(topGame === 'vireo') document.getElementById('navRPG').classList.add('active'); 
-            if(topGame === 'cae') document.getElementById('navWeb').classList.add('active'); 
+            if(max[0] === 'dinoma') document.getElementById('navUnity').classList.add('active'); 
+            if(max[0] === 'vireo') document.getElementById('navRPG').classList.add('active'); 
+            if(max[0] === 'cae') document.getElementById('navWeb').classList.add('active'); 
         };
 
         const trackInterest = async (game) => {
             if(!currentUser) return;
             const ref = doc(db, "users", currentUser.uid);
-            const field = `interestStats.${game}`;
-            await updateDoc(ref, { [field]: increment(1) });
+            await updateDoc(ref, { [`interestStats.${game}`]: increment(1) });
         };
 
         const viewedPosts = new Set();
@@ -623,11 +696,10 @@
             if(!timestamp) return "Reciente";
             const date = timestamp.toDate();
             const now = new Date();
-            const diffMs = now - date;
-            const diffSec = Math.floor(diffMs / 1000);
-            const diffMin = Math.floor(diffSec / 60);
+            const diffSec = Math.floor((now - date) / 1000);
             if (diffSec < 60) return "Hace un momento";
-            if (diffMin < 60) return `Hace ${diffMin} min`;
+            if (diffSec < 3600) return `Hace ${Math.floor(diffSec / 60)} min`;
+            if (diffSec < 86400) return `Hace ${Math.floor(diffSec / 3600)} h`;
             return date.toLocaleDateString();
         };
 
@@ -654,7 +726,6 @@
                     authorName: currentUser.displayName,
                     authorAvatar: currentUser.photoURL,
                     authorLevel: stats.level,
-                    authorTitle: stats.title,
                     content: content,
                     section: section,
                     game: game,
@@ -663,12 +734,15 @@
                     likes: [],
                     views: 0,
                     isPinned: false,
-                    isOfficial: isOfficial && currentUserData.isAdmin,
+                    isOfficial: isOfficial && ADMIN_UIDS.includes(currentUser.uid),
                     timestamp: serverTimestamp()
                 });
                 await updateDoc(doc(db, "users", currentUser.uid), { postCount: increment(1) });
                 closeModals();
                 document.getElementById('postContent').value = "";
+                uploadedImageUrl = "";
+                document.getElementById('imagePreview').style.display = 'none';
+                document.getElementById('uploadStatus').innerText = "";
             } catch (e) {
                 console.error(e);
                 alert("Error al publicar");
@@ -730,8 +804,17 @@
                 if(authorUid !== currentUser.uid) createNotification("like", authorUid);
             }
         };
-        window.togglePin = async (postId, currentStatus) => await updateDoc(doc(db, "posts", postId), { isPinned: !currentStatus });
-        window.deletePost = async (postId) => { if(confirm("¿Borrar?")) await deleteDoc(doc(db, "posts", postId)); };
+
+        // --- MODERACIÓN ---
+        window.togglePin = async (postId, currentStatus) => {
+            // Verificación extra de seguridad en cliente (Firewall debe proteger esto en reglas también)
+            if(!ADMIN_UIDS.includes(currentUser.uid)) return;
+            await updateDoc(doc(db, "posts", postId), { isPinned: !currentStatus });
+        };
+        window.deletePost = async (postId) => { 
+            if(!ADMIN_UIDS.includes(currentUser.uid)) return;
+            if(confirm("¿Seguro que quieres borrar este post permanentemente?")) await deleteDoc(doc(db, "posts", postId)); 
+        };
 
         const createNotification = async (type, toUid) => {
             await addDoc(collection(db, "notifications"), {
@@ -831,12 +914,10 @@
         document.getElementById('openPublishBtn').addEventListener('click', () => {
             if(!currentUser) return alert("Inicia sesión");
             document.getElementById('publishModal').style.display = 'flex';
-            if(currentUserData.isAdmin) document.getElementById('adminCheckContainer').style.display = 'flex';
+            if(ADMIN_UIDS.includes(currentUser.uid)) document.getElementById('adminCheckContainer').style.display = 'flex';
         });
-        document.getElementById('notifBtn').addEventListener('click', () => document.getElementById('notifDropdown').classList.toggle('show'));
+        document.getElementById('notifBtn').addEventListener('click', () => document.getElementById('notifDropdown').classList.toggle('show');
 
     </script>
 </body>
 </html>
-
-
