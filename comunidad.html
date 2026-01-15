@@ -508,38 +508,42 @@
         };
 
         /* --- 3. LÓGICA DE TENDENCIAS MEJORADA --- */
-        const calculateTrends = (posts) => {
+        const calculateTrends = (posts = []) => {
+            const div = document.getElementById('trendsContainer');
+            if (!div) return;
+
             let tagScores = {};
-            
+
             posts.forEach((p, index) => {
-                if(p.tags) {
-                    p.tags.forEach(t => {
-                        // Scoring: 
-                        // 1. Recencia: Inversa del índice (los primeros en la lista 'posts' son los más nuevos)
-                        // 2. Popularidad: Cantidad de Likes * 2
-                        let recencyScore = 50 - Math.min(index, 50); // Puntos extra si es de los últimos 50 posts
-                        let popularityScore = (p.likes ? p.likes.length : 0) * 2;
-                        
-                        tagScores[t] = (tagScores[t] || 0) + 1 + recencyScore + popularityScore;
-                    });
-                }
+                if (!p.tags || !Array.isArray(p.tags)) return;
+
+                p.tags.forEach(tag => {
+                    const recency = Math.max(0, 50 - index);
+                    const popularity = (p.likes?.length || 0) * 2;
+                    tagScores[tag] = (tagScores[tag] || 0) + 1 + recency + popularity;
+                });
             });
 
-            // Convertir a array, ordenar por puntaje y tomar top 3 únicos
-            let sortedTags = Object.keys(tagScores).sort((a,b) => tagScores[b] - tagScores[a]).slice(0, 3);
-
-            const div = document.getElementById('trendsContainer');
             div.innerHTML = "";
-            if(sortedTags.length === 0) div.innerHTML = "<p style='font-size:12px;color:#999'>Sin tendencias.</p>";
-            
-            sortedTags.forEach(tag => {
-                // Decidir subtítulo basado en por qué ganó (simplificado visualmente)
-                div.innerHTML += `<div class="trend-item" onclick="changeCategory('tag', '${tag}')">
-                    <span class="trend-name"># ${tag}</span>
-                    <span class="trend-count">Trending</span>
-                </div>`;
+
+            const topTags = Object.keys(tagScores)
+                .sort((a, b) => tagScores[b] - tagScores[a])
+                .slice(0, 3);
+
+            if (topTags.length === 0) {
+                div.innerHTML = `<p style="font-size:12px;color:#999">Sin tendencias.</p>`;
+                return;
+            }
+
+            topTags.forEach(tag => {
+                div.innerHTML += `
+                    <div class="trend-item" onclick="changeCategory('tag', '${tag}')">
+                        <span class="trend-name">#${tag}</span>
+                        <span class="trend-count">Trending</span>
+                    </div>`;
             });
         };
+
 
         const updateInterestsUI = (stats) => {
             const max = Object.entries(stats).reduce((a, b) => a[1] > b[1] ? a : b, ['none', 0]);
@@ -550,16 +554,39 @@
         };
 
         const viewedPosts = new Set();
+
         window.incrementViews = async (postId, game) => {
-            if(viewedPosts.has(postId)) return;
+            if (viewedPosts.has(postId)) return;
             viewedPosts.add(postId);
-            setTimeout(async () => {
-                await updateDoc(doc(db, "posts", postId), { views: increment(1) });
-                if(currentUser) await updateDoc(doc(db, "users", currentUser.uid), { [`interestStats.${game}`]: increment(1) });
-            }, 1000);
+
+            try {
+                setTimeout(async () => {
+                    await updateDoc(doc(db, "posts", postId), {
+                        views: increment(1)
+                    });
+
+                    if (currentUser && game) {
+                        await updateDoc(
+                            doc(db, "users", currentUser.uid),
+                            { [`interestStats.${game}`]: increment(1) }
+                        );
+                    }
+                }, 1000);
+            } catch (err) {
+                console.warn("Error incrementando vistas:", err.message);
+            }
         };
 
-        const parseText = (text) => text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="hashtag-link">$1</a>').replace(/#(\w+)/g, '<span class="hashtag-link" onclick="window.changeCategory(\'tag\', \'$1\')">#$1</span>');
+
+        const parseText = (text = "") => {
+            if (typeof text !== "string") return "";
+            return text
+                .replace(/(https?:\/\/[^\s]+)/g,
+                    '<a href="$1" target="_blank" class="hashtag-link">$1</a>')
+                .replace(/#(\w+)/g,
+                    '<span class="hashtag-link" onclick="window.changeCategory(\'tag\', \'$1\')">#$1</span>');
+        };
+
         const getGameName = (key) => ({ 'vireo': 'Vireo CODE', 'cae': 'Cae', 'lanzer': 'Move-Lanzer', 'dinoma': 'Creatura Dinoma', 'all': 'General' }[key] || key);
 
         // --- ACCIONES DE CHECK-IN Y SEGUIR ---
@@ -747,3 +774,4 @@
     </script>
 </body>
 </html>
+
