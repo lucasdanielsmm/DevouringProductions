@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- ESTILOS BASE (Mantenidos del original completo) --- */
+        /* --- ESTILOS BASE (Mantenidos al 100%) --- */
         :root { --bg-body: #f0f2f5; --bg-card: #ffffff; --accent: #4cc3ff; --accent-hover: #3aa8e0; --text-main: #333333; --text-sec: #999999; --border-color: #ebebeb; --radius: 12px; --nav-height: 64px; --subnav-height: 56px; --overlay-color: rgba(0, 0, 0, 0.6); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; background-color: var(--bg-body); color: var(--text-main); overflow-y: scroll; }
@@ -51,7 +51,7 @@
         .circles-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
         .circle-card { background: var(--bg-card); border-radius: var(--radius); padding: 15px; text-align: center; text-decoration: none; color: var(--text-main); border: 1px solid var(--border-color); transition: 0.2s; cursor: pointer; }
         .circle-card:hover { transform: translateY(-3px); border-color: var(--accent); }
-        .circle-card.active { border-color: var(--accent); background-color: #f0faff; } /* Añadido estado activo */
+        .circle-card.active { border-color: var(--accent); background-color: #f0faff; }
         .circle-icon { width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
         .grad-tavern { background: linear-gradient(135deg, #FF6B6B, #FFD93D); } .grad-art { background: linear-gradient(135deg, #6C5CE7, #A29BFE); } .grad-lab { background: linear-gradient(135deg, #00B894, #55E6C1); } .grad-off { background: linear-gradient(135deg, #0984E3, #74B9FF); }
 
@@ -105,8 +105,9 @@
         /* RECOMENDADOS */
         .rec-user { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .rec-info { display: flex; gap: 10px; align-items: center; }
-        .rec-btn { background: none; border: 1px solid var(--accent); color: var(--accent); border-radius: 20px; padding: 2px 10px; font-size: 11px; cursor: pointer; }
+        .rec-btn { background: none; border: 1px solid var(--accent); color: var(--accent); border-radius: 20px; padding: 2px 10px; font-size: 11px; cursor: pointer; transition: 0.2s;}
         .rec-btn:hover { background: var(--accent); color: white; }
+        .rec-btn.following { background: #e0e0e0; color: #666; border-color: #e0e0e0; }
 
         /* MODALS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--overlay-color); z-index: 3000; justify-content: center; align-items: center; }
@@ -204,7 +205,8 @@
                 <div class="profile-bg"></div>
                 <img src="https://via.placeholder.com/75" class="profile-avatar" id="sidebarAvatar">
                 <h3 style="font-size: 16px; margin-top: 5px;" id="sidebarName">Visitante</h3>
-                <p style="font-size: 11px; margin-bottom: 10px;" id="sidebarLevel">Lv. 0 • Invitado</p>
+                <p style="font-size: 11px; margin-bottom: 5px;" id="sidebarLevel">Lv. 0 • Invitado</p>
+                <p style="font-size: 11px; color:var(--accent); font-weight:bold; margin-bottom:10px; min-height:15px;" id="dailyTitleDisplay"></p>
                 
                 <div id="authActions">
                     <button class="modal-btn btn-submit" id="sidebarLoginBtn" style="font-size:12px;">Iniciar Sesión</button>
@@ -242,42 +244,20 @@
 
     <div class="modal-overlay" id="publishModal">
         <div class="modal-card">
-            <div class="modal-header">
-                <h3>Crear Publicación</h3>
-                <i class="fas fa-times" style="cursor:pointer" onclick="closeModals()"></i>
-            </div>
-            
+            <div class="modal-header"><h3>Crear Publicación</h3><i class="fas fa-times" style="cursor:pointer" onclick="closeModals()"></i></div>
             <div class="form-row">
-                <select id="postSection" class="form-select">
-                    <option value="Taberna">Taberna</option>
-                    <option value="Galería">Galería</option>
-                    <option value="Lab">Lab</option>
-                    <option value="Guías">Guías</option>
-                </select>
-                <select id="postGame" class="form-select">
-                    <option value="all">General</option>
-                    <option value="vireo">Vireo CODE</option>
-                    <option value="cae">Cae</option>
-                    <option value="lanzer">Move-Lanzer</option>
-                    <option value="dinoma">Creatura Dinoma</option>
-                </select>
+                <select id="postSection" class="form-select"><option value="Taberna">Taberna</option><option value="Galería">Galería</option><option value="Lab">Lab</option><option value="Guías">Guías</option></select>
+                <select id="postGame" class="form-select"><option value="all">General</option><option value="vireo">Vireo CODE</option><option value="cae">Cae</option><option value="lanzer">Move-Lanzer</option><option value="dinoma">Creatura Dinoma</option></select>
             </div>
-
             <textarea id="postContent" class="form-input" style="height:120px; resize:none;" placeholder="Comparte tus ideas... Usa #hashtags (mínimo 1)"></textarea>
-            
             <div style="margin-top:15px; display:flex; justify-content:space-between; align-items:center;">
-                <label for="fileInput" style="cursor:pointer; color:var(--accent); font-weight:600; font-size:14px;">
-                    <i class="fas fa-image"></i> Agregar Imagen
-                </label>
+                <label for="fileInput" style="cursor:pointer; color:var(--accent); font-weight:600; font-size:14px;"><i class="fas fa-image"></i> Agregar Imagen</label>
                 <input type="file" id="fileInput" style="display:none;" accept="image/*">
                 <span id="uploadStatus" style="font-size:12px; color:#999;"></span>
             </div>
             <img id="imagePreview" style="width:100%; border-radius:8px; margin-top:10px; display:none;">
-
             <div class="modal-footer">
-                <div id="adminCheckContainer" style="display:none; margin-right:auto; align-items:center; font-size:12px;">
-                    <input type="checkbox" id="checkOfficial"> <label for="checkOfficial">Oficial</label>
-                </div>
+                <div id="adminCheckContainer" style="display:none; margin-right:auto; align-items:center; font-size:12px;"><input type="checkbox" id="checkOfficial"> <label for="checkOfficial">Oficial</label></div>
                 <button class="modal-btn btn-cancel" onclick="closeModals()">Cancelar</button>
                 <button class="modal-btn btn-submit" id="submitPostBtn">Publicar</button>
             </div>
@@ -286,39 +266,23 @@
 
     <div class="modal-overlay" id="profileModal">
         <div class="modal-card">
-            <div class="modal-header">
-                <h3>Editar Perfil</h3>
-                <i class="fas fa-times" style="cursor:pointer" onclick="closeModals()"></i>
-            </div>
+            <div class="modal-header"><h3>Editar Perfil</h3><i class="fas fa-times" style="cursor:pointer" onclick="closeModals()"></i></div>
             <label style="font-size:12px;">Nombre de usuario</label>
             <input type="text" id="editName" class="form-input" placeholder="Tu nombre" style="margin-bottom:15px;">
-            
             <label style="font-size:12px;">Foto de Perfil</label>
             <div style="display:flex; gap:10px; align-items:center; margin-bottom:15px;">
-                <label for="avatarInput" class="btn-outline" style="cursor:pointer; display:inline-block; margin:0;">
-                    <i class="fas fa-upload"></i> Subir nueva
-                </label>
+                <label for="avatarInput" class="btn-outline" style="cursor:pointer; display:inline-block; margin:0;"><i class="fas fa-upload"></i> Subir nueva</label>
                 <input type="file" id="avatarInput" style="display:none;" accept="image/*">
                 <span id="avatarStatus" style="font-size:12px; color:#999;"></span>
             </div>
-
-            <div class="modal-footer">
-                <button class="modal-btn btn-cancel" onclick="closeModals()">Cancelar</button>
-                <button class="modal-btn btn-submit" onclick="saveProfileChanges()">Guardar</button>
-            </div>
+            <div class="modal-footer"><button class="modal-btn btn-cancel" onclick="closeModals()">Cancelar</button><button class="modal-btn btn-submit" onclick="saveProfileChanges()">Guardar</button></div>
         </div>
     </div>
 
     <div class="modal-overlay" id="commentsModal">
         <div class="modal-card">
-            <div class="modal-header">
-                <h3>Comentarios</h3>
-                <i class="fas fa-times" style="cursor:pointer" onclick="closeModals()"></i>
-            </div>
-            <div class="form-row" style="margin-bottom:0;">
-                <input type="text" id="commentInput" class="form-input" placeholder="Escribe un comentario...">
-                <button class="modal-btn btn-submit" style="padding:0 20px;" onclick="submitComment()">Enviar</button>
-            </div>
+            <div class="modal-header"><h3>Comentarios</h3><i class="fas fa-times" style="cursor:pointer" onclick="closeModals()"></i></div>
+            <div class="form-row" style="margin-bottom:0;"><input type="text" id="commentInput" class="form-input" placeholder="Escribe un comentario..."><button class="modal-btn btn-submit" style="padding:0 20px;" onclick="submitComment()">Enviar</button></div>
             <div class="comments-list" id="commentsList"></div>
         </div>
     </div>
@@ -328,7 +292,6 @@
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, where, getDocs, limit, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // CONFIGURACIÓN (TUS KEYS)
         const firebaseConfig = {
             apiKey: "AIzaSyC_vxI4azIIPRyXE3LCAlYDS1xKnwMSYmk",
             authDomain: "devouringlab.firebaseapp.com",
@@ -345,6 +308,7 @@
 
         const CLOUD_NAME = "dyhvx2vsz";
         const UPLOAD_PRESET = "DevouringIMG";
+        // IMPORTANTE: Agrega tu UID aquí para ver los botones de Admin
         const ADMIN_UIDS = ["qlJIBLf1I1clEVk2uggolNWL4Ai1"]; 
 
         let currentUser = null;
@@ -354,15 +318,9 @@
         let currentPostIdForComments = null;
         let commentsUnsubscribe = null;
 
-        // ESTADO DE LA APP (Sistema Robusto del archivo Reparado)
-        let appState = { 
-            filterType: 'all', 
-            filterValue: null, 
-            sort: 'recent',
-            feedUnsubscribe: null 
-        };
+        let appState = { filterType: 'all', filterValue: null, sort: 'recent', feedUnsubscribe: null };
 
-        /* --- 1. USUARIO --- */
+        /* --- 1. USUARIO Y TÍTULOS --- */
         const calculateStats = (userData) => {
             if (!userData) return { level: 1, title: "Novato" };
             const createdAt = userData.createdAt ? userData.createdAt.toDate() : new Date();
@@ -381,6 +339,13 @@
             return { level, title };
         };
 
+        // LISTA DE TÍTULOS DIARIOS ALEATORIOS
+        const DAILY_TITLES = [
+            "El Madrugador", "El Sabio", "Cazador de Bugs", "Bardo de Taberna", 
+            "El Alquimista", "Guerrero de Código", "El Visionario", "Nómada Digital",
+            "Guardián del Lab", "Maestro de Runas", "Explorador del Vacío"
+        ];
+
         const updateUserUI = (user, data) => {
             document.getElementById('authActions').style.display = 'none';
             document.getElementById('userStats').style.display = 'block';
@@ -389,7 +354,16 @@
             document.getElementById('navAvatar').src = data.photoURL || user.photoURL;
 
             const stats = calculateStats(data);
-            document.getElementById('sidebarLevel').innerHTML = `Lv. ${stats.level} • <span style="color:var(--accent)">${stats.title}</span>`;
+            document.getElementById('sidebarLevel').innerHTML = `Lv. ${stats.level} • <span style="color:var(--text-sec)">${stats.title}</span>`;
+            
+            // MOSTRAR TÍTULO DIARIO (Si existe)
+            if(data.dailyTitle) {
+                document.getElementById('dailyTitleDisplay').innerText = `✨ ${data.dailyTitle}`;
+            } else {
+                document.getElementById('dailyTitleDisplay').innerText = "";
+            }
+
+            // CONTADORES (Se actualizan en tiempo real gracias al Snapshot)
             document.getElementById('statPosts').innerText = data.postCount || 0;
             document.getElementById('statFollowers').innerText = (data.followers || []).length;
             document.getElementById('statFollowing').innerText = (data.following || []).length;
@@ -400,7 +374,7 @@
                 const btn = document.getElementById('checkInBtn');
                 if(last === today) {
                     btn.classList.add('checked');
-                    btn.innerHTML = `<div><i class="fas fa-check"></i> Completado</div>`;
+                    btn.innerHTML = `<div><i class="fas fa-check"></i> Check-in Listo</div>`;
                 } else {
                     btn.classList.remove('checked');
                     btn.innerHTML = `<div><i class="fas fa-calendar-check"></i> Check-in Diario</div><i class="fas fa-chevron-right"></i>`;
@@ -437,25 +411,20 @@
                 document.getElementById('sidebarName').innerText = "Visitante";
                 document.getElementById('sidebarAvatar').src = "https://via.placeholder.com/75";
                 document.getElementById('sidebarLevel').innerText = "Lv. 0 • Invitado";
-                document.getElementById('navAvatar').src = "https://via.placeholder.com/36";
+                document.getElementById('dailyTitleDisplay').innerText = "";
             }
             loadRecommendedUsers();
             loadFeed(); 
         });
 
-        /* --- 2. FILTROS Y FEED (MEZCLA ROBUSTA Y COMPLETA) --- */
+        /* --- 2. FEED & FILTROS --- */
         window.changeCategory = (type, value) => {
-            appState.filterType = type;
-            appState.filterValue = value;
-            
-            // UI Update
+            appState.filterType = type; appState.filterValue = value;
             document.querySelectorAll('.game-item, .nav-item, .circle-card').forEach(e => e.classList.remove('active'));
-            
             if(type === 'all') document.getElementById('nav-home').classList.add('active');
             else if(type === 'following') document.getElementById('nav-following').classList.add('active');
             else if(type === 'game') document.getElementById('game-' + value)?.classList.add('active');
             else if(type === 'section') document.getElementById('sect-' + value)?.classList.add('active');
-
             loadFeed();
         };
 
@@ -467,74 +436,48 @@
             loadFeed();
         }
 
-        // === FEED FIX DEFINITIVO ===
         window.loadFeed = () => {
             const feedDiv = document.getElementById('postsContainer');
             feedDiv.innerHTML = '<p style="text-align:center; padding:20px; color:#999"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
-
-            // Limpieza CRÍTICA
             if (appState.feedUnsubscribe) appState.feedUnsubscribe();
 
-            const q = query(
-                collection(db, "posts"),
-                orderBy("timestamp", "desc"),
-                limit(100)
-            );
+            const q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(100));
 
             appState.feedUnsubscribe = onSnapshot(q, (snapshot) => {
                 let posts = [];
                 snapshot.forEach(d => posts.push({ id: d.id, ...d.data() }));
 
+                // NUEVA FUNCIÓN: CALCULAR TENDENCIAS CON LOGICA MIXTA
+                calculateTrends(posts);
+
                 let filtered = posts;
-
-                // === FILTROS CORREGIDOS ===
                 switch (appState.filterType) {
-                    case 'following':
-                        if (currentUserData)
-                            filtered = posts.filter(p => currentUserData.following.includes(p.authorUid));
-                        break;
-
-                    case 'game':
-                        if (appState.filterValue !== 'all')
-                            filtered = posts.filter(p => p.game === appState.filterValue);
-                        break;
-
-                    case 'section':
-                        filtered = posts.filter(p => p.section === appState.filterValue);
-                        break;
-
-                    case 'tag':
-                        filtered = posts.filter(p => (p.tags || []).includes(appState.filterValue));
-                        break;
-  
-                    case 'search':
-                        const t = appState.filterValue.toLowerCase();
-                        filtered = posts.filter(p =>
-                            p.content?.toLowerCase().includes(t) ||
-                            p.authorName?.toLowerCase().includes(t)
-                        );
-                        break;
-
-                    default:
-                        // Inicio / General → no filtra
-                        break;
+                    case 'following': if (currentUserData) filtered = posts.filter(p => currentUserData.following.includes(p.authorUid)); break;
+                    case 'game': if (appState.filterValue !== 'all') filtered = posts.filter(p => p.game === appState.filterValue); break;
+                    case 'section': filtered = posts.filter(p => p.section === appState.filterValue); break;
+                    case 'tag': filtered = posts.filter(p => (p.tags || []).includes(appState.filterValue)); break;
+                    case 'search': const t = appState.filterValue.toLowerCase(); filtered = posts.filter(p => p.content?.toLowerCase().includes(t) || p.authorName?.toLowerCase().includes(t)); break;
                 }
+                if (appState.sort === 'top') filtered.sort((a, b) => (b.likes?.length || 0) - (a.likes?.length || 0));
 
-                // Orden
-                if (appState.sort === 'top') {
-                    filtered.sort((a, b) => (b.likes?.length || 0) - (a.likes?.length || 0));
-                }
-
-                if (!filtered.length) {
-                    feedDiv.innerHTML = '<div style="text-align:center; padding:30px; color:#999">No hay publicaciones.</div>';
-                    return;
-                }
+                if (!filtered.length) { feedDiv.innerHTML = '<div style="text-align:center; padding:30px; color:#999">No hay publicaciones.</div>'; return; }
 
                 feedDiv.innerHTML = filtered.map(post => {
                     const liked = currentUser && (post.likes || []).includes(currentUser.uid);
+                    // LÓGICA DE MODERADOR (ADMIN o DUEÑO)
+                    const isAdmin = currentUserData && (currentUserData.isAdmin || ADMIN_UIDS.includes(currentUser.uid));
+                    const isAuthor = currentUser && currentUser.uid === post.authorUid;
+                    let modButtons = '';
+                    if(isAdmin || isAuthor) {
+                        modButtons = `<div class="mod-actions" style="margin-left:auto; display:flex; gap:10px;">`;
+                        if(isAdmin) modButtons += `<i class="fas fa-thumbtack mod-btn" title="Fijar" onclick="togglePin('${post.id}', ${post.isPinned})" style="${post.isPinned ? 'color:var(--accent)' : ''}"></i>`;
+                        modButtons += `<i class="fas fa-trash mod-btn" title="Borrar" onclick="deletePost('${post.id}')"></i>`;
+                        modButtons += `</div>`;
+                    }
 
+                    // RESTAURADO: onmouseenter y contador de vistas
                     return `
-                    <article class="post-card ${post.isPinned ? 'pinned' : ''}">
+                    <article class="post-card ${post.isPinned ? 'pinned' : ''}" onmouseenter="incrementViews('${post.id}', '${post.game}')">
                         ${post.isPinned ? '<div class="pin-badge"><i class="fas fa-thumbtack"></i></div>' : ''}
                         <div class="user-header">
                             <div class="avatar-ring ${post.isOfficial ? 'official' : ''}">
@@ -542,15 +485,12 @@
                             </div>
                             <div>
                                 <b>${post.authorName}</b>
-                                <div style="font-size:11px;color:#999">
-                                    ${getGameName(post.game)} • ${post.section}
-                                </div>
+                                <div style="font-size:11px;color:#999">${getGameName(post.game)} • ${post.section}</div>
                             </div>
+                            ${modButtons} 
                         </div>
-
                         <div class="post-text">${parseText(post.content || '')}</div>
                         ${post.image ? `<img src="${post.image}" style="width:100%;border-radius:8px;margin-bottom:10px">` : ''}
-
                         <div class="post-footer">
                             <div class="interaction-btn ${liked ? 'liked' : ''}" onclick="toggleLike('${post.id}', ${liked}, '${post.authorUid}')">
                                 <i class="${liked ? 'fas' : 'far'} fa-heart"></i> ${(post.likes || []).length}
@@ -558,44 +498,55 @@
                             <div class="interaction-btn" onclick="openComments('${post.id}')">
                                 <i class="far fa-comment"></i>
                             </div>
+                            <div style="font-size:12px; color:#999; margin-left:auto;">
+                                <i class="far fa-eye"></i> ${post.views || 0}
+                            </div>
                         </div>
                     </article>`;
                 }).join('');
             });
         };
 
-
-        /* --- 3. UTILIDADES --- */
+        /* --- 3. LÓGICA DE TENDENCIAS MEJORADA --- */
         const calculateTrends = (posts) => {
-            const scores = {};
-            posts.forEach(p => {
-                if(p.tags) p.tags.forEach(t => {
-                    const score = ((p.likes?.length || 0) * 2) + ((p.views || 0) * 1);
-                    scores[t] = (scores[t] || 0) + score + 1;
-                });
+            let tagScores = {};
+            
+            posts.forEach((p, index) => {
+                if(p.tags) {
+                    p.tags.forEach(t => {
+                        // Scoring: 
+                        // 1. Recencia: Inversa del índice (los primeros en la lista 'posts' son los más nuevos)
+                        // 2. Popularidad: Cantidad de Likes * 2
+                        let recencyScore = 50 - Math.min(index, 50); // Puntos extra si es de los últimos 50 posts
+                        let popularityScore = (p.likes ? p.likes.length : 0) * 2;
+                        
+                        tagScores[t] = (tagScores[t] || 0) + 1 + recencyScore + popularityScore;
+                    });
+                }
             });
-            const sorted = Object.keys(scores).sort((a,b) => scores[b] - scores[a]).slice(0, 3);
+
+            // Convertir a array, ordenar por puntaje y tomar top 3 únicos
+            let sortedTags = Object.keys(tagScores).sort((a,b) => tagScores[b] - tagScores[a]).slice(0, 3);
+
             const div = document.getElementById('trendsContainer');
             div.innerHTML = "";
-            sorted.forEach(tag => {
-                div.innerHTML += `<div class="trend-item" onclick="changeCategory('tag', '${tag}')"><span class="trend-name"># ${tag}</span><span class="trend-count">Trending</span></div>`;
+            if(sortedTags.length === 0) div.innerHTML = "<p style='font-size:12px;color:#999'>Sin tendencias.</p>";
+            
+            sortedTags.forEach(tag => {
+                // Decidir subtítulo basado en por qué ganó (simplificado visualmente)
+                div.innerHTML += `<div class="trend-item" onclick="changeCategory('tag', '${tag}')">
+                    <span class="trend-name"># ${tag}</span>
+                    <span class="trend-count">Trending</span>
+                </div>`;
             });
         };
 
         const updateInterestsUI = (stats) => {
             const max = Object.entries(stats).reduce((a, b) => a[1] > b[1] ? a : b, ['none', 0]);
-            const topGame = max[0];
             ['navUnity', 'navRPG', 'navWeb'].forEach(id => document.getElementById(id).classList.remove('active'));
-            if(topGame === 'dinoma') document.getElementById('navUnity').classList.add('active'); 
-            if(topGame === 'vireo') document.getElementById('navRPG').classList.add('active'); 
-            if(topGame === 'cae') document.getElementById('navWeb').classList.add('active'); 
-        };
-
-        const trackInterest = async (game) => {
-            if(!currentUser) return;
-            const ref = doc(db, "users", currentUser.uid);
-            const field = `interestStats.${game}`;
-            await updateDoc(ref, { [field]: increment(1) });
+            if(max[0] === 'dinoma') document.getElementById('navUnity').classList.add('active'); 
+            if(max[0] === 'vireo') document.getElementById('navRPG').classList.add('active'); 
+            if(max[0] === 'cae') document.getElementById('navWeb').classList.add('active'); 
         };
 
         const viewedPosts = new Set();
@@ -604,40 +555,70 @@
             viewedPosts.add(postId);
             setTimeout(async () => {
                 await updateDoc(doc(db, "posts", postId), { views: increment(1) });
-                trackInterest(game); 
+                if(currentUser) await updateDoc(doc(db, "users", currentUser.uid), { [`interestStats.${game}`]: increment(1) });
             }, 1000);
         };
 
-        const parseText = (text) => {
-            let parsed = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="hashtag-link">$1</a>');
-            parsed = parsed.replace(/#(\w+)/g, '<span class="hashtag-link" onclick="window.changeCategory(\'tag\', \'$1\')">#$1</span>');
-            return parsed;
-        };
-        
-        const getGameName = (key) => {
-            const map = { 'vireo': 'Vireo CODE', 'cae': 'Cae', 'lanzer': 'Move-Lanzer', 'dinoma': 'Creatura Dinoma', 'all': 'General' };
-            return map[key] || key;
-        };
+        const parseText = (text) => text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="hashtag-link">$1</a>').replace(/#(\w+)/g, '<span class="hashtag-link" onclick="window.changeCategory(\'tag\', \'$1\')">#$1</span>');
+        const getGameName = (key) => ({ 'vireo': 'Vireo CODE', 'cae': 'Cae', 'lanzer': 'Move-Lanzer', 'dinoma': 'Creatura Dinoma', 'all': 'General' }[key] || key);
 
-        const formatTimeRelative = (timestamp) => {
-            if(!timestamp) return "Reciente";
-            const date = timestamp.toDate();
-            const now = new Date();
-            const diffMs = now - date;
-            const diffSec = Math.floor(diffMs / 1000);
-            const diffMin = Math.floor(diffSec / 60);
-            if (diffSec < 60) return "Hace un momento";
-            if (diffMin < 60) return `Hace ${diffMin} min`;
-            return date.toLocaleDateString();
-        };
-
-        // --- ACCIONES ---
+        // --- ACCIONES DE CHECK-IN Y SEGUIR ---
         document.getElementById('checkInBtn').addEventListener('click', async () => {
             if(!currentUser) return alert("Inicia sesión");
             if(document.getElementById('checkInBtn').classList.contains('checked')) return;
-            await updateDoc(doc(db, "users", currentUser.uid), { lastCheckIn: serverTimestamp() });
+            
+            // Asignar título aleatorio del día
+            const randomTitle = DAILY_TITLES[Math.floor(Math.random() * DAILY_TITLES.length)];
+
+            await updateDoc(doc(db, "users", currentUser.uid), { 
+                lastCheckIn: serverTimestamp(),
+                dailyTitle: randomTitle
+            });
+            // El onSnapshot actualizará la UI
         });
 
+        window.followUser = async (uid, btnElement) => {
+            if(!currentUser) return alert("Inicia sesión");
+            
+            // Feedback Visual Inmediato en el botón
+            if(btnElement) {
+                btnElement.innerText = "Siguiendo";
+                btnElement.classList.add("following");
+            }
+
+            await updateDoc(doc(db, "users", currentUser.uid), { following: arrayUnion(uid) });
+            await updateDoc(doc(db, "users", uid), { followers: arrayUnion(currentUser.uid) }); // Actualiza contador del otro (y el mío si me siguen)
+            
+            createNotification("follow", uid);
+        };
+
+        const loadRecommendedUsers = async () => {
+            const q = query(collection(db, "users"), limit(10));
+            const snap = await getDocs(q);
+            let users = [];
+            snap.forEach(d => users.push(d.data()));
+            users = users.sort(() => 0.5 - Math.random()).slice(0, 3);
+            const div = document.getElementById('recommendedContainer');
+            div.innerHTML = "";
+            users.forEach(u => {
+                if(currentUser && u.uid === currentUser.uid) return;
+                // Verificar si ya lo sigo para cambiar estado inicial del botón
+                let isFollowing = currentUserData && currentUserData.following && currentUserData.following.includes(u.uid);
+                
+                div.innerHTML += `
+                <div class="rec-user">
+                    <div class="rec-info">
+                        <img src="${u.photoURL || 'https://via.placeholder.com/32'}" style="width:32px; height:32px; border-radius:50%">
+                        <div style="font-weight:bold; font-size:12px;">${u.displayName}</div>
+                    </div>
+                    <button class="rec-btn ${isFollowing ? 'following' : ''}" onclick="followUser('${u.uid}', this)">
+                        ${isFollowing ? 'Siguiendo' : 'Seguir'}
+                    </button>
+                </div>`;
+            });
+        };
+
+        /* --- CREACIÓN DE POSTS --- */
         document.getElementById('submitPostBtn').addEventListener('click', async () => {
             const content = document.getElementById('postContent').value;
             const section = document.getElementById('postSection').value;
@@ -669,40 +650,25 @@
                 await updateDoc(doc(db, "users", currentUser.uid), { postCount: increment(1) });
                 closeModals();
                 document.getElementById('postContent').value = "";
-            } catch (e) {
-                console.error(e);
-                alert("Error al publicar");
-            }
+                uploadedImageUrl = ""; document.getElementById('imagePreview').style.display = 'none';
+            } catch (e) { console.error(e); alert("Error al publicar"); }
         });
 
-        // --- COMENTARIOS ---
+        /* --- UTILIDADES DE COMENTARIOS, LIKES Y NOTIFICACIONES --- */
         window.openComments = (postId) => {
             if(!currentUser) return alert("Inicia sesión");
             currentPostIdForComments = postId;
             document.getElementById('commentsModal').style.display = 'flex';
             const list = document.getElementById('commentsList');
-            list.innerHTML = "<p style='text-align:center; color:#999'>Cargando comentarios...</p>";
+            list.innerHTML = "<p style='text-align:center; color:#999'>Cargando...</p>";
             if(commentsUnsubscribe) commentsUnsubscribe();
-
-            const q = query(collection(db, "comments"), where("postId", "==", postId));
-            
-            commentsUnsubscribe = onSnapshot(q, (snap) => {
+            commentsUnsubscribe = onSnapshot(query(collection(db, "comments"), where("postId", "==", postId)), (snap) => {
                 list.innerHTML = "";
-                let comments = [];
-                snap.forEach(d => comments.push(d.data()));
+                let comments = []; snap.forEach(d => comments.push(d.data()));
                 comments.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
-
                 if(comments.length === 0) list.innerHTML = "<div style='text-align:center; padding:10px; color:#999'>Sé el primero en comentar.</div>";
-                
                 comments.forEach(c => {
-                    list.innerHTML += `
-                        <div class="comment-item">
-                            <img src="${c.authorAvatar}" style="width:30px; height:30px; border-radius:50%">
-                            <div class="comment-content">
-                                <div style="font-weight:bold; font-size:12px">${c.authorName}</div>
-                                <div>${c.text}</div>
-                            </div>
-                        </div>`;
+                    list.innerHTML += `<div class="comment-item"><img src="${c.authorAvatar}" style="width:30px; height:30px; border-radius:50%"><div class="comment-content"><div style="font-weight:bold; font-size:12px">${c.authorName}</div><div>${c.text}</div></div></div>`;
                 });
             });
         };
@@ -710,14 +676,7 @@
         window.submitComment = async () => {
             const txt = document.getElementById('commentInput').value;
             if(!txt) return;
-            await addDoc(collection(db, "comments"), {
-                postId: currentPostIdForComments,
-                text: txt,
-                authorName: currentUser.displayName,
-                authorAvatar: currentUser.photoURL,
-                authorUid: currentUser.uid,
-                timestamp: serverTimestamp()
-            });
+            await addDoc(collection(db, "comments"), { postId: currentPostIdForComments, text: txt, authorName: currentUser.displayName, authorAvatar: currentUser.photoURL, authorUid: currentUser.uid, timestamp: serverTimestamp() });
             document.getElementById('commentInput').value = "";
         };
 
@@ -725,91 +684,45 @@
             if (!currentUser) return alert("Inicia sesión");
             const postRef = doc(db, "posts", postId);
             if (isLiked) await updateDoc(postRef, { likes: arrayRemove(currentUser.uid) });
-            else {
-                await updateDoc(postRef, { likes: arrayUnion(currentUser.uid) });
-                if(authorUid !== currentUser.uid) createNotification("like", authorUid);
-            }
+            else { await updateDoc(postRef, { likes: arrayUnion(currentUser.uid) }); if(authorUid !== currentUser.uid) createNotification("like", authorUid); }
         };
+
         window.togglePin = async (postId, currentStatus) => await updateDoc(doc(db, "posts", postId), { isPinned: !currentStatus });
         window.deletePost = async (postId) => { if(confirm("¿Borrar?")) await deleteDoc(doc(db, "posts", postId)); };
 
         const createNotification = async (type, toUid) => {
-            await addDoc(collection(db, "notifications"), {
-                toUid: toUid,
-                fromUser: currentUser.displayName,
-                type: type, 
-                read: false,
-                timestamp: serverTimestamp()
-            });
+            await addDoc(collection(db, "notifications"), { toUid: toUid, fromUser: currentUser.displayName, type: type, read: false, timestamp: serverTimestamp() });
         };
         const loadNotifications = () => {
-            const q = query(collection(db, "notifications"), where("toUid", "==", currentUser.uid), limit(10));
-            onSnapshot(q, (snap) => {
-                const box = document.getElementById('notifDropdown');
-                const badge = document.getElementById('notifBadge');
-                let unread = 0;
-                box.innerHTML = "";
-                let notifs = [];
+            onSnapshot(query(collection(db, "notifications"), where("toUid", "==", currentUser.uid), limit(10)), (snap) => {
+                const box = document.getElementById('notifDropdown'); const badge = document.getElementById('notifBadge');
+                let unread = 0; box.innerHTML = ""; let notifs = [];
                 snap.forEach(d => notifs.push(d.data()));
                 notifs.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
-
                 if(notifs.length === 0) box.innerHTML = "<div style='padding:10px; text-align:center'>Nada por aquí</div>";
                 notifs.forEach(n => {
                     if(!n.read) unread++;
                     let icon = n.type === 'like' ? '<i class="fas fa-heart notif-icon"></i>' : '<i class="fas fa-user-plus notif-icon"></i>';
-                    let text = n.type === 'like' ? 'le gustó tu post' : 'te empezó a seguir';
-                    box.innerHTML += `<div class="notif-item">${icon}<div><b>${n.fromUser}</b> ${text}</div></div>`;
+                    box.innerHTML += `<div class="notif-item">${icon}<div><b>${n.fromUser}</b> ${n.type === 'like' ? 'le gustó tu post' : 'te empezó a seguir'}</div></div>`;
                 });
                 if(unread > 0) { badge.style.display = 'block'; badge.innerText = unread; } else { badge.style.display = 'none'; }
             });
         };
 
+        // --- MANEJO DE IMÁGENES Y PERFIL ---
         window.openEditProfile = () => document.getElementById('profileModal').style.display = 'flex';
         document.getElementById('avatarInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             const formData = new FormData(); formData.append('file', file); formData.append('upload_preset', UPLOAD_PRESET);
             document.getElementById('avatarStatus').innerText = "Subiendo...";
             const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
-            const data = await res.json();
-            newAvatarUrl = data.secure_url;
-            document.getElementById('avatarStatus').innerText = "Listo";
+            const data = await res.json(); newAvatarUrl = data.secure_url; document.getElementById('avatarStatus').innerText = "Listo";
         });
         window.saveProfileChanges = async () => {
-            const name = document.getElementById('editName').value;
-            const updates = {};
+            const name = document.getElementById('editName').value; const updates = {};
             if(name) { await updateProfile(auth.currentUser, { displayName: name }); updates.displayName = name; }
             if(newAvatarUrl) { await updateProfile(auth.currentUser, { photoURL: newAvatarUrl }); updates.photoURL = newAvatarUrl; }
-            await updateDoc(doc(db, "users", currentUser.uid), updates);
-            location.reload();
-        };
-
-        window.filterGame = (g) => changeCategory('game', g);
-        window.searchTag = (t) => changeCategory('tag', t);
-        
-        document.getElementById('searchInput').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') {
-                changeCategory('search', e.target.value);
-            }
-        });
-
-        const loadRecommendedUsers = async () => {
-            const q = query(collection(db, "users"), limit(10));
-            const snap = await getDocs(q);
-            let users = [];
-            snap.forEach(d => users.push(d.data()));
-            users = users.sort(() => 0.5 - Math.random()).slice(0, 3);
-            const div = document.getElementById('recommendedContainer');
-            div.innerHTML = "";
-            users.forEach(u => {
-                if(currentUser && u.uid === currentUser.uid) return;
-                div.innerHTML += `<div class="rec-user"><div class="rec-info"><img src="${u.photoURL || 'https://via.placeholder.com/32'}" style="width:32px; height:32px; border-radius:50%"><div><div style="font-weight:bold; font-size:12px;">${u.displayName}</div></div></div><button class="rec-btn" onclick="followUser('${u.uid}')">Seguir</button></div>`;
-            });
-        };
-        window.followUser = async (uid) => {
-            if(!currentUser) return alert("Inicia sesión");
-            await updateDoc(doc(db, "users", currentUser.uid), { following: arrayUnion(uid) });
-            createNotification("follow", uid);
-            alert("Siguiendo!");
+            await updateDoc(doc(db, "users", currentUser.uid), updates); location.reload();
         };
 
         document.getElementById('fileInput').addEventListener('change', async (e) => {
@@ -817,27 +730,20 @@
             const formData = new FormData(); formData.append('file', file); formData.append('upload_preset', UPLOAD_PRESET);
             document.getElementById('uploadStatus').innerText = "Subiendo...";
             const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
-            const data = await res.json();
-            uploadedImageUrl = data.secure_url;
+            const data = await res.json(); uploadedImageUrl = data.secure_url;
             document.getElementById('uploadStatus').innerText = "Imagen lista";
-            document.getElementById('imagePreview').src = uploadedImageUrl;
-            document.getElementById('imagePreview').style.display = 'block';
+            document.getElementById('imagePreview').src = uploadedImageUrl; document.getElementById('imagePreview').style.display = 'block';
         });
 
+        // --- EVENTOS GENERALES ---
         window.doLogout = () => signOut(auth);
         document.getElementById('sidebarLoginBtn').addEventListener('click', () => signInWithPopup(auth, provider));
         document.getElementById('navAvatar').addEventListener('click', () => { if(!currentUser) signInWithPopup(auth, provider); });
         window.closeModals = () => document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
-        document.getElementById('openPublishBtn').addEventListener('click', () => {
-            if(!currentUser) return alert("Inicia sesión");
-            document.getElementById('publishModal').style.display = 'flex';
-            if(currentUserData.isAdmin) document.getElementById('adminCheckContainer').style.display = 'flex';
-        });
+        document.getElementById('openPublishBtn').addEventListener('click', () => { if(!currentUser) return alert("Inicia sesión"); document.getElementById('publishModal').style.display = 'flex'; if(currentUserData.isAdmin) document.getElementById('adminCheckContainer').style.display = 'flex'; });
         document.getElementById('notifBtn').addEventListener('click', () => document.getElementById('notifDropdown').classList.toggle('show'));
+        document.getElementById('searchInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') changeCategory('search', e.target.value); });
 
     </script>
 </body>
 </html>
-
-
-
