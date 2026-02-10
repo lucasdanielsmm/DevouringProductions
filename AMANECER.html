@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antes del Amanecer — Portfolio Dev</title>
+    <style>
+        /* ========================================================= */
+        /* == ESTILOS GLOBALES (Base Dark) == */
+        /* ========================================================= */
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px 10px;
+            background-color: #050505;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden; 
+            text-align: center; 
+        }
+        
+        a { text-decoration: none; color: inherit; }
+
+        .titulo-pagina {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2.8em; 
+            color: #ffffff;
+            margin: 10px auto;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+        }
+
+        /* ========================================================= */
+        /* == ANIMACIONES Y VIDEO == */
+        /* ========================================================= */
+        .video-container {
+            width: 90%;
+            max-width: 900px; 
+            margin: 30px auto;
+            aspect-ratio: 16/9;
+            position: relative;
+            opacity: 0; 
+            transform: translateY(40px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out; 
+        }
+
+        .video-container.animar-video {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .video-container iframe, .video-container img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: 1px solid #333;
+            border-radius: 4px;
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.15);
+        }
+
+        .slide-up-on-scroll {
+            opacity: 0;
+            transform: translateY(40px); 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .slide-up-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========================================================= */
+        /* == ESTILOS ESPECÍFICOS == */
+        /* ========================================================= */
+        .subtitulo {
+            font-size: 1.8em;
+            color: #00e5ff; /* AZUL CYAN */
+            margin: 40px auto 20px auto;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .intro-text {
+            max-width: 750px; 
+            margin: 0 auto 30px auto; 
+            padding: 0 20px;
+            font-size: 1.1em;
+            color: #ccc;
+        }
+
+        /* BOTÓN DE ACCIÓN (GitHub/Itch.io) */
+        .btn-action {
+            display: inline-block;
+            margin: 0 auto 20px auto; /* Margen inferior para separar de la casilla */
+            padding: 14px 35px;
+            border: 1px solid #00e5ff;
+            color: #00e5ff;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            background: rgba(0, 229, 255, 0.05);
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn-action:hover {
+            background: #00e5ff;
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* CASILLA DE DETALLES */
+        .detalles-container {
+            display: inline-block; 
+            text-align: left;
+            margin: 10px auto 40px auto; /* Margen superior reducido para acercarlo al botón */
+            padding: 25px;
+            background-color: #0a0a10;
+            border-radius: 2px;
+            border: 1px solid #1a1a2e;
+            box-shadow: 0 0 15px rgba(0,0,0,0.7);
+            min-width: 350px;
+        }
+        
+        .detalle-fila {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 4px;
+        }
+        .detalle-fila:last-child { border-bottom: none; }
+        
+        .detalle-fila strong { color: #fff; }
+        .detalle-fila span { color: #00e5ff; font-family: monospace; font-size: 0.95em; }
+        
+        /* ========================================================= */
+        /* == SECCIÓN TÉCNICA == */
+        /* ========================================================= */
+        .mecánicas-seccion {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: left;
+        }
+
+        .tech-card {
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: #0e0e12;
+            border-left: 4px solid #00e5ff;
+            border-radius: 0 4px 4px 0;
+            position: relative;
+        }
+
+        .tech-card h4 {
+            color: #fff;
+            font-size: 1.4em;
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .tech-card h4 span {
+            font-size: 0.6em;
+            background: #111;
+            padding: 2px 8px;
+            border: 1px solid #333;
+            color: #888;
+            border-radius: 4px;
+        }
+
+        .tech-card ul { list-style: none; padding: 0; margin: 0; }
+        .tech-card ul li { margin-bottom: 10px; padding-left: 25px; position: relative; color: #bbb; }
+        .tech-card ul li::before { content: '>'; color: #00e5ff; font-family: monospace; font-weight: bold; position: absolute; left: 0; }
+        .highlight { color: #00e5ff; font-weight: 500; }
+
+        .divider {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #00e5ff, transparent);
+            opacity: 0.3;
+            margin: 50px auto;
+            max-width: 800px;
+        }
+
+        /* ========================================================= */
+        /* == GALERÍA == */
+        /* ========================================================= */
+        .galeria { margin-top: 50px; padding: 20px 10px; }
+        .galeria h3 { color: #fff; margin-bottom: 30px; }
+
+        .capturas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .capturas-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 2px;
+            border: 1px solid #222;
+            transition: transform 0.3s, border-color 0.3s;
+            filter: grayscale(40%);
+        }
+        
+        .capturas-grid img:hover {
+            transform: scale(1.02);
+            filter: grayscale(0%);
+            border-color: #00e5ff;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
+        }
+
+        /* ========================================================= */
+        /* == FOOTER == */
+        /* ========================================================= */
+        footer {
+            background-color: #020202; 
+            color: #666; 
+            padding: 40px 10px;
+            margin-top: 60px;
+            font-size: 0.85em;
+            border-top: 1px solid #111; 
+        }
+        footer a { color: #00e5ff; font-weight: bold; }
+        
+    </style>
+</head>
+<body>
+
+    <h1 class="titulo-pagina">Antes del Amanecer</h1>
+
+    <div class="video-container">
+        <img src="portada-antes-del-amanecer.jpg" alt="Portada: Antes del Amanecer - Unity 3D Horror">
+    </div>
+
+    <h2 class="subtitulo">"La muerte no es el final... es otra lente."</h2>
+
+    <p class="intro-text">
+        Atrapado en un cementerio maldito, deberás usar la máscara de tu hermano para ver el mundo espiritual.
+        Un proyecto de <strong>Terror Psicológico</strong> desarrollado en Unity 3D para la Global Game Jam.
+        Explora la delgada línea entre la realidad y el ritual.
+    </p>
+
+    <a href="https://tu-link-aqui.com" target="_blank" class="btn-action">Ver en GitHub / Itch.io</a>
+
+    <div class="detalles-container slide-up-on-scroll">
+        <div class="detalle-fila">
+            <strong>Rol Principal</strong>
+            <span>Unity Developer & Game Designer</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Motor / Lenguaje</strong>
+            <span>Unity 2022 / C#</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Género</strong>
+            <span>Survival Horror / Puzzle</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Tech Stack</strong>
+            <span>Post-Processing, Lighting, State Management</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Game Jam</strong>
+            <span>Global Game Jam (Tema: MÁSCARA)</span>
+        </div>
+    </div>
+    
+    <hr class="divider">
+    
+    <section class="mecánicas-seccion">
+        <h2 class="subtitulo" style="margin-top: 0; color: #fff;">Desarrollo Técnico & Mecánicas</h2>
+
+        <div class="tech-card slide-up-on-scroll">
+            <h4>1. Sistema de "Visión Dual" <span>C# / Scripting</span></h4>
+            <ul>
+                <li>Implementación de una mecánica de cambio de realidad en tiempo real usando <span class="highlight">State Pattern</span>.</li>
+                <li>Gestión de referencias dinámicas para alternar entre objetos físicos y espectrales sin perder el estado del juego.</li>
+                <li>Uso creativo de <strong>Layer Masking</strong> y cambios de materiales para revelar pistas ocultas tras la máscara.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.1s;">
+            <h4>2. Atmósfera e Inmersión 3D <span>Unity HDRP/URP</span></h4>
+            <ul>
+                <li>Diseño de iluminación dinámica para generar tensión (luces parpadeantes, sombras duras).</li>
+                <li>Implementación de <strong>Post-Processing Profiles</strong> personalizados para diferenciar visualmente el mundo de los vivos del espiritual (aberración cromática, viñeteado).</li>
+                <li>Sistemas de partículas para niebla y efectos rituales.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.2s;">
+            <h4>3. Narrativa & Eventos <span>Game Logic</span></h4>
+            <ul>
+                <li>Sistema de investigación <strong>Point & Click</strong> integrado en entorno 3D.</li>
+                <li>Programación de eventos temporales (Timelines) para la aparición progresiva de texto narrativo.</li>
+                <li>Secuencias de <strong>Jumpscares</strong> disparadas por Triggers espaciales y condiciones lógicas del jugador.</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="galeria">
+        <h3>Capturas del Desarrollo</h3>
+        <div class="capturas-grid">
+            <img src="gameplay-mask.jpg" alt="Uso de la Máscara" class="slide-up-on-scroll">
+            <img src="gameplay-ritual.jpg" alt="El Ritual Satánico" class="slide-up-on-scroll">
+            <img src="gameplay-puzzle.jpg" alt="Investigación Point and Click" class="slide-up-on-scroll">
+        </div>
+    </section>
+
+    <footer>
+        <p>Desarrollado por <strong>Lucas Daniel Soriano</strong></p>
+        <p>© 2026 - Portfolio de Desarrollo de Videojuegos</p>
+        <p>
+            <a href="#">LinkedIn</a> | <a href="#">GitHub</a> | <a href="#">Email</a>
+        </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.querySelector('.video-container');
+            if (video) {
+                video.offsetHeight; 
+                video.classList.add('animar-video');
+            }
+
+            const observerOptions = {
+                root: null, 
+                rootMargin: '0px',
+                threshold: 0.1 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const slideElements = document.querySelectorAll('.slide-up-on-scroll');
+            slideElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+    
+</body>
+</html>
