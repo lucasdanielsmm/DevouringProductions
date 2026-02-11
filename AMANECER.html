@@ -10,11 +10,11 @@
         /* ========================================================= */
         *, *::before, *::after { box-sizing: border-box; }
         
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente más técnica/limpia */
             margin: 0;
             padding: 20px 10px;
-            background-color: #050505;
+            background-color: #050505; /* Negro profundo pero no absoluto */
             color: #e0e0e0;
             line-height: 1.6;
             overflow-x: hidden; 
@@ -23,19 +23,30 @@
         
         a { text-decoration: none; color: inherit; }
 
+        .logo {
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        .logo:hover { opacity: 1; }
+        
         .titulo-pagina {
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Courier New', Courier, monospace; /* Toque "Expediente/Misterio" */
             font-size: 2.8em; 
             color: #ffffff;
             margin: 10px auto;
             text-transform: uppercase;
             letter-spacing: 4px;
-            text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.3); /* Brillo Azul tenue */
         }
 
         /* ========================================================= */
-        /* == ANIMACIONES Y VIDEO == */
+        /* == ANIMACIONES Y HERO SECTION == */
         /* ========================================================= */
+
         .video-container {
             width: 90%;
             max-width: 900px; 
@@ -58,9 +69,11 @@
             display: block;
             border: 1px solid #333;
             border-radius: 4px;
+            /* Brillo AZUL ESPECTRAL */
             box-shadow: 0 0 25px rgba(0, 229, 255, 0.15);
         }
 
+        /* Animaciones de entrada al scroll */
         .slide-up-on-scroll {
             opacity: 0;
             transform: translateY(40px); 
@@ -73,7 +86,7 @@
         }
 
         /* ========================================================= */
-        /* == ESTILOS ESPECÍFICOS == */
+        /* == ESTILOS ESPECÍFICOS (TEMA AZUL / TERROR) == */
         /* ========================================================= */
         .subtitulo {
             font-size: 1.8em;
@@ -91,48 +104,23 @@
             color: #ccc;
         }
 
-        /* BOTÓN DE ACCIÓN (GitHub/Itch.io) */
-        .btn-action {
-            display: inline-block;
-            margin: 0 auto 20px auto; /* Margen inferior para separar de la casilla */
-            padding: 14px 35px;
-            border: 1px solid #00e5ff;
-            color: #00e5ff;
-            font-weight: bold;
-            font-size: 1.1em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
-            background: rgba(0, 229, 255, 0.05);
-            cursor: pointer;
-            position: relative;
-            z-index: 10;
-        }
-
-        .btn-action:hover {
-            background: #00e5ff;
-            color: #000;
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
-            transform: translateY(-2px);
-        }
-
-        /* CASILLA DE DETALLES */
+        /* Tabla de detalles técnicos */
         .detalles-container {
             display: inline-block; 
             text-align: left;
-            margin: 10px auto 40px auto; /* Margen superior reducido para acercarlo al botón */
-            padding: 45px;
-            background-color: #0a0a10;
+            margin: 30px auto; 
+            padding: 25px;
+            background-color: #0a0a10; /* Azul muy oscuro de fondo */
             border-radius: 2px;
             border: 1px solid #1a1a2e;
-            box-shadow: 0 0 15px rgba(0,0,0,0.7);
-            min-width: 350px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
         
         .detalle-fila {
             display: flex;
             justify-content: space-between;
             width: 100%;
+            min-width: 320px;
             margin-bottom: 8px;
             border-bottom: 1px solid #222;
             padding-bottom: 4px;
@@ -140,10 +128,30 @@
         .detalle-fila:last-child { border-bottom: none; }
         
         .detalle-fila strong { color: #fff; }
-        .detalle-fila span { color: #00e5ff; font-family: monospace; font-size: 0.95em; }
+        .detalle-fila span { color: #00e5ff; font-family: monospace; font-size: 0.9em; } /* Texto técnico en azul */
+        
+        /* Botón de acción */
+        .btn-action {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 12px 30px;
+            border: 1px solid #00e5ff;
+            color: #00e5ff;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .btn-action:hover {
+            background: #00e5ff;
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+        }
         
         /* ========================================================= */
-        /* == SECCIÓN TÉCNICA == */
+        /* == SECCIÓN TÉCNICA (Mecánicas) == */
         /* ========================================================= */
         .mecánicas-seccion {
             max-width: 900px;
@@ -156,9 +164,20 @@
             margin-bottom: 30px;
             padding: 25px;
             background-color: #0e0e12;
+            /* Borde izquierdo AZUL */
             border-left: 4px solid #00e5ff;
             border-radius: 0 4px 4px 0;
             position: relative;
+            overflow: hidden;
+        }
+
+        /* Efecto de fondo sutil */
+        .tech-card::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: linear-gradient(90deg, transparent 95%, rgba(0, 229, 255, 0.03) 100%);
+            pointer-events: none;
         }
 
         .tech-card h4 {
@@ -172,7 +191,7 @@
             align-items: center;
             justify-content: space-between;
         }
-        
+
         .tech-card h4 span {
             font-size: 0.6em;
             background: #111;
@@ -182,15 +201,36 @@
             border-radius: 4px;
         }
 
-        .tech-card ul { list-style: none; padding: 0; margin: 0; }
-        .tech-card ul li { margin-bottom: 10px; padding-left: 25px; position: relative; color: #bbb; }
-        .tech-card ul li::before { content: '>'; color: #00e5ff; font-family: monospace; font-weight: bold; position: absolute; left: 0; }
+        .tech-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tech-card ul li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            color: #bbb;
+        }
+
+        /* Iconos de lista técnicos */
+        .tech-card ul li::before {
+            content: '>'; 
+            color: #00e5ff; 
+            font-family: monospace;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Highlighting keywords */
         .highlight { color: #00e5ff; font-weight: 500; }
 
         .divider {
             border: 0;
             height: 1px;
-            background: linear-gradient(to right, transparent, #00e5ff, transparent);
+            background: linear-gradient(to right, transparent, #00e5ff, transparent); /* Línea divisoria azul */
             opacity: 0.3;
             margin: 50px auto;
             max-width: 800px;
@@ -199,7 +239,11 @@
         /* ========================================================= */
         /* == GALERÍA == */
         /* ========================================================= */
-        .galeria { margin-top: 50px; padding: 20px 10px; }
+        .galeria {
+            margin-top: 50px;
+            padding: 20px 10px;
+        }
+
         .galeria h3 { color: #fff; margin-bottom: 30px; }
 
         .capturas-grid {
@@ -216,13 +260,13 @@
             border-radius: 2px;
             border: 1px solid #222;
             transition: transform 0.3s, border-color 0.3s;
-            filter: grayscale(40%);
+            filter: grayscale(40%); /* Desaturado para toque dark */
         }
         
         .capturas-grid img:hover {
             transform: scale(1.02);
             filter: grayscale(0%);
-            border-color: #00e5ff;
+            border-color: #00e5ff; /* Borde azul al hover */
             box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
         }
 
@@ -237,7 +281,9 @@
             font-size: 0.85em;
             border-top: 1px solid #111; 
         }
+
         footer a { color: #00e5ff; font-weight: bold; }
+        footer a:hover { text-decoration: underline; }
         
     </style>
 </head>
@@ -367,6 +413,7 @@
 </body>
 
 </html>
+
 
 
 
