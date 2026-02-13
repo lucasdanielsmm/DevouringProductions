@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Creatura Dinoma: Proyecto indie de acción-exploración cooperativa. Oportunidad de inversión seed.">
+    <meta name="author" content="Creatura Dinoma Team">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Invertí en Creatura Dinoma">
+    <meta property="og:description" content="El próximo hit cooperativo de extracción y captura de criaturas. Prototipo funcional disponible.">
+    <meta property="og:image" content="ruta-a-tu-hero-image.jpg"> 
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Chakra+Petch:wght@400;700&display=swap" rel="stylesheet">
+    
+    <title>Creatura Dinoma — Investor Relations</title>
+    
+    <style>
+        /* ========================================================= */
+        /* == ESTILOS GLOBALES (Sci-Fi Industrial Theme) == */
+        /* ========================================================= */
+        :root {
+            --bg-color: #050508;
+            --text-main: #c0c0c5;
+            --accent-cyan: #00e5ff;
+            --accent-alert: #ff9d00; /* Naranja para riesgo/acción */
+            --card-bg: #0e0e12;
+            --border-dim: #1a1a2e;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Share Tech Mono', monospace; /* Fuente técnica */
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden; 
+            text-align: center; 
+        }
+        
+        h1, h2, h3, h4, strong { font-family: 'Chakra Petch', sans-serif; }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ========================================================= */
+        /* == TYPOGRAPHY & HERO == */
+        /* ========================================================= */
+
+        .hero-section {
+            padding: 60px 20px 40px;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #050505 70%);
+        }
+
+        .titulo-principal {
+            font-size: 3.5em; 
+            color: #ffffff;
+            margin: 0 auto;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+            line-height: 1;
+        }
+
+        .tagline {
+            color: var(--accent-alert);
+            font-size: 1.5em;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; text-shadow: 0 0 15px var(--accent-alert); }
+            100% { opacity: 0.8; }
+        }
+
+        .hero-desc {
+            max-width: 800px;
+            margin: 20px auto;
+            font-size: 1.2em;
+            color: #fff;
+        }
+
+        /* ========================================================= */
+        /* == MEDIA CONTAINERS & ANIMATIONS == */
+        /* ========================================================= */
+
+        .video-container {
+            width: 100%;
+            max-width: 900px; 
+            margin: 30px auto;
+            aspect-ratio: 16/9;
+            position: relative;
+            border: 1px solid #333;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.1);
+            background: #000;
+        }
+        
+        .video-container iframe, .video-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Animación scroll */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px); 
+            transition: all 0.8s ease-out;
+        }
+        .reveal-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========================================================= */
+        /* == BOTONES (CTA) == */
+        /* ========================================================= */
+        
+        .cta-group {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 2px;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-cyan);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+        }
+        .btn-primary:hover { background-color: #fff; box-shadow: 0 0 25px rgba(0, 229, 255, 0.6); }
+
+        .btn-secondary {
+            border: 1px solid var(--accent-alert);
+            color: var(--accent-alert);
+            background: transparent;
+        }
+        .btn-secondary:hover { background: var(--accent-alert); color: #000; }
+
+        /* ========================================================= */
+        /* == SECCIONES DE CONTENIDO == */
+        /* ========================================================= */
+
+        .section-title {
+            color: var(--accent-cyan);
+            font-size: 2em;
+            text-transform: uppercase;
+            border-bottom: 2px solid #222;
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 60px;
+            margin-bottom: 30px;
+        }
+
+        /* Grid de Features */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            text-align: left;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-left: 3px solid var(--accent-cyan);
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card.alert-theme { border-left-color: var(--accent-alert); }
+
+        .card h3 { margin-top: 0; color: #fff; display: flex; justify-content: space-between; }
+        .card p { font-size: 0.95em; color: #aaa; }
+        
+        /* Detalles Técnicos (Validación) */
+        .validation-box {
+            background: #0a0a0f;
+            border: 1px solid #222;
+            padding: 20px;
+            margin: 20px auto;
+            text-align: left;
+            max-width: 800px;
+        }
+        
+        .check-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #1a1a2e;
+            padding: 10px 0;
+            color: #fff;
+        }
+        .check-item span { color: var(--accent-cyan); font-weight: bold; }
+        .check-item.done span { color: #00ff88; } /* Verde para DONE */
+
+        /* ========================================================= */
+        /* == BUSINESS & ROADMAP == */
+        /* ========================================================= */
+
+        .market-highlight {
+            background: linear-gradient(90deg, #1e1e24 0%, transparent 100%);
+            border-left: 5px solid var(--accent-alert);
+            padding: 20px;
+            text-align: left;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .roadmap-container {
+            text-align: left;
+            border-left: 2px solid #333;
+            margin-left: 20px;
+            padding-left: 20px;
+        }
+
+        .roadmap-phase {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .roadmap-phase::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+        }
+        .roadmap-phase h4 { color: #fff; margin: 0 0 5px 0; font-size: 1.2em; }
+        .roadmap-phase span { color: #888; font-size: 0.8em; display: block; margin-bottom: 5px; }
+
+        /* Tabla Financiera */
+        .finance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            text-align: left;
+            font-size: 0.9em;
+        }
+        .finance-table th { color: var(--accent-cyan); border-bottom: 1px solid #444; padding: 10px; }
+        .finance-table td { border-bottom: 1px solid #222; padding: 10px; color: #ddd; }
+        .finance-table tr:last-child td { font-weight: bold; color: #fff; border-top: 1px solid #555; }
+
+        .divider {
+            border: 0; height: 1px;
+            background: linear-gradient(to right, transparent, #333, transparent);
+            margin: 50px 0;
+        }
+
+        /* ========================================================= */
+        /* == FOOTER == */
+        /* ========================================================= */
+        footer {
+            background-color: #000; 
+            padding: 50px 20px;
+            margin-top: 80px;
+            border-top: 1px solid #111; 
+        }
+        footer h3 { color: #fff; }
+        footer a { color: var(--accent-cyan); }
+        
+    </style>
+</head>
+<body>
+
+    <header class="hero-section reveal-on-scroll">
+        <h1 class="titulo-principal">Creatura Dinoma</h1>
+        <div class="tagline">¡Necesita tu ayuda!</div>
+        
+        <p class="hero-desc">
+            Un proyecto indie de acción‑exploración cooperativa con criaturas carismáticas, 
+            captura estratégica y un loop de extracción de alta tensión.
+        </p>
+
+        <div class="video-container">
+            <img src="https://placehold.co/900x500/050508/00e5ff?text=Gameplay+Prototipo+Loop" alt="Creatura Dinoma Gameplay">
+        </div>
+
+        <div class="cta-group">
+            <a href="#contacto" class="btn btn-primary">Solicitar Demo Privada</a>
+            <a href="#pitch" class="btn btn-secondary">Ver Pitch Deck</a>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <section class="reveal-on-scroll">
+            <h2 class="section-title">La Oportunidad</h2>
+            <div class="market-highlight">
+                <p><strong>Por qué ahora:</strong> El mercado actual premia experiencias cooperativas con loops emergentes. Juegos como <em>Repo</em> y <em>Lethal Company</em> demostraron que una idea central fuerte puede escalar masivamente.</p>
+                <p style="margin-top:10px; color:#ccc;">Creatura Dinoma combina esa tensión viralizable con una mecánica de "captura y transporte" que fuerza la cooperación física.</p>
+            </div>
+        </section>
+
+        <section class="reveal-on-scroll">
+            <h2 class="section-title">Características Clave</h2>
+            <div class="grid-cards">
+                <div class="card">
+                    <h3>Captura Táctica</h3>
+                    <p>Tres sistemas diferenciados: red temporal, trampa estratégica y minijuego de sincronía. No es solo disparar, es pensar.</p>
+                </div>
+                <div class="card alert-theme">
+                    <h3>Riesgo "PEAK"</h3>
+                    <p>Barra de estados visible. Si se llena por daño de enemigos específicos, activa Game Over para el equipo. Tensión constante.</p>
+                </div>
+                <div class="card">
+                    <h3>Transporte Técnico</h3>
+                    <p>Cápsula pesada con dos 'carripoints'. Requiere coordinación de movimiento entre jugadores para llevar la carga a la zona de entrega.</p>
+                </div>
+                <div class="card">
+                    <h3>Loop de Extracción</h3>
+                    <p>Explorar → Capturar → Transportar → Vender. Usa las ganancias en la tienda funcional para mejorar equipo y sobrevivir.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider">
+
+        <section class="reveal-on-scroll">
+            <h2 class="section-title">Estado del Prototipo</h2>
+            <p>No vendemos humo. Vendemos un sistema que ya funciona.</p>
+            
+            <div class="validation-box">
+                <div class="check-item done">
+                    <strong>IA de Criaturas (Wander/Patrulla)</strong>
+                    <span>IMPLEMENTADO</span>
+                </div>
+                <div class="check-item done">
+                    <strong>Sistemas de Captura (x3)</strong>
+                    <span>IMPLEMENTADO</span>
+                </div>
+                <div class="check-item done">
+                    <strong>Transporte y Carripoints</strong>
+                    <span>IMPLEMENTADO</span>
+                </div>
+                <div class="check-item done">
+                    <strong>Economía (Tienda/Inventario)</strong>
+                    <span>IMPLEMENTADO</span>
+                </div>
+                <div class="check-item">
+                    <strong>Multijugador Online (Red)</strong>
+                    <span>EN PROCESO (Fase 1)</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal-on-scroll">
+            <h2 class="section-title">Plan de Ejecución</h2>
+            <div class="roadmap-container">
+                <div class="roadmap-phase">
+                    <span>MESES 0-3</span>
+                    <h4>Fase 1: Pulido y Cooperativo</h4>
+                    <p>Implementación de red (matchmaking/lobby), pulido de balance de la barra PEAK y mejoras en UX de tienda.</p>
+                </div>
+                <div class="roadmap-phase">
+                    <span>MESES 3-6</span>
+                    <h4>Fase 2: Contenido y Experiencia</h4>
+                    <p>Animaciones originales, arte 3D final, selector estético de personajes y nuevas variantes de criaturas.</p>
+                </div>
+                <div class="roadmap-phase">
+                    <span>MESES 6-12</span>
+                    <h4>Fase 3: Escalado y Lanzamiento</h4>
+                    <p>Beta cerrada con métricas, campaña de marketing, optimización de red y lanzamiento comercial con primera expansión.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pitch" class="reveal-on-scroll">
+            <h2 class="section-title">Resumen de Inversión</h2>
+            <p>Buscamos <strong>USD 250,000</strong> para transformar este prototipo en un lanzamiento comercial.</p>
+            
+            <div class="grid-cards" style="grid-template-columns: 1fr 1fr;">
+                <div class="card">
+                    <h3>Uso de Fondos</h3>
+                    <table class="finance-table">
+                        <tr>
+                            <td>Desarrollo y Prog.</td>
+                            <td>$90,000</td>
+                        </tr>
+                        <tr>
+                            <td>Arte y Animación</td>
+                            <td>$60,000</td>
+                        </tr>
+                        <tr>
+                            <td>Marketing & Com.</td>
+                            <td>$30,000</td>
+                        </tr>
+                        <tr>
+                            <td>Infraestructura/QA</td>
+                            <td>$70,000</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TOTAL</strong></td>
+                            <td><strong>$250,000</strong></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card alert-theme">
+                    <h3>Oferta al Inversor</h3>
+                    <ul style="text-align: left; padding-left: 20px; color: #ddd;">
+                        <li style="margin-bottom: 10px;">Acceso inmediato a demos privadas.</li>
+                        <li style="margin-bottom: 10px;">Métricas reales de playtests.</li>
+                        <li style="margin-bottom: 10px;">Equity competitivo o Revenue Share.</li>
+                        <li style="margin-bottom: 10px;">Reportes trimestrales detallados.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer id="contacto">
+        <h2 style="color: #fff; text-transform: uppercase;">Invertí en el futuro del Co-Op</h2>
+        <p>Hablemos. Tenemos el código, el diseño y la visión.</p>
+        
+        <a href="mailto:inversion@creaturadinoma.com" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Agendar Reunión</a>
+        
+        <div style="margin-top: 40px; font-size: 0.8em; color: #555;">
+            <p>© 2026 Creatura Dinoma Team. Todos los derechos reservados.</p>
+            <p><a href="#">Descargar One-Pager PDF</a> | <a href="#">Ver Gameplay Completo</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const scrollElements = document.querySelectorAll('.reveal-on-scroll');
+            scrollElements.forEach(el => observer.observe(el));
+        });
+    </script>
+    
+</body>
+</html>
