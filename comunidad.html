@@ -927,6 +927,54 @@
             document.getElementById('imagePreview').src = uploadedImageUrl; document.getElementById('imagePreview').style.display = 'block';
         });
 
+        document.addEventListener('DOMContentLoaded', () => {
+        const hamburgerBtn = document.querySelector('.hamburger-menu');
+        const sidebarLeft = document.querySelector('.sidebar-left');
+        const userAvatar = document.querySelector('.user-avatar-nav');
+        const sidebarRight = document.querySelector('.sidebar-right'); // Será el popup
+        const body = document.body;
+
+        // FUNCION: Alternar Menú Hamburguesa
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evita cerrar inmediatamente
+            sidebarLeft.classList.toggle('active');
+            sidebarRight.classList.remove('active'); // Cierra el otro si está abierto
+            toggleOverlay();
+        });
+
+        // FUNCION: Alternar Popup Usuario
+        userAvatar.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebarRight.classList.toggle('active');
+            sidebarLeft.classList.remove('active'); // Cierra el menú si está abierto
+            toggleOverlay();
+        });
+
+        // CERRAR AL TOCAR AFUERA
+        document.addEventListener('click', (e) => {
+            // Si el clic NO fue dentro del sidebar izquierdo ni del botón hamburguesa
+            if (!sidebarLeft.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                sidebarLeft.classList.remove('active');
+            }
+            
+            // Si el clic NO fue dentro del popup usuario ni del avatar
+            if (!sidebarRight.contains(e.target) && !userAvatar.contains(e.target)) {
+                sidebarRight.classList.remove('active');
+            }
+            
+            toggleOverlay();
+        });
+
+        function toggleOverlay() {
+            if (sidebarLeft.classList.contains('active') || sidebarRight.classList.contains('active')) {
+                body.classList.add('menu-open');
+                body.style.overflow = 'hidden'; // Evita scroll de fondo
+            } else {
+                body.classList.remove('menu-open');
+                body.style.overflow = '';
+            }
+        }
+
         // --- EVENTOS GENERALES ---
         window.doLogout = () => signOut(auth);
         document.getElementById('sidebarLoginBtn').addEventListener('click', () => signInWithPopup(auth, provider));
@@ -939,6 +987,7 @@
     </script>
 </body>
 </html>
+
 
 
 
