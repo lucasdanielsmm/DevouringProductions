@@ -126,6 +126,21 @@
         .comment-content { background: #f4f4f4; padding: 8px 12px; border-radius: 12px; flex: 1;}
 
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        /* --- BOTÓN HAMBURGUESA (Oculto en PC) --- */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        .hamburger-menu span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-main);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
         /* --- CORRECCIONES PARA MÓVIL (Pantallas < 768px) --- */
         @media (max-width: 768px) {
             .container {
@@ -203,6 +218,9 @@
 <body>
 
     <nav class="navbar">
+        <div class="hamburger-menu">
+            <span></span><span></span><span></span>
+        </div>
         <div class="logo">Devouring<span>Games</span></div>
         <div class="search-wrapper">
             <div class="search-bar">
@@ -846,6 +864,7 @@
     </script>
 </body>
 </html>
+
 
 
 
