@@ -143,6 +143,81 @@
         }
         /* --- CORRECCIONES PARA MÓVIL (Pantallas < 768px) --- */
         @media (max-width: 768px) {
+        /* Mostrar botón hamburguesa */
+            .hamburger-menu { display: flex; }
+
+            /* --- 1. MENU HAMBURGUESA (Izquierda) --- */
+            .sidebar-left {
+                position: fixed;
+                top: var(--nav-height);
+                left: -100%; /* Oculto a la izquierda */
+                width: 280px;
+                height: calc(100vh - var(--nav-height));
+                background: var(--bg-card);
+                z-index: 2500;
+                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                padding: 20px;
+                box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+                overflow-y: auto;
+            }
+    
+            .sidebar-left.active {
+                left: 0; /* Aparece al activarse */
+            }
+
+            /* --- 2. POPUP USUARIO (Derecha) --- */
+            .sidebar-right {
+                position: fixed;
+                top: 70px; /* Debajo de la navbar */
+                right: 20px; /* Margen derecho */
+                width: 300px;
+                height: auto;
+                max-height: 80vh; /* Para que no sea más alto que la pantalla */
+                overflow-y: auto;
+                z-index: 2600;
+        
+                /* Oculto por defecto con transformación */
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px) scale(0.95);
+                transition: 0.2s ease-in-out;
+        
+                /* Sombra fuerte para efecto popup */
+                box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+                border-radius: var(--radius);
+                background: transparent; /* El fondo lo tienen los widgets dentro */
+            }
+
+            .sidebar-right.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0) scale(1);
+            }
+    
+            /* Aseguramos que los widgets del popup se vean bien juntos */
+            .sidebar-right .widget-box, 
+            .sidebar-right .profile-widget,
+            .sidebar-right .check-in-box {
+                box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+                margin-bottom: 10px; /* Menos espacio entre ellos */
+            }
+
+            /* --- 3. ARREGLO FONDO JUEGOS --- */
+            .game-nav {
+                justify-content: flex-start; /* Alinear a la izquierda */
+                padding-right: 40px; /* ESPACIO EXTRA A LA DERECHA */
+                width: 100%;
+            }
+    
+            /* Fondo oscuro semitransparente cuando se abre un menú */
+            body.menu-open::after {
+                content: '';
+                position: fixed;
+                top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 2400; /* Debajo de los menús, encima del contenido */
+            }
+            
             .container {
                 /* Cambiamos a 1 sola columna que ocupe todo el espacio disponible */
                 grid-template-columns: 1fr;
@@ -864,6 +939,7 @@
     </script>
 </body>
 </html>
+
 
 
 
