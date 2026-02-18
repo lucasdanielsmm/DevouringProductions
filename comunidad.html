@@ -927,66 +927,94 @@
             document.getElementById('imagePreview').src = uploadedImageUrl; document.getElementById('imagePreview').style.display = 'block';
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
-        const hamburgerBtn = document.querySelector('.hamburger-menu');
-        const sidebarLeft = document.querySelector('.sidebar-left');
-        const userAvatar = document.querySelector('.user-avatar-nav');
-        const sidebarRight = document.querySelector('.sidebar-right'); // Será el popup
-        const body = document.body;
+// --- MANEJO DE MENÚS Y POPUPS (CORREGIDO PARA MÓDULOS) ---
+        // Definimos las variables fuera para que estén disponibles
+        const setupMenus = () => {
+            const hamburgerBtn = document.querySelector('.hamburger-menu');
+            const sidebarLeft = document.querySelector('.sidebar-left');
+            const userAvatar = document.querySelector('.user-avatar-nav');
+            const sidebarRight = document.querySelector('.sidebar-right');
+            const body = document.body;
 
-        // FUNCION: Alternar Menú Hamburguesa
-        hamburgerBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Evita cerrar inmediatamente
-            sidebarLeft.classList.toggle('active');
-            sidebarRight.classList.remove('active'); // Cierra el otro si está abierto
-            toggleOverlay();
-        });
+            if (!hamburgerBtn || !userAvatar) return; // Seguridad por si no cargan
 
-        // FUNCION: Alternar Popup Usuario
-        userAvatar.addEventListener('click', (e) => {
-            e.stopPropagation();
-            sidebarRight.classList.toggle('active');
-            sidebarLeft.classList.remove('active'); // Cierra el menú si está abierto
-            toggleOverlay();
-        });
+            const toggleOverlay = () => {
+                if (sidebarLeft.classList.contains('active') || sidebarRight.classList.contains('active')) {
+                    body.classList.add('menu-open');
+                    // Solo bloqueamos scroll en pantallas pequeñas
+                    if(window.innerWidth <= 1024) body.style.overflow = 'hidden';
+                } else {
+                    body.classList.remove('menu-open');
+                    body.style.overflow = '';
+                }
+            };
 
-        // CERRAR AL TOCAR AFUERA
-        document.addEventListener('click', (e) => {
-            // Si el clic NO fue dentro del sidebar izquierdo ni del botón hamburguesa
-            if (!sidebarLeft.contains(e.target) && !hamburgerBtn.contains(e.target)) {
-                sidebarLeft.classList.remove('active');
-            }
-            
-            // Si el clic NO fue dentro del popup usuario ni del avatar
-            if (!sidebarRight.contains(e.target) && !userAvatar.contains(e.target)) {
+            hamburgerBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebarLeft.classList.toggle('active');
                 sidebarRight.classList.remove('active');
-            }
-            
-            toggleOverlay();
+                toggleOverlay();
+            });
+
+            userAvatar.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Si no hay usuario, el listener de login de abajo se encargará
+                if (currentUser) {
+                    sidebarRight.classList.toggle('active');
+                    sidebarLeft.classList.remove('active');
+                    toggleOverlay();
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (sidebarLeft && !sidebarLeft.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                    sidebarLeft.classList.remove('active');
+                }
+                if (sidebarRight && !sidebarRight.contains(e.target) && !userAvatar.contains(e.target)) {
+                    sidebarRight.classList.remove('active');
+                }
+                toggleOverlay();
+            });
+        };
+
+        // --- EVENTOS GENERALES Y LOGIN ---
+        window.doLogout = () => signOut(auth);
+        
+        document.getElementById('sidebarLoginBtn').addEventListener('click', () => signInWithPopup(auth, provider));
+        
+        // Ajustamos el click del avatar para que funcione tanto para Login como para Popup
+        document.getElementById('navAvatar').addEventListener('click', () => { 
+            if(!currentUser) {
+                signInWithPopup(auth, provider);
+            } 
         });
 
-        function toggleOverlay() {
-            if (sidebarLeft.classList.contains('active') || sidebarRight.classList.contains('active')) {
-                body.classList.add('menu-open');
-                body.style.overflow = 'hidden'; // Evita scroll de fondo
-            } else {
-                body.classList.remove('menu-open');
-                body.style.overflow = '';
-            }
-        }
-
-        // --- EVENTOS GENERALES ---
-        window.doLogout = () => signOut(auth);
-        document.getElementById('sidebarLoginBtn').addEventListener('click', () => signInWithPopup(auth, provider));
-        document.getElementById('navAvatar').addEventListener('click', () => { if(!currentUser) signInWithPopup(auth, provider); });
         window.closeModals = () => document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
-        document.getElementById('openPublishBtn').addEventListener('click', () => { if(!currentUser) return alert("Inicia sesión"); document.getElementById('publishModal').style.display = 'flex'; if(currentUserData.isAdmin) document.getElementById('adminCheckContainer').style.display = 'flex'; });
-        document.getElementById('notifBtn').addEventListener('click', () => document.getElementById('notifDropdown').classList.toggle('show'));
-        document.getElementById('searchInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') changeCategory('search', e.target.value); });
+        
+        document.getElementById('openPublishBtn').addEventListener('click', () => { 
+            if(!currentUser) return alert("Inicia sesión"); 
+            document.getElementById('publishModal').style.display = 'flex'; 
+            if(currentUserData && currentUserData.isAdmin) {
+                document.getElementById('adminCheckContainer').style.display = 'flex';
+            }
+        });
+
+        document.getElementById('notifBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.getElementById('notifDropdown').classList.toggle('show');
+        });
+
+        document.getElementById('searchInput').addEventListener('keypress', (e) => { 
+            if(e.key === 'Enter') window.changeCategory('search', e.target.value); 
+        });
+
+        // INICIALIZAR MENÚS
+        setupMenus();
 
     </script>
 </body>
 </html>
+
 
 
 
