@@ -128,7 +128,14 @@
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         /* --- CORRECCIONES PARA MÓVIL (Pantallas < 768px) --- */
         @media (max-width: 768px) {
-    
+            .container {
+                /* Cambiamos a 1 sola columna que ocupe todo el espacio disponible */
+                grid-template-columns: 1fr;
+        
+                /* Opcional: Reducir los espacios para ganar pantalla en el cel */
+                gap: 16px; 
+                padding: 0 15px;
+            }
             /* 1. ARREGLAR NAVBAR */
             .navbar {
                 padding: 0 15px; /* Reducir padding lateral */
@@ -839,6 +846,7 @@
     </script>
 </body>
 </html>
+
 
 
 
