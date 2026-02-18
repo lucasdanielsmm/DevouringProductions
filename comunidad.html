@@ -142,7 +142,7 @@
             transition: 0.3s;
         }
         /* --- CORRECCIONES PARA MÓVIL (Pantallas < 768px) --- */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
         /* Mostrar botón hamburguesa */
             .hamburger-menu { display: flex; }
 
@@ -154,11 +154,12 @@
                 width: 280px;
                 height: calc(100vh - var(--nav-height));
                 background: var(--bg-card);
-                z-index: 2500;
+                z-index: 3000;
                 transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 padding: 20px;
                 box-shadow: 4px 0 15px rgba(0,0,0,0.1);
                 overflow-y: auto;
+                display: block !important; /* Asegurar que se vea al activar */
             }
     
             .sidebar-left.active {
@@ -174,7 +175,7 @@
                 height: auto;
                 max-height: 80vh; /* Para que no sea más alto que la pantalla */
                 overflow-y: auto;
-                z-index: 2600;
+                z-index: 3001;
         
                 /* Oculto por defecto con transformación */
                 opacity: 0;
@@ -1014,6 +1015,7 @@
     </script>
 </body>
 </html>
+
 
 
 
