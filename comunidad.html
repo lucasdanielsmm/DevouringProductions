@@ -415,7 +415,7 @@
             <div class="modal-header"><h3>Crear Publicación</h3><i class="fas fa-times" style="cursor:pointer" onclick="closeModals()"></i></div>
             <div class="form-row">
                 <select id="postSection" class="form-select"><option value="Taberna">Taberna</option><option value="Galería">Galería</option><option value="Lab">Lab</option><option value="Guías">Guías</option></select>
-                <select id="postGame" class="form-select"><option value="all">General</option><option value="vireo">Vireo CODE</option><option value="cae">Cae</option><option value="lanzer">Move-Lanzer</option><option value="dinoma">Creatura Dinoma</option></select>
+                <select id="postGame" class="form-select"><option value="all">General</option><option value="vireo">Vireo CODE</option><option value="cae">Cae</option><option value="lanzer">Move-Lanzer</option><option value="dinoma">Creatura Dinoma</option><option value="amanecer">Antes del Amanecer</option></select>
             </div>
             <textarea id="postContent" class="form-input" style="height:120px; resize:none;" placeholder="Comparte tus ideas... Usa #hashtags (mínimo 1)"></textarea>
             <div style="margin-top:15px; display:flex; justify-content:space-between; align-items:center;">
@@ -512,7 +512,7 @@
             "El Madrugador", "El Sabio", "Cazador de Bugs", "Bardo de Taberna", "Hostigador",
             "El Alquimista", "Code Warrior", "El Visionario", "Nómada Etereo", "Cambia Formas",
             "Guardian del Lab", "Maestro de Runas", "Explorador del Vacío", "Vigilante Atemporal",
-            "Bestia Magica"
+            "Bestia Magica", "Portador de Mascara", "Bruja"
         ];
 
         const updateUserUI = (user, data) => {
@@ -717,7 +717,8 @@
         const updateInterestsUI = (stats) => {
             const max = Object.entries(stats).reduce((a, b) => a[1] > b[1] ? a : b, ['none', 0]);
             ['navUnity', 'navRPG', 'navWeb'].forEach(id => document.getElementById(id).classList.remove('active'));
-            if(max[0] === 'dinoma') document.getElementById('navUnity').classList.add('active'); 
+            if(max[0] === 'dinoma') document.getElementById('navUnity').classList.add('active');
+            if(max[0] === 'amanecer') document.getElementById('navUnity').classList.add('active'); 
             if(max[0] === 'vireo') document.getElementById('navRPG').classList.add('active'); 
             if(max[0] === 'cae') document.getElementById('navWeb').classList.add('active'); 
         };
@@ -756,7 +757,7 @@
                     '<span class="hashtag-link" onclick="window.changeCategory(\'tag\', \'$1\')">#$1</span>');
         };
 
-        const getGameName = (key) => ({ 'vireo': 'Vireo CODE', 'cae': 'Cae', 'lanzer': 'Move-Lanzer', 'dinoma': 'Creatura Dinoma', 'all': 'General' }[key] || key);
+        const getGameName = (key) => ({ 'vireo': 'Vireo CODE', 'cae': 'Cae', 'lanzer': 'Move-Lanzer', 'dinoma': 'Creatura Dinoma', 'amanecer': 'Antes del Amanecer', 'all': 'General' }[key] || key);
 
         // --- ACCIONES DE CHECK-IN Y SEGUIR ---
         document.getElementById('checkInBtn').addEventListener('click', async () => {
@@ -1032,6 +1033,7 @@
     </script>
 </body>
 </html>
+
 
 
 
