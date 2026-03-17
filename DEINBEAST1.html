@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="description" content="Portfolio de Game Design para un Shooter Vertical de supervivencia creado en 24H. Sistemas de metaprogresión, economía y diseño de combate.">
+    <meta name="author" content="Lucas Daniel Soriano">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="24H Survival Shooter — Portfolio Game Design">
+    <meta property="og:description" content="Descubre cómo diseñé los sistemas de combate, economía pasiva y UI para este reto de 24 horas.">
+    <meta property="og:image" content="https://github.com/lucasdanielsmm/DevouringProductions/portadaDeinBeast2.jpg"> 
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="24H Survival Shooter — Portfolio Game Design">
+    <meta property="twitter:image" content="https://github.com/lucasdanielsmm/DevouringProductions/portadaDeinBeast2.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Special+Elite&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24H Survival Shooter — Portfolio Game Design</title>
+    <link rel="icon" type="image/png" href="sMaskcelest.png">
+
+    <style>
+        /* ========================================================= */
+        /* == ESTILOS GLOBALES (Base Dark con Acentos Rojos) == */
+        /* ========================================================= */
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px 10px;
+            background-color: #050505;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden; 
+            text-align: center; 
+        }
+        
+        a { text-decoration: none; color: inherit; }
+
+        .logo {
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        .logo:hover { opacity: 1; }
+        
+        .titulo-pagina {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2.8em; 
+            color: #ffffff;
+            margin: 10px auto;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.4); /* Brillo Rojo tenue */
+        }
+
+        /* ========================================================= */
+        /* == ANIMACIONES Y HERO SECTION == */
+        /* ========================================================= */
+
+        .video-container {
+            width: 90%;
+            max-width: 900px; 
+            margin: 30px auto;
+            aspect-ratio: 16/9;
+            position: relative;
+            opacity: 0; 
+            transform: translateY(40px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out; 
+        }
+
+
+        .video-container.animar-video {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .video-container iframe, .video-container img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: 1px solid #333;
+            border-radius: 4px;
+            /* Brillo ROJO ARCADE */
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.2);
+        }
+        
+
+        /* Animaciones de entrada al scroll */
+        .slide-up-on-scroll {
+            opacity: 0;
+            transform: translateY(40px); 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .slide-up-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========================================================= */
+        /* == ESTILOS ESPECÍFICOS (TEMA ROJO) == */
+        /* ========================================================= */
+        .subtitulo {
+            font-size: 1.8em;
+            color: #ff0000; /* ROJO INTENSO */
+            margin: 40px auto 20px auto;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .intro-text {
+            max-width: 750px; 
+            margin: 0 auto 30px auto; 
+            padding: 0 20px;
+            font-size: 1.1em;
+            color: #ccc;
+        }
+
+        /* Tabla de detalles técnicos */
+        .detalles-container {
+            display: inline-block; 
+            text-align: left;
+            margin: 30px auto; 
+            padding: 25px;
+            background-color: #0e0a0a; /* Fondo muy oscuro con tinte rojizo sutil */
+            border-radius: 2px;
+            border: 1px solid #2e1a1a; /* Borde marrón/rojo oscuro */
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        
+        .detalle-fila {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            min-width: 320px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 4px;
+        }
+        .detalle-fila:last-child { border-bottom: none; }
+        
+        .detalle-fila strong { color: #fff; }
+        .detalle-fila span { color: #ff0000; font-family: monospace; font-size: 0.9em; } /* Texto técnico en rojo */
+        
+        /* Botón de acción */
+        .btn-action {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 12px 30px;
+            border: 1px solid #ff0000;
+            color: #ff0000;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .btn-action:hover {
+            background: #ff0000;
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+        }
+        
+        /* ========================================================= */
+        /* == SECCIÓN TÉCNICA (Mecánicas) == */
+        /* ========================================================= */
+        .mecánicas-seccion {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: left;
+        }
+
+        .tech-card {
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: #120e0e; /* Fondo oscuro con tinte rojo */
+            /* Borde izquierdo ROJO */
+            border-left: 4px solid #ff0000;
+            border-radius: 0 4px 4px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Efecto de fondo sutil */
+        .tech-card::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            /* Degradado sutil a rojo */
+            background: linear-gradient(90deg, transparent 95%, rgba(255, 0, 0, 0.04) 100%);
+            pointer-events: none;
+        }
+
+        .tech-card h4 {
+            color: #fff;
+            font-size: 1.4em;
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tech-card h4 span {
+            font-size: 0.6em;
+            background: #111;
+            padding: 2px 8px;
+            border: 1px solid #333;
+            color: #888;
+            border-radius: 4px;
+        }
+
+        .tech-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tech-card ul li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            color: #bbb;
+        }
+
+        /* Iconos de lista técnicos en rojo */
+        .tech-card ul li::before {
+            content: '>'; 
+            color: #ff0000; 
+            font-family: monospace;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Highlighting keywords en rojo */
+        .highlight { color: #ff0000; font-weight: 500; }
+
+        .divider {
+            border: 0;
+            height: 1px;
+            /* Línea divisoria roja */
+            background: linear-gradient(to right, transparent, #ff0000, transparent);
+            opacity: 0.4;
+            margin: 50px auto;
+            max-width: 800px;
+        }
+
+        /* ========================================================= */
+        /* == GALERÍA == */
+        /* ========================================================= */
+        .galeria {
+            margin-top: 50px;
+            padding: 20px 10px;
+        }
+
+        .galeria h3 { color: #fff; margin-bottom: 30px; }
+
+        .capturas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .capturas-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 2px;
+            border: 1px solid #222;
+            transition: transform 0.3s, border-color 0.3s;
+            filter: grayscale(40%); 
+        }
+        
+        .capturas-grid img:hover {
+            transform: scale(1.02);
+            filter: grayscale(0%);
+            border-color: #ff0000; /* Borde rojo al hover */
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.15);
+        }
+
+        .titulo-pagina { font-family: 'Share Tech Mono', monospace; }
+
+        /* ========================================================= */
+        /* == FOOTER == */
+        /* ========================================================= */
+        footer {
+            background-color: #020202; 
+            color: #666; 
+            padding: 40px 10px;
+            margin-top: 60px;
+            font-size: 0.85em;
+            border-top: 1px solid #111; 
+        }
+
+        /* Enlaces del footer en rojo */
+        footer a { color: #ff0000; font-weight: bold; }
+        footer a:hover { text-decoration: underline; }
+        
+    </style>
+</head>
+<body>
+
+    <h1 class="titulo-pagina">DEIN BEAST</h1> <div class="video-container">
+        <img src="portadaDeinBeast2.jpg" alt="Portada: Shooter Vertical - 24H Challenge">
+    </div>
+
+    <h2 class="subtitulo">"Supervivencia, metaprogresión y acción táctica."</h2>
+
+    <p class="intro-text">
+        Un intenso shooter vertical diseñado y estructurado desde cero en un reto de <strong>24 horas</strong>. Mi rol se centró en el <strong>Game Design</strong>, definiendo el "core loop", el balance de la economía y la experiencia del usuario (UI/UX), mientras que <strong>jabali.ai</strong> se encargó de toda la lógica de programación.
+    </p>
+
+    <a href="https://devouringprojects.itch.io/dein-beast" target="_blank" class="btn-action">Ver en Itch.io</a>
+
+    <div class="detalles-container slide-up-on-scroll">
+        <div class="detalle-fila">
+            <strong>Rol Principal</strong>
+            <span>  Game Designer (Sistemas & UI/UX)</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Programación</strong>
+            <span>  jabali.ai</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Género</strong>
+            <span>  Vertical Shooter / Supervivencia</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Plataforma</strong>
+            <span>  Mobile (Touch-First)</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Formato</strong>
+            <span>  Reto 24 Horas</span>
+        </div>
+    </div>
+
+    <div class="video" style="opacity: 1; transform: none;">
+        <iframe 
+            width="315" 
+            height="560"
+            src="https://www.youtube.com/embed/TU_VIDEO_AQUI?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0" 
+            allow="autoplay; encrypted-media" 
+            allowfullscreen>
+        </iframe>
+    </div>
+
+    
+    <hr class="divider">
+    
+    <section class="mecánicas-seccion">
+        <h2 class="subtitulo" style="margin-top: 0; color: #fff;">Sistemas & Diseño de Juego</h2>
+
+        <div class="tech-card slide-up-on-scroll">
+            <h4>1. Diseño de Combate & Core Loop <span>Mecánicas Base</span></h4>
+            <ul>
+                <li><strong>Dualidad Crali/Detta:</strong> Sistema de cambio en tiempo real mediante interfaz táctil, permitiendo adaptar la estrategia sobre la marcha.</li>
+                <li><strong>Weapon Modes:</strong> Cambio dinámico de modos de combate. El modo especial de Detta <span class="highlight">(dashblade/claymore/katana)</span> incluye barridos encadenados y ajustes de <em>hitbox</em> ensanchados para mejorar el <em>Game Feel</em>.</li>
+                <li><strong>Boss System:</strong> Eventos estructurados que rompen la limpieza de oleadas, con una UI dedicada y mecánicas de estado alterado (<span class="highlight">Enraged</span>).</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.1s;">
+            <h4>2. Progresión y Economía <span>Metaprogresión</span></h4>
+            <ul>
+                <li><strong>Economía In-Game:</strong> Un modelo híbrido entre la recolección activa en partida y un ingreso pasivo constante (<span class="highlight">Income per second</span>).</li>
+                <li><strong>Upgrades y Automatización:</strong> Árbol de mejoras con costos escalados (Fire Rate, Magnet, Miner). Implementación de un <span class="highlight">Auto-upgrade</span> para evitar fatiga táctil.</li>
+                <li><strong>Prestige/Rebirth:</strong> Diseño de un sistema a largo plazo donde el jugador acumula puntos de prestigio que se traducen en un <span class="highlight">Legacy Bonus</span> para futuras <em>runs</em>.</li>
+                <li><strong>Builds Dinámicas:</strong> Aparición de <em>Perks</em> aleatorios acumulables durante la partida para incentivar la rejugabilidad.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.2s;">
+            <h4>3. UI/UX y Experiencia Móvil <span>Interfaz Táctil</span></h4>
+            <ul>
+                <li><strong>Diseño Touch-First:</strong> Controles e interfaces (como el previsualizador del personaje a relevar) pensados puramente para la ergonomía móvil.</li>
+                <li><strong>HUD en Vivo:</strong> Organización visual clara de métricas críticas sin entorpecer el gameplay (Score, Combo, Relic Charge, Overdrive, Economía).</li>
+                <li><strong>Flujo de Pantallas:</strong> Transiciones limpias desde un <em>Loading Screen</em> con progreso real hasta una pantalla de <em>Game Over</em> que detalla métricas clave como Boss Kills y Perks seleccionados.</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="galeria">
+        <h3>Capturas del Proyecto</h3>
+        <div class="capturas-grid">
+            <img src="captura-1.jpg" alt="Gameplay Shooter Base" class="slide-up-on-scroll">
+            <img src="captura-2.jpg" alt="Cambio Crali/Detta" class="slide-up-on-scroll">
+            <img src="captura-3.jpg" alt="Árbol de Upgrades" class="slide-up-on-scroll">
+            <img src="captura-4.jpg" alt="Enfrentamiento contra Boss" class="slide-up-on-scroll">
+            <img src="captura-5.jpg" alt="Sistema de Perks" class="slide-up-on-scroll">
+            <img src="captura-6.jpg" alt="Pantalla de Game Over" class="slide-up-on-scroll">
+        </div>
+    </section>
+
+    <footer>
+        <p>Desarrollado por <strong>Lucas Daniel Soriano</strong> usando <strong>jabali.ai</strong></p>
+        <p>© 2026 - Portfolio de Desarrollo de Videojuegos y Game Design</p>
+        <p>
+            <a href="https://www.linkedin.com/in/lucasdanielsoriano/">LinkedIn</a> | <a href="https://lucasdanielsmm.github.io/DevouringProductions/">GitHub</a> | <a href="mailto:devouringgproductions@gmail.com">Email</a>
+        </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.querySelector('.video-container');
+            if (video) {
+                video.offsetHeight; 
+                video.classList.add('animar-video');
+            }
+
+            const observerOptions = {
+                root: null, 
+                rootMargin: '0px',
+                threshold: 0.1 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const slideElements = document.querySelectorAll('.slide-up-on-scroll');
+            slideElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+    
+</body>
+</html>
