@@ -150,7 +150,65 @@
             transform: scale(1.05); 
             opacity: 0.9;
         }
-        
+
+
+        /* ========================================================= */
+        /* == BOTÓN JUGAR RELUCIENTE == */
+        /* ========================================================= */
+        .btn-jugar {
+            display: block; /* Para que se ponga encima del otro */
+            width: fit-content;
+            margin: 20px auto 10px auto;
+            padding: 16px 45px;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #ffffff;
+            background: linear-gradient(45deg, #cc0000, #ff0000);
+            border: 2px solid #ff4d4d;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+            font-family: 'Share Tech Mono', monospace; /* Para que coincida con el título */
+        }
+
+        /* Efecto de destello que pasa por encima */
+        .btn-jugar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+
+        .btn-jugar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px rgba(255, 0, 0, 1);
+            background: linear-gradient(45deg, #ff0000, #ff3333);
+        }
+
+        /* Ajuste para el botón original para que queden bien apilados */
+        .btn-action {
+            display: block;
+            width: fit-content;
+            margin: 10px auto 30px auto; /* Ajustamos el margen */
+            /* El resto de tu código de .btn-action se queda igual */
+        }
+
         /* Estilos específicos para las mecánicas del juego */
         .mecánicas-seccion {
             max-width: 900px;
@@ -299,10 +357,11 @@
     <p style="max-width: 800px; margin: 0 auto 10px auto; padding: 0 20px;">
         Controla a 🐽 en este frenético arcade de esquivar y recolectar. Tres modos de juego únicos que ponen a prueba tu habilidad, velocidad y gestión de recursos. ¡Prepárate para el caos que cae del cielo!
     </p>
-
-    <a href="#" class="btn-logo-play" aria-label="Jugar Ahora (Versión Demo)">
-        <img src="play-button-generic.png" alt="Jugar CAE CCC">
-    </a>
+    
+    <div class="botones-container" style="text-align: center;">
+        <a href="TU_ENLACE_DE_JUEGO_AQUI" target="_blank" class="btn-jugar">▶ Jugar Ahora</a>
+        <a href="https://devouringprojects.itch.io/dein-beast" target="_blank" class="btn-logo-play">Jugar Ahora (Versión Demo)</a>
+    </div>
 
     <div class="detalles-container">
         <div class="detalle-fila">
