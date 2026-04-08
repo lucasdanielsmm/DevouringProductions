@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="description" content="Portfolio de Game Design para UTOPIA: Un juego móvil de exploración, captura de criaturas y supervivencia de un robot arácnido.">
+    <meta name="author" content="Lucas Daniel Soriano">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="UTOPIA — Portfolio Game Design">
+    <meta property="og:description" content="Descubre los sistemas de ecosistema procedimental, recolección y metaprogresión de UTOPIA.">
+    <meta property="og:image" content="https://github.com/lucasdanielsmm/DevouringProductions/portadaUtopia.jpg"> 
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="UTOPIA — Portfolio Game Design">
+    <meta property="twitter:image" content="https://github.com/lucasdanielsmm/DevouringProductions/portadaUtopia.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTOPIA — Portfolio Game Design</title>
+    <link rel="icon" type="image/png" href="UTOPIALOGO.png">
+
+    <style>
+        /* ========================================================= */
+        /* == ESTILOS GLOBALES (Base Dark con Acentos Verdes) == */
+        /* ========================================================= */
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px 10px;
+            background-color: #050806; /* Fondo ligeramente verdoso oscuro */
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden; 
+            text-align: center; 
+        }
+        
+        a { text-decoration: none; color: inherit; }
+
+        .logo {
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        .logo:hover { opacity: 1; }
+        
+        .titulo-pagina {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 3.5em; 
+            color: #ffffff;
+            margin: 10px auto;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            text-shadow: 0 0 15px rgba(0, 217, 105, 0.6); /* Brillo Verde */
+        }
+
+        /* ========================================================= */
+        /* == ANIMACIONES Y HERO SECTION == */
+        /* ========================================================= */
+
+        .video-container {
+            width: 90%;
+            max-width: 900px; 
+            margin: 30px auto;
+            aspect-ratio: 16/9;
+            position: relative;
+            opacity: 0; 
+            transform: translateY(40px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out; 
+        }
+
+        .video-container.animar-video {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .video-container iframe, .video-container img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: 1px solid #113322;
+            border-radius: 4px;
+            /* Brillo VERDE SCANNER */
+            box-shadow: 0 0 25px rgba(0, 217, 105, 0.3);
+        }
+        
+        /* Animaciones de entrada al scroll */
+        .slide-up-on-scroll {
+            opacity: 0;
+            transform: translateY(40px); 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .slide-up-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========================================================= */
+        /* == ESTILOS ESPECÍFICOS (TEMA VERDE #00d969) == */
+        /* ========================================================= */
+        .subtitulo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6em;
+            color: #00d969; /* VERDE INTENSO */
+            margin: 40px auto 20px auto;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .intro-text {
+            max-width: 750px; 
+            margin: 0 auto 30px auto; 
+            padding: 0 20px;
+            font-size: 1.1em;
+            color: #ccc;
+        }
+
+        /* Tabla de detalles técnicos */
+        .detalles-container {
+            display: inline-block; 
+            text-align: left;
+            margin: 30px auto; 
+            padding: 25px;
+            background-color: #08120c; /* Fondo muy oscuro con tinte verde */
+            border-radius: 4px;
+            border: 1px solid #102b1a; /* Borde verde oscuro */
+            box-shadow: 0 0 15px rgba(0,0,0,0.8);
+        }
+        
+        .detalle-fila {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            min-width: 320px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #1a3324;
+            padding-bottom: 4px;
+        }
+        .detalle-fila:last-child { border-bottom: none; }
+        
+        .detalle-fila strong { color: #fff; font-family: 'Orbitron', sans-serif; font-size: 0.9em;}
+        .detalle-fila span { color: #00d969; font-family: monospace; font-size: 1em; } /* Texto técnico en verde */
+        
+        /* Botón de acción */
+        .btn-action {
+            display: block;
+            width: fit-content;
+            margin: 10px auto 30px auto;
+            padding: 12px 30px;
+            border: 1px solid #00d969;
+            color: #00d969;
+            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .btn-action:hover {
+            background: #00d969;
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 217, 105, 0.6);
+        }
+
+        /* ========================================================= */
+        /* == BOTÓN JUGAR RELUCIENTE == */
+        /* ========================================================= */
+        .btn-jugar {
+            display: block; 
+            width: fit-content;
+            margin: 20px auto 10px auto;
+            padding: 16px 45px;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #050505;
+            background: linear-gradient(45deg, #00a850, #00d969);
+            border: 2px solid #33ff90;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0, 217, 105, 0.6);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Efecto de destello que pasa por encima */
+        .btn-jugar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+
+        .btn-jugar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px rgba(0, 217, 105, 1);
+            background: linear-gradient(45deg, #00d969, #33ff90);
+        }
+        
+        /* ========================================================= */
+        /* == SECCIÓN TÉCNICA (Mecánicas) == */
+        /* ========================================================= */
+        .mecánicas-seccion {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: left;
+        }
+
+        .tech-card {
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: #0a140f; /* Fondo oscuro con tinte verde */
+            /* Borde izquierdo VERDE */
+            border-left: 4px solid #00d969;
+            border-radius: 0 4px 4px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Efecto de fondo sutil */
+        .tech-card::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            /* Degradado sutil a verde */
+            background: linear-gradient(90deg, transparent 95%, rgba(0, 217, 105, 0.05) 100%);
+            pointer-events: none;
+        }
+
+        .tech-card h4 {
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2em;
+            margin-top: 0;
+            border-bottom: 1px solid #1a3324;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tech-card h4 span {
+            font-size: 0.6em;
+            font-family: monospace;
+            background: #050a07;
+            padding: 3px 8px;
+            border: 1px solid #00d969;
+            color: #00d969;
+            border-radius: 4px;
+        }
+
+        .tech-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tech-card ul li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            color: #bbb;
+        }
+
+        /* Iconos de lista técnicos en verde */
+        .tech-card ul li::before {
+            content: '>'; 
+            color: #00d969; 
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Highlighting keywords en verde */
+        .highlight { color: #00d969; font-weight: 500; }
+
+        .divider {
+            border: 0;
+            height: 1px;
+            /* Línea divisoria verde */
+            background: linear-gradient(to right, transparent, #00d969, transparent);
+            opacity: 0.4;
+            margin: 50px auto;
+            max-width: 800px;
+        }
+
+        /* ========================================================= */
+        /* == GALERÍA == */
+        /* ========================================================= */
+        .galeria {
+            margin-top: 50px;
+            padding: 20px 10px;
+        }
+
+        .galeria h3 { 
+            color: #fff; 
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 30px; 
+            text-transform: uppercase;
+        }
+
+        .capturas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .capturas-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            border: 1px solid #1a3324;
+            transition: transform 0.3s, border-color 0.3s;
+            filter: grayscale(30%) contrast(1.1); 
+        }
+        
+        .capturas-grid img:hover {
+            transform: scale(1.02);
+            filter: grayscale(0%);
+            border-color: #00d969; /* Borde verde al hover */
+            box-shadow: 0 0 20px rgba(0, 217, 105, 0.2);
+        }
+
+        /* ========================================================= */
+        /* == FOOTER == */
+        /* ========================================================= */
+        footer {
+            background-color: #020503; 
+            color: #666; 
+            padding: 40px 10px;
+            margin-top: 60px;
+            font-size: 0.85em;
+            border-top: 1px solid #0a1a11; 
+        }
+
+        /* Enlaces del footer en verde */
+        footer a { color: #00d969; font-weight: bold; font-family: 'Orbitron', sans-serif; letter-spacing: 1px;}
+        footer a:hover { text-decoration: underline; text-shadow: 0 0 8px rgba(0,217,105,0.4); }
+        
+    </style>
+</head>
+<body>
+
+    <h1 class="titulo-pagina">UTOPIA</h1> 
+    
+    <div class="video-container">
+        <img src="portadaUtopia.jpg" alt="Portada: UTOPIA - Survival Móvil">
+    </div>
+
+    <h2 class="subtitulo">"Memoria borrada. Ecosistema hostil. Sobrevive."</h2>
+
+    <p class="intro-text">
+        Controlas a un <strong>robot arácnido abandonado</strong> que despierta sin datos en un mundo procedural desconocido. Explora biomas alienígenas, cumple tu <span class="highlight">cuota de extracción</span> y domina un ecosistema dinámico para desbloquear los niveles de datos perdidos.
+    </p>
+
+    <div class="botones-container" style="text-align: center;">
+        <a href="#" target="_blank" class="btn-jugar">▶ Jugar Ahora</a>
+        <a href="#" target="_blank" class="btn-action">Ver en Astrocade</a>
+    </div>
+
+    <div class="detalles-container slide-up-on-scroll">
+        <div class="detalle-fila">
+            <strong>Rol Principal</strong>
+            <span>Game Designer & Developer</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Motor / Tool</strong>
+            <span>Astrocade</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Género</strong>
+            <span>Survival / Creature Collector</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Plataforma</strong>
+            <span>Mobile</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Mundo</strong>
+            <span>Generación Procedimental</span>
+        </div>
+    </div>
+
+    <div class="video" style="opacity: 1; transform: none;">
+        <iframe 
+            width="315" 
+            height="560"
+            src="https://www.youtube.com/embed/TU_VIDEO_AQUI?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0" 
+            allow="autoplay; encrypted-media" 
+            allowfullscreen>
+        </iframe>
+    </div>
+
+    
+    <hr class="divider">
+    
+    <section class="mecánicas-seccion">
+        <h2 class="subtitulo" style="margin-top: 0; color: #fff;">Sistemas & Diseño de Juego</h2>
+
+        <div class="tech-card slide-up-on-scroll">
+            <h4>1. Ecosistema Dinámico y Captura <span>Cacería Basada en Físicas</span></h4>
+            <ul>
+                <li><strong>Mundo Procedimental:</strong> El terreno, la vegetación, las criaturas y los nidos se generan dinámicamente con una separación inteligente entre 2 biomas principales (Bosque y Río Púrpura).</li>
+                <li><strong>Mecánica de Captura:</strong> Caza a <span class="highlight">10 criaturas alienígenas únicas</span> calculando trayectorias mediante lanzamientos basados en físicas.</li>
+                <li><strong>Ciclo Día-Noche:</strong> El entorno se transforma en fases de 6 minutos (Día → Amanecer → Anochecer) en un bucle total de 18 minutos, afectando la exploración.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.1s;">
+            <h4>2. Recolección y Metaprogresión <span>Gestión de Cuotas</span></h4>
+            <ul>
+                <li><strong>Sistema de Cuotas:</strong> Captura criaturas para alcanzar métricas de extracción crecientes (<span class="highlight">50, 100, 150...</span>), visualizadas mediante barras de progreso en la UI.</li>
+                <li><strong>Minería Táctica:</strong> Transición a modo minería para extraer cristales de los árboles y minerales de los depósitos con un sistema rápido de <em>3-clicks</em>.</li>
+                <li><strong>Data Levels:</strong> Un sistema de 20+ niveles de progresión que se desbloquean al reunir huevos, criaturas, minerales, cristales, reliquias y seguidores.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.2s;">
+            <h4>3. Crianza y Escaneo de Artefactos <span>Followers & Lore</span></h4>
+            <ul>
+                <li><strong>Incubación de Huevos:</strong> Recolecta huevos de los nidos para eclosionarlos manualmente, o utiliza la función de <span class="highlight">auto-hatch</span> optimizada para la retención en móviles. Críalos para que se conviertan en seguidores del robot.</li>
+                <li><strong>Sistema de Escáner:</strong> Un módulo de rastreo de 3 segundos permite al robot analizar el entorno para descubrir <span class="highlight">9 Reliquias antiguas</span> ocultas en el mundo.</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="galeria">
+        <h3>Archivos de Datos (Capturas)</h3>
+        <div class="capturas-grid">
+            <img src="captura-utopia-1.jpg" alt="Generación Procedimental del Bosque" class="slide-up-on-scroll">
+            <img src="captura-utopia-2.jpg" alt="Mecánica de Captura por Físicas" class="slide-up-on-scroll">
+            <img src="captura-utopia-3.jpg" alt="Sistema de Incubación y Seguidores" class="slide-up-on-scroll">
+            <img src="captura-utopia-4.jpg" alt="Minería de Cristales y Minerales" class="slide-up-on-scroll">
+            <img src="captura-utopia-5.jpg" alt="Uso del Escáner de 3 Segundos" class="slide-up-on-scroll">
+            <img src="captura-utopia-6.jpg" alt="UI del Sistema de Cuotas y Data Levels" class="slide-up-on-scroll">
+        </div>
+    </section>
+
+    <footer>
+        <p>Desarrollado por <strong>Lucas Daniel Soriano</strong></p>
+        <p>© 2026 - Portfolio de Desarrollo de Videojuegos y Game Design</p>
+        <p>
+            <a href="https://www.linkedin.com/in/lucasdanielsoriano/">LinkedIn</a> | <a href="https://lucasdanielsmm.github.io/DevouringProductions/">GitHub</a> | <a href="mailto:devouringgproductions@gmail.com">Email</a>
+        </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.querySelector('.video-container');
+            if (video) {
+                video.offsetHeight; 
+                video.classList.add('animar-video');
+            }
+
+            const observerOptions = {
+                root: null, 
+                rootMargin: '0px',
+                threshold: 0.1 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const slideElements = document.querySelectorAll('.slide-up-on-scroll');
+            slideElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+    
+</body>
+</html>
