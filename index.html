@@ -634,6 +634,57 @@
             width: 100%;
         }
 
+
+
+        /* --- CARRUSEL PARA ITCH.IO --- */
+        .itch-seccion {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 10px;
+            text-align: center;
+        }
+
+        .itch-carrusel {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 20px 0;
+            scroll-snap-type: x mandatory;
+            /* Estilos para la barra de scroll */
+            scrollbar-width: thin;
+            scrollbar-color: #1e90ff #111;
+        }
+
+        /* Scrollbar para navegadores basados en WebKit (Chrome, Edge, Safari) */
+        .itch-carrusel::-webkit-scrollbar {
+            height: 10px;
+        }
+        .itch-carrusel::-webkit-scrollbar-track {
+            background: #111;
+            border-radius: 5px;
+        }
+        .itch-carrusel::-webkit-scrollbar-thumb {
+            background-color: #1e90ff;
+            border-radius: 5px;
+        }
+
+        .itch-item {
+            flex: 0 0 300px; /* Ancho fijo de la tarjeta de Itch.io */
+            scroll-snap-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .itch-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .itch-item iframe {
+            width: 100%;
+            height: 167px; /* Altura estándar del widget de Itch.io */
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }    
     </style>
 </head>
 
@@ -708,6 +759,30 @@
         </div>
 
         <button class="carrusel-btn derecha">⟩</button>
+    </section>
+
+    <hr class="divider">
+
+    <section class="itch-seccion">
+        <h2>Mi Perfil en Itch.io</h2>
+        <p>¡Echá un vistazo a mis juegos publicados directamente desde la plataforma!</p>
+    
+        <div class="itch-carrusel">
+            <div class="itch-item">
+                <iframe src="<iframe frameborder="0" src="https://itch.io/embed/4450642?bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535" width="552" height="167"><a href="https://devouringprojects.itch.io/humanity-will-remember">Humanity will Remember by DevouringProjects</a></iframe>" width="100%" height="167"></iframe>
+            </div>
+        
+            <div class="itch-item">
+                <iframe src="https://itch.io/embed/TU_ID_DE_JUEGO_2?bg_color=111111&fg_color=ffffff&link_color=1e90ff" width="100%" height="167"></iframe>
+            </div>
+
+            <div class="itch-item">
+                <iframe src="https://itch.io/embed/TU_ID_DE_JUEGO_3?bg_color=111111&fg_color=ffffff&link_color=1e90ff" width="100%" height="167"></iframe>
+            </div>
+        
+            </div>
+    
+        <a href="https://devouringprojects.itch.io" target="_blank" class="btn">Ver perfil completo en Itch.io</a>
     </section>
 
     <section class="proyecto-seccion proyecto-impar">
