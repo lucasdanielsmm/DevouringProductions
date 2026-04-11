@@ -87,6 +87,40 @@
             display: block;
         }
 
+        /* --- CONTENEDOR DE 3 PORTADAS --- */
+        .contenedor-portadas {
+            display: flex;
+            justify-content: center;
+            align-items: stretch; /* Obliga a los laterales a tener la misma altura que la central */
+            width: 100%;
+            margin: 40px auto;
+            overflow: hidden; 
+        }
+
+        /* Estilos para las imágenes laterales */
+        .portada-lateral {
+            display: none; /* Ocultas por defecto (para móvil) */
+            flex: 1; /* Toman todo el espacio disponible a los lados */
+            object-fit: cover; /* Evita que las imágenes se deformen, solo las recorta */
+        }
+
+        /* Ajuste a tu Portada central cuando está dentro del contenedor */
+        .contenedor-portadas .Portada {
+            margin: 0; /* Quitamos su margen porque ya lo maneja el contenedor padre */
+            flex: 0 0 100%; /* En móvil, ocupa todo el ancho */
+            max-width: 900px; /* Respeta tu ancho máximo original */
+        }
+
+        /* Regla para PC: Mostramos los laterales */
+        @media (min-width: 900px) {
+            .portada-lateral {
+                display: block; /* Se hacen visibles en monitores */
+            }
+            .contenedor-portadas .Portada {
+                flex: 0 0 900px; /* Fijamos el tamaño central en 900px para PC */
+            }
+        }
+        
         /* ESTILOS DE CAJAS DE JUEGOS */
         .cajas-juegos {
             display: flex;
@@ -714,8 +748,14 @@
     <h1>Devouring Productions</h1>
     <p><strong>Pagina Principal</strong></p>
 
-    <div class="Portada">
-    <img src="Portadainfo.jpg" alt="Portada: Devouring Productions - Descripcion">
+    <div class="contenedor-portadas">
+        <img src="ruta-imagen-izquierda.jpg" alt="Decoración Izquierda" class="portada-lateral">
+    
+        <div class="Portada">
+            <img src="Portadainfo.jpg" alt="Portada: Devouring Productions - Descripcion">
+        </div>
+    
+        <img src="ruta-imagen-derecha.jpg" alt="Decoración Derecha" class="portada-lateral">
     </div>
 
     <section class="carrusel">
