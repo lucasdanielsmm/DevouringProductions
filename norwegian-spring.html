@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="description" content="Portfolio de UI/UX para Comfy Jam Spring - Proyecto de Ciclismo Cozy.">
+    <meta name="author" content="Lucas Daniel Soriano">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Cozy Bike Loop — Portfolio UI/UX">
+    <meta property="og:description" content="Diseño de interfaz pacífica y amena para una experiencia de ciclismo infinito en Noruega.">
+    <meta property="og:image" content="portadaCozyJam.jpg"> 
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Cozy Bike Loop — Portfolio UI/UX">
+    <meta property="twitter:image" content="portadaCozyJam.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cozy Bike Loop — Portfolio UI/UX</title>
+    <link rel="icon" type="image/png" href="ICON_COZY.png">
+
+    <style>
+        /* ========================================================= */
+        /* == ESTILOS GLOBALES (Moderno: Verde Jade Claro & Rosa) == */
+        /* ========================================================= */
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px 10px;
+            background-color: #060807; /* Tono oscuro con un muy sutil matiz jade */
+            color: #d4d4d4;
+            line-height: 1.6;
+            overflow-x: hidden; 
+            text-align: center; 
+        }
+        
+        a { text-decoration: none; color: inherit; }
+
+        .titulo-pagina {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 3.5em; 
+            color: #ffffff;
+            margin: 10px auto;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            text-shadow: 0 0 15px rgba(152, 216, 186, 0.4); /* Brillo Jade */
+        }
+
+        /* ========================================================= */
+        /* == ANIMACIONES Y HERO SECTION == */
+        /* ========================================================= */
+
+        .video-container {
+            width: 90%;
+            max-width: 900px; 
+            margin: 30px auto;
+            aspect-ratio: 16/9;
+            position: relative;
+            opacity: 0; 
+            transform: translateY(40px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out; 
+        }
+
+        .video-container.animar-video {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .video-container img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: 1px solid #1a2620;
+            border-radius: 4px;
+            box-shadow: 0 0 25px rgba(247, 168, 184, 0.15); /* Sombra Rosa sutil */
+        }
+        
+        .slide-up-on-scroll {
+            opacity: 0;
+            transform: translateY(40px); 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .slide-up-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========================================================= */
+        /* == ESTILOS ESPECÍFICOS == */
+        /* ========================================================= */
+        .subtitulo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6em;
+            color: #98D8BA; /* Verde Jade Claro */
+            margin: 40px auto 20px auto;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .intro-text {
+            max-width: 800px; 
+            margin: 0 auto 30px auto; 
+            padding: 0 20px;
+            font-size: 1.1em;
+            color: #b0b0b0;
+        }
+
+        .detalles-container {
+            display: inline-block; 
+            text-align: left;
+            margin: 30px auto; 
+            padding: 25px;
+            background-color: #0b0f0d; 
+            border-radius: 4px;
+            border: 1px solid #1c2b23; 
+        }
+        
+        .detalle-fila {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            min-width: 350px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #1a2620;
+            padding-bottom: 4px;
+        }
+        .detalle-fila:last-child { border-bottom: none; }
+        .detalle-fila strong { color: #F7A8B8; font-family: 'Orbitron', sans-serif; font-size: 0.85em;} /* Acento Rosa */
+        .detalle-fila span { color: #ffffff; font-family: monospace; font-size: 1em; opacity: 0.8;} 
+        
+        /* BOTÓN ITCH.IO */
+        .btn-jugar {
+            display: block; 
+            width: fit-content;
+            margin: 20px auto 30px auto;
+            padding: 16px 45px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #050505;
+            background: linear-gradient(45deg, #98D8BA, #F7A8B8); /* Gradiente Jade a Rosa */
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0 0 15px rgba(152, 216, 186, 0.4);
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-jugar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+
+        .btn-jugar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(247, 168, 184, 0.6); /* Sombra cambia a rosa al hover */
+        }
+
+        /* ========================================================= */
+        /* == SECCIÓN DE DISEÑO (WIREFRAMES) == */
+        /* ========================================================= */
+        .wireframes-section {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .wireframes-title {
+            text-align: left;
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            border-bottom: 1px solid #98D8BA; /* Línea Jade */
+            padding-bottom: 10px;
+        }
+
+        .wireframes-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .wireframes-grid img {
+            width: 48%;
+            height: auto;
+            border: 1px solid #1c2b23;
+            border-radius: 4px;
+            filter: grayscale(40%);
+            transition: filter 0.4s ease, border-color 0.3s ease;
+        }
+
+        .wireframes-grid img:hover {
+            filter: grayscale(0%);
+            border-color: #F7A8B8; /* Borde rosa al hover */
+        }
+        
+        /* ========================================================= */
+        /* == SECCIÓN TÉCNICA (Mecánicas) == */
+        /* ========================================================= */
+        .mecánicas-seccion {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: left;
+        }
+
+        .tech-card {
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: #090d0b; 
+            border-left: 4px solid #F7A8B8; /* Borde izquierdo Rosa */
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .tech-card h4 {
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2em;
+            margin-top: 0;
+            border-bottom: 1px solid #1c2b23;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tech-card h4 span {
+            font-size: 0.6em;
+            font-family: monospace;
+            padding: 3px 8px;
+            border: 1px solid #98D8BA; /* Borde Jade */
+            color: #98D8BA;
+            background-color: rgba(152, 216, 186, 0.05);
+            border-radius: 4px;
+        }
+
+        .tech-card ul li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            color: #c0c0c0;
+            list-style: none;
+        }
+
+        .tech-card ul li::before {
+            content: '•'; 
+            color: #F7A8B8; /* Viñetas Rosa */
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.2em;
+            line-height: 1;
+        }
+
+        .highlight { color: #98D8BA; font-weight: 700; } /* Textos destacados en Jade */
+
+        .divider {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #98D8BA, #F7A8B8, transparent); /* Transición de colores */
+            margin: 50px auto;
+            max-width: 800px;
+            opacity: 0.6;
+        }
+
+        /* ========================================================= */
+        /* == GALERÍA == */
+        /* ========================================================= */
+        .capturas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .capturas-grid img {
+            width: 100%;
+            border: 1px solid #1c2b23;
+            border-radius: 4px;
+            filter: grayscale(30%);
+            transition: all 0.3s ease;
+        }
+        
+        .capturas-grid img:hover {
+            filter: grayscale(0%);
+            transform: scale(1.03);
+            border-color: #98D8BA; /* Borde jade al interactuar */
+            box-shadow: 0 0 15px rgba(152, 216, 186, 0.2);
+        }
+
+        /* ========================================================= */
+        /* == FOOTER == */
+        /* ========================================================= */
+        footer {
+            background-color: #030504; 
+            color: #666; 
+            padding: 40px 10px;
+            margin-top: 60px;
+            font-size: 0.85em;
+            border-top: 1px solid #1a2620; 
+        }
+
+        footer a { color: #98D8BA; font-family: 'Orbitron', sans-serif; transition: color 0.3s; }
+        footer a:hover { color: #F7A8B8; text-shadow: 0 0 8px rgba(247, 168, 184, 0.4); }
+        
+    </style>
+</head>
+<body>
+
+    <h1 class="titulo-pagina">BIKE LOOP: NORWAY</h1> 
+    
+    <div class="video-container">
+        <img src="portadaSeamless.jpg" alt="Portada: Paseo en Bicicleta por Noruega">
+    </div>
+
+    <h2 class="subtitulo">"Investigación, UX y Estética Cozy de Primavera"</h2>
+
+    <p class="intro-text">
+        Incursión colaborativa para la <strong>Comfy Jam Spring</strong> (Tema: <i>Seamless Loop</i>). Un equipo internacional unido para crear una experiencia pacífica: un paseo infinito en bicicleta por un pueblo noruego, utilizando fotogrametría y modelos 3D reales de Noruega.
+    </p>
+
+    <div class="botones-container">
+        <a href="TU_LINK_DE_ITCHIO" target="_blank" class="btn-jugar">Ver en Itch.io</a>
+    </div>
+
+    <div class="detalles-container slide-up-on-scroll">
+        <div class="detalle-fila">
+            <strong>Rol</strong>
+            <span>UI/UX Designer</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Equipo</strong>
+            <span>Iyasu, DaedalusNOR, st0rmcl0ud</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Herramientas</strong>
+            <span>Photoshop 2025 / Canva Premium</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Concepto</strong>
+            <span>Cozy / Seamless Loop</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Motor</strong>
+            <span>Unity (Soporte Técnico UI)</span>
+        </div>
+    </div>
+
+    <div class="wireframes-section slide-up-on-scroll">
+        <h3 class="wireframes-title">Investigación & Assets de Interfaz:</h3>
+        <div class="wireframes-grid">
+            <img src="ui-layout-boceto.jpg" alt="Investigación de interfaces de ciclismo">
+            <img src="ui-final-color.jpg" alt="Implementación de la paleta de primavera">
+        </div>
+    </div>
+
+    <hr class="divider">
+    
+    <section class="mecánicas-seccion">
+        <h2 class="subtitulo" style="margin-top: 0; color: #fff;">Diseño de Experiencia (UX)</h2>
+
+        <div class="tech-card slide-up-on-scroll">
+            <h4>1. Investigación y Estética <span>Análisis de Género</span></h4>
+            <ul>
+                <li><strong>Investigación de Referentes:</strong> Estudio detallado de interfaces en juegos de ciclismo y estética <i>cozy</i> para determinar la disposición ideal de elementos.</li>
+                <li><strong>Paleta de Primavera:</strong> Edición de vectores y tarjetas de menú para garantizar una coherencia visual elegante con los colores suaves de la estación.</li>
+                <li><strong>Diseño de Assets:</strong> Creación de flechas direccionales con estilo de bandera de carreras y botones de velocidad luminosos para guiar al jugador de forma intuitiva.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.1s;">
+            <h4>2. Gameplay Pacífico y Centrado <span>UX Inmersiva</span></h4>
+            <ul>
+                <li><strong>Focalización Visual:</strong> Optimización del centrado de elementos en pantalla para que nada pase desapercibido sin romper la paz del jugador durante el bucle infinito.</li>
+                <li><strong>Sistema de Notificaciones:</strong> Implementación de último momento de avisos de <i>checkpoints</i> integrados de forma no intrusiva.</li>
+                <li><strong>Menú de Pausa:</strong> Mi pieza favorita del proyecto, logrando un equilibrio perfecto entre funcionalidad y elegancia visual.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.2s;">
+            <h4>3. Implementación y Soporte Técnico <span>Unity Integration</span></h4>
+            <ul>
+                <li><strong>Colaboración Técnica:</strong> Trabajo directo con Iyasu en Unity para solventar errores críticos de transparencia y calibración de color en los elementos de la interfaz.</li>
+                <li><strong>Tutorial y Logo:</strong> Creación de la identidad visual (Logo/Título) y un tutorial de controles claro y <span class="highlight">minimalista</span>.</li>
+                <li><strong>Reflexión Final:</strong> Aunque el resultado fue altamente satisfactorio, este proyecto reafirmó mi deseo de liderar el <strong>Game Design integral</strong>, mi verdadera pasión más allá del diseño de interfaces.</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="galeria">
+        <h3 style="color: #fff; font-family: 'Orbitron', sans-serif; text-transform: uppercase; margin-bottom: 30px;">Archivos de Diseño (Capturas)</h3>
+        <div class="capturas-grid">
+            <img src="cap-cozy-1.jpg" alt="Interfaz de Menú Principal" class="slide-up-on-scroll">
+            <img src="cap-cozy-2.jpg" alt="Gameplay: Flechas y Botones" class="slide-up-on-scroll">
+            <img src="cap-cozy-3.jpg" alt="El Menú de Pausa (Diseño Favorito)" class="slide-up-on-scroll">
+            <img src="cap-cozy-4.jpg" alt="Entorno Noruego en 3D" class="slide-up-on-scroll">
+            <img src="cap-cozy-5.jpg" alt="Tutorial de Controles" class="slide-up-on-scroll">
+            <img src="cap-cozy-6.jpg" alt="Pueblo Noruego y Paisaje" class="slide-up-on-scroll">
+        </div>
+    </section>
+
+    <footer>
+        <p>UI/UX por <strong>Lucas Daniel Soriano</strong></p>
+        <p>© 2026 - Portfolio de Game Design & Desarrollo</p>
+        <p>
+            <a href="https://www.linkedin.com/in/lucasdanielsoriano/">LinkedIn</a> | <a href="https://lucasdanielsmm.github.io/DevouringProductions/">GitHub</a>
+        </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.querySelector('.video-container');
+            if (video) {
+                video.offsetHeight; 
+                video.classList.add('animar-video');
+            }
+
+            const observerOptions = {
+                root: null, 
+                rootMargin: '0px',
+                threshold: 0.1 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const slideElements = document.querySelectorAll('.slide-up-on-scroll');
+            slideElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+    
+</body>
+</html>
