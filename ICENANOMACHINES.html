@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="description" content="Portfolio de Desarrollo: Proyecto Incremental Frutiger Aero.">
+    <meta name="author" content="Lucas Daniel Soriano">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Aero Ice System — Incremental Experiment">
+    <meta property="og:description" content="Un experimento de videojuego incremental con estética Frutiger Aero y automatización por IA.">
+    <meta property="og:image" content="portadaIncremental.jpg"> 
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ice Recycler — Frutiger Aero Incremental</title>
+
+    <style>
+        /* ========================================================= */
+        /* == ESTILOS GLOBALES (Frutiger Aero: Cyan & Naranja) == */
+        /* ========================================================= */
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px 10px;
+            background-color: #020b0d; /* Fondo muy oscuro con matiz cyan */
+            color: #e0f7fa;
+            line-height: 1.6;
+            overflow-x: hidden; 
+            text-align: center; 
+        }
+        
+        a { text-decoration: none; color: inherit; }
+
+        .titulo-pagina {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 3.5em; 
+            color: #ffffff;
+            margin: 10px auto;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5); /* Resplandor Cyan */
+        }
+
+        /* ========================================================= */
+        /* == ANIMACIONES Y HERO SECTION == */
+        /* ========================================================= */
+
+        .hero-container {
+            width: 90%;
+            max-width: 900px; 
+            margin: 30px auto;
+            aspect-ratio: 16/9;
+            position: relative;
+            opacity: 0; 
+            transform: translateY(40px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out; 
+            background: linear-gradient(135deg, rgba(0,255,255,0.1), rgba(255,165,0,0.1));
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .hero-container.animar-hero {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: saturate(1.2);
+        }
+        
+        .slide-up-on-scroll {
+            opacity: 0;
+            transform: translateY(40px); 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .slide-up-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========================================================= */
+        /* == ESTILOS ESPECÍFICOS == */
+        /* ========================================================= */
+        .subtitulo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6em;
+            color: #00fbff; /* Cyan Vivo */
+            margin: 40px auto 20px auto;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .intro-text {
+            max-width: 800px; 
+            margin: 0 auto 30px auto; 
+            padding: 0 20px;
+            font-size: 1.1em;
+            color: #b2ebf2;
+        }
+
+        .detalles-container {
+            display: inline-block; 
+            text-align: left;
+            margin: 30px auto; 
+            padding: 25px;
+            background: rgba(0, 40, 50, 0.5); 
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 251, 255, 0.3); 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        .detalle-fila {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            min-width: 350px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(0, 251, 255, 0.1);
+            padding-bottom: 4px;
+        }
+        .detalle-fila:last-child { border-bottom: none; }
+        .detalle-fila strong { color: #ff9d00; font-family: 'Orbitron', sans-serif; font-size: 0.85em;} /* Acento Naranja */
+        .detalle-fila span { color: #ffffff; font-family: monospace; font-size: 1em; opacity: 0.9;} 
+        
+        /* BOTÓN ACCIÓN */
+        .btn-principal {
+            display: block; 
+            width: fit-content;
+            margin: 20px auto 30px auto;
+            padding: 16px 45px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #000;
+            background: linear-gradient(45deg, #00fbff, #ff9d00); 
+            border: none;
+            border-radius: 50px; /* Estilo más orgánico Frutiger */
+            box-shadow: 0 0 20px rgba(0, 251, 255, 0.4);
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+        }
+
+        .btn-principal:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 157, 0, 0.5);
+        }
+
+        /* ========================================================= */
+        /* == SECCIÓN TÉCNICA == */
+        /* ========================================================= */
+        .tech-section {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: left;
+        }
+
+        .tech-card {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid #ff9d00; /* Naranja */
+            border-right: 1px solid rgba(0, 251, 255, 0.2);
+            border-top: 1px solid rgba(0, 251, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 251, 255, 0.2);
+            border-radius: 0 15px 15px 0;
+        }
+
+        .tech-card h4 {
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2em;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tech-card h4 span {
+            font-size: 0.6em;
+            font-family: monospace;
+            padding: 3px 8px;
+            border: 1px solid #00fbff;
+            color: #00fbff;
+            border-radius: 4px;
+        }
+
+        .tech-card ul li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            color: #b2ebf2;
+            list-style: none;
+        }
+
+        .tech-card ul li::before {
+            content: '→'; 
+            color: #ff9d00; 
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .highlight { color: #ff9d00; font-weight: 700; }
+        .highlight-cyan { color: #00fbff; font-weight: 700; }
+
+        .divider {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #00fbff, #ff9d00, transparent);
+            margin: 50px auto;
+            max-width: 800px;
+        }
+
+        /* ========================================================= */
+        /* == FOOTER == */
+        /* ========================================================= */
+        footer {
+            background-color: #010506; 
+            color: #558b91; 
+            padding: 40px 10px;
+            margin-top: 60px;
+            font-size: 0.8em;
+            border-top: 1px solid #00282d; 
+        }
+
+        footer a { color: #00fbff; font-family: 'Orbitron', sans-serif; }
+        footer a:hover { color: #ff9d00; }
+        
+    </style>
+</head>
+<body>
+
+    <h1 class="titulo-pagina">AERO ICE RECYCLER</h1> 
+    
+    <div class="hero-container" id="hero">
+        <img src="tu-imagen-incremental.jpg" alt="Visual del Proyecto Incremental Frutiger Aero">
+    </div>
+
+    <h2 class="subtitulo">"Experimento Incremental & Coding AI"</h2>
+
+    <p class="intro-text">
+        Un prototipo nacido de la fascinación por el género <strong>Incremental</strong> y la estética <strong>Frutiger Aero</strong>. Lo que comenzó como una simple máquina de hielo terminó evolucionando en un complejo sistema de robots, núcleos bombeantes y tecnología médica retro-futurista.
+    </p>
+
+    <div class="botones-container">
+        <button class="btn-principal">Probar Prototipo</button>
+    </div>
+
+    <div class="detalles-container slide-up-on-scroll">
+        <div class="detalle-fila">
+            <strong>Género</strong>
+            <span>Incremental / Clicker</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Estética</strong>
+            <span>Frutiger Aero / Glossy Tech</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Coding IA</strong>
+            <span>Codex / OpenCode (Computer Control)</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>3D Assets</strong>
+            <span>Meshy 6 / Hunyuan (Generative AI)</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Estatus</strong>
+            <span>Prototipo Funcional</span>
+        </div>
+    </div>
+
+    <hr class="divider">
+    
+    <section class="tech-section">
+        <h2 class="subtitulo" style="margin-top: 0;">Mecánicas y Loop</h2>
+
+        <div class="tech-card slide-up-on-scroll">
+            <h4>El Ciclo de Producción <span>Loop Jugable</span></h4>
+            <ul>
+                <li><strong>Recolección & Transformación:</strong> Recoger hielo → Derretir → Extraer agua caliente del reciclador.</li>
+                <li><strong>Gestión de Fluidos:</strong> Llenado de tanques intravenosos y alimentación del núcleo central bombeante.</li>
+                <li><strong>Economía Incremental:</strong> Venta de recursos para financiar la expansión de la <span class="highlight">Empresa de Robots</span> y mejoras de infraestructura.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.1s;">
+            <h4>Experimentación con IA <span>Desarrollo</span></h4>
+            <ul>
+                <li><strong>Coding Assistance:</strong> Implementación exitosa mediante <span class="highlight-cyan">Codex</span> y <span class="highlight-cyan">OpenCode</span>, otorgando control directo para la estructuración de lógica compleja.</li>
+                <li><strong>Visuales Generativos:</strong> Modelos 3D creados a partir de prompts específicos de Frutiger Aero, resultando en piezas únicas como el "Platillo Dentista" de luz.</li>
+                <li><strong>Sistemas de Partículas:</strong> Uso de assets gratuitos optimizados para mantener esa sensación de limpieza y fluidez propia del género.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.2s;">
+            <h4>Roadmap & Visión <span>Futuro</span></h4>
+            <ul>
+                <li><strong>Función Soplete:</strong> Evolución de la herramienta de derretido para la búsqueda de <span class="highlight">Fósiles y Curiosidades</span> ocultas en los bloques de hielo.</li>
+                <li><strong>Nuevas Estructuras:</strong> Implementación de más módulos de suero y corazones mecánicos para escalar la producción.</li>
+                <li><strong>Refinamiento de IA:</strong> Migración de modelos básicos a soluciones más robustas para pulir el comportamiento de los robots.</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <p>Desarrollado por <strong>Lucas Daniel Soriano</strong></p>
+        <p>© 2026 - Devouring Productions | Incremental Lab</p>
+        <p>
+            <a href="#">GitHub</a> | <a href="#">Itch.io</a>
+        </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hero = document.getElementById('hero');
+            if (hero) {
+                hero.offsetHeight; 
+                hero.classList.add('animar-hero');
+            }
+
+            const observerOptions = {
+                root: null, 
+                threshold: 0.1 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const slideElements = document.querySelectorAll('.slide-up-on-scroll');
+            slideElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+    
+</body>
+</html>
