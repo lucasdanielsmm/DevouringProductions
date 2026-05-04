@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="description" content="Portfolio de Game Design y UI/UX para Proyecto Dungeon Crawler 3D.">
+    <meta name="author" content="Lucas Daniel Soriano">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Dungeon Crawler 3D — Portfolio Game Design">
+    <meta property="og:description" content="Explora el diseño de UI moderno, cámara libre y combate real-time en movimiento GRID.">
+    <meta property="og:image" content="portadaDungeon.jpg"> 
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Dungeon Crawler 3D — Portfolio Game Design">
+    <meta property="twitter:image" content="portadaDungeon.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dungeon Crawler 3D — Portfolio</title>
+    <link rel="icon" type="image/png" href="LOGODUNGEON.png">
+
+    <style>
+        /* ========================================================= */
+        /* == ESTILOS GLOBALES (Base Minimalista Blanco y Negro) == */
+        /* ========================================================= */
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px 10px;
+            background-color: #030303; /* Negro puro para mayor contraste y limpieza */
+            color: #d4d4d4;
+            line-height: 1.6;
+            overflow-x: hidden; 
+            text-align: center; 
+        }
+        
+        a { text-decoration: none; color: inherit; }
+
+        .logo {
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        .logo:hover { opacity: 1; }
+        
+        .titulo-pagina {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 3.5em; 
+            color: #ffffff;
+            margin: 10px auto;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Brillo blanco sutil */
+        }
+
+        /* ========================================================= */
+        /* == ANIMACIONES Y HERO SECTION == */
+        /* ========================================================= */
+
+        .video-container {
+            width: 90%;
+            max-width: 900px; 
+            margin: 30px auto;
+            aspect-ratio: 16/9;
+            position: relative;
+            opacity: 0; 
+            transform: translateY(40px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out; 
+        }
+
+        .video-container.animar-video {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .video-container img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: 1px solid #333333;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); /* Sombra limpia */
+        }
+        
+        /* Animaciones de entrada al scroll */
+        .slide-up-on-scroll {
+            opacity: 0;
+            transform: translateY(40px); 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .slide-up-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========================================================= */
+        /* == ESTILOS ESPECÍFICOS (TEMA B&W MINIMALISTA) == */
+        /* ========================================================= */
+        .subtitulo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6em;
+            color: #ffffff; 
+            margin: 40px auto 20px auto;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .intro-text {
+            max-width: 800px; 
+            margin: 0 auto 30px auto; 
+            padding: 0 20px;
+            font-size: 1.1em;
+            color: #b0b0b0;
+        }
+
+        /* Tabla de detalles técnicos */
+        .detalles-container {
+            display: inline-block; 
+            text-align: left;
+            margin: 30px auto; 
+            padding: 25px;
+            background-color: #080808; 
+            border-radius: 4px;
+            border: 1px solid #222222; 
+            box-shadow: 0 0 15px rgba(0,0,0,0.9);
+        }
+        
+        .detalle-fila {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            min-width: 320px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 4px;
+        }
+        .detalle-fila:last-child { border-bottom: none; }
+        
+        .detalle-fila strong { color: #fff; font-family: 'Orbitron', sans-serif; font-size: 0.9em;}
+        .detalle-fila span { color: #ffffff; font-family: monospace; font-size: 1em; opacity: 0.8;} 
+        
+        /* ========================================================= */
+        /* == BOTÓN JUGAR B&W RELUCIENTE == */
+        /* ========================================================= */
+        .btn-jugar {
+            display: block; 
+            width: fit-content;
+            margin: 20px auto 30px auto;
+            padding: 16px 45px;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #000000;
+            background: linear-gradient(45deg, #e0e0e0, #ffffff);
+            border: 2px solid #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .btn-jugar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+
+        .btn-jugar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px rgba(255, 255, 255, 0.6);
+            background: #ffffff;
+        }
+
+        /* ========================================================= */
+        /* == CONTENEDOR DE WIREFRAMES == */
+        /* ========================================================= */
+        .wireframes-section {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .wireframes-title {
+            text-align: left;
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .wireframes-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .wireframes-grid img {
+            width: 48%;
+            height: auto;
+            border: 1px solid #333;
+            border-radius: 4px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .wireframes-grid img:hover {
+            transform: translateY(-5px);
+            border-color: #ffffff;
+        }
+        
+        /* ========================================================= */
+        /* == SECCIÓN TÉCNICA (Mecánicas) == */
+        /* ========================================================= */
+        .mecánicas-seccion {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: left;
+        }
+
+        .tech-card {
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: #0a0a0a; 
+            border-left: 4px solid #ffffff; /* Borde izquierdo BLANCO */
+            border-radius: 0 4px 4px 0;
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid #1a1a1a;
+            border-right: 1px solid #1a1a1a;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .tech-card::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: linear-gradient(90deg, transparent 95%, rgba(255, 255, 255, 0.03) 100%);
+            pointer-events: none;
+        }
+
+        .tech-card h4 {
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2em;
+            margin-top: 0;
+            border-bottom: 1px solid #222;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tech-card h4 span {
+            font-size: 0.6em;
+            font-family: monospace;
+            background: #050505;
+            padding: 3px 8px;
+            border: 1px solid #555;
+            color: #ccc;
+            border-radius: 4px;
+        }
+
+        .tech-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tech-card ul li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            color: #b0b0b0;
+        }
+
+        .tech-card ul li::before {
+            content: '>'; 
+            color: #ffffff; 
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .highlight { color: #ffffff; font-weight: 700; }
+
+        .divider {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #555, transparent);
+            opacity: 0.4;
+            margin: 50px auto;
+            max-width: 800px;
+        }
+
+        /* ========================================================= */
+        /* == GALERÍA == */
+        /* ========================================================= */
+        .galeria {
+            margin-top: 50px;
+            padding: 20px 10px;
+        }
+
+        .galeria h3 { 
+            color: #fff; 
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 30px; 
+            text-transform: uppercase;
+        }
+
+        .capturas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .capturas-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            border: 1px solid #222;
+            transition: transform 0.3s, border-color 0.3s;
+            filter: grayscale(80%) contrast(1.1); 
+        }
+        
+        .capturas-grid img:hover {
+            transform: scale(1.02);
+            filter: grayscale(0%);
+            border-color: #ffffff; 
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+        }
+
+        /* ========================================================= */
+        /* == FOOTER == */
+        /* ========================================================= */
+        footer {
+            background-color: #020202; 
+            color: #666; 
+            padding: 40px 10px;
+            margin-top: 60px;
+            font-size: 0.85em;
+            border-top: 1px solid #111; 
+        }
+
+        footer a { color: #d4d4d4; font-weight: bold; font-family: 'Orbitron', sans-serif; letter-spacing: 1px;}
+        footer a:hover { text-decoration: underline; color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.4); }
+        
+    </style>
+</head>
+<body>
+
+    <h1 class="titulo-pagina">PROJECT CRAWLER</h1> 
+    
+    <div class="video-container">
+        <img src="portadaDungeon.jpg" alt="Portada: Proyecto Dungeon Crawler 3D">
+    </div>
+
+    <h2 class="subtitulo">"Un clásico renovado. Estilo rebelde. Lore propio."</h2>
+
+    <p class="intro-text">
+        El inicio de un ambicioso proyecto 3D basado en mis dungeon crawlers móviles favoritos. Desarrollado (en simultáneo con UTOPIA) para la <strong>Dungeon Crawler Jam 2026</strong>, donde se mantuvo en el <span class="highlight">Top 10 de popularidad</span> gracias a su llamativo estilo visual, a pesar de sus bugs de pre-lanzamiento.
+    </p>
+
+    <div class="botones-container" style="text-align: center;">
+        <a href="TU_ENLACE_ITCHIO_AQUI" target="_blank" class="btn-jugar">Ver en Itch.io</a>
+    </div>
+
+    <div class="detalles-container slide-up-on-scroll">
+        <div class="detalle-fila">
+            <strong>Rol Principal</strong>
+            <span>Game Designer & UI/UX</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Estilo Visual</strong>
+            <span>Moderno / Limpio</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Género</strong>
+            <span>3D Dungeon Crawler</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Innovación</strong>
+            <span>Grid Procedural + Free Look</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Evento</strong>
+            <span>Dungeon Crawler Jam 2026</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Rango</strong>
+            <span>Top 10 Popularidad</span>
+        </div>
+    </div>
+
+    <!-- SECCIÓN DE WIREFRAMES REEMPLAZANDO EL VIDEO -->
+    <div class="wireframes-section slide-up-on-scroll">
+        <h3 class="wireframes-title">Wireframes & UI Design:</h3>
+        <div class="wireframes-grid">
+            <img src="wireframe-boceto.jpg" alt="Boceto inicial del Wireframe">
+            <img src="wireframe-color.jpg" alt="Implementación final con color y estilo moderno">
+        </div>
+    </div>
+
+    <hr class="divider">
+    
+    <section class="mecánicas-seccion">
+        <h2 class="subtitulo" style="margin-top: 0;">Arquitectura & Game Design</h2>
+
+        <div class="tech-card slide-up-on-scroll">
+            <h4>1. UI Moderna y Cámara Libre <span>UX Dinámica</span></h4>
+            <ul>
+                <li><strong>Expansión a UI/UX:</strong> Diseño integral desde bocetos (wireframes) hasta la implementación final a color, dotando a un género clásico de una interfaz limpia y extremadamente moderna.</li>
+                <li><strong>UI Dinámica:</strong> La interfaz de usuario detecta la interacción y se oculta automáticamente cuando no hay movimiento.</li>
+                <li><strong>Mecánica "Free Look":</strong> Rompiendo el estándar de rotación fija (Q/E) del género. Manteniendo presionado el clic izquierdo, la UI se oculta permitiendo mover la cámara libremente para observar el entorno 3D.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.1s;">
+            <h4>2. Generación Procedural y Movimiento GRID <span>Tile-Based Logic</span></h4>
+            <ul>
+                <li><strong>Fusión de Sistemas:</strong> Integración exitosa de un algoritmo de generación procedural de mazmorras adaptado perfectamente a un sistema de movimiento estricto por baldosas (GRID).</li>
+                <li><strong>Salas Personalizadas:</strong> Inyección de "habitaciones prefabricadas" dentro de la generación procedural, integrando elementos interactivos y eventos localizados.</li>
+                <li><strong>Interactividad Animada:</strong> Objetos de entorno, como cofres y puertas, cuentan con scripts de animación que modifican su rotación de forma suave y realista al interactuar.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.2s;">
+            <h4>3. Combate Real-Time basado en Tipos <span>Flujo de Acción</span></h4>
+            <ul>
+                <li><strong>Bases del Combate:</strong> Sistema fundamental de enfrentamientos basado en tipos elementales y debilidades.</li>
+                <li><strong>Animaciones en el GRID:</strong> Las animaciones de ataque y esquiva ocurren en tiempo real y desplazan físicamente al jugador/enemigo por las baldosas, sin "desligarse" ni romper la rigidez del movimiento en grilla.</li>
+                <li><strong>Estilo Rebelde:</strong> Diseño de enemigos característicos que rompen el molde clásico, aportando la identidad visual que destacó al proyecto en la Jam.</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="galeria">
+        <h3>Archivos de Proyecto (Capturas)</h3>
+        <div class="capturas-grid">
+            <img src="captura-crawler-1.jpg" alt="UI Dinámica y Limpia" class="slide-up-on-scroll">
+            <img src="captura-crawler-2.jpg" alt="Uso de la Cámara Libre (Free Look)" class="slide-up-on-scroll">
+            <img src="captura-crawler-3.jpg" alt="Generación Procedural de la Mazmorra" class="slide-up-on-scroll">
+            <img src="captura-crawler-4.jpg" alt="Interacción con Puertas y Cofres" class="slide-up-on-scroll">
+            <img src="captura-crawler-5.jpg" alt="Sistema de Combate por Tipos" class="slide-up-on-scroll">
+            <img src="captura-crawler-6.jpg" alt="Enemigos Característicos del Lore" class="slide-up-on-scroll">
+        </div>
+    </section>
+
+    <footer>
+        <p>Desarrollado por <strong>Lucas Daniel Soriano</strong></p>
+        <p>© 2026 - Portfolio de Desarrollo de Videojuegos y Game Design</p>
+        <p>
+            <a href="https://www.linkedin.com/in/lucasdanielsoriano/">LinkedIn</a> | <a href="https://lucasdanielsmm.github.io/DevouringProductions/">GitHub</a> | <a href="mailto:devouringgproductions@gmail.com">Email</a>
+        </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.querySelector('.video-container');
+            if (video) {
+                video.offsetHeight; 
+                video.classList.add('animar-video');
+            }
+
+            const observerOptions = {
+                root: null, 
+                rootMargin: '0px',
+                threshold: 0.1 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const slideElements = document.querySelectorAll('.slide-up-on-scroll');
+            slideElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+    
+</body>
+</html>
