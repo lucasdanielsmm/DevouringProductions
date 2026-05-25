@@ -90,6 +90,36 @@
             transform: translateY(0);
         }
 
+
+                .video-container {
+            width: 90%;
+            max-width: 800px; 
+            margin: 20px auto;
+            aspect-ratio: 16/9;
+            position: relative;
+
+            opacity: 0; 
+            transform: translateY(40px); /* Posición inicial oculta */
+            transition: opacity 1.0s ease-out, transform 1.0s ease-out; 
+            will-change: opacity, transform; 
+        }
+
+        /* Clase final añadida por JavaScript (se anima) */
+        .video-container.animar-video {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .video-container iframe, .video-container img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.2); /* Sutil brillo verde estilo código */
+        }
+
+
         /* ========================================================= */
         /* == ESTILOS ESPECÍFICOS == */
         /* ========================================================= */
