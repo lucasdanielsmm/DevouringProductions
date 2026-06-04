@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="description" content="Portfolio de Game Design y UI/UX para Regulus Waterfalls.">
+    <meta name="author" content="Lucas Daniel Soriano">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Regulus Waterfalls — Portfolio Game Design">
+    <meta property="og:description" content="Explora el diseño de mecánicas de acrobacias, IA de carreras dinámica y UI de tienda en tiempo real.">
+    <meta property="og:image" content="portadaRegulus.gif"> 
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Regulus Waterfalls — Portfolio Game Design">
+    <meta property="twitter:image" content="portadaRegulus.gif">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Luckiest+Guy&display=swap" rel="stylesheet">
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regulus Waterfalls — Portfolio</title>
+    <link rel="icon" type="image/png" href="LOGODEVOURING.png">
+
+    <style>
+        /* ========================================================= */
+        /* == ESTILOS GLOBALES == */
+        /* ========================================================= */
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px 10px;
+            background-color: #181818; 
+            color: #dae0e3;
+            line-height: 1.6;
+            overflow-x: hidden; 
+            text-align: center; 
+        }
+        
+        a { text-decoration: none; color: inherit; }
+
+        .logo {
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+        .logo:hover { opacity: 1; }
+        
+        .titulo-pagina {
+            font-family: 'Luckiest Guy', cursive;
+            font-weight: 400;
+            font-size: 4.5em; 
+            color: #ffffff;
+            margin: 10px auto;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 6px rgba(0,0,0,0.6);
+        }
+
+        /* ========================================================= */
+        /* == ANIMACIONES Y HERO SECTION == */
+        /* ========================================================= */
+
+        .video-container {
+            width: 90%;
+            max-width: 900px; 
+            margin: 30px auto;
+            aspect-ratio: 16/9;
+            position: relative;
+            opacity: 0; 
+            transform: translateY(40px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out; 
+        }
+
+        .video-container.animar-video {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .video-container img, .video-container video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 4px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4); 
+            background-color: #000;
+        }
+        
+        /* Animaciones de entrada al scroll */
+        .slide-up-on-scroll {
+            opacity: 0;
+            transform: translateY(40px); 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .slide-up-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========================================================= */
+        /* == ESTILOS ESPECÍFICOS == */
+        /* ========================================================= */
+        .subtitulo {
+            font-family: 'Luckiest Guy', cursive;
+            font-weight: 400;
+            font-size: 2em;
+            color: #ffffff; 
+            margin: 40px auto 20px auto;
+            letter-spacing: 1px;
+        }
+
+        .intro-text {
+            max-width: 800px; 
+            margin: 0 auto 30px auto; 
+            padding: 0 20px;
+            font-size: 1.15em;
+            color: #b3b3b3;
+        }
+
+        /* Tabla de detalles técnicos */
+        .detalles-container {
+            display: inline-block; 
+            text-align: left;
+            margin: 30px auto; 
+            padding: 25px 35px;
+            background-color: #222222; 
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border-left: 4px solid #3b82f6; /* Acento Azul */
+        }
+        
+        .detalle-fila {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            min-width: 320px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #333333;
+            padding-bottom: 8px;
+        }
+        .detalle-fila:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
+        
+        .detalle-fila strong { color: #888888; font-size: 0.9em; text-transform: uppercase;}
+        .detalle-fila span { color: #ffffff; font-weight: 600; font-size: 0.95em;} 
+        
+        /* ========================================================= */
+        /* == BOTÓN JUGAR == */
+        /* ========================================================= */
+        .btn-jugar {
+            display: block; 
+            width: fit-content;
+            margin: 20px auto 30px auto;
+            padding: 14px 40px;
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 1.5em;
+            letter-spacing: 1px;
+            color: #ffffff;
+            background-color: #3b82f6; /* Azul brillante */
+            border-radius: 4px;
+            box-shadow: 0 4px 0 #2563eb; /* Sombra sólida base */
+            transition: transform 0.1s, box-shadow 0.1s, background-color 0.2s;
+        }
+
+        .btn-jugar:hover {
+            background-color: #60a5fa;
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #2563eb;
+        }
+
+        .btn-jugar:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #2563eb;
+        }
+
+        /* ========================================================= */
+        /* == CONTENEDOR DE VIDEOS == */
+        /* ========================================================= */
+        .wireframes-section {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .wireframes-title {
+            font-family: 'Luckiest Guy', cursive;
+            text-align: left;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .videos-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .videos-grid video {
+            width: 48%;
+            height: auto;
+            background-color: #000;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .videos-grid video:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* ========================================================= */
+        /* == SECCIÓN TÉCNICA (Mecánicas) == */
+        /* ========================================================= */
+        .mecánicas-seccion {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: left;
+        }
+
+        .tech-card {
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: #222222; 
+            border-left: 4px solid #3b82f6; /* Acento Azul */
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .tech-card h4 {
+            font-family: 'Luckiest Guy', cursive;
+            color: #fff;
+            font-size: 1.4em;
+            letter-spacing: 1px;
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tech-card h4 span {
+            font-family: 'Inter', sans-serif; /* Mantenemos span en Inter para legibilidad */
+            font-size: 0.5em;
+            background: #111;
+            padding: 4px 10px;
+            border: 1px solid #444;
+            color: #60a5fa; /* Texto Azul Claro */
+            border-radius: 20px;
+            font-weight: bold;
+            letter-spacing: 0;
+        }
+
+        .tech-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tech-card ul li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+            color: #c7c7c7;
+        }
+
+        .tech-card ul li::before {
+            content: '•'; 
+            color: #3b82f6; /* Bullet Azul */
+            font-size: 1.5em;
+            line-height: 0.8;
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+
+        .highlight { color: #ffffff; font-weight: 700; }
+
+        .divider {
+            border: 0;
+            height: 1px;
+            background: #333;
+            margin: 50px auto;
+            max-width: 800px;
+        }
+
+        /* ========================================================= */
+        /* == GALERÍA == */
+        /* ========================================================= */
+        .galeria {
+            margin-top: 50px;
+            padding: 20px 10px;
+        }
+
+        .galeria h3 { 
+            font-family: 'Luckiest Guy', cursive;
+            font-weight: 400;
+            font-size: 2em;
+            color: #fff; 
+            margin-bottom: 30px; 
+            letter-spacing: 1px;
+        }
+
+        .capturas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .capturas-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s, filter 0.2s;
+            filter: brightness(0.85); 
+        }
+        
+        .capturas-grid img:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        /* ========================================================= */
+        /* == FOOTER == */
+        /* ========================================================= */
+        footer {
+            background-color: #111111; 
+            color: #777; 
+            padding: 40px 10px;
+            margin-top: 60px;
+            font-size: 0.9em;
+            border-top: 1px solid #222; 
+        }
+
+        footer a { color: #3b82f6; font-weight: 600; } /* Enlaces Azules */
+        footer a:hover { text-decoration: underline; color: #60a5fa; }
+        
+    </style>
+</head>
+<body>
+
+    <h1 class="titulo-pagina">Regulus Waterfalls</h1> 
+    
+    <div class="video-container">
+        <img src="portadaRegulus.gif" alt="Portada: Regulus Waterfalls Gameplay">
+    </div>
+
+    <h2 class="subtitulo">"Surfea la cascada imposible. Corona la cima."</h2>
+
+    <p class="intro-text">
+        Un título de acción frenética que <span class="highlight">reimagina ideas populares actuales y las implementa en nuevos géneros</span>. Escala una corriente vertical implacable, ejecuta combos acrobáticos en el aire y compite contra un enjambre de rivales impulsados por IA en una carrera donde la velocidad y los recursos lo son todo.
+    </p>
+
+    <div class="botones-container" style="text-align: center;">
+        <a href="https://devouringprojects.itch.io/regulus-waterfalls" target="_blank" class="btn-jugar">Descargar ahora</a>
+    </div>
+
+    <div class="detalles-container slide-up-on-scroll">
+        <div class="detalle-fila">
+            <strong>Rol Principal</strong>
+            <span>Game Developer & UI/UX</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Estilo Visual</strong>
+            <span>Moderno / Limpio</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Género</strong>
+            <span>Acción / Carrera / Arcade</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Innovación</strong>
+            <span>IA Dinámica + Tienda en Tiempo Real</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Plataforma</strong>
+            <span>Windows / Itch.io</span>
+        </div>
+    </div>
+
+    <div class="wireframes-section slide-up-on-scroll">
+        <h3 class="wireframes-title">Mecánicas en Acción:</h3>
+        <div class="videos-grid">
+            <video src="gameplay-acrobacias.mp4" autoplay loop muted playsinline title="Sistema de Combos y Acrobacias"></video>
+            <video src="gameplay-carrera.mp4" autoplay loop muted playsinline title="Carrera contra Rivales IA"></video>
+        </div>
+    </div>
+
+    <hr class="divider">
+    
+    <section class="mecánicas-seccion">
+        <h2 class="subtitulo" style="margin-top: 0; text-align: center; margin-bottom: 40px;">Arquitectura & Game Design</h2>
+
+        <div class="tech-card slide-up-on-scroll">
+            <h4>1. Motor Acrobático Multieje <span>Input & Combos</span></h4>
+            <ul>
+                <li><strong>Fluidez de Control:</strong> Sistema de movimiento basado en variables de estado que permite interrumpir o enlazar volteretas en distintos ejes (X, Z) según el input del jugador.</li>
+                <li><strong>Recompensa de Riesgo:</strong> Cada acrobacia completada con éxito alimenta un multiplicador en pantalla, otorgando "Boost Manual" (aire) extra para acelerar en la cascada.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.1s;">
+            <h4>2. IA Dinámica de Rivales <span>Rubberbanding</span></h4>
+            <ul>
+                <li><strong>Comportamiento Natural:</strong> Los oponentes no siguen raíles fijos; utilizan un algoritmo que combina variaciones de velocidad base con pequeñas fuerzas aleatorias para simular esquivas y errores orgánicos.</li>
+                <li><strong>Personalidades y Acrobacias:</strong> Algunos rivales tienen la variable "Spinner" activada, permitiéndoles ejecutar sus propios combos y sumar multiplicadores en medio de la carrera.</li>
+                <li><strong>Competencia Justa:</strong> Implementación de un sistema de "Goma Elástica" que altera dinámicamente la velocidad máxima de la IA basándose en la distancia Y con el jugador.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.2s;">
+            <h4>3. Entorno Vivo y Tienda In-Game <span>UI/UX Limpia</span></h4>
+            <ul>
+                <li><strong>Fauna Matemática:</strong> Spawners ambientales que generan bancos de peces. Utilizando funciones trigonométricas de Seno y Coseno, los modelos 3D describen patrones naturales infinitos (lemniscata) alrededor del jugador.</li>
+                <li><strong>Economía en Movimiento:</strong> Sistema de compras integrado directamente en el escenario. Al entrar a zonas específicas, una UI moderna entra en escena mediante animaciones (Tweens), permitiendo canjear monedas por <em>Arrojables</em> o <em>Más Aire</em> de forma inmediata usando Q y E.</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="galeria">
+        <h3>Capturas de Desarrollo</h3>
+        <div class="capturas-grid">
+            <img src="captura-regulus-1.jpg" alt="Acrobacia en el aire y multiplicador de combo" class="slide-up-on-scroll">
+            <img src="captura-regulus-2.jpg" alt="Carrera codo a codo con rivales Spinner" class="slide-up-on-scroll">
+            <img src="captura-regulus-3.jpg" alt="Interfaz limpia de la Tienda de Arrojables" class="slide-up-on-scroll">
+            <img src="captura-regulus-4.jpg" alt="Patrón trigonométrico de los peces infinitos" class="slide-up-on-scroll">
+        </div>
+    </section>
+
+    <footer>
+        <p>Desarrollado por <strong>Lucas Daniel Soriano</strong> — Devouring Productions</p>
+        <p>© 2026 - Portfolio de Desarrollo de Videojuegos y Game Design</p>
+        <p>
+            <a href="https://www.linkedin.com/in/lucasdanielsoriano/">LinkedIn</a> | <a href="https://lucasdanielsmm.github.io/DevouringProductions/">GitHub</a> | <a href="mailto:devouringgproductions@gmail.com">Email</a>
+        </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.querySelector('.video-container');
+            if (video) {
+                video.offsetHeight; 
+                video.classList.add('animar-video');
+            }
+
+            const observerOptions = {
+                root: null, 
+                rootMargin: '0px',
+                threshold: 0.1 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const slideElements = document.querySelectorAll('.slide-up-on-scroll');
+            slideElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+    
+</body>
+</html>
