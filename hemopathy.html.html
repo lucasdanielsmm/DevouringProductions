@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hemopathy — Oficial</title>
+    <meta name="description" content="Portfolio de Game Design y UI/UX para Hemopathy.">
+    <meta name="author" content="InSesth, Erin, Kenzurk">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Hemopathy — Portfolio Game Design & Horror Arcade">
+    <meta property="og:description" content="La sangre es tu recurso y tu fuerza vital. Gestiona tus estados de ser y domina el retorno balístico.">
+    <meta property="og:image" content="portadaHemopathy.gif"> 
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Hemopathy — Arcade Horror">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Lora:ital,wght@0,400;0,600;1,400&family=Pirata+One&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================================= */
+        /* == ESTILOS GLOBALES & TEMÁTICA GÓTICA == */
+        /* ========================================================= */
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Lora', 'Georgia', serif;
+            margin: 0;
+            padding: 20px 10px;
+            background: radial-gradient(circle at center, #1c0505 0%, #0a0202 100%);
+            color: #dcd4c9; /* Tono pergamino claro para legibilidad */
+            line-height: 1.7;
+            overflow-x: hidden; 
+            text-align: center; 
+        }
+        
+        a { text-decoration: none; color: inherit; }
+
+        .logo {
+            max-width: 120px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+            opacity: 0.8;
+            filter: drop-shadow(0 0 8px #800000);
+            transition: opacity 0.3s, filter 0.3s;
+        }
+        .logo:hover { opacity: 1; filter: drop-shadow(0 0 15px #ff1a1a); }
+        
+        .titulo-pagina {
+            font-family: 'Pirata One', cursive;
+            font-weight: 400;
+            font-size: 5.5em; 
+            color: #990000; /* Rojo Sangre Profundo */
+            margin: 10px auto;
+            letter-spacing: 3px;
+            text-shadow: 3px 3px 0px #2a0000, 0 0 20px rgba(153, 0, 0, 0.6);
+        }
+
+        /* ========================================================= */
+        /* == ANIMACIONES Y HERO SECTION == */
+        /* ========================================================= */
+        .video-container {
+            width: 90%;
+            max-width: 900px; 
+            margin: 30px auto;
+            aspect-ratio: 16/9;
+            position: relative;
+            opacity: 0; 
+            transform: translateY(40px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out; 
+            border: 2px solid #4a0505;
+            box-shadow: 0 0 30px rgba(139, 0, 0, 0.4);
+        }
+
+        .video-container.animar-video {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .video-container img, .video-container video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 2px;
+            background-color: #000;
+        }
+        
+        /* Animaciones de entrada al scroll */
+        .slide-up-on-scroll {
+            opacity: 0;
+            transform: translateY(40px); 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .slide-up-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========================================================= */
+        /* == TIPOGRAFÍA Y TEXTOS DE SOPORTE == */
+        /* ========================================================= */
+        .subtitulo {
+            font-family: 'Cinzel Decorative', serif;
+            font-weight: 700;
+            font-size: 1.8em;
+            color: #e60000; /* Rojo vívido */
+            margin: 40px auto 20px auto;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .intro-text {
+            max-width: 800px; 
+            margin: 0 auto 30px auto; 
+            padding: 0 20px;
+            font-size: 1.2em;
+            color: #bfaea3;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        /* Tabla de detalles técnicos */
+        .detalles-container {
+            display: inline-block; 
+            text-align: left;
+            margin: 30px auto; 
+            padding: 25px 35px;
+            background-color: #140404; 
+            border-radius: 2px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+            border-left: 4px solid #800000; /* Acento Rojo Gótico */
+            border-right: 1px solid #3a0a0a;
+            border-top: 1px solid #3a0a0a;
+            border-bottom: 1px solid #3a0a0a;
+        }
+        
+        .detalle-fila {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            min-width: 360px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #2d0b0b;
+            padding-bottom: 8px;
+        }
+        .detalle-fila:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
+        
+        .detalle-fila strong { color: #8c766c; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px;}
+        .detalle-fila span { color: #dcd4c9; font-weight: 600; font-size: 0.95em; font-family: 'Lora', serif;} 
+        
+        /* ========================================================= */
+        /* == CONTROLES & ACCIONES == */
+        /* ========================================================= */
+        .controles-seccion {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #110303;
+            padding: 20px;
+            border: 1px dashed #5e1111;
+        }
+        .controles-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            text-align: left;
+            max-width: 400px;
+            margin: 15px auto 0 auto;
+        }
+        .control-item {
+            border-bottom: 1px solid #260707;
+            padding: 5px 0;
+        }
+        .control-key {
+            color: #ff3333;
+            font-weight: bold;
+            font-family: monospace;
+            background: #220505;
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid #440a0a;
+        }
+
+        /* ========================================================= */
+        /* == BOTÓN JUGAR (ESTILO PACTO DE SANGRE) == */
+        /* ========================================================= */
+        .btn-jugar {
+            display: block; 
+            width: fit-content;
+            margin: 30px auto;
+            padding: 16px 45px;
+            font-family: 'Pirata One', cursive;
+            font-size: 1.8em;
+            letter-spacing: 2px;
+            color: #ffffff;
+            background-color: #800000; 
+            border-radius: 3px;
+            box-shadow: 0 5px 0 #4d0000, 0 0 15px rgba(128, 0, 0, 0.4);
+            transition: transform 0.1s, box-shadow 0.1s, background-color 0.2s;
+            border: 1px solid #a30000;
+        }
+
+        .btn-jugar:hover {
+            background-color: #b30000;
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 #4d0000, 0 0 25px rgba(255, 0, 0, 0.6);
+            color: #fff;
+        }
+
+        .btn-jugar:active {
+            transform: translateY(5px);
+            box-shadow: 0 0 0 #4d0000;
+        }
+
+        /* ========================================================= */
+        /* == WIREFRAMES & MEDIA SECTIONS == */
+        /* ========================================================= */
+        .wireframes-section {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .wireframes-title {
+            font-family: 'Cinzel Decorative', serif;
+            text-align: left;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #4a0505;
+            padding-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .videos-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .videos-grid iframe, .videos-grid video {
+            width: 48%;
+            height: 250px;
+            background-color: #000;
+            border: 1px solid #3a0707;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.8);
+            transition: transform 0.3s ease, border-color 0.3s;
+        }
+
+        .videos-grid iframe:hover, .videos-grid video:hover {
+            transform: translateY(-5px);
+            border-color: #990000;
+        }
+        
+        /* ========================================================= */
+        /* == ARQUITECTURA & ARTE (TARJETAS GÓTICAS) == */
+        /* ========================================================= */
+        .mecánicas-seccion {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: left;
+        }
+
+        .tech-card {
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: #140404; 
+            border-left: 4px solid #990000; 
+            border-radius: 2px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+            border-top: 1px solid #240707;
+            border-right: 1px solid #240707;
+            border-bottom: 1px solid #240707;
+        }
+
+        .tech-card h4 {
+            font-family: 'Cinzel Decorative', serif;
+            color: #fff;
+            font-size: 1.3em;
+            letter-spacing: 1px;
+            margin-top: 0;
+            border-bottom: 1px solid #3a0a0a;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tech-card h4 span {
+            font-family: 'Lora', serif;
+            font-size: 0.55em;
+            background: #000;
+            padding: 4px 12px;
+            border: 1px solid #4a0505;
+            color: #ff3333; 
+            border-radius: 0px; /* Bordes rectos más góticos */
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .tech-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tech-card ul li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            color: #c4b9b1;
+        }
+
+        .tech-card ul li::before {
+            content: '†'; 
+            color: #990000; 
+            font-size: 1.2em;
+            line-height: 1;
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+
+        .highlight { color: #ffffff; font-weight: 700; text-shadow: 0 0 5px rgba(255,0,0,0.3); }
+
+        .divider {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #5e1111, transparent);
+            margin: 50px auto;
+            max-width: 800px;
+        }
+
+        /* ========================================================= */
+        /* == GALERÍA DE ARTE VISCERAL == */
+        /* ========================================================= */
+        .galeria {
+            margin-top: 50px;
+            padding: 20px 10px;
+        }
+
+        .galeria h3 { 
+            font-family: 'Cinzel Decorative', serif;
+            font-weight: 700;
+            font-size: 2em;
+            color: #fff; 
+            margin-bottom: 30px; 
+            letter-spacing: 2px;
+        }
+
+        .capturas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .capturas-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 2px;
+            border: 1px solid #3a0505;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+            transition: transform 0.3s, filter 0.3s, border-color 0.3s;
+            filter: brightness(0.7) sepia(0.2) hue-rotate(-10deg); 
+        }
+        
+        .capturas-grid img:hover {
+            transform: scale(1.03);
+            filter: brightness(1.0) sepia(0);
+            border-color: #ff1a1a;
+        }
+
+        /* ========================================================= */
+        /* == FOOTER == */
+        /* ========================================================= */
+        footer {
+            background-color: #080101; 
+            color: #6e5f58; 
+            padding: 40px 10px;
+            margin-top: 60px;
+            font-size: 0.9em;
+            border-top: 1px solid #260505; 
+        }
+
+        footer strong { color: #a69285; }
+        footer a { color: #990000; font-weight: 600; transition: color 0.2s; } 
+        footer a:hover { text-decoration: underline; color: #ff3333; }
+        
+    </style>
+</head>
+<body>
+
+    <!-- Puedes reemplazar src con un logo si cuentas con uno -->
+    <h1 class="titulo-pagina">Hemopathy</h1> 
+    
+    <div class="video-container">
+        <!-- Reemplazar con el GIF o Imagen de portada de Hemopathy -->
+        <img src="portadaHemopathy.gif" alt="Portada: Hemopathy Gameplay Excitante">
+    </div>
+
+    <h2 class="subtitulo">"La sangre es tu recurso preciado... y tu condena vital."</h2>
+
+    <p class="intro-text">
+        Un título de acción frenética y terror donde <span class="highlight">cada bala disparada extrae la esencia vital de tus enemigos</span> para devolverla a tus venas. Atraviesa hordas de criaturas grotescas en tu camino hacia el Corazón, la fuente latente de la plaga. Tu cuerpo mutará y reaccionará de acuerdo a la cantidad de sangre consumida, forzándote a equilibrar tu cordura y tu poder.
+    </p>
+
+    <div class="botones-container">
+        <a href="https://devouringprojects.itch.io/hemopathy" target="_blank" class="btn-jugar">Consagrar Pacto (Descargar)</a>
+    </div>
+
+    <div class="detalles-container slide-up-on-scroll">
+        <div class="detalle-fila">
+            <strong>Desarrollo</strong>
+            <span>InSesth, Erin, Kenzurk</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Estilo Visual</strong>
+            <span>Gothic Low-Poly / Arcade Gore</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Género</strong>
+            <span>Survival Horror / Fast-paced Shooter</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Motor Gráfico</strong>
+            <span>Unity</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Ecosistema</strong>
+            <span>Mecánica de Estados Reactivos</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Plataforma</strong>
+            <span>PC / Web / Itch.io</span>
+        </div>
+    </div>
+
+    <div class="controles-seccion slide-up-on-scroll">
+        <h3 font-family: 'Cinzel Decorative' style="color: #fff; margin-top:0;">Esquema de Controles</h3>
+        <div class="controles-grid">
+            <div class="control-item">Moverse:</div><div class="control-item"><span class="control-key">W</span> <span class="control-key">A</span> <span class="control-key">S</span> <span class="control-key">D</span></div>
+            <div class="control-item">Disparar:</div><div class="control-item"><span class="control-key">Clic Izquierdo</span></div>
+            <div class="control-item">Infundir (Sanar):</div><div class="control-item"><span class="control-key">E</span></div>
+            <div class="control-item">Extraer Sangre:</div><div class="control-item"><span class="control-key">Q</span></div>
+            <div class="control-item">Cambiar Arma:</div><div class="control-item"><span class="control-key">1 - 8</span></div>
+        </div>
+    </div>
+
+    <div class="wireframes-section slide-up-on-scroll">
+        <h3 class="wireframes-title">Metrajes del Matadero:</h3>
+        <div class="videos-grid">
+            <!-- Marcadores de posición para videos de mecánicas -->
+            <video src="clip_mecanica1.mp4" poster="placeholder_armas.jpg" controls muted></video>
+            <video src="clip_mecanica2.mp4" poster="placeholder_estados.jpg" controls muted></video>
+        </div>
+    </div>
+
+    <hr class="divider">
+    
+    <section class="mecánicas-seccion">
+        <h2 class="subtitulo" style="margin-top: 0; text-align: center; margin-bottom: 40px;">Arquitectura de Sistemas & Game Design</h2>
+
+        <div class="tech-card slide-up-on-scroll">
+            <h4>1. Infusión, Extracción y Tres Estados <span>Mecánica de Vida</span></h4>
+            <ul>
+                <li><strong>Retorno Vital Activo:</strong> Infunde la sangre recolectada instantáneamente presionando <span class="highlight">E</span> para recuperar tu salud, balanceando las oscilaciones de los ataques enemigos.</li>
+                <li><strong>Tres Estados del Ser:</strong> Dependiendo de la cantidad exacta de sangre en tu vial, tu personaje mutará dinámicamente entre tres estados únicos de rendimiento físico que modifican tus estadísticas clave.</li>
+                <li><strong>Consecuencias del Consumo:</strong> Curarse en exceso o permanecer famélico altera radicalmente el ritmo del juego. Tú decides si vale la pena el riesgo.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.1s;">
+            <h4>2. Arsenal de Retorno Balístico <span>Armas & Combate</span></h4>
+            <ul>
+                <li><strong>Pistola de Chispa (Flintlock):</strong> Precisión calculada a media distancia para extraer gotas individuales estratégicas.</li>
+                <li><strong>Escopeta (Shotgun):</strong> Daño masivo a quemarropa; ideal para llenar el vial de un solo impacto contundente frente a amenazas densas.</li>
+                <li><strong>Rifle de Ráfagas (Burst Rifle):</strong> Flujo sostenido de proyectiles para mantener a raya a las hordas y asegurar un goteo de salud constante.</li>
+                <li><strong>Sinergia de Impacto:</strong> Cada bala que encuentra su objetivo extrae la sangre de la víctima y la redirige directamente de vuelta hacia ti.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.2s;">
+            <h4>3. El Sistema de FE (FAITH) <span>Percepción Psicológica</span></h4>
+            <ul>
+                <li><strong>Alteración de la Visión:</strong> Una mecánica nuclear que distorsiona los filtros de pantalla, el audio ambiental y la visibilidad geométrica del mundo.</li>
+                <li><strong>Desesperación vs. Verdad:</strong> Caer en la desesperación ciega tus sentidos ante los peligros inmediatos, mientras que potenciar tu Fe te permite observar la aberrante realidad del Corazón y sus siervos.</li>
+                <li><strong>Bestiario Contenido:</strong> Enfréntate a dos tipologías de enemigos grotescos con patrones reactivos antes de medirte en el altar definitivo contra el Jefe Final.</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="galeria">
+        <h3>Visiones del Corazón</h3>
+        <div class="capturas-grid">
+            <img src="captura-hemopathy-1.jpg" alt="Combate frenético con la escopeta e infusión de sangre" class="slide-up-on-scroll">
+            <img src="captura-hemopathy-2.jpg" alt="Mutación visual bajo el estado de desesperación" class="slide-up-on-scroll">
+            <img src="captura-hemopathy-3.jpg" alt="Encuentro con las abominaciones siervas del Corazón" class="slide-up-on-scroll">
+            <img src="captura-hemopathy-4.jpg" alt="Interfaz del vial de sangre y estados activos" class="slide-up-on-scroll">
+        </div>
+    </section>
+
+    <footer>
+        <p>Diseño por <strong>InSesth</strong> — Arte por <strong>Erin</strong> — Programación por <strong>Kenzurk</strong></p>
+        <p>© 2026 - Devouring Projects & Hemopathy Production</p>
+        <p>
+            <a href="https://devouringprojects.itch.io/" target="_blank">Itch.io Hub</a> | <a href="mailto:devouringgproductions@gmail.com">Contacto Sanguíneo</a>
+        </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.querySelector('.video-container');
+            if (video) {
+                video.offsetHeight; 
+                video.classList.add('animar-video');
+            }
+
+            const observerOptions = {
+                root: null, 
+                rootMargin: '0px',
+                threshold: 0.1 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const slideElements = document.querySelectorAll('.slide-up-on-scroll');
+            slideElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+    
+</body>
+</html>
