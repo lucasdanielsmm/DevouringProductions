@@ -31,7 +31,9 @@
             font-family: 'Inter', 'Segoe UI', sans-serif;
             margin: 0;
             padding: 20px 10px;
-            background-color: #181818; 
+            /* Fondo inmersivo con gradiente radial oscuro */
+            background: radial-gradient(circle at top center, #111a2c 0%, #080c14 60%, #030508 100%);
+            background-attachment: fixed;
             color: #dae0e3;
             line-height: 1.6;
             overflow-x: hidden; 
@@ -46,18 +48,23 @@
             display: block;
             margin: 0 auto 20px;
             opacity: 0.9;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
         }
-        .logo:hover { opacity: 1; }
+        .logo:hover { opacity: 1; transform: scale(1.05); }
         
+        /* Efecto 3D Arcade para el título */
         .titulo-pagina {
             font-family: 'Luckiest Guy', cursive;
             font-weight: 400;
-            font-size: 4.5em; 
+            font-size: 5em; 
             color: #ffffff;
             margin: 10px auto;
-            letter-spacing: 2px;
-            text-shadow: 0 4px 6px rgba(0,0,0,0.6);
+            letter-spacing: 3px;
+            text-shadow: 
+                4px 4px 0px #bd00ff, 
+                8px 8px 0px #00e5ff,
+                10px 10px 15px rgba(0, 0, 0, 0.8);
+            transform: skew(-2deg, -2deg);
         }
 
         /* ========================================================= */
@@ -67,7 +74,7 @@
         .video-container {
             width: 90%;
             max-width: 900px; 
-            margin: 30px auto;
+            margin: 40px auto;
             aspect-ratio: 16/9;
             position: relative;
             opacity: 0; 
@@ -84,12 +91,13 @@
             width: 100%;
             height: 100%;
             display: block;
-            border-radius: 4px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4); 
+            border-radius: 8px;
+            /* Glow neón para la portada */
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.3), 0 10px 40px rgba(0,0,0,0.8); 
             background-color: #000;
+            border: 1px solid rgba(0, 229, 255, 0.2);
         }
         
-        /* Animaciones de entrada al scroll */
         .slide-up-on-scroll {
             opacity: 0;
             transform: translateY(40px); 
@@ -107,30 +115,42 @@
         .subtitulo {
             font-family: 'Luckiest Guy', cursive;
             font-weight: 400;
-            font-size: 2em;
-            color: #ffffff; 
+            font-size: 2.5em;
+            color: #00e5ff; /* Acento cian principal */
             margin: 40px auto 20px auto;
             letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(0, 229, 255, 0.4);
         }
 
         .intro-text {
             max-width: 800px; 
-            margin: 0 auto 30px auto; 
+            margin: 0 auto 40px auto; 
             padding: 0 20px;
-            font-size: 1.15em;
-            color: #b3b3b3;
+            font-size: 1.2em;
+            color: #a0aec0;
         }
 
-        /* Tabla de detalles técnicos */
+        .highlight { 
+            color: #ffffff; 
+            font-weight: 800;
+            background: linear-gradient(90deg, #bd00ff, #00e5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+        }
+
+        /* Tabla de detalles técnicos con Glassmorphism */
         .detalles-container {
             display: inline-block; 
             text-align: left;
             margin: 30px auto; 
-            padding: 25px 35px;
-            background-color: #222222; 
-            border-radius: 4px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            border-left: 4px solid #3b82f6; /* Acento Azul */
+            padding: 30px 40px;
+            background: rgba(16, 23, 35, 0.7); 
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            border: 1px solid rgba(0, 229, 255, 0.15);
+            border-left: 6px solid #bd00ff; /* Acento Púrpura */
         }
         
         .detalle-fila {
@@ -138,42 +158,45 @@
             justify-content: space-between;
             width: 100%;
             min-width: 320px;
-            margin-bottom: 12px;
-            border-bottom: 1px solid #333333;
-            padding-bottom: 8px;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
         }
         .detalle-fila:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
         
-        .detalle-fila strong { color: #888888; font-size: 0.9em; text-transform: uppercase;}
-        .detalle-fila span { color: #ffffff; font-weight: 600; font-size: 0.95em;} 
+        .detalle-fila strong { color: #00e5ff; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;}
+        .detalle-fila span { color: #ffffff; font-weight: 600; font-size: 1em;} 
         
         /* ========================================================= */
-        /* == BOTÓN JUGAR == */
+        /* == BOTÓN JUGAR (Rediseñado Arcade) == */
         /* ========================================================= */
         .btn-jugar {
             display: block; 
             width: fit-content;
-            margin: 20px auto 30px auto;
-            padding: 14px 40px;
+            margin: 20px auto 40px auto;
+            padding: 18px 50px;
             font-family: 'Luckiest Guy', cursive;
-            font-size: 1.5em;
-            letter-spacing: 1px;
+            font-size: 1.8em;
+            letter-spacing: 2px;
             color: #ffffff;
-            background-color: #3b82f6; /* Azul brillante */
-            border-radius: 4px;
-            box-shadow: 0 4px 0 #2563eb; /* Sombra sólida base */
-            transition: transform 0.1s, box-shadow 0.1s, background-color 0.2s;
+            background: linear-gradient(90deg, #bd00ff, #00e5ff); /* Gradiente vibrante */
+            border-radius: 8px;
+            box-shadow: 0 6px 0 #0088cc, 0 15px 25px rgba(0, 229, 255, 0.4);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .btn-jugar:hover {
-            background-color: #60a5fa;
             transform: translateY(2px);
-            box-shadow: 0 2px 0 #2563eb;
+            box-shadow: 0 4px 0 #0088cc, 0 10px 20px rgba(0, 229, 255, 0.6);
+            filter: brightness(1.1);
         }
 
         .btn-jugar:active {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 #2563eb;
+            transform: translateY(6px);
+            box-shadow: 0 0 0 #0088cc, 0 0 10px rgba(0, 229, 255, 0.4);
         }
 
         /* ========================================================= */
@@ -190,11 +213,12 @@
             text-align: left;
             font-weight: 400;
             color: #fff;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-            border-bottom: 2px solid #333;
+            margin-bottom: 30px;
+            font-size: 2em;
+            border-bottom: 2px solid rgba(0, 229, 255, 0.3);
             padding-bottom: 10px;
             letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
         }
 
         .videos-grid {
@@ -203,17 +227,19 @@
             justify-content: space-between;
         }
 
-        .videos-grid video {
+        .videos-grid iframe {
             width: 48%;
-            height: auto;
+            aspect-ratio: 16/9;
             background-color: #000;
-            border-radius: 4px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: transform 0.3s ease;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .videos-grid video:hover {
-            transform: translateY(-5px);
+        .videos-grid iframe:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 229, 255, 0.2);
         }
         
         /* ========================================================= */
@@ -228,37 +254,48 @@
 
         .tech-card {
             margin-bottom: 30px;
-            padding: 25px;
-            background-color: #222222; 
-            border-left: 4px solid #3b82f6; /* Acento Azul */
-            border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            padding: 30px;
+            background: linear-gradient(145deg, rgba(20, 28, 40, 0.8), rgba(10, 14, 22, 0.9));
+            border-left: 5px solid #00e5ff;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            border-right: 1px solid rgba(0, 229, 255, 0.05);
+            border-top: 1px solid rgba(0, 229, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .tech-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.1);
+            border-left-color: #bd00ff;
         }
 
         .tech-card h4 {
             font-family: 'Luckiest Guy', cursive;
             color: #fff;
-            font-size: 1.4em;
+            font-size: 1.6em;
             letter-spacing: 1px;
             margin-top: 0;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .tech-card h4 span {
-            font-family: 'Inter', sans-serif; /* Mantenemos span en Inter para legibilidad */
-            font-size: 0.5em;
-            background: #111;
-            padding: 4px 10px;
-            border: 1px solid #444;
-            color: #60a5fa; /* Texto Azul Claro */
+            font-family: 'Inter', sans-serif; 
+            font-size: 0.45em;
+            background: rgba(0, 229, 255, 0.1);
+            padding: 6px 14px;
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            color: #00e5ff; 
             border-radius: 20px;
-            font-weight: bold;
-            letter-spacing: 0;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .tech-card ul {
@@ -268,30 +305,31 @@
         }
 
         .tech-card ul li {
-            margin-bottom: 10px;
-            padding-left: 20px;
+            margin-bottom: 15px;
+            padding-left: 25px;
             position: relative;
-            color: #c7c7c7;
+            color: #cbd5e1;
         }
 
         .tech-card ul li::before {
-            content: '•'; 
-            color: #3b82f6; /* Bullet Azul */
+            content: '▹'; 
+            color: #bd00ff; 
             font-size: 1.5em;
             line-height: 0.8;
             position: absolute;
             left: 0;
             top: 2px;
+            text-shadow: 0 0 8px rgba(189, 0, 255, 0.6);
         }
 
-        .highlight { color: #ffffff; font-weight: 700; }
-
+        /* Divisor neón */
         .divider {
             border: 0;
-            height: 1px;
-            background: #333;
-            margin: 50px auto;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #bd00ff, #00e5ff, transparent);
+            margin: 70px auto;
             max-width: 800px;
+            opacity: 0.5;
         }
 
         /* ========================================================= */
@@ -305,16 +343,17 @@
         .galeria h3 { 
             font-family: 'Luckiest Guy', cursive;
             font-weight: 400;
-            font-size: 2em;
+            font-size: 2.5em;
             color: #fff; 
-            margin-bottom: 30px; 
+            margin-bottom: 40px; 
             letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
         .capturas-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -322,31 +361,36 @@
         .capturas-grid img {
             width: 100%;
             height: auto;
-            border-radius: 4px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: transform 0.2s, filter 0.2s;
-            filter: brightness(0.85); 
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(0.7) contrast(1.1); 
+            border: 2px solid transparent;
         }
         
         .capturas-grid img:hover {
-            transform: scale(1.02);
-            filter: brightness(1.1);
+            transform: scale(1.05) translateY(-5px);
+            filter: brightness(1.1) contrast(1.1);
+            border-color: #00e5ff;
+            box-shadow: 0 15px 30px rgba(0, 229, 255, 0.3);
+            z-index: 2;
         }
 
         /* ========================================================= */
         /* == FOOTER == */
         /* ========================================================= */
         footer {
-            background-color: #111111; 
-            color: #777; 
-            padding: 40px 10px;
-            margin-top: 60px;
-            font-size: 0.9em;
-            border-top: 1px solid #222; 
+            background: #05080c; 
+            color: #64748b; 
+            padding: 50px 10px;
+            margin-top: 80px;
+            font-size: 0.95em;
+            border-top: 1px solid rgba(0, 229, 255, 0.1); 
         }
 
-        footer a { color: #3b82f6; font-weight: 600; } /* Enlaces Azules */
-        footer a:hover { text-decoration: underline; color: #60a5fa; }
+        footer strong { color: #94a3b8; }
+        footer a { color: #00e5ff; font-weight: 600; text-decoration: none; transition: color 0.2s; }
+        footer a:hover { color: #bd00ff; text-shadow: 0 0 8px rgba(189, 0, 255, 0.4); }
         
     </style>
 </head>
@@ -355,6 +399,7 @@
     <h1 class="titulo-pagina">Regulus Waterfalls</h1> 
     
     <div class="video-container">
+        <!-- Puedes cambiar la imagen por un iframe de un trailer también -->
         <img src="REGULUS WATERFALL CATARACT.jpg" alt="Portada: Regulus Waterfalls Gameplay">
     </div>
 
@@ -365,13 +410,13 @@
     </p>
 
     <div class="botones-container" style="text-align: center;">
-        <a href="https://devouringprojects.itch.io/regulus-waterfalls" target="_blank" class="btn-jugar">Descargar ahora</a>
+        <a href="https://devouringprojects.itch.io/regulus-waterfalls" target="_blank" class="btn-jugar">JUGAR AHORA</a>
     </div>
 
     <div class="detalles-container slide-up-on-scroll">
         <div class="detalle-fila">
             <strong>Rol Principal</strong>
-            <span>Game Developer & UI/UX</span>
+            <span>Game Dev & UI/UX</span>
         </div>
         <div class="detalle-fila">
             <strong>Estilo Visual</strong>
@@ -379,48 +424,49 @@
         </div>
         <div class="detalle-fila">
             <strong>Género</strong>
-            <span>Carrera / Plataformas / Arcade</span>
+            <span>Carrera / Arcade</span>
         </div>
         <div class="detalle-fila">
             <strong>Innovación</strong>
             <span>3D en GDEVELOP</span>
         </div>
         <div class="detalle-fila">
-            <strong>Game Jam </strong>
-            <span>GDevelop BIG Game Jam #9</span>
+            <strong>Game Jam</strong>
+            <span>GDevelop BIG Jam #9</span>
         </div>
         <div class="detalle-fila">
             <strong>Plataforma</strong>
-            <span>Web</span>
+            <span>Navegador Web</span>
         </div>
     </div>
 
     <div class="wireframes-section slide-up-on-scroll">
-        <h3 class="wireframes-title">Mecánicas en Acción:</h3>
+        <h3 class="wireframes-title">Mecánicas en Acción</h3>
         <div class="videos-grid">
-        <iframe 
-            src="https://www.youtube.com/embed/C9l4OTt4fZo?si=qTPXiyYSbIzZxtJ8=placeholder&amp;autoplay=1&amp;mute=1&amp;controls=0&amp;modestbranding=1&amp;rel=0&amp;showinfo=0" 
-            allow="autoplay; encrypted-media" 
-            allowfullscreen>
-        </iframe>
-        <iframe 
-            src="https://www.youtube.com/embed/C9l4OTt4fZo?si=qTPXiyYSbIzZxtJ8=placeholder&amp;autoplay=1&amp;mute=1&amp;controls=0&amp;modestbranding=1&amp;rel=0&amp;showinfo=0" 
-            encrypted-media" 
-            allowfullscreen>
-        </iframe>
+            <iframe 
+                src="https://www.youtube.com/embed/C9l4OTt4fZo?si=qTPXiyYSbIzZxtJ8=placeholder&amp;autoplay=1&amp;mute=1&amp;controls=0&amp;modestbranding=1&amp;rel=0&amp;showinfo=0" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen>
+            </iframe>
+            <!-- Cambié la etiqueta del segundo video para asegurar que use Iframe si es de YouTube -->
+            <iframe 
+                src="https://www.youtube.com/embed/C9l4OTt4fZo?si=qTPXiyYSbIzZxtJ8=placeholder&amp;autoplay=1&amp;mute=1&amp;controls=0&amp;modestbranding=1&amp;rel=0&amp;showinfo=0" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen>
+            </iframe>
         </div>
     </div>
 
     <hr class="divider">
     
     <section class="mecánicas-seccion">
-        <h2 class="subtitulo" style="margin-top: 0; text-align: center; margin-bottom: 40px;">Arquitectura & Game Design</h2>
+        <h2 class="subtitulo" style="margin-top: 0; text-align: center; margin-bottom: 50px;">Arquitectura & Game Design</h2>
 
         <div class="tech-card slide-up-on-scroll">
             <h4>1. Motor Acrobático Multieje <span>Input & Combos</span></h4>
             <ul>
                 <li><strong>Fluidez de Control:</strong> Sistema de movimiento basado en variables de estado que permite interrumpir o enlazar volteretas en distintos ejes (X, Z) según el input del jugador o aumentar la velocidad manteniendo W / S.</li>
-                <li><strong>Cambio de Postura:</strong> El jugador puede activar el cambio de postura manteniendo presionado Q + E y realizar acrobacias al presionar diversas teclas que aumentaran el multiplicador de COMBO al activarlas rapidamente.</li>
+                <li><strong>Cambio de Postura:</strong> El jugador puede activar el cambio de postura manteniendo presionado Q + E y realizar acrobacias al presionar diversas teclas que aumentarán el multiplicador de COMBO al activarlas rápidamente.</li>
                 <li><strong>Recompensa de Riesgo:</strong> Cada acrobacia completada con éxito alimenta un multiplicador en pantalla, otorgando "Boost Manual" (aire) extra para acelerar en la cascada.</li>
             </ul>
         </div>
@@ -435,9 +481,9 @@
         </div>
 
         <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.2s;">
-            <h4>3. Entorno Vivo y Tienda In-Game <span>UI/UX Dinamica</span></h4>
+            <h4>3. Entorno Vivo y Tienda In-Game <span>UI/UX Dinámica</span></h4>
             <ul>
-                <li><strong>Barras giratorias:</strong> Barras de interface que giran o rotan su pocicion siguiendo el movimiento del jugador, utilizando layers separadas para cada informacion en pantalla, dan una incentiva al movimiento y los combos.</li>
+                <li><strong>Barras Giratorias:</strong> Barras de interfaz que giran o rotan su posición siguiendo el movimiento del jugador, utilizando capas separadas para cada información en pantalla, dando un incentivo al movimiento y los combos.</li>
                 <li><strong>Fauna Matemática:</strong> Spawners ambientales que generan bancos de peces. Utilizando funciones trigonométricas de Seno y Coseno, los modelos 3D describen patrones naturales infinitos (lemniscata) alrededor del jugador.</li>
                 <li><strong>Economía en Movimiento:</strong> Sistema de compras integrado directamente en el escenario. Al entrar a zonas específicas, una UI moderna entra en escena mediante animaciones (Tweens), permitiendo canjear monedas por <em>Arrojables</em> o <em>Más Aire</em> de forma inmediata.</li>
             </ul>
@@ -450,9 +496,9 @@
         <h3>Capturas de Regulus</h3>
         <div class="capturas-grid">
             <img src="captura-regulus-1.jpg" alt="Acrobacia en el aire y multiplicador de combo" class="slide-up-on-scroll">
-            <img src="captura-regulus-2.jpg" alt="Carrera codo a codo con rivales Spinner" class="slide-up-on-scroll">
-            <img src="captura-regulus-3.jpg" alt="Interfaz limpia de la Tienda de Arrojables" class="slide-up-on-scroll">
-            <img src="captura-regulus-4.jpg" alt="Tutorial integrado in-game" class="slide-up-on-scroll">
+            <img src="captura-regulus-2.jpg" alt="Carrera codo a codo con rivales Spinner" class="slide-up-on-scroll" style="transition-delay: 0.1s">
+            <img src="captura-regulus-3.jpg" alt="Interfaz limpia de la Tienda de Arrojables" class="slide-up-on-scroll" style="transition-delay: 0.2s">
+            <img src="captura-regulus-4.jpg" alt="Tutorial integrado in-game" class="slide-up-on-scroll" style="transition-delay: 0.3s">
         </div>
     </section>
 
@@ -460,7 +506,9 @@
         <p>Desarrollado por <strong>Lucas Daniel Soriano</strong> — Devouring Productions</p>
         <p>© 2026 - Portfolio de Desarrollo de Videojuegos y Game Design</p>
         <p>
-            <a href="https://www.linkedin.com/in/lucasdanielsoriano/">LinkedIn</a> | <a href="https://lucasdanielsmm.github.io/DevouringProductions/">GitHub</a> | <a href="mailto:devouringgproductions@gmail.com">Email</a>
+            <a href="https://www.linkedin.com/in/lucasdanielsoriano/">LinkedIn</a> &nbsp;|&nbsp; 
+            <a href="https://lucasdanielsmm.github.io/DevouringProductions/">GitHub</a> &nbsp;|&nbsp; 
+            <a href="mailto:devouringgproductions@gmail.com">Email</a>
         </p>
     </footer>
 
@@ -475,7 +523,7 @@
             const observerOptions = {
                 root: null, 
                 rootMargin: '0px',
-                threshold: 0.1 
+                threshold: 0.15 
             };
 
             const observer = new IntersectionObserver((entries, observer) => {
