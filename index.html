@@ -69,56 +69,24 @@
             border: none;
         }
 
-        .Portada {
+        /* --- CONTENEDOR PORTADA PANORÁMICA (GIF) ESTILO NEÓN - AHORA MÁS GRANDE --- */
+        .contenedor-panoramico {
             width: 100%;
-            max-width: 900px; 
+            max-width: 1400px; /* Aumentado para que sea más grande */
             margin: 40px auto;
-            aspect-ratio: 16/9;
-            position: relative;
-            opacity: 1; 
-            transform: translateY(40px);
-            transition: opacity 1.2s ease-out, transform 1.2s ease-out; 
+            aspect-ratio: 16 / 7; /* Proporción ajustada para que sea más alta */
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(255, 105, 180, 0.5), 0 0 15px rgba(0, 255, 255, 0.4);
+            border: 2px solid #333;
+            background-color: #111;
         }
 
-        
-        .Portada iframe, .Portada img {
+        .contenedor-panoramico img {
             width: 100%;
             height: 100%;
+            object-fit: cover; 
             display: block;
-        }
-
-        /* --- CONTENEDOR DE 3 PORTADAS --- */
-        .contenedor-portadas {
-            display: flex;
-            justify-content: center;
-            align-items: stretch; /* Obliga a los laterales a tener la misma altura que la central */
-            width: 100%;
-            margin: 40px auto;
-            overflow: hidden; 
-        }
-
-        /* Estilos para las imágenes laterales */
-        .portada-lateral {
-            display: none; /* Ocultas por defecto (para móvil) */
-            flex: 1; /* Toman todo el espacio disponible a los lados */
-            object-fit: cover; /* Evita que las imágenes se deformen, solo las recorta */
-        }
-
-        /* Ajuste a tu Portada central cuando está dentro del contenedor */
-        .contenedor-portadas .Portada {
-            margin: 0; /* Quitamos su margen porque ya lo maneja el contenedor padre */
-            flex: 0 0 100%; /* En móvil, ocupa todo el ancho */
-            max-width: 900px; /* Respeta tu ancho máximo original */
-        }
-
-        /* Regla para PC: Mostramos los laterales */
-        @media (min-width: 900px) {
-            .portada-lateral {
-                display: block; /* Se hacen visibles en monitores */
-            }
-            .contenedor-portadas .Portada {
-                flex: 0 0 900px; /* Fijamos el tamaño central en 900px para PC */
-            }
         }
         
         /* ESTILOS DE CAJAS DE JUEGOS */
@@ -131,12 +99,13 @@
             padding: 40px 10px;
             
         }
-        /* Quita el subrayado de los enlaces que contienen las cajas y tarjetas */
+        
         .cajas-juegos a,
         .carrusel-contenedor a {
-            text-decoration: none; /* Esto elimina el subrayado */
-            color: inherit;      /* Asegura que el color del texto dentro del enlace se herede */
+            text-decoration: none; 
+            color: inherit;      
         }
+
         .caja {
             width: 200px;
             height: 280px;
@@ -153,7 +122,7 @@
 
         .caja:hover {
             transform: scale(1.05);
-            box-shadow: 0 12px 24px rgba(255,105,180,0.4);
+            box-shadow: 0 12px 24px rgba(255,105,180,0.4), 0 0 10px rgba(0,255,255,0.2);
         }
 
         .caja img {
@@ -208,7 +177,6 @@
             overflow: hidden; 
         }
 
-        /* Regla para PC: Muestra 4 tarjetas */
         @media (min-width: 900px) {
             .tarjeta {
                 flex: 0 0 25%; 
@@ -250,7 +218,7 @@
             content: "🔍"; 
             font-size: 3em;
             color: white;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
         }
 
         /* --- ESTILOS DE BOTONES --- */
@@ -258,7 +226,7 @@
             position: absolute; 
             top: 50%; 
             transform: translateY(-50%); 
-            background: rgba(0, 0, 0, 0.4); 
+            background: rgba(0, 0, 0, 0.6); 
             border: 2px solid #1e90ff; 
             font-size: 2em;
             color: #1e90ff; 
@@ -266,57 +234,32 @@
             line-height: 1;
             border-radius: 50%;
             cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s;
+            transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s, box-shadow 0.3s;
             z-index: 10; 
         }
 
         .carrusel-btn:hover {
             background-color: #1e90ff; 
             color: #000; 
+            box-shadow: 0 0 15px rgba(30, 144, 255, 0.6);
         }
 
-        .carrusel-btn.izquierda {
-            left: 10px;
-        }
-
-        .carrusel-btn.derecha {
-            right: 10px;
-        }
-
-        /* Clase para ocultar botones si no son necesarios */
-        .carrusel-btn.oculto {
-            opacity: 0;
-            pointer-events: none;
-        }
+        .carrusel-btn.izquierda { left: 10px; }
+        .carrusel-btn.derecha { right: 10px; }
+        .carrusel-btn.oculto { opacity: 0; pointer-events: none; }
 
         /* --- EFECTO DE BRILLO --- */
-        .tarjeta h3, .tarjeta p {
-            position: relative;
-            z-index: 2; 
-        }
+        .tarjeta h3, .tarjeta p { position: relative; z-index: 2; }
 
         .tarjeta::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%; 
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.1) 50%, 
-                transparent
-            );
-            transition: transform 0.5s ease; 
-            z-index: 1; 
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1) 50%, transparent);
+            transition: transform 0.5s ease; z-index: 1; 
         }
 
-        .tarjeta:hover::after {
-            transform: translateX(200%); 
-        }
+        .tarjeta:hover::after { transform: translateX(200%); }
 
-        /* ESTILOS RGB, FOOTER, ETC. */
+        /* ESTILOS RGB ANIMADOS ORIGINALES */
         h2 {
             font-size: 1.5em;
             margin-top: 40px;
@@ -335,92 +278,40 @@
         }
 
         @keyframes neonPulse {
-            0%, 100% {
-                text-shadow: 0 0 2px rgba(255, 105, 180, 0.4), 0 0 4px rgba(0, 255, 255, 0.3), 0 0 6px rgba(255, 0, 255, 0.3);    
-            }
-            50% {
-                text-shadow: 0 0 4px rgba(255, 105, 180, 0.5), 0 0 8px rgba(0, 255, 255, 0.4), 0 0 10px rgba(255, 0, 255, 0.4);
-            }
+            0%, 100% { text-shadow: 0 0 2px rgba(255, 105, 180, 0.4), 0 0 4px rgba(0, 255, 255, 0.3), 0 0 6px rgba(255, 0, 255, 0.3); }
+            50% { text-shadow: 0 0 4px rgba(255, 105, 180, 0.5), 0 0 8px rgba(0, 255, 255, 0.4), 0 0 10px rgba(255, 0, 255, 0.4); }
         }
 
         .divider {
             border: 0;
             height: 3px;
-            background: linear-gradient(to right, transparent, #111, transparent);
+            background: linear-gradient(to right, transparent, #333, transparent);
             margin: 30px 0;
         }
 
         .btn {
-            display: inline-block;
-            padding: 12px 20px;
-            margin: 10px auto;
-            font-size: 1.1em;
-            font-weight: bold;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 8px;
-            background-color: #1e90ff;
-            color: #fff;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            display: inline-block; padding: 12px 20px; margin: 10px auto;
+            font-size: 1.1em; font-weight: bold; text-align: center; text-decoration: none;
+            border-radius: 8px; background-color: #1e90ff; color: #fff;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s;
         }
 
-        .btn:hover {
-            background-color: #00bfff;
-        }
+        .btn:hover { background-color: #00bfff; box-shadow: 0 0 10px rgba(0, 191, 255, 0.5); }
+        .btn:active { background-color: #00ff00; color: #000; }
+        .btn-redes { background-color: #28a745; color: #fff; }
+        .btn-redes:hover { background-color: #3bd85f; box-shadow: 0 0 10px rgba(40, 167, 69, 0.5); }
+        .btn-redes:active { background-color: #fff; color: #28a745; }
 
-        .btn:active {
-            background-color: #00ff00;
-            color: #000;
-        }
-
-        .btn-redes {
-            background-color: #28a745; 
-            color: #fff;
-        }
-
-        .btn-redes:hover {
-            background-color: #3bd85f; 
-        }
-
-        .btn-redes:active {
-            background-color: #fff;      
-            color: #28a745;             
-        }
-
-        .logo {
-            max-width: 120px;
-            height: auto;
-            display: block;
-            margin: 0 auto 10px;
-        }
+        .logo { max-width: 120px; height: auto; display: block; margin: 0 auto 10px; }
 
         footer {
-            background-color: #0a0a0a; 
-            color: #888; 
-            text-align: center;
-            padding: 20px 10px;
-            margin-top: 40px;
-            font-size: 0.9em;
-            border-top: 1px solid #111; 
+            background-color: #0a0a0a; color: #888; text-align: center;
+            padding: 20px 10px; margin-top: 40px; font-size: 0.9em; border-top: 1px solid #111; 
         }
 
-        footer img {
-            max-width: 60px;
-            height: auto;
-            display: block;
-            margin: 0 auto 10px;
-        }
-
-        footer a {
-            color: #28a745; 
-            font-weight: bold;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: #3bd85f; 
-        }
+        footer img { max-width: 60px; height: auto; display: block; margin: 0 auto 10px; }
+        footer a { color: #28a745; font-weight: bold; text-decoration: none; transition: color 0.3s ease; }
+        footer a:hover { color: #3bd85f; }
 
         @media (max-width: 600px) {
             h1 { font-size: 1.8em; }
@@ -430,295 +321,142 @@
         }
 
         /* --- ESTILOS PARA MODAL --- */
-        .modal {
-            display: none; 
-            position: fixed;
-            z-index: 9999; 
-            padding-top: 50px; 
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.9); 
-        }
+        .modal { display: none; position: fixed; z-index: 9999; padding-top: 50px; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.9); }
+        .modal-contenido { margin: auto; display: block; width: 90%; max-width: 900px; animation: zoom 0.6s; }
+        @keyframes zoom { from {transform: scale(0)} to {transform: scale(1)} }
+        .cerrar-modal { position: absolute; top: 15px; right: 35px; color: #f1f1f1; font-size: 40px; font-weight: bold; transition: 0.3s; cursor: pointer; }
+        .cerrar-modal:hover, .cerrar-modal:focus { color: #ff69b4; text-decoration: none; cursor: pointer; }
 
-        .modal-contenido {
-            margin: auto;
-            display: block;
-            width: 90%;
-            max-width: 900px; 
-            animation: zoom 0.6s; 
-        }
-
-        @keyframes zoom {
-            from {transform: scale(0)} 
-            to {transform: scale(1)}
-        }
-
-        .cerrar-modal {
-            position: absolute;
-            top: 15px;
-            right: 35px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-
-        .cerrar-modal:hover,
-        .cerrar-modal:focus {
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        @media only screen and (max-width: 700px) {
-            .modal-contenido {
-                width: 100%;
-            }
-        }
+        @media only screen and (max-width: 700px) { .modal-contenido { width: 100%; } }
 
         /* --- ESTILOS PARA SECCIONES DE PROYECTO (Zig-Zag) --- */
-        .proyecto-seccion {
-            padding: 20px 0;
-            margin-bottom: 40px;
-        }
+        .proyecto-seccion { padding: 20px 0; margin-bottom: 40px; }
+        .proyecto-cuerpo { width: 100%; }
+        .proyecto-seccion h2 { margin-bottom: 15px; line-height: 1.2; }
+        .contenido-proyecto { display: flex; flex-direction: column; gap: 20px; align-items: center; }
+        .texto-columna { width: 100%; text-align: center; }
+        .texto-columna p { margin-top: 5px; }
+        .texto-columna .btn { margin: 10px auto; display: block; width: fit-content; }
 
-        .proyecto-cuerpo {
-            width: 100%; 
-        }
-
-        /* Ajuste: margen reducido para pegar título a descripción */
-        .proyecto-seccion h2 {
-            margin-bottom: 15px; 
-            line-height: 1.2;
-        }
-
-        .contenido-proyecto {
-            display: flex; 
-            flex-direction: column; 
-            gap: 20px;
-            align-items: center; 
-        }
-
-        .texto-columna {
-            width: 100%;
-            text-align: center; 
-        }
-        
-        /* Ajuste para subir descripción */
-        .texto-columna p {
-            margin-top: 5px; 
-        }
-
-        .texto-columna .btn {
-            margin: 10px auto; 
-            display: block; 
-            width: fit-content; 
-        }
-
-        /* --- Ajustes para PC (min-width: 900px) --- */
         @media (min-width: 900px) {
-            .proyecto-cuerpo {
-                max-width: 1200px; 
-                margin: 0 auto; 
-            }
-            
-            .contenido-proyecto {
-                flex-direction: row; 
-                align-items: center; /* Alineado verticalmente al video */
-                gap: 50px;
-            }
-            
-            .texto-columna {
-                flex: 1; 
-                max-width: 50%;
-                
-                /* CLAVE: Alineación centrada para Título y Descripción */
-                text-align: center; 
-                
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                
-                /* Ajuste para subir el bloque entero ligeramente */
-                margin-top: -100px; 
-            }
-            
-            /* Asegurar que el párrafo también se centre */
-            .texto-columna p {
-                text-align: center;
-            }
-            
-            .texto-columna .btn {
-                margin: 15px auto 0 auto; 
-                display: block; 
-            }
-
-            .video-columna {
-                flex: 1; 
-                max-width: 50%;
-                display: flex;
-                flex-direction: column;
-                align-items: center; 
-            }
-
-            .video-columna .informe {
-                margin-top: 10px;
-                text-align: center; 
-            }
-
+            .proyecto-cuerpo { max-width: 1200px; margin: 0 auto; }
+            .contenido-proyecto { flex-direction: row; align-items: center; gap: 50px; }
+            .texto-columna { flex: 1; max-width: 50%; text-align: center; display: flex; flex-direction: column; justify-content: center; margin-top: -100px; }
+            .texto-columna p { text-align: center; }
+            .texto-columna .btn { margin: 15px auto 0 auto; display: block; }
+            .video-columna { flex: 1; max-width: 50%; display: flex; flex-direction: column; align-items: center; }
+            .video-columna .informe { margin-top: 10px; text-align: center; }
             .proyecto-impar .texto-columna { order: 0; }
             .proyecto-impar .video-columna { order: 1; }
             .proyecto-par .texto-columna { order: 1; }
             .proyecto-par .video-columna { order: 0; }
         }
 
-        /* =========================================
-           NUEVOS ESTILOS PARA EL MENÚ HAMBURGUESA
-           ========================================= */
-        .menu-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            font-size: 3em;     
-            line-height: 0.6;   
-            color: #ffffff;     
-            cursor: pointer;
-            z-index: 10001;     /* Mayor que el modal (9999) */
-            transition: transform 0.4s ease, color 0.4s ease;
-            user-select: none;  
-            font-weight: 300;
-        }
+        /* --- MENÚ HAMBURGUESA --- */
+        .menu-btn { position: fixed; top: 20px; right: 20px; font-size: 3em; line-height: 0.6; color: #ffffff; cursor: pointer; z-index: 10001; transition: transform 0.4s ease, color 0.4s ease; user-select: none; font-weight: 300; }
+        .menu-btn.activo { transform: rotate(45deg); color: #000000; }
+        .menu-overlay { position: fixed; top: 0; right: 0; background-color: #ffffff; z-index: 10000; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; transform: translateY(-20px); }
+        @media (min-width: 900px) { .menu-overlay { width: 350px; height: 100%; border-left: 4px solid #1e90ff; box-shadow: -5px 0 15px rgba(0,0,0,0.5); transform: translateX(100%); } }
+        .menu-overlay.activo { opacity: 1; visibility: visible; transform: translate(0, 0); }
+        .menu-links a { display: block; font-size: 2em; font-weight: bold; color: #000000; text-decoration: none; margin: 15px 0; position: relative; transition: color 0.3s; font-family: Arial, sans-serif; text-align: center; }
+        .menu-links a:hover { color: #ff69b4; }
+        .menu-links a::after { content: ''; display: block; width: 0; height: 3px; background: #1e90ff; transition: width 0.3s; margin: 5px auto 0; }
+        .menu-links a:hover::after { width: 100%; background: #ff69b4; }
 
-        .menu-btn.activo {
-            transform: rotate(45deg); 
-            color: #000000;
-        }
-
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            right: 0;
-            background-color: #ffffff;
-            z-index: 10000; 
-            
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
-            
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            
-            /* Mobile Default */
-            width: 100%;
-            height: 100%;
-            transform: translateY(-20px); 
-        }
-
-        /* PC: Barra lateral derecha */
-        @media (min-width: 900px) {
-            .menu-overlay {
-                width: 350px; 
-                height: 100%;
-                border-left: 4px solid #1e90ff;
-                box-shadow: -5px 0 15px rgba(0,0,0,0.5);
-                transform: translateX(100%); 
-            }
-        }
-
-        .menu-overlay.activo {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(0, 0);
-        }
-
-        .menu-links a {
-            display: block;
-            font-size: 2em;
-            font-weight: bold;
-            color: #000000; 
-            text-decoration: none;
-            margin: 15px 0;
-            position: relative;
-            transition: color 0.3s;
-            font-family: Arial, sans-serif; 
-            text-align: center;
-        }
-
-        .menu-links a:hover {
-            color: #1e90ff; 
-        }
-
-        .menu-links a::after {
-            content: '';
-            display: block;
-            width: 0;
-            height: 3px;
-            background: #1e90ff;
-            transition: width 0.3s;
-            margin: 5px auto 0;
-        }
-
-        .menu-links a:hover::after {
-            width: 100%;
-        }
-
-
-
-        /* --- CARRUSEL PARA ITCH.IO --- */
+        /* --- CARRUSEL VERTICAL PARA ITCH.IO ESTILO RGB + IMÁGENES --- */
         .itch-seccion {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 40px auto;
             padding: 0 10px;
             text-align: center;
         }
 
-        .itch-carrusel {
+        .itch-layout {
             display: flex;
-            overflow-x: auto;
+            justify-content: center;
+            align-items: stretch;
             gap: 20px;
-            padding: 20px 0;
-            scroll-snap-type: x mandatory;
-            /* Estilos para la barra de scroll */
+            margin-top: 30px;
+            height: 750px; /* AUMENTADO para dar espacio a las imágenes y el iframe */
+        }
+
+        .itch-casilla-lateral {
+            flex: 1;
+            display: none; 
+            background-color: #111;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background-image: url('tu-imagen-decorativa.jpg'); 
+            background-size: cover;
+            background-position: center;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.9), inset 0 0 15px rgba(255, 105, 180, 0.2);
+            position: relative;
+        }
+
+        .itch-casilla-lateral::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8));
+            border-radius: 6px;
+        }
+
+        @media (min-width: 900px) { .itch-casilla-lateral { display: block; } }
+
+        .itch-carrusel-vertical {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            gap: 20px;
+            padding: 15px;
+            scroll-snap-type: y mandatory;
             scrollbar-width: thin;
-            scrollbar-color: #1e90ff #111;
+            scrollbar-color: #ff69b4 #111; 
+            border: 2px solid #333;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.1);
         }
 
-        /* Scrollbar para navegadores basados en WebKit (Chrome, Edge, Safari) */
-        .itch-carrusel::-webkit-scrollbar {
-            height: 10px;
-        }
-        .itch-carrusel::-webkit-scrollbar-track {
-            background: #111;
-            border-radius: 5px;
-        }
-        .itch-carrusel::-webkit-scrollbar-thumb {
-            background-color: #1e90ff;
-            border-radius: 5px;
-        }
+        .itch-carrusel-vertical::-webkit-scrollbar { width: 8px; }
+        .itch-carrusel-vertical::-webkit-scrollbar-track { background: #111; border-radius: 4px; }
+        .itch-carrusel-vertical::-webkit-scrollbar-thumb { background-color: #ff69b4; border-radius: 4px; }
 
+        /* NUEVO DISEÑO PARA LA TARJETA DE ITCH CON IMAGEN */
         .itch-item {
-            flex: 0 0 300px; /* Ancho fijo de la tarjeta de Itch.io */
-            scroll-snap-align: center;
-            transition: transform 0.3s ease;
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            background-color: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .itch-item:hover {
-            transform: translateY(-5px);
+        .itch-item:hover { 
+            transform: scale(1.02); 
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.4); 
+        }
+
+        .itch-item img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+            border: 1px solid #333;
         }
 
         .itch-item iframe {
-            width: 100%;
-            height: 167px; /* Altura estándar del widget de Itch.io */
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }    
+            width: 100%; 
+            height: 167px; 
+            border: none; 
+            border-radius: 4px;
+        }
+
     </style>
 </head>
 
@@ -748,14 +486,10 @@
     <h1>Devouring Productions</h1>
     <p><strong>Pagina Principal</strong></p>
 
-    <div class="contenedor-portadas">
-        <img src="ruta-imagen-izquierda2.jpg" alt="Decoración Izquierda" class="portada-lateral">
-    
-        <div class="Portada">
-            <img src="Portadainfo.jpg" alt="Portada: Devouring Productions - Descripcion">
-        </div>
-    
-        <img src="ruta-imagen-derecha.jpg" alt="Decoración Derecha" class="portada-lateral">
+    <!-- PORTADA PANORÁMICA MÁS GRANDE -->
+    <div class="contenedor-panoramico">
+        <!-- Reemplaza esto con tu archivo .gif -->
+        <img src="PortadaAnimada.gif" alt="Portada: Devouring Productions - Animacion">
     </div>
 
     <section class="carrusel">
@@ -801,6 +535,7 @@
                 <img src="portada-move-lanzer.jpg" alt="MOVE-LANZER">
                 <h3>MOVE-LANZER</h3>
                 <p>Juego de oleadas infinitas hecho en Scratch. "Frenesí explosivo inteminable que pone a prueba tu paciencia"</p>
+            </div>
         </div>
 
         <button class="carrusel-btn derecha">⟩</button>
@@ -808,34 +543,46 @@
 
     <hr class="divider">
 
+    <!-- SECCIÓN ITCH.IO VERTICAL CON VISUALES DE JUEGO -->
     <section class="itch-seccion">
         <h2>Mi Perfil en Itch.io</h2>
         <p>¡Echá un vistazo a mis juegos publicados directamente desde la plataforma!</p>
     
-        <div class="itch-carrusel">
-            <div class="itch-item">
-                <iframe frameborder="0" src="https://itch.io/embed/4551247?border_width=5&amp;bg_color=141414&amp;fg_color=ffffff&amp;link_color=ff2a2a&amp;border_color=3a3a3a" width="560" height="175"><a href="https://devouringprojects.itch.io/hemopathy">HEMOPATHY by DevouringProjects, InSesth, erineee</a></iframe>
-            </div>
-            
-            <div class="itch-item">
-                <iframe frameborder="0" src="https://itch.io/embed/4450642?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535" width="560" height="175"><a href="https://devouringprojects.itch.io/humanity-will-remember">Humanity will Remember by DevouringProjects</a></iframe>
-            </div>
-        
-            <div class="itch-item">
-                <iframe frameborder="0" src="https://itch.io/embed/4440436?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535" width="560" height="175"><a href="https://devouringprojects.itch.io/utopia-csa-technologies">UTOPIA CSA Technologies by DevouringProjects</a></iframe>
+        <div class="itch-layout">
+            <div class="itch-casilla-lateral"></div>
+
+            <div class="itch-carrusel-vertical">
+                <div class="itch-item">
+                    <!-- ARTE DEL JUEGO AGREGADO AQUÍ -->
+                    <img src="HEMOPATHY.png" alt="Visual Hemopathy">
+                    <iframe frameborder="0" src="https://itch.io/embed/4551247?border_width=5&amp;bg_color=141414&amp;fg_color=ffffff&amp;link_color=ff2a2a&amp;border_color=3a3a3a"></iframe>
+                </div>
+                <div class="itch-item">
+                    <!-- ARTE DEL JUEGO AGREGADO AQUÍ -->
+                    <img src="HumanityRemember.jpg" alt="Visual Humanity will Remember">
+                    <iframe frameborder="0" src="https://itch.io/embed/4450642?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535"></iframe>
+                </div>
+                <div class="itch-item">
+                    <!-- ARTE DEL JUEGO AGREGADO AQUÍ -->
+                    <img src="CODIGOUTOPIA5.jpg" alt="Visual Utopia CSA">
+                    <iframe frameborder="0" src="https://itch.io/embed/4440436?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535"></iframe>
+                </div>
+                <div class="itch-item">
+                    <!-- ARTE DEL JUEGO AGREGADO AQUÍ -->
+                    <img src="portada-CAE-CCC.jpg" alt="Visual CAE">
+                    <iframe frameborder="0" src="https://itch.io/embed/4344151?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535"></iframe>
+                </div>
+                <div class="itch-item">
+                    <!-- ARTE DEL JUEGO AGREGADO AQUÍ -->
+                    <img src="portada-amanecer.jpg" alt="Visual Antes del Amanecer">
+                    <iframe frameborder="0" src="https://itch.io/embed/4252823?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535"></iframe>
+                </div>
             </div>
 
-            <div class="itch-item">
-                <iframe frameborder="0" src="https://itch.io/embed/4344151?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535" width="560" height="175"><a href="https://devouringprojects.itch.io/cae-time-traveler">CAE — Time Traveler by DevouringProjects</a></iframe>
-            </div>
-
-            <div class="itch-item">
-                <iframe frameborder="0" src="https://itch.io/embed/4252823?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535" width="560" height="175"><a href="https://devouringprojects.itch.io/antes-del-amanecer">AnTes Del AmANECER by DevouringProjects</a></iframe>
-            </div>
-        
-            </div>
+            <div class="itch-casilla-lateral"></div>
+        </div>
     
-        <a href="https://devouringprojects.itch.io" target="_blank" class="btn">Ver perfil completo en Itch.io</a>
+        <a href="https://devouringprojects.itch.io" target="_blank" class="btn" style="margin-top:20px;">Ver perfil completo en Itch.io</a>
     </section>
 
     <section class="proyecto-seccion proyecto-impar">
@@ -898,7 +645,6 @@
                 <p>Juego Arcade hecho Completamente en HTML.</p>
             </div>
         </a>
-        
         <a href="move-lanzer.html" class="enlace-tarjeta">
             <div class="caja">
                 <img src="caratula-move-lanzer.jpg" alt="MOVE-LANZER">
@@ -906,7 +652,6 @@
                 <p>Juego de oleadas infinitas hecho en Scratch.</p>
             </div>
         </a>
-        
         <a href="vireo-code.html" class="enlace-tarjeta">
             <div class="caja">
                 <img src="caratula-vireo-CODE.jpg" alt="Vireo CODE">
@@ -914,7 +659,6 @@
                 <p>RPG Sci-fi hecho en RPG Maker MV.</p>
             </div>
         </a>
-        
         <a href="DINOMA.html" class="enlace-tarjeta">
             <div class="caja">
                 <img src="caratula-creatura-dinoma.jpg" alt="CREATURA DINOMA">
@@ -922,7 +666,6 @@
                 <p>Juego 3D de extracción hecho en Unity.</p>
             </div>
         </a>
-
         <a href="AMANECER.html" class="enlace-tarjeta">
             <div class="caja">
                 <img src="caratula-amanecer-1.jpg" alt="AMANECER">
@@ -930,7 +673,6 @@
                 <p>Terror Paranormal en un cementerio hecho en Unity.</p>
             </div>
         </a>
-
         <a href="DEINBEAST1.html" class="enlace-tarjeta">
             <div class="caja">
                 <img src="portadaDeinBeast4.jpg" alt="DEIN BEAST">
@@ -938,7 +680,6 @@
                 <p>Rogue-lite Mobile Vertical hecho en Jabali studio.</p>
             </div>
         </a>
-
         <a href="UTOPIA.html" class="enlace-tarjeta">
             <div class="caja">
                 <img src="CODIGOUTOPIA2.jpg" alt="UTOPIA">
@@ -946,7 +687,6 @@
                 <p>Simulador de Robot formato Vertical hecho en Astrocade.</p>
             </div>
         </a>
-
         <a href="HumanityRemember.html" class="enlace-tarjeta">
             <div class="caja">
                 <img src="HumanityRemember.jpg" alt="HUMANITY">
@@ -954,7 +694,6 @@
                 <p>Dungeon Crawler con Mazmorras Procedurales hecho en Unity 6000.</p>
             </div>
         </a>
-
         <a href="ICENANOMACHINES.html" class="enlace-tarjeta">
             <div class="caja">
                 <img src="portadaIncremental.jpg" alt="ICENANOMACHINES">
@@ -962,16 +701,13 @@
                 <p>Prototypo incremental de Mantener y Alimentar una maquina de Hielo.</p>
             </div>
         </a>
-        
         <a href="hemopathy.html" class="enlace-tarjeta">
             <div class="caja">
                 <img src="HEMOPATHY.png" alt="HEMOPATHY">
                 <h3>HEMOPATHY</h3>
-                <p>Drena Salud y Asesina al Corazon en este Bullet Hell 2D Sangriento de Unity.</p>
+                <p>Drena Salud y Asesina al Corazon en este Bullet Hell 2D Sangriento.</p>
             </div>
         </a>
-
-        
         <a href="REGULUS.HTML" class="enlace-tarjeta">
             <div class="caja">
                 <img src="logoREGULUSWATER.png" alt="REGULUS WATERFALLS">
@@ -991,6 +727,7 @@
         <p><a href="https://linktr.ee/LucasDaniel">Contacto</a></p>
     </footer>
 
+    <!-- TU JAVASCRIPT INTACTO -->
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const contenedor = document.querySelector('.carrusel-contenedor');
@@ -998,14 +735,10 @@
             const botonIzquierda = document.querySelector('.carrusel-btn.izquierda');
             const botonDerecha = document.querySelector('.carrusel-btn.derecha');
             
-            // Elementos del Modal
             const modal = document.getElementById('modal-imagen');
             const imagenModal = document.getElementById('imagen-modal');
             const cerrarModal = document.querySelector('.cerrar-modal');
 
-            /* =========================================
-               LOGICA JS PARA EL MENU HAMBURGUESA
-               ========================================= */
             const menuBtn = document.getElementById('menuBtn');
             const menuOverlay = document.getElementById('menuOverlay');
             const menuLinks = document.querySelectorAll('.menu-links a');
@@ -1016,7 +749,6 @@
                     menuOverlay.classList.toggle('activo');
                 });
 
-                // Cerrar al clickear un link
                 menuLinks.forEach(link => {
                     link.addEventListener('click', () => {
                         menuBtn.classList.remove('activo');
@@ -1024,9 +756,6 @@
                     });
                 });
             }
-            /* =========================================
-               FIN LOGICA MENU
-               ========================================= */
 
             if (!contenedor || tarjetas.length === 0 || !botonIzquierda || !botonDerecha) {
                 return;
@@ -1036,29 +765,14 @@
             let indice = 0;
             let autoScrollInterval;
 
-            // --- Lógica del Carrusel ---
-
-            // Función para calcular el índice máximo permitido
             function getMaxIndice() {
-                // Ancho del contenedor visible
                 const anchoContenedor = document.querySelector('.carrusel').offsetWidth;
-                // Ancho de una sola tarjeta
                 const anchoTarjeta = tarjetas[0].offsetWidth;
-                
-                // Cuántas tarjetas caben en pantalla (aprox)
-                // En móvil será 1, en PC será 4
                 const tarjetasVisibles = Math.round(anchoContenedor / anchoTarjeta);
-                
-                // El índice máximo es Total - Visibles.
-                // Si tengo 4 tarjetas y veo 4, el max es 0 (no se mueve).
-                // Si tengo 4 tarjetas y veo 1, el max es 3.
                 let max = totalTarjetas - tarjetasVisibles;
-                
-                // Seguridad: no permitir negativos
                 return Math.max(0, max);
             }
 
-            // Función para ocultar flechas si no son necesarias
             function actualizarFlechas() {
                 const maxIndice = getMaxIndice();
                 if (maxIndice === 0) {
@@ -1081,8 +795,6 @@
                 if (autoScrollInterval) {
                     clearInterval(autoScrollInterval);
                 }
-                
-                // Solo iniciar autoscroll si hay desplazamiento posible
                 if (getMaxIndice() > 0) {
                     autoScrollInterval = setInterval(() => {
                         const maxIndice = getMaxIndice();
@@ -1092,13 +804,11 @@
                 }
             }
 
-            // Iniciar lógica
             actualizarFlechas();
             iniciarAutoScroll();
 
             botonIzquierda.addEventListener('click', () => {
                 const maxIndice = getMaxIndice();
-                // Si estamos en 0, ir al final (maxIndice), si no, restar 1
                 indice = (indice > 0) ? indice - 1 : maxIndice; 
                 mostrarTarjeta();
                 iniciarAutoScroll(); 
@@ -1106,13 +816,11 @@
 
             botonDerecha.addEventListener('click', () => {
                 const maxIndice = getMaxIndice();
-                // Si estamos en el max, volver a 0, si no, sumar 1
                 indice = (indice < maxIndice) ? indice + 1 : 0; 
                 mostrarTarjeta();
                 iniciarAutoScroll();
             });
 
-            // Swipe Táctil
             let startX = 0;
             contenedor.addEventListener('touchstart', (e) => {
                 startX = e.touches[0].clientX;
@@ -1123,20 +831,18 @@
                 let diff = startX - endX;
                 const maxIndice = getMaxIndice();
 
-                if (diff > 50) { // Deslizar izquierda (Siguiente)
+                if (diff > 50) { 
                     indice = (indice < maxIndice) ? indice + 1 : 0;
                     mostrarTarjeta();
                     iniciarAutoScroll();
-                } else if (diff < -50) { // Deslizar derecha (Anterior)
+                } else if (diff < -50) { 
                     indice = (indice > 0) ? indice - 1 : maxIndice;
                     mostrarTarjeta();
                     iniciarAutoScroll();
                 }
             });
             
-            // Recalcular al cambiar tamaño de ventana
             window.addEventListener('resize', () => {
-                // Asegurar que el índice no quede fuera de rango al cambiar de móvil a PC
                 const maxIndice = getMaxIndice();
                 if (indice > maxIndice) {
                     indice = maxIndice;
@@ -1145,9 +851,7 @@
                 actualizarFlechas();
             });
 
-            // --- Lógica del Modal (Lupa) ---
             tarjetas.forEach(tarjeta => {
-                // (Mantener la creación de la lupa igual...)
                 const lupaOverlay = document.createElement('div');
                 lupaOverlay.classList.add('lupa-overlay');
                 tarjeta.appendChild(lupaOverlay);
@@ -1156,16 +860,12 @@
                     const imagenSrc = tarjeta.querySelector('img').src;
                     modal.style.display = "block";
                     imagenModal.src = imagenSrc;
-                    
-                    // --- NUEVO: OCULTAR EL BOTÓN + ---
                     menuBtn.style.display = "none";
                 });
             });
 
-            // Función para cerrar y volver a mostrar el botón
             function cerrarYMostrarBoton() {
                 modal.style.display = "none";
-                // --- NUEVO: MOSTRAR EL BOTÓN + ---
                 menuBtn.style.display = "block";
             }
 
