@@ -556,6 +556,14 @@
             image-rendering: crisp-edges; /* Intenta evitar el desenfoque */
             image-rendering: pixelated; /* Opcional: si prefieres que se vea "nítida" aunque sea pequeña */
         }
+
+    .timeline-item.timeline-oculto {
+        display: none !important;
+    }
+
+    .timeline-item.visible {
+        display: flex !important; /* Mantiene la estructura original */
+    }
     </style>
 </head>
 
@@ -717,7 +725,7 @@
                 <div class="timeline-contenido">
                     <h2>Cae: Reto Emoji + Block de Notas = Juego</h2>
                     <p><strong>Descripción:</strong> Un juego incremental completamente en HTML. ¡Controla a 🐽 en este frenético juego arcade de esquivar y recolectar! 4 modos de juego únicos pondrán a prueba tu habilidad!.</p>
-                    <iframe src="CaeTTF.png" allowfullscreen></iframe>
+                    <img src="CaeTTF.png" style="width: 100%; border-radius: 8px; border: 1px solid #333;">
                     <div class="timeline-botones">
                         <a href="https://devouringprojects.itch.io/cae-time-traveler" target="_blank" class="btn">Jugar en Itch.io</a>
                     </div>
