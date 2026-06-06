@@ -551,6 +551,11 @@
                 color: #1e90ff; 
             }
         }
+        .imagen-miniatura {
+            image-rendering: -webkit-optimize-contrast; /* Para navegadores basados en Webkit */
+            image-rendering: crisp-edges; /* Intenta evitar el desenfoque */
+            image-rendering: pixelated; /* Opcional: si prefieres que se vea "nítida" aunque sea pequeña */
+        }
     </style>
 </head>
 
@@ -645,7 +650,7 @@
                 <div class="timeline-icono" style="border-color: #0080ff;"></div>
                 <div class="timeline-contenido">
                     <h2>REGULUS WATERFALLS</h2>
-                    <p><strong>Descripción:</strong> ¿Serás capaz de surfear por la Cascada de 5000 Metros, llegar a la Cima, y Coronarte como el Rey de Regulus? Edicion: GDevelop BIG Game Jam #9 Tema: TO THE TOP</p>
+                    <p><strong>Descripción:</strong> ¿Serás capaz de surfear por la Cascada de 5000 Metros, llegar a la Cima, y Coronarte como el Rey de Regulus? Edicion: GDevelop BIG Game Jam #9 </p>
                     <iframe src="https://www.youtube.com/embed/C9l4OTt4fZo?si=_yt_l-oXxmxPKh8k" allowfullscreen></iframe>
                     <div class="timeline-botones">
                         <a href="https://devouringprojects.itch.io/regulus-waterfalls" target="_blank" class="btn">Ver en Itch.io</a>
