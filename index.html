@@ -1102,12 +1102,12 @@
         });
 
         // Lógica para Línea de Tiempo y Botón "Ver Más"
+            // Ocultar a partir del índice 3 (el 4to elemento)
         const timelineItems = document.querySelectorAll('.timeline-item');
         const btnVerMas = document.getElementById('btn-ver-mas');
         const maxVisiblesPorDefecto = 3;
-
+        
         if (timelineItems.length > 0) {
-            // Ocultar a partir del índice 3 (el 4to elemento)
             timelineItems.forEach((item, index) => {
                 if (index >= maxVisiblesPorDefecto) {
                     item.classList.add('timeline-oculto');
@@ -1124,9 +1124,12 @@
                     btnVerMas.addEventListener('click', () => {
                         timelineItems.forEach(item => {
                             item.classList.remove('timeline-oculto');
-                            item.classList.add('visible'); // Forzamos la visibilidad
+                            item.classList.add('visible');
                         });
-                        btnVerMas.style.display = 'none'; // Ocultamos el botón al terminar
+                        btnVerMas.style.display = 'none';
+            
+                        // TRUCO: Forzar un reflow para que las imágenes se redibujen nítidas
+                        window.dispatchEvent(new Event('resize'));
                     });
             }
         }
