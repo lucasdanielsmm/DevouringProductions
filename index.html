@@ -577,19 +577,48 @@
             to { opacity: 1; }
         }
 
-        /* El botón de play "flotante" para que el usuario sepa que es un video */
+        /* Contenedor que mantiene la proporción 16:9 y evita pixelación */
+        .video-preview-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9; /* ESTO ES CLAVE: Reserva el espacio exacto */
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 15px 0;
+            border: 1px solid #333;
+        }
+        
+        /* La imagen dentro del contenedor */
+        .video-preview-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Hace que la imagen encaje perfecto sin deformarse */
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Efecto hover profesional */
+        .video-preview-container:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Botón de Play */
         .play-icon {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 3em;
+            font-size: 3rem;
             color: white;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.5);
             padding: 10px 20px;
-            border-radius: 10px;
-            pointer-events: none; /* Esto hace que el clic pase a través del ícono */
+            border-radius: 50%;
+            pointer-events: none; /* Crucial: permite el clic en la imagen */
+            backdrop-filter: blur(2px);
         }
+
+        
     </style>
 </head>
 
