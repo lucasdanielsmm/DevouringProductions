@@ -432,7 +432,6 @@
             border-radius: 4px;
         }
 
-
         /* --- ESTILOS DE LÍNEA DE TIEMPO (VIDEOS) --- */
         .seccion-timeline {
             max-width: 1000px;
@@ -550,21 +549,6 @@
                 padding: 0 0 10px 0; 
                 color: #1e90ff; 
             }
-        }
-        .imagen-miniatura {
-            image-rendering: -webkit-optimize-contrast; /* Para navegadores basados en Webkit */
-            image-rendering: crisp-edges; /* Intenta evitar el desenfoque */
-            image-rendering: pixelated; /* Opcional: si prefieres que se vea "nítida" aunque sea pequeña */
-        }
-
-        .timeline-item {
-            /* Esto ayuda a que el navegador procese mejor las imágenes y elementos internos */
-            will-change: transform;
-            backface-visibility: hidden;
-        }
-        
-        .timeline-item.timeline-oculto {
-            display: none !important;
         }
         
         .timeline-item.visible {
@@ -1156,32 +1140,42 @@
         });
 
         // Lógica para Línea de Tiempo y Botón "Ver Más"
-            // Ocultar a partir del índice 3 (el 4to elemento)
         const timelineItems = document.querySelectorAll('.timeline-item');
         const btnVerMas = document.getElementById('btn-ver-mas');
         const maxVisiblesPorDefecto = 3;
-        
+
         if (timelineItems.length > 0) {
             timelineItems.forEach((item, index) => {
                 if (index >= maxVisiblesPorDefecto) {
                     item.classList.add('timeline-oculto');
+                    
+                    // EL FIX: Guardamos el enlace en un atributo temporal y vaciamos el iframe
+                    const iframes = item.querySelectorAll('iframe');
+                    iframes.forEach(iframe => {
+                        iframe.setAttribute('data-src', iframe.src);
+                        iframe.removeAttribute('src');
+                    });
                 }
             });
 
-
-
             // Funcionalidad al hacer click
             if (btnVerMas) {
-                    btnVerMas.addEventListener('click', () => {
-                        timelineItems.forEach(item => {
-                            item.classList.remove('timeline-oculto');
-                            item.classList.add('visible');
+                btnVerMas.addEventListener('click', () => {
+                    timelineItems.forEach(item => {
+                        item.classList.remove('timeline-oculto');
+                        item.classList.add('visible');
+                        
+                        // Restauramos el src ahora que el contenedor tiene dimensiones reales
+                        const iframes = item.querySelectorAll('iframe');
+                        iframes.forEach(iframe => {
+                            if (iframe.hasAttribute('data-src')) {
+                                iframe.src = iframe.getAttribute('data-src');
+                                iframe.removeAttribute('data-src');
+                            }
                         });
-                        btnVerMas.style.display = 'none';
-            
-                        // TRUCO: Forzar un reflow para que las imágenes se redibujen nítidas
-                        window.dispatchEvent(new Event('resize'));
                     });
+                    btnVerMas.style.display = 'none';
+                });
             }
         }
     </script>
