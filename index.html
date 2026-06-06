@@ -577,7 +577,19 @@
             to { opacity: 1; }
         }
 
-
+        /* El botón de play "flotante" para que el usuario sepa que es un video */
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            color: white;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 10px;
+            pointer-events: none; /* Esto hace que el clic pase a través del ícono */
+        }
     </style>
 </head>
 
@@ -807,11 +819,10 @@
                 <div class="timeline-contenido">
                     <h2>MOVE-LANZER: Scratch</h2>
                     <p><strong>Descripción:</strong> Proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de la carrera Diseño y Producción de videojuegos. "Frenesí explosivo interminable".</p>
-                    <a href="https://www.youtube.com/watch?v=b6SXy9xIIP0" target="_blank">
-                    <img src="https://img.youtube.com/vi/b6SXy9xIIP0/maxresdefault.jpg" 
-                    alt="Video Move-Lanzer" 
-                    style="width: 100%; border-radius: 8px; cursor: pointer;">
-                    </a>
+                    <a href="https://www.youtube.com/watch?v=b6SXy9xIIP0" target="_blank" class="video-link">
+                            <img src="https://img.youtube.com/vi/b6SXy9xIIP0/maxresdefault.jpg" alt="Play Video" class="video-miniatura">
+                            <div class="play-icon">▶</div>
+                        </a>
                         <div class="timeline-botones">
                             <a href="https://scratch.mit.edu/projects/1208664342" class="btn">Jugar en Scratch</a> 
                             <a href="https://docs.google.com/document/d/1H_EasA6_fBTmswYct79Bxj22b70S6vSK/edit?usp=sharing" class="btn">Informe Completo</a>
