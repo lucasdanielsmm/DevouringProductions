@@ -457,6 +457,113 @@
             border-radius: 4px;
         }
 
+
+        /* --- ESTILOS DE LÍNEA DE TIEMPO (VIDEOS) --- */
+    .seccion-timeline {
+        max-width: 1000px;
+        margin: 60px auto;
+        padding: 0 20px;
+        position: relative;
+    }
+
+    .timeline-contenedor {
+        position: relative;
+    }
+
+    /* Línea central vertical con gradiente */
+    .timeline-contenedor::before {
+        content: '';
+        position: absolute;
+        top: 0; bottom: 0; left: 50%;
+        width: 4px;
+        background: linear-gradient(to bottom, #ff69b4, #1e90ff, #00ff00, #ff00ff);
+        transform: translateX(-50%);
+        border-radius: 2px;
+    }
+
+    .timeline-item {
+        position: relative;
+        width: 100%;
+        margin-bottom: 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    /* Alternar orden de los elementos (Izquierda/Derecha) */
+    .timeline-item:nth-child(even) {
+        flex-direction: row-reverse;
+    }
+
+    /* Cajas de contenido */
+    .timeline-contenido {
+        width: 45%;
+        background-color: #111;
+        border: 1px solid #333;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .timeline-contenido:hover {
+        transform: scale(1.02);
+        box-shadow: 0 12px 24px rgba(30, 144, 255, 0.2); /* Resaltado azul limpio */
+    }
+
+    /* Ajustes de tipografía interna */
+    .timeline-contenido h2 { margin-top: 0; font-size: 1.4em; }
+    .timeline-contenido p { font-size: 0.95em; text-align: left; }
+    .timeline-botones { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
+    .timeline-botones .btn { margin: 0; font-size: 0.9em; padding: 10px 15px; }
+
+    /* Fechas laterales */
+    .timeline-fecha {
+        width: 45%;
+        text-align: right;
+        padding-top: 15px;
+        font-weight: bold;
+        color: #888;
+        font-size: 1.1em;
+    }
+
+    .timeline-item:nth-child(even) .timeline-fecha {
+        text-align: left;
+    }
+
+    /* Nodos/Puntos en la línea central */
+        .timeline-icono {
+        position: absolute;
+        left: 50%;
+        top: 15px; /* Alineado con el título */
+        transform: translateX(-50%);
+        width: 24px;
+        height: 24px;
+        background-color: #000;
+        border: 4px solid #1e90ff;
+        border-radius: 50%;
+        z-index: 2;
+        box-shadow: 0 0 10px rgba(0,0,0,0.8);
+    }
+
+    /* Clase para la lógica de ocultar proyectos */
+    .timeline-oculto {
+        display: none !important;
+    }
+
+    /* Adaptabilidad a dispositivos móviles */
+    @media (max-width: 900px) {
+        .timeline-contenedor::before { left: 30px; }
+        .timeline-item, .timeline-item:nth-child(even) { flex-direction: column; align-items: flex-end; }
+        .timeline-icono { left: 30px; transform: translateX(-50%); }
+        .timeline-contenido { width: calc(100% - 60px); }
+        .timeline-fecha, .timeline-item:nth-child(even) .timeline-fecha { 
+            width: calc(100% - 60px); 
+            text-align: left; 
+            padding: 0 0 10px 0; 
+            color: #1e90ff; 
+        }
+    }
     </style>
 </head>
 
@@ -546,56 +653,69 @@
 
     </section>
 
-    <section class="proyecto-seccion proyecto-impar">
-        <div class="proyecto-cuerpo"> 
-            <div class="contenido-proyecto">
-                <div class="texto-columna">
-                    <h2>MOVE-LANZER: Scratch</h2>
-                    <p><strong>Descripción:</strong> Este es mi proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de la carrera Diseño y Produccion de videojuegos. Podés probarlo y editarlo acá:</p>
+    <section class="seccion-timeline" id="seccion-videos">
+    <div class="timeline-contenedor">
+        
+        <div class="timeline-item">
+            <div class="timeline-fecha">Nov 2025 - Actualidad</div>
+            <div class="timeline-icono" style="border-color: #ff69b4;"></div>
+            <div class="timeline-contenido">
+                <h2>MOVE-LANZER: Scratch</h2>
+                <p><strong>Descripción:</strong> Este es mi proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de la carrera Diseño y Producción de videojuegos. Podés probarlo y editarlo acá:</p>
+                <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
+                <div class="timeline-botones">
                     <a href="https://scratch.mit.edu/projects/1208664342" class="btn">Jugar en Scratch</a> 
-                </div>
-                <div class="video-columna">
-                    <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
-                    <p class="informe"> <a href="https://docs.google.com/document/d/1H_EasA6_fBTmswYct79Bxj22b70S6vSK/edit?usp=sharing">Informe Completo</a></p>
+                    <a href="https://docs.google.com/document/d/1H_EasA6_fBTmswYct79Bxj22b70S6vSK/edit?usp=sharing" class="btn">Informe Completo</a>
                 </div>
             </div>
         </div>
-    </section>
 
-    <hr class="divider">
-
-    <section class="proyecto-seccion proyecto-par">
-        <div class="proyecto-cuerpo">
-            <div class="contenido-proyecto">
-                <div class="texto-columna">
-                    <h2>Vireo CODE: RPG Maker</h2>
-                    <p><strong>Descripción:</strong> Este es mi proyecto en RPG Maker MV. Es un juego de rol de estética Sci-fi que creé en la materia de Fundamentos de la Programación I en 2025. Podés descargarlo y jugarlo acá:</p>
+        <div class="timeline-item">
+            <div class="timeline-fecha">Feb 2025 - Jul 2025</div>
+            <div class="timeline-icono" style="border-color: #1e90ff;"></div>
+            <div class="timeline-contenido">
+                <h2>Vireo CODE: RPG Maker</h2>
+                <p><strong>Descripción:</strong> Este es mi proyecto en RPG Maker MV. Es un juego de rol de estética Sci-fi que creé en la materia de Fundamentos de la Programación I en 2025. Podés descargarlo y jugarlo acá:</p>
+                <iframe src="https://www.youtube.com/embed/t_Ud17NMSQQ?si=5u_qgy6hGDH1eisW" allowfullscreen></iframe>
+                <div class="timeline-botones">
                     <a href="https://drive.google.com/drive/folders/1fmQCkMnAtXoqv5pZXHVjmH-JfM3LilDH?usp=drive_link" class="btn">Descargar</a>
-                </div>
-                <div class="video-columna">
-                    <iframe src="https://www.youtube.com/embed/t_Ud17NMSQQ?si=5u_qgy6hGDH1eisW" allowfullscreen></iframe>
-                    <a href="https://docs.google.com/document/d/1AyxeBXJah2CiWuHDM5pdYhdMJttzdoRP/edit?usp=sharing">Informe Completo</a></p>
+                    <a href="https://docs.google.com/document/d/1AyxeBXJah2CiWuHDM5pdYhdMJttzdoRP/edit?usp=sharing" class="btn">Informe Completo</a>
                 </div>
             </div>
         </div>
-    </section>
 
-    <hr class="divider">
-
-    <section class="proyecto-seccion proyecto-impar">
-        <div class="proyecto-cuerpo">
-            <div class="contenido-proyecto">
-                <div class="texto-columna">
-                    <h2>CREATURA DINOMA: Unity</h2>
-                    <p><strong>Descripción:</strong> Este es mi proyecto de Unity, un videojuego del género Extracción en 3D, de Capturar, Transportar y Vender Criaturas. Podés descargarlo y jugarlo acá:</p>
+        <div class="timeline-item">
+            <div class="timeline-fecha">Feb 2026</div>
+            <div class="timeline-icono" style="border-color: #00ff00;"></div>
+            <div class="timeline-contenido">
+                <h2>CREATURA DINOMA: Unity</h2>
+                <p><strong>Descripción:</strong> Mi proyecto de Unity, un videojuego del género Extracción en 3D centrado en la comedia, la logística y la recolección. Atrapá, transportá y vendé criaturas. Podés descargarlo acá:</p>
+                <iframe src="https://www.youtube.com/embed/YGBjGzZh438" allowfullscreen></iframe>
+                <div class="timeline-botones">
                     <a href="https://drive.google.com/drive/folders/1N632Wn_cmsnFj1Ge4oFEEcSdj-sIYoGV?usp=drive_link" class="btn">Descargar</a>
-                </div>
-                <div class="video-columna">
-                    <iframe src="https://www.youtube.com/embed/YGBjGzZh438" allowfullscreen></iframe>
-                    <a href="https://docs.google.com/document/d/1hRlHdFdcQsb9y8-r7JjA5UjjRilk5XoE/edit?usp=drive_link">Informe Completo</a></p>
+                    <a href="https://docs.google.com/document/d/1hRlHdFdcQsb9y8-r7JjA5UjjRilk5XoE/edit?usp=drive_link" class="btn">Informe Completo</a>
                 </div>
             </div>
         </div>
+
+        <div class="timeline-item">
+            <div class="timeline-fecha">May 2026</div>
+            <div class="timeline-icono" style="border-color: #ff00ff;"></div>
+            <div class="timeline-contenido">
+                <h2>Cae: Incremental</h2>
+                <p><strong>Descripción:</strong> Un experimento incremental completamente en HTML. Usá el soplete para encontrar fósiles, ganar recursos y progresar en el bucle de recolección.</p>
+                <iframe src="https://www.youtube.com/embed/EJEMPLO" allowfullscreen></iframe>
+                <div class="timeline-botones">
+                    <a href="#" class="btn">Jugar (Próximamente)</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+        <button id="btn-ver-mas" class="btn">Ver más proyectos</button>
+    </div>
     </section>
 
     <section class="cajas-juegos">
@@ -882,6 +1002,33 @@
                 }
             });
         });
+
+        // Lógica para Línea de Tiempo y Botón "Ver Más"
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    const btnVerMas = document.getElementById('btn-ver-mas');
+    const maxVisiblesPorDefecto = 3;
+
+    if (timelineItems.length > 0) {
+        // Ocultar a partir del índice 3 (el 4to elemento)
+        timelineItems.forEach((item, index) => {
+            if (index >= maxVisiblesPorDefecto) {
+                item.classList.add('timeline-oculto');
+            }
+        });
+
+        // Si no hay más de 3, no mostramos el botón
+        if (timelineItems.length <= maxVisiblesPorDefecto && btnVerMas) {
+            btnVerMas.style.display = 'none';
+        }
+
+        // Funcionalidad al hacer click
+        if (btnVerMas) {
+            btnVerMas.addEventListener('click', () => {
+                timelineItems.forEach(item => item.classList.remove('timeline-oculto'));
+                btnVerMas.style.display = 'none'; // Desaparece el botón
+            });
+        }
+    }
     </script>
 </body>
 </html>
