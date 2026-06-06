@@ -617,7 +617,13 @@
             pointer-events: none; /* Crucial: permite el clic en la imagen */
             backdrop-filter: blur(2px);
         }
-
+        .video-miniatura {
+            width: 100%;           /* Ocupa todo el ancho disponible */
+            aspect-ratio: 16 / 9;  /* ESTO ES LA CLAVE: Mantiene la proporción perfecta */
+            display: block;
+            border-radius: 8px;    /* Opcional: para que combine con tus tarjetas */
+            border: none;
+        }
         
     </style>
 </head>
