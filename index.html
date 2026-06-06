@@ -557,13 +557,25 @@
             image-rendering: pixelated; /* Opcional: si prefieres que se vea "nítida" aunque sea pequeña */
         }
 
-    .timeline-item.timeline-oculto {
-        display: none !important;
-    }
-
-    .timeline-item.visible {
-        display: flex !important; /* Mantiene la estructura original */
-    }
+        .timeline-item {
+            /* Esto ayuda a que el navegador procese mejor las imágenes y elementos internos */
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+        
+        .timeline-item.timeline-oculto {
+            display: none !important;
+        }
+        
+        .timeline-item.visible {
+            display: flex !important;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 
