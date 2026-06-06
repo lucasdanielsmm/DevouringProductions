@@ -69,12 +69,12 @@
             border: none;
         }
 
-        /* --- CONTENEDOR PORTADA PANORÁMICA (GIF) ESTILO NEÓN - AHORA MÁS GRANDE --- */
+        /* --- CONTENEDOR PORTADA PANORÁMICA (GIF) ESTILO NEÓN --- */
         .contenedor-panoramico {
             width: 100%;
-            max-width: 1400px; /* Aumentado para que sea más grande */
+            max-width: 1400px;
             margin: 40px auto;
-            aspect-ratio: 16 / 7; /* Proporción ajustada para que sea más alta */
+            aspect-ratio: 16 / 7; 
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 0 25px rgba(255, 105, 180, 0.5), 0 0 15px rgba(0, 255, 255, 0.4);
@@ -97,7 +97,6 @@
             justify-content: center;
             gap: 20px;
             padding: 40px 10px;
-            
         }
         
         .cajas-juegos a,
@@ -329,29 +328,6 @@
 
         @media only screen and (max-width: 700px) { .modal-contenido { width: 100%; } }
 
-        /* --- ESTILOS PARA SECCIONES DE PROYECTO (Zig-Zag) --- */
-        .proyecto-seccion { padding: 20px 0; margin-bottom: 40px; }
-        .proyecto-cuerpo { width: 100%; }
-        .proyecto-seccion h2 { margin-bottom: 15px; line-height: 1.2; }
-        .contenido-proyecto { display: flex; flex-direction: column; gap: 20px; align-items: center; }
-        .texto-columna { width: 100%; text-align: center; }
-        .texto-columna p { margin-top: 5px; }
-        .texto-columna .btn { margin: 10px auto; display: block; width: fit-content; }
-
-        @media (min-width: 900px) {
-            .proyecto-cuerpo { max-width: 1200px; margin: 0 auto; }
-            .contenido-proyecto { flex-direction: row; align-items: center; gap: 50px; }
-            .texto-columna { flex: 1; max-width: 50%; text-align: center; display: flex; flex-direction: column; justify-content: center; margin-top: -100px; }
-            .texto-columna p { text-align: center; }
-            .texto-columna .btn { margin: 15px auto 0 auto; display: block; }
-            .video-columna { flex: 1; max-width: 50%; display: flex; flex-direction: column; align-items: center; }
-            .video-columna .informe { margin-top: 10px; text-align: center; }
-            .proyecto-impar .texto-columna { order: 0; }
-            .proyecto-impar .video-columna { order: 1; }
-            .proyecto-par .texto-columna { order: 1; }
-            .proyecto-par .video-columna { order: 0; }
-        }
-
         /* --- MENÚ HAMBURGUESA --- */
         .menu-btn { position: fixed; top: 20px; right: 20px; font-size: 3em; line-height: 0.6; color: #ffffff; cursor: pointer; z-index: 10001; transition: transform 0.4s ease, color 0.4s ease; user-select: none; font-weight: 300; }
         .menu-btn.activo { transform: rotate(45deg); color: #000000; }
@@ -377,7 +353,7 @@
             align-items: stretch;
             gap: 20px;
             margin-top: 30px;
-            height: 750px; /* AUMENTADO para dar espacio a las imágenes y el iframe */
+            height: 750px;
         }
 
         .itch-casilla-lateral {
@@ -421,7 +397,6 @@
         .itch-carrusel-vertical::-webkit-scrollbar-track { background: #111; border-radius: 4px; }
         .itch-carrusel-vertical::-webkit-scrollbar-thumb { background-color: #ff69b4; border-radius: 4px; }
 
-        /* NUEVO DISEÑO PARA LA TARJETA DE ITCH CON IMAGEN */
         .itch-item {
             flex: 0 0 auto;
             scroll-snap-align: start;
@@ -459,111 +434,123 @@
 
 
         /* --- ESTILOS DE LÍNEA DE TIEMPO (VIDEOS) --- */
-    .seccion-timeline {
-        max-width: 1000px;
-        margin: 60px auto;
-        padding: 0 20px;
-        position: relative;
-    }
-
-    .timeline-contenedor {
-        position: relative;
-    }
-
-    /* Línea central vertical con gradiente */
-    .timeline-contenedor::before {
-        content: '';
-        position: absolute;
-        top: 0; bottom: 0; left: 50%;
-        width: 4px;
-        background: linear-gradient(to bottom, #ff69b4, #1e90ff, #00ff00, #ff00ff);
-        transform: translateX(-50%);
-        border-radius: 2px;
-    }
-
-    .timeline-item {
-        position: relative;
-        width: 100%;
-        margin-bottom: 60px;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-    }
-
-    /* Alternar orden de los elementos (Izquierda/Derecha) */
-    .timeline-item:nth-child(even) {
-        flex-direction: row-reverse;
-    }
-
-    /* Cajas de contenido */
-    .timeline-contenido {
-        width: 45%;
-        background-color: #111;
-        border: 1px solid #333;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.6);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .timeline-contenido:hover {
-        transform: scale(1.02);
-        box-shadow: 0 12px 24px rgba(30, 144, 255, 0.2); /* Resaltado azul limpio */
-    }
-
-    /* Ajustes de tipografía interna */
-    .timeline-contenido h2 { margin-top: 0; font-size: 1.4em; }
-    .timeline-contenido p { font-size: 0.95em; text-align: left; }
-    .timeline-botones { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
-    .timeline-botones .btn { margin: 0; font-size: 0.9em; padding: 10px 15px; }
-
-    /* Fechas laterales */
-    .timeline-fecha {
-        width: 45%;
-        text-align: right;
-        padding-top: 15px;
-        font-weight: bold;
-        color: #888;
-        font-size: 1.1em;
-    }
-
-    .timeline-item:nth-child(even) .timeline-fecha {
-        text-align: left;
-    }
-
-    /* Nodos/Puntos en la línea central */
-        .timeline-icono {
-        position: absolute;
-        left: 50%;
-        top: 15px; /* Alineado con el título */
-        transform: translateX(-50%);
-        width: 24px;
-        height: 24px;
-        background-color: #000;
-        border: 4px solid #1e90ff;
-        border-radius: 50%;
-        z-index: 2;
-        box-shadow: 0 0 10px rgba(0,0,0,0.8);
-    }
-
-    /* Clase para la lógica de ocultar proyectos */
-    .timeline-oculto {
-        display: none !important;
-    }
-
-    /* Adaptabilidad a dispositivos móviles */
-    @media (max-width: 900px) {
-        .timeline-contenedor::before { left: 30px; }
-        .timeline-item, .timeline-item:nth-child(even) { flex-direction: column; align-items: flex-end; }
-        .timeline-icono { left: 30px; transform: translateX(-50%); }
-        .timeline-contenido { width: calc(100% - 60px); }
-        .timeline-fecha, .timeline-item:nth-child(even) .timeline-fecha { 
-            width: calc(100% - 60px); 
-            text-align: left; 
-            padding: 0 0 10px 0; 
-            color: #1e90ff; 
+        .seccion-timeline {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 0 20px;
+            position: relative;
         }
-    }
+
+        .timeline-contenedor {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        /* LÍNEA CENTRAL RGB ANIMADA */
+        .timeline-contenedor::before {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0; left: 50%;
+            width: 5px; 
+            background: linear-gradient(180deg, red, orange, yellow, lime, green, cyan, turquoise, blue, indigo, violet, magenta, pink, red);
+            background-size: 100% 300%;
+            animation: rgbShiftVertical 8s infinite linear, neonPulseBar 2s infinite ease-in-out;
+            transform: translateX(-50%);
+            border-radius: 3px;
+            z-index: 0;
+        }
+
+        @keyframes rgbShiftVertical {
+            0% { background-position: 50% 0%; }
+            50% { background-position: 50% 100%; }
+            100% { background-position: 50% 0%; }
+        }
+
+        @keyframes neonPulseBar {
+            0%, 100% { box-shadow: 0 0 4px rgba(255, 105, 180, 0.4), 0 0 8px rgba(0, 255, 255, 0.3), 0 0 10px rgba(255, 0, 255, 0.3); }
+            50% { box-shadow: 0 0 8px rgba(255, 105, 180, 0.6), 0 0 15px rgba(0, 255, 255, 0.5), 0 0 20px rgba(255, 0, 255, 0.5); }
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 100%;
+            margin-bottom: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-contenido {
+            width: 45%;
+            background-color: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-contenido:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 24px rgba(30, 144, 255, 0.2);
+        }
+
+        .timeline-contenido h2 { margin-top: 0; font-size: 1.4em; text-align: left; }
+        .timeline-contenido p { font-size: 0.95em; text-align: left; margin-bottom: 15px;}
+        .timeline-botones { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
+        .timeline-botones .btn { margin: 0; font-size: 0.9em; padding: 10px 15px; }
+
+        .timeline-fecha {
+            width: 45%;
+            text-align: right;
+            padding-top: 15px;
+            font-weight: bold;
+            color: #888;
+            font-size: 1.1em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-item:nth-child(even) .timeline-fecha {
+            text-align: left;
+        }
+
+        .timeline-icono {
+            position: absolute;
+            left: 50%;
+            top: 15px; 
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            background-color: #000;
+            border: 4px solid #1e90ff;
+            border-radius: 50%;
+            z-index: 2;
+            box-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        .timeline-oculto {
+            display: none !important;
+        }
+
+        @media (max-width: 900px) {
+            .timeline-contenedor::before { left: 30px; }
+            .timeline-item, .timeline-item:nth-child(even) { flex-direction: column; align-items: flex-end; }
+            .timeline-icono { left: 30px; transform: translateX(-50%); }
+            .timeline-contenido { width: calc(100% - 60px); }
+            .timeline-fecha, .timeline-item:nth-child(even) .timeline-fecha { 
+                width: calc(100% - 60px); 
+                text-align: left; 
+                padding: 0 0 10px 0; 
+                color: #1e90ff; 
+            }
+        }
     </style>
 </head>
 
@@ -593,9 +580,7 @@
     <h1>Devouring Productions</h1>
     <p><strong>Pagina Principal</strong></p>
 
-    <!-- PORTADA PANORÁMICA MÁS GRANDE -->
     <div class="contenedor-panoramico">
-        <!-- Reemplaza esto con tu archivo .gif -->
         <img src="PortadaAnimada.gif" alt="Portada: Devouring Productions - Animacion">
     </div>
 
@@ -650,73 +635,139 @@
 
     <hr class="divider">
 
-
-    </section>
-
     <section class="seccion-timeline" id="seccion-videos">
-    <div class="timeline-contenedor">
+        <h2 style="margin-bottom: 40px;">Historial de Proyectos</h2>
         
-        <div class="timeline-item">
-            <div class="timeline-fecha">Nov 2025 - Actualidad</div>
-            <div class="timeline-icono" style="border-color: #ff69b4;"></div>
-            <div class="timeline-contenido">
-                <h2>MOVE-LANZER: Scratch</h2>
-                <p><strong>Descripción:</strong> Este es mi proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de la carrera Diseño y Producción de videojuegos. Podés probarlo y editarlo acá:</p>
-                <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
-                <div class="timeline-botones">
-                    <a href="https://scratch.mit.edu/projects/1208664342" class="btn">Jugar en Scratch</a> 
-                    <a href="https://docs.google.com/document/d/1H_EasA6_fBTmswYct79Bxj22b70S6vSK/edit?usp=sharing" class="btn">Informe Completo</a>
+        <div class="timeline-contenedor">
+            
+            <div class="timeline-item">
+                <div class="timeline-fecha">Mayo 2026</div>
+                <div class="timeline-icono" style="border-color: red;"></div>
+                <div class="timeline-contenido">
+                    <h2>HEMOPATHY: Bullet Hell</h2>
+                    <p><strong>Descripción:</strong> Drena salud y asesina al corazón en este Bullet Hell 2D sangriento. Desafía tus reflejos esquivando oleadas extremas y administrando tu vitalidad.</p>
+                    <iframe frameborder="0" src="https://itch.io/embed/4551247?bg_color=141414&amp;fg_color=ffffff&amp;link_color=ff2a2a&amp;border_color=3a3a3a" height="167"></iframe>
+                    <div class="timeline-botones">
+                        <a href="https://devouringprojects.itch.io/hemopathy" target="_blank" class="btn">Ver en Itch.io</a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="timeline-item">
-            <div class="timeline-fecha">Feb 2025 - Jul 2025</div>
-            <div class="timeline-icono" style="border-color: #1e90ff;"></div>
-            <div class="timeline-contenido">
-                <h2>Vireo CODE: RPG Maker</h2>
-                <p><strong>Descripción:</strong> Este es mi proyecto en RPG Maker MV. Es un juego de rol de estética Sci-fi que creé en la materia de Fundamentos de la Programación I en 2025. Podés descargarlo y jugarlo acá:</p>
-                <iframe src="https://www.youtube.com/embed/t_Ud17NMSQQ?si=5u_qgy6hGDH1eisW" allowfullscreen></iframe>
-                <div class="timeline-botones">
-                    <a href="https://drive.google.com/drive/folders/1fmQCkMnAtXoqv5pZXHVjmH-JfM3LilDH?usp=drive_link" class="btn">Descargar</a>
-                    <a href="https://docs.google.com/document/d/1AyxeBXJah2CiWuHDM5pdYhdMJttzdoRP/edit?usp=sharing" class="btn">Informe Completo</a>
+            <div class="timeline-item">
+                <div class="timeline-fecha">Mayo 2026</div>
+                <div class="timeline-icono" style="border-color: #ff00ff;"></div>
+                <div class="timeline-contenido">
+                    <h2>Cae: Incremental</h2>
+                    <p><strong>Descripción:</strong> Un experimento incremental completamente en HTML. Usá el soplete para encontrar fósiles, ganar recursos y progresar en el bucle de recolección.</p>
+                    <iframe src="https://www.youtube.com/embed/EJEMPLO" allowfullscreen></iframe>
+                    <div class="timeline-botones">
+                        <a href="#" class="btn">Jugar (Próximamente)</a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="timeline-item">
-            <div class="timeline-fecha">Feb 2026</div>
-            <div class="timeline-icono" style="border-color: #00ff00;"></div>
-            <div class="timeline-contenido">
-                <h2>CREATURA DINOMA: Unity</h2>
-                <p><strong>Descripción:</strong> Mi proyecto de Unity, un videojuego del género Extracción en 3D centrado en la comedia, la logística y la recolección. Atrapá, transportá y vendé criaturas. Podés descargarlo acá:</p>
-                <iframe src="https://www.youtube.com/embed/YGBjGzZh438" allowfullscreen></iframe>
-                <div class="timeline-botones">
-                    <a href="https://drive.google.com/drive/folders/1N632Wn_cmsnFj1Ge4oFEEcSdj-sIYoGV?usp=drive_link" class="btn">Descargar</a>
-                    <a href="https://docs.google.com/document/d/1hRlHdFdcQsb9y8-r7JjA5UjjRilk5XoE/edit?usp=drive_link" class="btn">Informe Completo</a>
+            <div class="timeline-item">
+                <div class="timeline-fecha">Abril 2026</div>
+                <div class="timeline-icono" style="border-color: cyan;"></div>
+                <div class="timeline-contenido">
+                    <h2>ICE NANOMACHINES</h2>
+                    <p><strong>Descripción:</strong> Experimento incremental estratégico enfocado en el mantenimiento, gestión de recursos y alimentación de una compleja máquina criogénica productora de hielo.</p>
+                    <img src="portadaIncremental.jpg" alt="ICE NANOMACHINES" style="width: 100%; border-radius: 8px; border: 1px solid #333;">
+                    <div class="timeline-botones">
+                        <a href="ICENANOMACHINES.html" class="btn">Ver Detalles</a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="timeline-item">
-            <div class="timeline-fecha">May 2026</div>
-            <div class="timeline-icono" style="border-color: #ff00ff;"></div>
-            <div class="timeline-contenido">
-                <h2>Cae: Incremental</h2>
-                <p><strong>Descripción:</strong> Un experimento incremental completamente en HTML. Usá el soplete para encontrar fósiles, ganar recursos y progresar en el bucle de recolección.</p>
-                <iframe src="https://www.youtube.com/embed/EJEMPLO" allowfullscreen></iframe>
-                <div class="timeline-botones">
-                    <a href="#" class="btn">Jugar (Próximamente)</a>
+            <div class="timeline-item">
+                <div class="timeline-fecha">Abril 2026</div>
+                <div class="timeline-icono" style="border-color: yellow;"></div>
+                <div class="timeline-contenido">
+                    <h2>Humanity will Remember</h2>
+                    <p><strong>Descripción:</strong> Dungeon Crawler en primera persona con generación procedural de mazmorras y un preciso sistema de movimiento basado en rejilla (GRID).</p>
+                    <iframe frameborder="0" src="https://itch.io/embed/4450642?bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535" height="167"></iframe>
+                    <div class="timeline-botones">
+                        <a href="https://devouringprojects.itch.io/humanity-will-remember" target="_blank" class="btn">Ver en Itch.io</a>
+                    </div>
                 </div>
             </div>
+
+            <div class="timeline-item">
+                <div class="timeline-fecha">Abril 2026</div>
+                <div class="timeline-icono" style="border-color: orange;"></div>
+                <div class="timeline-contenido">
+                    <h2>Utopia CSA Technologies</h2>
+                    <p><strong>Descripción:</strong> Simulador estratégico y técnico en formato vertical. Captura criaturas saltarinas, incuba huevos, recolecta minerales y analiza reliquias antiguas.</p>
+                    <iframe frameborder="0" src="https://itch.io/embed/4440436?bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535" height="167"></iframe>
+                    <div class="timeline-botones">
+                        <a href="https://devouringprojects.itch.io/utopia-csa" target="_blank" class="btn">Ver en Itch.io</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-fecha">Feb 2026</div>
+                <div class="timeline-icono" style="border-color: #00ff00;"></div>
+                <div class="timeline-contenido">
+                    <h2>CREATURA DINOMA: Unity</h2>
+                    <p><strong>Descripción:</strong> Mi proyecto de Unity, un videojuego del género Extracción en 3D centrado en la comedia, la logística y la recolección. Atrapá, transportá y vendé criaturas.</p>
+                    <iframe src="https://www.youtube.com/embed/YGBjGzZh438" allowfullscreen></iframe>
+                    <div class="timeline-botones">
+                        <a href="https://drive.google.com/drive/folders/1N632Wn_cmsnFj1Ge4oFEEcSdj-sIYoGV?usp=drive_link" class="btn">Descargar</a>
+                        <a href="https://docs.google.com/document/d/1hRlHdFdcQsb9y8-r7JjA5UjjRilk5XoE/edit?usp=drive_link" class="btn">Informe Completo</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-fecha">Feb 2026</div>
+                <div class="timeline-icono" style="border-color: #9d00ff;"></div>
+                <div class="timeline-contenido">
+                    <h2>Antes del Amanecer: Terror 3D</h2>
+                    <p><strong>Descripción:</strong> Sobrevive atrapado en un tétrico cementerio enfrentando peligros paranormales antes de que llegue la luz del día. Desarrollado en Unity 3D.</p>
+                    <iframe frameborder="0" src="https://itch.io/embed/4252823?bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535" height="167"></iframe>
+                    <div class="timeline-botones">
+                        <a href="https://devouringprojects.itch.io/antes-del-amanecer" target="_blank" class="btn">Ver en Itch.io</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-fecha">Feb 2025 - Jul 2025</div>
+                <div class="timeline-icono" style="border-color: #1e90ff;"></div>
+                <div class="timeline-contenido">
+                    <h2>Vireo CODE: RPG Maker</h2>
+                    <p><strong>Descripción:</strong> Mi proyecto en RPG Maker MV. Es un juego de rol de estética Sci-fi que creé en la materia de Fundamentos de la Programación I. ¿Y si un dia eres transportado a un lugar aleatorio del Universo?</p>
+                    <iframe src="https://www.youtube.com/embed/t_Ud17NMSQQ?si=5u_qgy6hGDH1eisW" allowfullscreen></iframe>
+                    <div class="timeline-botones">
+                        <a href="https://drive.google.com/drive/folders/1fmQCkMnAtXoqv5pZXHVjmH-JfM3LilDH?usp=drive_link" class="btn">Descargar</a>
+                        <a href="https://docs.google.com/document/d/1AyxeBXJah2CiWuHDM5pdYhdMJttzdoRP/edit?usp=sharing" class="btn">Informe Completo</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-fecha">Nov 2025 - Actualidad</div>
+                <div class="timeline-icono" style="border-color: #ff69b4;"></div>
+                <div class="timeline-contenido">
+                    <h2>MOVE-LANZER: Scratch</h2>
+                    <p><strong>Descripción:</strong> Proyecto de Scratch, un juego de Oleadas Infinitas que hice como parte de la carrera Diseño y Producción de videojuegos. "Frenesí explosivo interminable".</p>
+                    <iframe src="https://www.youtube.com/embed/b6SXy9xIIP0?si=vS2wElFlRMek62V3" allowfullscreen></iframe>
+                    <div class="timeline-botones">
+                        <a href="https://scratch.mit.edu/projects/1208664342" class="btn">Jugar en Scratch</a> 
+                        <a href="https://docs.google.com/document/d/1H_EasA6_fBTmswYct79Bxj22b70S6vSK/edit?usp=sharing" class="btn">Informe Completo</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-    </div>
-
-    <div style="text-align: center; margin-top: 40px;">
-        <button id="btn-ver-mas" class="btn">Ver más proyectos</button>
-    </div>
+        <div style="text-align: center; margin-top: 40px;">
+            <button id="btn-ver-mas" class="btn">Ver el historial completo</button>
+        </div>
     </section>
+
+    <hr class="divider">
 
     <section class="cajas-juegos">
         <a href="cae-ccc.html" class="enlace-tarjeta">
@@ -797,7 +848,7 @@
             </div>
         </a>
     </section>
-    <!-- SECCIÓN ITCH.IO VERTICAL CON VISUALES DE JUEGO -->
+    
     <section class="itch-seccion">
         <h2>Mi Perfil en Itch.io</h2>
         <p>¡Echá un vistazo a mis juegos publicados directamente desde la plataforma!</p>
@@ -805,48 +856,42 @@
         <div class="itch-layout">
             <div class="itch-casilla-lateral"></div>
             <div class="itch-carrusel-vertical">
-            <!-- HEMOPATHY -->
-            <div class="itch-item">
-                <img src="HEMOPATHY.png" alt="Visual Hemopathy">
-                <iframe frameborder="0" src="https://itch.io/embed/4551247?border_width=5&amp;bg_color=141414&amp;fg_color=ffffff&amp;link_color=ff2a2a&amp;border_color=3a3a3a"></iframe>
+                <div class="itch-item">
+                    <img src="HEMOPATHY.png" alt="Visual Hemopathy">
+                    <iframe frameborder="0" src="https://itch.io/embed/4551247?border_width=5&amp;bg_color=141414&amp;fg_color=ffffff&amp;link_color=ff2a2a&amp;border_color=3a3a3a"></iframe>
+                </div>
+                <div class="itch-item">
+                    <img src="HumanityRemember.jpg" alt="Visual Humanity will Remember">
+                    <iframe frameborder="0" src="https://itch.io/embed/4450642?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535"></iframe>
+                </div>
+                <div class="itch-item">
+                    <img src="CODIGOUTOPIA5.jpg" alt="Visual Utopia CSA">
+                    <iframe frameborder="0" src="https://itch.io/embed/4440436?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535"></iframe>
+                </div>
+                <div class="itch-item">
+                    <img src="portada-CAE-CCC.jpg" alt="Visual CAE">
+                    <iframe frameborder="0" src="https://itch.io/embed/4344151?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535"></iframe>
+                </div>
+                <div class="itch-item">
+                    <img src="portada-amanecer.jpg" alt="Visual Antes del Amanecer">
+                    <iframe frameborder="0" src="https://itch.io/embed/4252823?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535"></iframe>
+                </div>
             </div>
-            <!-- Humanity will Remember -->
-            <div class="itch-item">
-                <img src="HumanityRemember.jpg" alt="Visual Humanity will Remember">
-                <iframe frameborder="0" src="https://itch.io/embed/4450642?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535"></iframe>
-            </div>
-            <!-- Utopia CSA -->
-            <div class="itch-item">
-                <img src="CODIGOUTOPIA5.jpg" alt="Visual Utopia CSA">
-                <iframe frameborder="0" src="https://itch.io/embed/4440436?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535"></iframe>
-            </div>
-            <!-- CAE: CCC -->
-            <div class="itch-item">
-                <img src="portada-CAE-CCC.jpg" alt="Visual CAE">
-                <iframe frameborder="0" src="https://itch.io/embed/4344151?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535"></iframe>
-            </div>
-            <!-- Antes del Amanecer -->
-            <div class="itch-item">
-                <img src="portada-amanecer.jpg" alt="Visual Antes del Amanecer">
-                <iframe frameborder="0" src="https://itch.io/embed/4252823?border_width=5&amp;bg_color=000000&amp;fg_color=ffffff&amp;link_color=ff3535&amp;border_color=353535"></iframe>
-            </div>
-        </div>
-
             <div class="itch-casilla-lateral"></div>
         </div>
     
         <a href="https://devouringprojects.itch.io" target="_blank" class="btn" style="margin-top:20px;">Ver perfil completo en Itch.io</a>
-    <div style="text-align:center; margin-top:30px;">
-        <a href="https://linktr.ee/LucasDaniel" class="btn btn-redes">Mis Redes</a>
-    </div>
+        <div style="text-align:center; margin-top:30px;">
+            <a href="https://linktr.ee/LucasDaniel" class="btn btn-redes">Mis Redes</a>
+        </div>
     </section>
+    
     <footer>
         <img src="tu-logo.png" alt="Logo Lucas Daniel Soriano">
         <p>© 2026 Lucas Daniel Soriano</p>
         <p><a href="https://linktr.ee/LucasDaniel">Contacto</a></p>
     </footer>
 
-    <!-- TU JAVASCRIPT INTACTO -->
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const contenedor = document.querySelector('.carrusel-contenedor');
@@ -1004,31 +1049,31 @@
         });
 
         // Lógica para Línea de Tiempo y Botón "Ver Más"
-    const timelineItems = document.querySelectorAll('.timeline-item');
-    const btnVerMas = document.getElementById('btn-ver-mas');
-    const maxVisiblesPorDefecto = 3;
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        const btnVerMas = document.getElementById('btn-ver-mas');
+        const maxVisiblesPorDefecto = 3;
 
-    if (timelineItems.length > 0) {
-        // Ocultar a partir del índice 3 (el 4to elemento)
-        timelineItems.forEach((item, index) => {
-            if (index >= maxVisiblesPorDefecto) {
-                item.classList.add('timeline-oculto');
-            }
-        });
-
-        // Si no hay más de 3, no mostramos el botón
-        if (timelineItems.length <= maxVisiblesPorDefecto && btnVerMas) {
-            btnVerMas.style.display = 'none';
-        }
-
-        // Funcionalidad al hacer click
-        if (btnVerMas) {
-            btnVerMas.addEventListener('click', () => {
-                timelineItems.forEach(item => item.classList.remove('timeline-oculto'));
-                btnVerMas.style.display = 'none'; // Desaparece el botón
+        if (timelineItems.length > 0) {
+            // Ocultar a partir del índice 3 (el 4to elemento)
+            timelineItems.forEach((item, index) => {
+                if (index >= maxVisiblesPorDefecto) {
+                    item.classList.add('timeline-oculto');
+                }
             });
+
+            // Si no hay más de 3, no mostramos el botón
+            if (timelineItems.length <= maxVisiblesPorDefecto && btnVerMas) {
+                btnVerMas.style.display = 'none';
+            }
+
+            // Funcionalidad al hacer click
+            if (btnVerMas) {
+                btnVerMas.addEventListener('click', () => {
+                    timelineItems.forEach(item => item.classList.remove('timeline-oculto'));
+                    btnVerMas.style.display = 'none'; // Desaparece el botón
+                });
+            }
         }
-    }
     </script>
 </body>
 </html>
