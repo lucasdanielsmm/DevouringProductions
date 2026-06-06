@@ -577,15 +577,7 @@
             to { opacity: 1; }
         }
 
-        iframe {
-            width: 100% !important;
-            height: 167px !important; /* Mantiene la altura estándar de Itch.io */
-            display: block;
-            border: none;
-            /* Esto ayuda a que el renderizado de video sea más nítido */
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-        }
+
     </style>
 </head>
 
@@ -1124,10 +1116,7 @@
                 }
             });
 
-            // Si no hay más de 3, no mostramos el botón
-            if (timelineItems.length <= maxVisiblesPorDefecto && btnVerMas) {
-                btnVerMas.style.display = 'none';
-            }
+
 
             // Funcionalidad al hacer click
             if (btnVerMas) {
