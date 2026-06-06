@@ -1109,10 +1109,13 @@
 
             // Funcionalidad al hacer click
             if (btnVerMas) {
-                btnVerMas.addEventListener('click', () => {
-                    timelineItems.forEach(item => item.classList.remove('timeline-oculto'));
-                    btnVerMas.style.display = 'none'; // Desaparece el botón
-                });
+                    btnVerMas.addEventListener('click', () => {
+                        timelineItems.forEach(item => {
+                            item.classList.remove('timeline-oculto');
+                            item.classList.add('visible'); // Forzamos la visibilidad
+                        });
+                        btnVerMas.style.display = 'none'; // Ocultamos el botón al terminar
+                    });
             }
         }
     </script>
