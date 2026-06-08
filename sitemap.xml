@@ -1,9 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://sitemaps.org">
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
     <loc>https://lucasdanielsmm.github.io/DevouringProductions/</loc>
     <lastmod>2026-06-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/DINOMA.html</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/UTOPIA.html</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/REGULUS.HTML</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/cae-ccc.html</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/AMANECER.html</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/DEINBEAST1.html</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/vireo-code.html</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/move-lanzer.html</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/hemopathy.html.html</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/ICENANOMACHINES.html</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/HumanityRemember.html</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/norwegian-spring.html</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/soporte.html</loc>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/comunidad.html</loc>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://lucasdanielsmm.github.io/DevouringProductions/portafolio.html</loc>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>
