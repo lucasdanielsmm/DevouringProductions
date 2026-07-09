@@ -371,20 +371,27 @@
         .itch-casilla-lateral {
             flex: 1;
             display: none; 
-            background: linear-gradient(135deg, rgba(17, 17, 17, 0.9), rgba(255, 105, 180, 0.2), rgba(0, 255, 255, 0.15));
+            background: linear-gradient(135deg, rgba(20, 20, 40, 0.85), rgba(255, 105, 180, 0.5), rgba(0, 255, 255, 0.4), rgba(138, 43, 226, 0.5), rgba(255, 69, 0, 0.3));
+            background-size: 400% 400%;
             border: 2px solid #333;
             border-radius: 8px;
-            background-image: url('tu-imagen-decorativa.jpg'); 
-            background-size: cover;
             background-position: center;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.9), inset 0 0 15px rgba(255, 105, 180, 0.2);
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
             position: relative;
+            animation: gradienteAnimado 8s ease infinite;
+        }
+
+        @keyframes gradienteAnimado {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .itch-casilla-lateral::after {
             content: ''; position: absolute; inset: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8));
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
             border-radius: 6px;
+            pointer-events: none;
         }
 
         @media (min-width: 900px) { .itch-casilla-lateral { display: block; } }
