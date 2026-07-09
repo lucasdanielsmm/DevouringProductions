@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Devouring Productions | Videojuegos Indie por Lucas Daniel Soriano</title>
-    <meta name="description" content="Sitio oficial de Devouring Productions, estudio de desarrollo de videojuegos indie fundado por Lucas Daniel Soriano. Descubre juegos de terror, bullet hell, rogue-like y más.">
+    <meta name="description" content="Sitio oficial de Devouring Productions, estudio de desarrollo de videojuegos indie fundado por Lucas Daniel Soriano. Descubre juegos de terror, bullet hell, rogue[...]
     <meta name="keywords" content="Devouring Productions, Lucas Daniel Soriano, videojuegos indie, antes del amanecer, hemopathy, creatura dinoma, vireo code, game developer argentina, itch.io">
     <meta name="author" content="Lucas Daniel Soriano">
     <meta name="robots" content="index, follow">
@@ -176,12 +176,13 @@
         .tarjeta {
             flex: 0 0 100%; 
             text-align: center;
-            background-color: #111;
+            background: linear-gradient(180deg, rgba(51, 51, 51, 0.8) 0%, rgba(17, 17, 17, 0.8) 100%);
             border-radius: 10px;
             padding: 20px;
             position: relative; 
             cursor: pointer;
-            overflow: hidden; 
+            overflow: hidden;
+            border: 1px solid rgba(51, 51, 51, 0.6);
         }
 
         @media (min-width: 900px) {
@@ -565,8 +566,8 @@
 
         .timeline-contenido {
             width: 45%;
-            background-color: #111;
-            border: 1px solid #333;
+            background: linear-gradient(180deg, rgba(51, 51, 51, 0.8) 0%, rgba(17, 17, 17, 0.8) 100%);
+            border: 1px solid rgba(51, 51, 51, 0.6);
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.6);
@@ -934,7 +935,7 @@
                 <div class="timeline-icono" style="border-color: red;"></div>
                 <div class="timeline-contenido">
                     <h2>DEIN BEAST: Reto 24 HORAS</h2>
-                    <p><strong>Descripción:</strong> Rogue-lite Mobile Vertical. Mejora tu personaje y sobrevive a cada instancia junto a tu bestia espiritual mientras eres perseguido/a por ejércitos.</p>
+                    <p><strong>Descripción:</strong> Rogue-lite Mobile Vertical. Mejora tu personaje y sobrevive a cada instancia junto a tu bestia espiritual mientras eres perseguido/a por ejército enemigo.</p>
                     <iframe src="https://www.youtube.com/embed/x6WPSm5Q6kc?si=SffNJkcgrt5QCcLW" allowfullscreen></iframe>
                     <div class="timeline-botones">
                         <a href="https://www.jabali.ai/play/5f27b66e-f15f-468e-a912-a53a79a157ea/quick-game/dein-beast/" target="_blank" class="btn">Jugar en Jabali</a>
@@ -948,7 +949,7 @@
                 <div class="timeline-icono" style="border-color: #9d00ff;"></div>
                 <div class="timeline-contenido">
                     <h2>Antes del Amanecer: Terror SPOOKY</h2>
-                    <p><strong>Descripción:</strong> Sobrevive atrapado en un tétrico cementerio enfrentando peligros paranormales antes de que llegue la luz del día. Desarrollado para la Global Game Jam.</p>
+                    <p><strong>Descripción:</strong> Sobrevive atrapado en un tétrico cementerio enfrentando peligros paranormales antes de que llegue la luz del día. Desarrollado para la Global Game Jam 2026.</p>
                     <iframe frameborder="0" src="https://www.youtube.com/embed/2Pa3fYxKvpQ?si=V_jN5GStirTRncpM" allowfullscreen></iframe>
                     <div class="timeline-botones">
                         <a href="https://devouringprojects.itch.io/antes-del-amanecer" target="_blank" class="btn">Ver en Itch.io</a>
@@ -997,126 +998,98 @@
                     </div>
                 </div>
             </div>
-
-        </div>
-
-        <div style="text-align: center; margin-top: 40px;">
-            <button id="btn-ver-mas" class="btn">Ver Roadmap completo</button>
         </div>
     </section>
-
-    <hr class="divider">
-
-    <section class="cajas-juegos">
-        <a href="cae-ccc.html" class="enlace-tarjeta">
-            <div class="caja">
-                <img src="caratula-CAE-CCC.jpg" alt="CAE">
-                <h3>CAE</h3>
-                <p>Juego Arcade hecho Completamente en HTML.</p>
-            </div>
-        </a>
-        <a href="move-lanzer.html" class="enlace-tarjeta">
-            <div class="caja">
-                <img src="caratula-move-lanzer.jpg" alt="MOVE-LANZER">
-                <h3>MOVE-LANZER</h3>
-                <p>Juego de oleadas infinitas hecho en Scratch.</p>
-            </div>
-        </a>
-        <a href="vireo-code.html" class="enlace-tarjeta">
-            <div class="caja">
-                <img src="caratula-vireo-CODE.jpg" alt="Vireo CODE">
-                <h3>Vireo CODE</h3>
-                <p>RPG Sci-fi hecho en RPG Maker MV.</p>
-            </div>
-        </a>
-        <a href="DINOMA.html" class="enlace-tarjeta">
-            <div class="caja">
-                <img src="caratula-creatura-dinoma.jpg" alt="CREATURA DINOMA">
-                <h3>CREATURA DINOMA</h3>
-                <p>Juego 3D de extracción hecho en Unity.</p>
-            </div>
-        </a>
-        <a href="AMANECER.html" class="enlace-tarjeta">
-            <div class="caja">
-                <img src="caratula-amanecer-1.jpg" alt="AMANECER">
-                <h3>Antes del Amanecer</h3>
-                <p>Terror Paranormal en un cementerio hecho en Unity.</p>
-            </div>
-        </a>
-        <a href="DEINBEAST1.html" class="enlace-tarjeta">
-            <div class="caja">
-                <img src="portadaDeinBeast4.jpg" alt="DEIN BEAST">
-                <h3>DEINBEAST</h3>
-                <p>Rogue-lite Mobile Vertical hecho en Jabali studio.</p>
-            </div>
-        </a>
-        <a href="UTOPIA.html" class="enlace-tarjeta">
-            <div class="caja">
-                <img src="CODIGOUTOPIA2.jpg" alt="UTOPIA">
-                <h3>UTOPIA</h3>
-                <p>Simulador de Robot formato Vertical hecho en Astrocade.</p>
-            </div>
-        </a>
-        <a href="HumanityRemember.html" class="enlace-tarjeta">
-            <div class="caja">
-                <img src="HumanityRemember.jpg" alt="HUMANITY">
-                <h3>Humanity Remember</h3>
-                <p>Dungeon Crawler con Mazmorras Procedurales hecho en Unity.</p>
-            </div>
-        </a>
-        <a href="ICENANOMACHINES.html" class="enlace-tarjeta">
-            <div class="caja">
-                <img src="HIELO.jpg" alt="ICE & NANOMACHINES">
-                <h3>ICE & NANOMACHINES</h3>
-                <p>Juego incremental estratégico hecho en GDevelop.</p>
-            </div>
-        </a>
-    </section>
-
-    <hr class="divider">
-
-    <footer>
-        <img src="tu-logo.png" alt="Logo Devouring Productions">
-        <p>&copy; 2025 Devouring Productions. Todos los derechos reservados.</p>
-        <p>Desarrollado por <a href="https://linktr.ee/LucasDaniel">Lucas Daniel Soriano</a></p>
-    </footer>
 
     <script>
-        // Menu hamburguesa
-        document.getElementById('menuBtn').addEventListener('click', function() {
-            this.classList.toggle('activo');
-            document.getElementById('menuOverlay').classList.toggle('activo');
+        // Menú Hamburguesa
+        const menuBtn = document.getElementById('menuBtn');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        menuBtn.addEventListener('click', function() {
+            menuBtn.classList.toggle('activo');
+            menuOverlay.classList.toggle('activo');
         });
 
-        // Cerrar menú al hacer clic en un enlace
-        document.querySelectorAll('.menu-links a').forEach(link => {
-            link.addEventListener('click', function() {
-                document.getElementById('menuBtn').classList.remove('activo');
-                document.getElementById('menuOverlay').classList.remove('activo');
-            });
+        menuOverlay.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') {
+                menuBtn.classList.remove('activo');
+                menuOverlay.classList.remove('activo');
+            }
         });
 
-        // Modal para imágenes
+        // Modal
         const modal = document.getElementById('modal-imagen');
-        const modalImg = document.getElementById('imagen-modal');
-        const closeBtn = document.querySelector('.cerrar-modal');
+        const imagenModal = document.getElementById('imagen-modal');
+        const cerrarModal = document.querySelector('.cerrar-modal');
 
-        document.querySelectorAll('.timeline-contenido img').forEach(img => {
+        document.querySelectorAll('.tarjeta img').forEach(img => {
             img.addEventListener('click', function() {
+                imagenModal.src = this.src;
                 modal.style.display = 'block';
-                modalImg.src = this.src;
             });
         });
 
-        closeBtn.addEventListener('click', () => {
+        cerrarModal.addEventListener('click', function() {
             modal.style.display = 'none';
         });
 
-        window.addEventListener('click', (event) => {
-            if (event.target === modal) {
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
                 modal.style.display = 'none';
             }
         });
+
+        // Carrusel
+        const carruselContenedor = document.querySelector('.carrusel-contenedor');
+        const tarjetas = document.querySelectorAll('.tarjeta');
+        const btnIzquierda = document.querySelector('.carrusel-btn.izquierda');
+        const btnDerecha = document.querySelector('.carrusel-btn.derecha');
+
+        let indiceActual = 0;
+
+        function actualizarCarrusel() {
+            const ancho = tarjetas[0].offsetWidth;
+            carruselContenedor.style.transform = `translateX(-${indiceActual * ancho}px)`;
+
+            // Ocultar botones si es necesario
+            if (window.innerWidth < 900) {
+                btnIzquierda.classList.toggle('oculto', indiceActual === 0);
+                btnDerecha.classList.toggle('oculto', indiceActual === tarjetas.length - 1);
+            }
+        }
+
+        btnDerecha.addEventListener('click', function() {
+            if (indiceActual < tarjetas.length - 1) {
+                indiceActual++;
+                actualizarCarrusel();
+            }
+        });
+
+        btnIzquierda.addEventListener('click', function() {
+            if (indiceActual > 0) {
+                indiceActual--;
+                actualizarCarrusel();
+            }
+        });
+
+        window.addEventListener('resize', actualizarCarrusel);
+        actualizarCarrusel();
+
+        // Timeline
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        
+        function mostrarTimelineItems() {
+            timelineItems.forEach(item => {
+                const rect = item.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.75) {
+                    item.classList.add('visible');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', mostrarTimelineItems);
+        mostrarTimelineItems();
     </script>
 </body>
 </html>
