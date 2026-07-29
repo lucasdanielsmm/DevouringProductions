@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="description" content="Portfolio de Game Design y Desarrollo para Jibun Jigoku Planet.">
+    <meta name="author" content="Lucas Daniel Soriano">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Jibun Jigoku Planet — One Mecha. One Rail. One Hell.">
+    <meta property="og:description" content="Pilot your dual-handed mecha in this arcade rail shooter.">
+    <meta property="og:image" content="JIGOKU ICON.png"> 
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- FUENTES ACTUALIZADAS: Chakra Petch para títulos e Inter para texto -->
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,700;1,700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jibun Jigoku Planet — Oficial</title>
+    <link rel="icon" type="image/png" href="JIGOKU ICON.png">
+
+    <style>
+        /* ========================================================= */
+        /* == ESTILOS GLOBALES == */
+        /* ========================================================= */
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px 10px;
+            /* Fondo inmersivo con gradiente radial oscuro cyberpunk (indigo/dark) */
+            background: radial-gradient(circle at top center, rgb(60, 20, 100) 0%, #080c14 60%, #030508 100%);
+            background-attachment: fixed;
+            color: #dae0e3;
+            line-height: 1.6;
+            overflow-x: hidden; 
+            text-align: center; 
+        }
+
+        /* Efecto Scanlines CRT */
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 999;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+        
+        a { text-decoration: none; color: inherit; }
+
+        .logo {
+            max-width: 450px; 
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto 40px;
+            opacity: 0.95;
+            transition: opacity 0.3s, transform 0.3s;
+            filter: drop-shadow(0 0 15px rgba(255, 0, 255, 0.5));
+            position: relative;
+            z-index: 10;
+        }
+        .logo:hover { opacity: 1; transform: scale(1.03); filter: drop-shadow(0 0 25px rgba(255, 204, 0, 0.7)); }
+        
+        /* ========================================================= */
+        /* == ANIMACIONES Y HERO SECTION == */
+        /* ========================================================= */
+
+        .video-container {
+            width: 90%;
+            max-width: 900px; 
+            margin: 20px auto 40px auto;
+            aspect-ratio: 4/3; 
+            position: relative;
+            opacity: 0; 
+            transform: translateY(40px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out; 
+            z-index: 10;
+        }
+
+        .video-container.animar-video {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .video-container img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 8px;
+            /* Glow neón cyan y magenta */
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.4), 0 10px 40px rgba(255, 0, 255, 0.4); 
+            background-color: #000;
+            border: 2px solid rgba(255, 204, 0, 0.5); /* Borde amarillo */
+            object-fit: cover;
+        }
+        
+        .slide-up-on-scroll {
+            opacity: 0;
+            transform: translateY(40px); 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .slide-up-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========================================================= */
+        /* == ESTILOS ESPECÍFICOS == */
+        /* ========================================================= */
+        .subtitulo {
+            font-family: 'Chakra Petch', sans-serif;
+            font-weight: 700;
+            font-style: italic;
+            font-size: 3.2em;
+            color: #ffcc00; /* Color AMARILLO */
+            margin: 40px auto 20px auto;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            transform: skewX(-10deg);
+            /* Aberración cromática y brillo interior */
+            text-shadow: 3px 3px 0px #ff00ff, -3px -3px 0px #00e5ff, 0 0 25px rgba(255, 204, 0, 0.6);
+            position: relative;
+            z-index: 10;
+        }
+
+        .intro-text {
+            max-width: 800px; 
+            margin: 0 auto 40px auto; 
+            padding: 0 20px;
+            font-size: 1.2em;
+            color: #a0aec0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .highlight { 
+            color: #ffffff; 
+            font-weight: 800;
+            background: linear-gradient(90deg, #ff00ff, #00e5ff, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+        }
+
+        /* Tabla de detalles técnicos con Glassmorphism */
+        .detalles-container {
+            display: inline-block; 
+            text-align: left;
+            margin: 30px auto; 
+            padding: 30px 40px;
+            background: rgba(40, 20, 60, 0.7); 
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-left: 6px solid #ffcc00; /* Acento Amarillo */
+            position: relative;
+            z-index: 10;
+        }
+        
+        .detalle-fila {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            min-width: 320px;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+        .detalle-fila:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
+        
+        .detalle-fila strong { color: #00e5ff; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;}
+        .detalle-fila span { color: #ffffff; font-weight: 600; font-size: 1em;} 
+        
+        /* ========================================================= */
+        /* == BOTÓN JUGAR (Rediseñado Arcade Mecha) == */
+        /* ========================================================= */
+        .btn-jugar {
+            display: block; 
+            width: fit-content;
+            margin: 20px auto 40px auto;
+            padding: 18px 50px;
+            font-family: 'Chakra Petch', sans-serif;
+            font-weight: 700;
+            font-style: italic;
+            font-size: 1.8em;
+            letter-spacing: 2px;
+            transform: skewX(-10deg);
+            color: #05000a;
+            background: linear-gradient(90deg, #ffcc00, #ff00ff); 
+            border-radius: 4px; /* Menos redondeado, más cortado */
+            box-shadow: 0 6px 0 #b38f00, 0 15px 25px rgba(255, 204, 0, 0.4);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #ffffff;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+            z-index: 10;
+        }
+
+        .btn-jugar:hover {
+            transform: skewX(-10deg) translateY(2px);
+            box-shadow: 0 4px 0 #b38f00, 0 10px 20px rgba(255, 0, 255, 0.6);
+            filter: brightness(1.2);
+            color: #ffffff;
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        .btn-jugar:active {
+            transform: skewX(-10deg) translateY(6px);
+            box-shadow: 0 0 0 #b38f00, 0 0 10px rgba(255, 204, 0, 0.4);
+        }
+
+        /* ========================================================= */
+        /* == SECCIÓN TÉCNICA (Mecánicas) == */
+        /* ========================================================= */
+        .mecánicas-seccion {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: left;
+            position: relative;
+            z-index: 10;
+        }
+
+        .tech-card {
+            margin-bottom: 30px;
+            padding: 30px;
+            background: linear-gradient(145deg, rgba(20, 10, 40, 0.8), rgba(10, 5, 20, 0.9));
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-cyan { border-left: 5px solid #00e5ff; border-top: 1px solid rgba(0, 229, 255, 0.1); border-right: 1px solid rgba(0, 229, 255, 0.1); border-bottom: 1px solid rgba(0, 229, 255, 0.1); }
+        .card-magenta { border-left: 5px solid #ff00ff; border-top: 1px solid rgba(255, 0, 255, 0.1); border-right: 1px solid rgba(255, 0, 255, 0.1); border-bottom: 1px solid rgba(255, 0, 255, 0.1); }
+        .card-yellow { border-left: 5px solid #ffcc00; border-top: 1px solid rgba(255, 204, 0, 0.1); border-right: 1px solid rgba(255, 204, 0, 0.1); border-bottom: 1px solid rgba(255, 204, 0, 0.1); }
+        
+        .card-cyan:hover { transform: translateX(5px); box-shadow: 0 10px 30px rgba(0, 229, 255, 0.2); }
+        .card-magenta:hover { transform: translateX(5px); box-shadow: 0 10px 30px rgba(255, 0, 255, 0.2); }
+        .card-yellow:hover { transform: translateX(5px); box-shadow: 0 10px 30px rgba(255, 204, 0, 0.2); }
+
+        .tech-card h4 {
+            font-family: 'Chakra Petch', sans-serif;
+            font-weight: 700;
+            font-style: italic;
+            transform: skewX(-5deg);
+            color: #fff;
+            font-size: 1.6em;
+            letter-spacing: 1px;
+            margin-top: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-cyan h4 { text-shadow: 2px 2px 0px rgba(0, 229, 255, 0.5); }
+        .card-magenta h4 { text-shadow: 2px 2px 0px rgba(255, 0, 255, 0.5); }
+        .card-yellow h4 { text-shadow: 2px 2px 0px rgba(255, 204, 0, 0.5); }
+
+        .tech-card h4 span {
+            font-family: 'Inter', sans-serif; 
+            font-style: normal;
+            transform: skewX(5deg); /* Contrarresta la inclinación del H4 para que se lea recto */
+            font-size: 0.45em;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .card-cyan h4 span { background: rgba(0, 229, 255, 0.1); border: 1px solid rgba(0, 229, 255, 0.4); color: #00e5ff; }
+        .card-magenta h4 span { background: rgba(255, 0, 255, 0.1); border: 1px solid rgba(255, 0, 255, 0.4); color: #ff00ff; }
+        .card-yellow h4 span { background: rgba(255, 204, 0, 0.1); border: 1px solid rgba(255, 204, 0, 0.4); color: #ffcc00; }
+
+        .tech-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tech-card ul li {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+            color: #cbd5e1;
+        }
+
+        .tech-card ul li::before {
+            content: '▹'; 
+            font-size: 1.5em;
+            line-height: 0.8;
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+        
+        .card-cyan ul li::before { color: #00e5ff; text-shadow: 0 0 8px rgba(0, 229, 255, 0.6); }
+        .card-magenta ul li::before { color: #ff00ff; text-shadow: 0 0 8px rgba(255, 0, 255, 0.6); }
+        .card-yellow ul li::before { color: #ffcc00; text-shadow: 0 0 8px rgba(255, 204, 0, 0.6); }
+
+        /* Divisor neón */
+        .divider {
+            border: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff00ff, #ffcc00, #00e5ff, transparent);
+            margin: 70px auto;
+            max-width: 800px;
+            opacity: 0.7;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ========================================================= */
+        /* == FOOTER == */
+        /* ========================================================= */
+        footer {
+            background: #05020a; 
+            color: #64748b; 
+            padding: 50px 10px;
+            margin-top: 80px;
+            font-size: 0.95em;
+            border-top: 1px solid rgba(255, 204, 0, 0.2); 
+            position: relative;
+            z-index: 10;
+        }
+
+        footer strong { color: #94a3b8; }
+        footer a { color: #ffcc00; font-weight: 600; text-decoration: none; transition: color 0.2s; }
+        footer a:hover { color: #ff00ff; text-shadow: 0 0 8px rgba(255, 0, 255, 0.4); }
+        
+    </style>
+</head>
+<body>
+
+    <img src="JIGOKU ICON.png" alt="Jibun Jigoku Logo" class="logo">
+    
+    <div class="video-container">
+        <img src="2026-07-08.png" alt="Portada: Jibun Jigoku Planet Gameplay">
+    </div>
+
+    <h2 class="subtitulo">ONE MECHA. ONE RAIL. ONE HELL.</h2>
+
+    <p class="intro-text">
+        Pilota tu MECHA de doble empuñadura en este ARCADE RAIL SHOOTER. <span class="highlight">DODGE, SHOOT, PARRY</span>. Sobrevive a oleadas de drones enemigos mientras gestionas calor, munición, armadura y mejoras en una carrera contrarreloj de 2:30 hacia el jefe final: el Command Overlord Core.
+    </p>
+
+    <div class="botones-container" style="text-align: center;">
+        <a href="#play" class="btn-jugar">INICIAR SISTEMA</a>
+    </div>
+
+    <div class="detalles-container slide-up-on-scroll">
+        <div class="detalle-fila">
+            <strong>Rol Principal</strong>
+            <span>Game Dev, 3D Art & VFX</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Estilo Visual</strong>
+            <span>Cyberpunk Neon</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Género</strong>
+            <span>Arcade Rail Shooter</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Input Soportado</strong>
+            <span>Mouse / Gamepad / Gyroscope</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Motor Gráfico</strong>
+            <span>Unity (URP)</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Plataforma</strong>
+            <span>PC / WebGL / Mobile</span>
+        </div>
+    </div>
+
+    <hr class="divider">
+    
+    <section class="mecánicas-seccion">
+        <h2 class="subtitulo" style="margin-top: 0; text-align: center; margin-bottom: 50px; color:#ffffff; text-shadow: 0 0 15px rgba(255,255,255,0.3);">SYSTEM_CORE_MECHANICS</h2>
+
+        <div class="tech-card card-cyan slide-up-on-scroll">
+            <h4>1. Dual Sniper Rifles <span>Hitscan & Heat</span></h4>
+            <ul>
+                <li><strong>Fuego Rápido:</strong> Disparo continuo hitscan de 8.5 rondas/segundo con gestión de temperatura para no sobrecalentar las armas.</li>
+                <li><strong>Active Venting:</strong> Al llegar al 100% de calor, se activa un minijuego de ritmo. Acertar en la zona verde otorga un estado de <em>Overdrive</em> duplicando la cadencia.</li>
+                <li><strong>Charged Railgun:</strong> Disparo secundario penetrante (clic derecho) que consume 15 balas y hace 350 de daño devastador en línea recta.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card card-magenta slide-up-on-scroll" style="transition-delay: 0.1s;">
+            <h4>2. Defensa y Evasión <span>Dodge & Parry</span></h4>
+            <ul>
+                <li><strong>Parry Shield (F):</strong> Escudo de energía temporal (0.45s). Un parry exitoso destruye los proyectiles enemigos y devuelve un rayo de contraataque.</li>
+                <li><strong>Lane Dodge (Q/E):</strong> Sistema de esquiva entre 3 carriles horizontales independientes para evadir el enjambre de fuego plasma enemigo.</li>
+                <li><strong>Rail Path Branching:</strong> Dispara a los nodos de bifurcación para decidir la ruta (Ruta A: Cyan / Ruta B: Yellow).</li>
+            </ul>
+        </div>
+
+        <div class="tech-card card-yellow slide-up-on-scroll" style="transition-delay: 0.2s;">
+            <h4>3. Roguelite Breakdown <span>Upgrades</span></h4>
+            <ul>
+                <li><strong>Sistema de Fallo:</strong> Cuando la armadura llega a cero, el tiempo se congela mostrando un panel interno del mecha. No es Game Over, es una oportunidad.</li>
+                <li><strong>24 Mejoras Modulares:</strong> Repartidas en rarezas UNCOMMON (Cooling, Shield), RARE (Double Damage, Mini-turret), RELIC (3x Crit, Life Steal).</li>
+                <li><strong>LEGENDARY TIER:</strong> Consigue multiplicadores de puntaje dobles, invulnerabilidad al 25% de HP o la habilidad de ralentizar el tiempo con Shift.</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <footer>
+        <p>VFX, Sound & 3D Art Design por <strong>Lucas Daniel Soriano</strong></p>
+        <p>Game Design Q.A/Testing por <strong>Lucas Daniel Soriano</strong></p>
+        <p style="color: #ffcc00; margin-top: 10px;">100% Código Procedural — Audio generado en Runtime</p>
+        <p style="margin-top: 15px;">
+            <a href="https://www.linkedin.com/in/lucasdanielsoriano/">LinkedIn</a> &nbsp;|&nbsp; 
+            <a href="https://lucasdanielsmm.github.io/DevouringProductions/">GitHub</a> &nbsp;|&nbsp; 
+            <a href="mailto:devouringgproductions@gmail.com">Email</a>
+        </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.querySelector('.video-container');
+            if (video) {
+                video.offsetHeight; 
+                video.classList.add('animar-video');
+            }
+
+            const observerOptions = {
+                root: null, 
+                rootMargin: '0px',
+                threshold: 0.15 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const slideElements = document.querySelectorAll('.slide-up-on-scroll');
+            slideElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+    
+</body>
+</html>
