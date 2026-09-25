@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="description" content="Portfolio de Game Design y UI/UX para INTERPREDATOR.">
+    <meta name="author" content="Lucas Daniel Soriano">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="INTERPREDATOR — Portfolio Game Design">
+    <meta property="og:description" content="Explora el diseño de mecánicas de sigilo, IA adaptativa y sistemas de caza microscópica.">
+    <meta property="og:image" content="17885435372.png"> 
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="INTERPREDATOR — Portfolio Game Design">
+    <meta property="twitter:image" content="17885435372.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INTERPREDATOR — Oficial</title>
+    <link rel="icon" type="image/png" href="17885435372.png">
+
+    <style>
+        /* ========================================================= */
+        /* == ESTILOS GLOBALES == */
+        /* ========================================================= */
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px 10px;
+            /* Fondo inmersivo oceánico/microscópico */
+            background: radial-gradient(circle at top center, #051428 0%, #020a14 60%, #010308 100%);
+            background-attachment: fixed;
+            color: #dae0e3;
+            line-height: 1.6;
+            overflow-x: hidden; 
+            text-align: center; 
+        }
+        
+        a { text-decoration: none; color: inherit; }
+
+        .logo {
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+            opacity: 0.9;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .logo:hover { opacity: 1; transform: scale(1.05); }
+        
+        /* Efecto Sci-Fi/Acuático para el título */
+        .titulo-pagina {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 4.5em; 
+            color: #ffffff;
+            margin: 10px auto;
+            letter-spacing: 5px;
+            text-shadow: 
+                3px 3px 0px #0055ff, 
+                6px 6px 0px #00e5ff,
+                10px 10px 15px rgba(0, 0, 0, 0.9);
+            transform: skew(-2deg, 0deg);
+        }
+
+        /* ========================================================= */
+        /* == AVISO DE DESARROLLO == */
+        /* ========================================================= */
+        .disclaimer-dev {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid #ffd700;
+            color: #fff3b3;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 15px 20px;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-weight: 600;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
+            animation: pulse-border-yellow 2.5s infinite;
+            backdrop-filter: blur(5px);
+        }
+
+        .disclaimer-dev strong {
+            color: #ffd700;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        @keyframes pulse-border-yellow {
+            0% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.1); }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+            100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.1); }
+        }
+
+        /* ========================================================= */
+        /* == ANIMACIONES Y HERO SECTION == */
+        /* ========================================================= */
+
+        .video-container {
+            width: 90%;
+            max-width: 900px; 
+            margin: 30px auto 40px auto;
+            aspect-ratio: 4/3; /* Adaptado ligeramente para la imagen cuadrada/rectangular */
+            position: relative;
+            opacity: 0; 
+            transform: translateY(40px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out; 
+        }
+
+        .video-container.animar-video {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animación de flotación para la imagen de portada */
+        @keyframes float-underwater {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(0.5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .video-container img, .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 12px;
+            /* Glow neón cian para la portada */
+            box-shadow: 0 0 35px rgba(0, 229, 255, 0.3), 0 15px 50px rgba(0,0,0,0.9); 
+            background-color: #000;
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            animation: float-underwater 6s ease-in-out infinite;
+        }
+        
+        .slide-up-on-scroll {
+            opacity: 0;
+            transform: translateY(40px); 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .slide-up-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========================================================= */
+        /* == ESTILOS ESPECÍFICOS == */
+        /* ========================================================= */
+        .subtitulo {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 2.2em;
+            color: #00e5ff; /* Acento Cian */
+            margin: 40px auto 20px auto;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 15px rgba(0, 229, 255, 0.5);
+            text-transform: uppercase;
+        }
+
+        .intro-text {
+            max-width: 800px; 
+            margin: 0 auto 40px auto; 
+            padding: 0 20px;
+            font-size: 1.2em;
+            color: #b0c4de;
+        }
+
+        .highlight { 
+            color: #ffffff; 
+            font-weight: 800;
+            background: linear-gradient(90deg, #ffd700, #00e5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+        }
+
+        /* Tabla de detalles técnicos con Glassmorphism mejorado */
+        .detalles-container {
+            display: inline-block; 
+            text-align: left;
+            margin: 30px auto; 
+            padding: 30px 40px;
+            background: rgba(5, 20, 40, 0.6); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.8), inset 0 0 15px rgba(0, 229, 255, 0.05);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-left: 6px solid #ffd700; /* Acento Amarillo */
+        }
+        
+        .detalle-fila {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            min-width: 320px;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed rgba(0, 229, 255, 0.2);
+            padding-bottom: 10px;
+        }
+        .detalle-fila:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
+        
+        .detalle-fila strong { color: #00e5ff; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;}
+        .detalle-fila span { color: #ffffff; font-weight: 600; font-size: 1em;} 
+        
+        /* ========================================================= */
+        /* == BOTÓN JUGAR == */
+        /* ========================================================= */
+        .btn-jugar {
+            display: block; 
+            width: fit-content;
+            margin: 20px auto 40px auto;
+            padding: 18px 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5em;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #ffffff;
+            background: linear-gradient(90deg, #0055ff, #00e5ff); /* Gradiente azul profundo a cian */
+            border-radius: 6px;
+            box-shadow: 0 6px 0 #002266, 0 15px 25px rgba(0, 229, 255, 0.3);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.3);
+            text-transform: uppercase;
+        }
+
+        .btn-jugar:hover {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 #002266, 0 10px 20px rgba(0, 229, 255, 0.5);
+            filter: brightness(1.15);
+            border-color: #ffd700; /* Brillo amarillo al interactuar */
+        }
+
+        .btn-jugar:active {
+            transform: translateY(6px);
+            box-shadow: 0 0 0 #002266, 0 0 10px rgba(0, 229, 255, 0.4);
+        }
+
+        /* ========================================================= */
+        /* == CONTENEDOR DE VIDEOS == */
+        /* ========================================================= */
+        .wireframes-section {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .wireframes-title {
+            font-family: 'Orbitron', sans-serif;
+            text-align: left;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 2em;
+            border-bottom: 2px solid rgba(0, 229, 255, 0.4);
+            padding-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+            text-transform: uppercase;
+        }
+
+        .videos-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .videos-grid iframe {
+            width: 48%;
+            aspect-ratio: 16/9;
+            background-color: #000;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.8);
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+
+        .videos-grid iframe:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 229, 255, 0.3);
+            border-color: #ffd700;
+        }
+        
+        /* ========================================================= */
+        /* == SECCIÓN TÉCNICA (Mecánicas) == */
+        /* ========================================================= */
+        .mecánicas-seccion {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: left;
+        }
+
+        .tech-card {
+            margin-bottom: 30px;
+            padding: 30px;
+            background: linear-gradient(145deg, rgba(5, 20, 40, 0.7), rgba(2, 10, 20, 0.9));
+            backdrop-filter: blur(8px);
+            border-left: 5px solid #00e5ff;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            border-right: 1px solid rgba(0, 229, 255, 0.05);
+            border-top: 1px solid rgba(0, 229, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-left-color 0.3s ease;
+        }
+        
+        .tech-card:hover {
+            transform: translateX(8px);
+            box-shadow: 0 12px 35px rgba(0, 229, 255, 0.15);
+            border-left-color: #ffd700; /* Transición a amarillo */
+        }
+
+        .tech-card h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            font-size: 1.4em;
+            letter-spacing: 1px;
+            margin-top: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tech-card h4 span {
+            font-family: 'Inter', sans-serif; 
+            font-size: 0.5em;
+            background: rgba(0, 229, 255, 0.1);
+            padding: 6px 14px;
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            color: #00e5ff; 
+            border-radius: 6px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .tech-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tech-card ul li {
+            margin-bottom: 15px;
+            padding-left: 28px;
+            position: relative;
+            color: #cbd5e1;
+        }
+
+        .tech-card ul li::before {
+            content: '►'; 
+            color: #ffd700; /* Punteros amarillos */
+            font-size: 1em;
+            line-height: 1.2;
+            position: absolute;
+            left: 0;
+            top: 2px;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+        }
+
+        /* Divisor neón oceánico */
+        .divider {
+            border: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #0055ff, #ffd700, transparent);
+            margin: 70px auto;
+            max-width: 800px;
+            opacity: 0.6;
+        }
+
+        /* ========================================================= */
+        /* == GALERÍA == */
+        /* ========================================================= */
+        .galeria {
+            margin-top: 50px;
+            padding: 20px 10px;
+        }
+
+        .galeria h3 { 
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 2.2em;
+            color: #fff; 
+            margin-bottom: 40px; 
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+            text-transform: uppercase;
+        }
+
+        .capturas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .capturas-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.8);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(0.7) contrast(1.2); 
+            border: 2px solid transparent;
+        }
+        
+        .capturas-grid img:hover {
+            transform: scale(1.05) translateY(-5px);
+            filter: brightness(1.1) contrast(1.2);
+            border-color: #00e5ff;
+            box-shadow: 0 15px 40px rgba(0, 229, 255, 0.3);
+            z-index: 2;
+        }
+
+        /* ========================================================= */
+        /* == FOOTER == */
+        /* ========================================================= */
+        footer {
+            background: #02060d; 
+            color: #64748b; 
+            padding: 50px 10px;
+            margin-top: 80px;
+            font-size: 0.95em;
+            border-top: 1px solid rgba(0, 229, 255, 0.15); 
+        }
+
+        footer strong { color: #94a3b8; }
+        footer a { color: #00e5ff; font-weight: 600; text-decoration: none; transition: color 0.2s, text-shadow 0.2s; }
+        footer a:hover { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+        
+    </style>
+</head>
+<body>
+
+    <h1 class="titulo-pagina">INTERPREDATOR</h1> 
+
+    <div class="disclaimer-dev slide-up-on-scroll">
+        <strong>⚠️ AVISO IMPORTANTE:</strong> INTERPREDATOR se encuentra actualmente en fase de desarrollo activo. Todo el contenido, mecánicas y aspectos visuales mostrados en este sitio son prototipos y <strong>pueden variar significativamente en la versión final</strong> del juego.
+    </div>
+    
+    <div class="video-container">
+        <img src="17885435372.png" alt="Portada: Interpredator Microscopic Gameplay">
+    </div>
+
+    <h2 class="subtitulo">"Devora. Evoluciona. Sobrevive."</h2>
+
+    <p class="intro-text">
+        Un título de acción, sigilo y supervivencia que <span class="highlight">te sumerge en el ecosistema celular más hostil</span>. Acecha en fluidos abisales, asimila organismos luminescentes para mutar tus habilidades y adáptate a un mundo donde cada espora define tu lugar en la cadena alimenticia microscópica.
+    </p>
+
+    <div class="botones-container" style="text-align: center;">
+        <a href="#" target="_blank" class="btn-jugar">SEGUIR DESARROLLO</a>
+    </div>
+
+    <div class="detalles-container slide-up-on-scroll">
+        <div class="detalle-fila">
+            <strong>Rol Principal</strong>
+            <span>Game Dev & UI/UX</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Estado</strong>
+            <span>En Desarrollo (Alpha)</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Género</strong>
+            <span>Supervivencia Celular</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Estilo Visual</strong>
+            <span>Sci-Fi / Bioluminiscente</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Motor</strong>
+            <span>Custom / WebGL</span>
+        </div>
+        <div class="detalle-fila">
+            <strong>Plataforma</strong>
+            <span>PC / Navegador</span>
+        </div>
+    </div>
+
+    <div class="wireframes-section slide-up-on-scroll">
+        <h3 class="wireframes-title">Mecánicas en Prototipo</h3>
+        <div class="videos-grid">
+            <iframe 
+                src="https://www.youtube.com/embed/placeholder1?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen>
+            </iframe>
+            <iframe 
+                src="https://www.youtube.com/embed/placeholder2?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <hr class="divider">
+    
+    <section class="mecánicas-seccion">
+        <h2 class="subtitulo" style="margin-top: 0; text-align: center; margin-bottom: 50px;">Arquitectura & Game Design</h2>
+
+        <div class="tech-card slide-up-on-scroll">
+            <h4>1. Ecosistema de Asimilación <span>Mutación Dinámica</span></h4>
+            <ul>
+                <li><strong>Caza Específica:</strong> Devorar células de núcleo amarillo otorga velocidad de propulsión, mientras que las células con púas rojas incrementan la defensa basal.</li>
+                <li><strong>Bioluminiscencia Táctica:</strong> Controla tu brillo para atraer presas menores o apágalo completamente para evadir depredadores abisales masivos.</li>
+                <li><strong>Fluidos Newtonianos:</strong> Física de movimiento basada en la densidad del entorno, requiriendo dominar el impulso y la inercia para navegar eficazmente.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.1s;">
+            <h4>2. IA de Enjambre Reactiva <span>Adaptive Swarm</span></h4>
+            <ul>
+                <li><strong>Mentalidad de Colmena:</strong> Los microorganismos se agrupan en formaciones defensivas si detectan agresividad, creando barreras impenetrables de membrana.</li>
+                <li><strong>Cadena Trófica Dinámica:</strong> El ecosistema vive sin ti. Los NPC cazan y son cazados en tiempo real, alterando la disponibilidad de nutrientes en tu bioma.</li>
+                <li><strong>Quimiotaxis:</strong> Los enemigos rastrean tus "rastros químicos" si estás herido, obligándote a buscar corrientes de agua para limpiar tu firma celular.</li>
+            </ul>
+        </div>
+
+        <div class="tech-card slide-up-on-scroll" style="transition-delay: 0.2s;">
+            <h4>3. Interfaz Orgánica Diegética <span>UI/UX Fluida</span></h4>
+            <ul>
+                <li><strong>Núcleo como HUD:</strong> Tu propia anatomía celular refleja tu salud y energía. La opacidad de tu núcleo indica hambre, y las terminaciones nerviosas vibran al percibir peligro.</li>
+                <li><strong>Visión Espectral:</strong> Filtros visuales que alteran la pantalla completa para revelar corrientes térmicas o patógenos invisibles a simple vista.</li>
+                <li><strong>Menús Suspendidos:</strong> Navegación a través de membranas translúcidas con efecto de refracción, manteniendo la inmersión total en el mundo microscópico.</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="galeria">
+        <h3>Capturas Conceptuales</h3>
+        <div class="capturas-grid">
+            <img src="captura-interpredator-1.jpg" alt="Evasión en la fosa bioluminiscente" class="slide-up-on-scroll">
+            <img src="captura-interpredator-2.jpg" alt="Asimilando un núcleo energético" class="slide-up-on-scroll" style="transition-delay: 0.1s">
+            <img src="captura-interpredator-3.jpg" alt="Enfrentamiento contra el organismo alfa rojo" class="slide-up-on-scroll" style="transition-delay: 0.2s">
+            <img src="captura-interpredator-4.jpg" alt="Camuflaje activo entre las esporas" class="slide-up-on-scroll" style="transition-delay: 0.3s">
+        </div>
+    </section>
+
+    <footer>
+        <p>Desarrollado por <strong>Lucas Daniel Soriano</strong> — Devouring Productions</p>
+        <p>© 2026 - Portfolio de Desarrollo de Videojuegos y Game Design</p>
+        <p>
+            <a href="https://www.linkedin.com/in/lucasdanielsoriano/">LinkedIn</a> &nbsp;|&nbsp; 
+            <a href="https://lucasdanielsmm.github.io/DevouringProductions/">GitHub</a> &nbsp;|&nbsp; 
+            <a href="mailto:devouringgproductions@gmail.com">Email</a>
+        </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.querySelector('.video-container');
+            if (video) {
+                video.offsetHeight; 
+                video.classList.add('animar-video');
+            }
+
+            const observerOptions = {
+                root: null, 
+                rootMargin: '0px',
+                threshold: 0.15 
+            }
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const slideElements = document.querySelectorAll('.slide-up-on-scroll');
+            slideElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+    
+</body>
+</html>
